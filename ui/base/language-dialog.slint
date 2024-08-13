@@ -1,0 +1,49 @@
+import { Theme } from "../theme.slint";
+import { Store } from "../store.slint";
+import { Logic } from "../logic.slint";
+import { Dialog } from "./dialog.slint";
+import { ConfirmBtn } from "./btn.slint";
+import { RadioBtn } from "./radio-btn.slint";
+
+export component LanguageDialog inherits Dialog {
+    title: Logic.tr(Store.is-cn, "请选择语言");
+    is-hide-btns: true;
+
+    in-out property<string> language: "cn";
+
+    VerticalLayout {
+        padding: Theme.padding * 4;
+        spacing: Theme.spacing * 4;
+
+        VerticalLayout {
+            alignment: center;
+            spacing: Theme.spacing * 4;
+
+            cn-radio := RadioBtn {
+                text: "中文";
+                checked: root.language == "cn";
+                check => { root.language = "cn"; }
+            }
+
+            en-radio := RadioBtn {
+                text: "English";
+                checked: root.language == "en";
+                check => { root.language = "en"; }
+            }
+        }
+
+        HorizontalLayout {
+            alignment: end;
+
+            ConfirmBtn {
+                text: Logic.tr(Store.is-cn, "确认");
+                clicked => {
+                    Store.setting-ui.language = root.language;
+                    Logic.set-setting-ui(Store.setting-ui);
+                    Store.is-first-run = false;
+                }
+            }
+        }
+    }
+
+}

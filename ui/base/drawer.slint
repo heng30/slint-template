@@ -1,0 +1,113 @@
+import { Theme } from "../theme.slint";
+import { Blanket } from "./blanket.slint";
+
+// Example:
+// Rectangle {
+//     drawer := Drawer {
+//         is-show: true;
+//         position: DrawerPosition.Right;
+//         drawer-size: 300px;
+//         Rectangle {
+//             background: blue;
+//         }
+//     }
+//     HorizontalLayout {
+//         y: 0;
+//         height: 50px;
+//         spacing: 30px;
+//         TextBtn {
+//             text: "Show";
+//             background: pink;
+//             clicked => {
+//                 drawer.show();
+//             }
+//         }
+//         TextBtn {
+//             text: "Hide";
+//             background: pink;
+//             clicked => {
+//                 drawer.hide();
+//             }
+//         }
+//     }
+// }
+
+export enum DrawerPosition {
+    Top,
+    Right,
+    Bottom,
+    Left,
+}
+
+export component Drawer inherits Rectangle {
+    in-out property <bool> is-show;
+    in property <length> drawer-size: 200px;
+    in property <DrawerPosition> position: DrawerPosition.Bottom;
+
+    public function show() {
+        root.is-show = true;
+    }
+
+    public function hide() {
+        root.is-show = false;
+    }
+
+    pure function drawer-x() -> length {
+        if (root.position == DrawerPosition.Left) {
+            if (root.is-show) {
+                return 0px;
+            } else {
+                return -root.width;
+            }
+        } else if (root.position == DrawerPosition.Right) {
+            if (root.is-show) {
+                return 0px;
+            } else {
+                return root.width;
+            }
+        }
+        return 0px;
+    }
+
+    pure function drawer-y() -> length {
+        if (root.position == DrawerPosition.Top) {
+            if (root.is-show) {
+                return 0px;
+            } else {
+                return -root.height;
+            }
+        } else if (root.position == DrawerPosition.Bottom) {
+            if (root.is-show) {
+                return 0px;
+            } else {
+                return root.height;
+            }
+        }
+        return 0px;
+    }
+
+    x: drawer-x();
+    y: drawer-y();
+
+    animate x, y {
+        duration: Theme.default-animate-duration;
+        easing: ease-in-out;
+    }
+
+    if root.is-show: Blanket {
+        clicked => {
+            root.is-show = false;
+        }
+    }
+
+    VerticalLayout {
+        x: root.position == DrawerPosition.Right ? root.width - self.width : 0px;
+        y: root.position == DrawerPosition.Bottom ? root.height - self.height : 0px;
+        width: root.position == DrawerPosition.Right || root.position == DrawerPosition.Left ? drawer-size : root.width;
+        height: root.position == DrawerPosition.Top || root.position == DrawerPosition.Bottom ? drawer-size : root.height;
+
+        TouchArea {
+            @children
+        }
+    }
+}

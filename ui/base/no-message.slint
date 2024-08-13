@@ -1,0 +1,28 @@
+import { Theme, Icons } from "../theme.slint";
+import { CenterLayout } from "./center-layout.slint";
+
+export component NoMessageImg inherits Rectangle {
+    in-out property img-width <=> img.width;
+    in-out property text <=> txt.text;
+    width: 300px;
+
+    opacity: 0.5;
+
+    CenterLayout {
+        CenterLayout {
+            img := Image {
+                width: root.width * 0.6;
+                source: Icons.no-message;
+            }
+        }
+
+        CenterLayout {
+            txt := Text {
+                opacity: 0.5;
+                color: Theme.regular-text-color;
+                font-size: Theme.default-font-size + 4px;
+            }
+        }
+    }
+
+}

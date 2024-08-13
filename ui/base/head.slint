@@ -1,0 +1,37 @@
+import { Theme, Icons } from "../theme.slint";
+import { IconBtn } from "./icon-btn.slint";
+import { Divider } from "./divider.slint";
+
+export component Head inherits Rectangle {
+    height: Theme.header-height;
+    background: Theme.base-background;
+
+    in-out property <bool> is-show-divider;
+    in-out property <string> title;
+    in-out property icon <=> ic.icon;
+    in-out property icon-width <=> ic.icon-width;
+    in-out property <LayoutAlignment> hbox-alignment: LayoutAlignment.stretch;
+
+    callback clicked <=> ic.clicked;
+
+    hbox := HorizontalLayout {
+        alignment: hbox-alignment;
+        padding-left: Theme.padding;
+        padding-right: Theme.padding;
+
+        ic := IconBtn {
+            icon-width: Theme.icon-size;
+            background: Colors.transparent;
+            icon: Icons.back;
+            text: root.title;
+        }
+
+        @children
+    }
+
+    if is-show-divider : Divider {
+        x: 0;
+        y: root.height - self.height;
+        background: Theme.base-border-color;
+    }
+}

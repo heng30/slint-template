@@ -1,0 +1,63 @@
+import { Theme, Icons } from "theme.slint";
+
+export global Util {
+    callback show-toast(string, string);
+
+    pure callback qr-code(string) -> image;
+
+    callback string-fixed2(string) -> string;
+    callback float-fixed2(float) -> string;
+
+    // (browser, url) => void
+    callback open-url(string, string);
+
+    pure callback text-len(string) -> int;
+
+    // (low-bound, up-bound) => void
+    pure callback rand-int(int, int) -> int;
+
+    pure callback local-now(string) -> string;
+    local-now => {
+        return "12:34:45";
+    }
+
+    pure callback format_number_with_commas(string) -> string;
+    format_number-with-commas(number-str) => {
+        return number-str;
+    }
+
+    pure callback split-and-join-string(string, int, string) -> string;
+    split-and-join-string(input, length, sep) => {
+        return input;
+    }
+
+    public pure function text-color(type: string) -> color {
+        if (type == "success") {
+            return Theme.success-color;
+        } else if (type == "warning") {
+            return Theme.warning-color.darker(10%);
+        } else if (type == "danger") {
+            return Theme.danger-color;
+        }
+        return Theme.info-color;
+    }
+
+    public pure function icon-source(type: string) -> image {
+        if (type == "success") {
+            return @image-url("./images/success.svg");
+        } else if (type == "warning") {
+            return @image-url("./images/warning.svg");
+        } else if (type == "danger") {
+            return @image-url("./images/danger.svg");
+        }
+        return @image-url("./images/info.svg");
+    }
+
+    public pure function bound(low: int, value: int, height: int) -> int {
+        return Math.max(low, Math.min(value, height));
+    }
+
+    pure public function get-token-icon(symbol: string, mint-address: string, icon-extension: string) -> image {
+        return Icons.token;
+    }
+}

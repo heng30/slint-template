@@ -1,0 +1,52 @@
+import { Theme } from "../theme.slint";
+import { Util } from "../util.slint";
+import { Label } from "./label.slint";
+import { CenterLayout } from "./center-layout.slint";
+
+export global ToastSetting {
+    in-out property <string> text;
+    in-out property <string> text-type;
+
+    public function set(text: string, text-type: string) {
+        self.text = text;
+        self.text-type = text-type;
+    }
+}
+
+export component Toast inherits Rectangle {
+    in-out property<string> type: "success";
+    in-out property<length> inner-max-width: 300px;
+    in-out property text <=> txt.text;
+
+    callback clicked <=> touch.clicked;
+
+    width: hbox.preferred-width + Theme.padding * 2;
+    height: hbox.preferred-height;
+    border-radius: Theme.border-radius;
+    border-color: Theme.base-border-color;
+    background: Util.text-color(root.type);
+
+    hbox := HorizontalLayout {
+        alignment: LayoutAlignment.center;
+        spacing: Theme.spacing;
+        padding: Theme.padding * 2;
+
+        CenterLayout {
+            img := Image {
+                width: txt.font-size * 1.2;
+                height: self.width;
+                source: Util.icon-source(root.type);
+                colorize: Colors.white;
+            }
+        }
+
+        txt := Label {
+            max-width: root.inner-max-width;
+            font-size: Theme.title4-font-size;
+            color: img.colorize;
+            wrap: word-wrap;
+        }
+    }
+
+    touch := TouchArea { }
+}

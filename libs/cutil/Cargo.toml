@@ -1,0 +1,23 @@
+[package]
+name = "cutil"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0"
+rand = "0.8"
+hex = "0.4"
+chrono = "0.4"
+bytes = "1.0"
+
+aes = { version = "0.7", optional = true }
+block-modes = { version = "0.8", optional = true }
+crypto-hash = { version = "0.3", optional = true }
+reqwest = { version = "0.11", optional = true }
+
+[features]
+default = []
+time = []
+http = ["reqwest/json", "reqwest/socks"]
+native-tls-vendored = ["reqwest/native-tls-vendored"]
+crypto = ["dep:aes", "dep:block-modes", "dep:crypto-hash"]

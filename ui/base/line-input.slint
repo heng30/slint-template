@@ -1,0 +1,79 @@
+import { Palette } from "std-widgets.slint";
+import { Theme } from "../theme.slint";
+import { Label } from "./label.slint";
+import { IconBtn } from "./icon-btn.slint";
+
+export component LineInput inherits Rectangle {
+    in-out property text <=> text-input.text;
+    in property input-type <=> text-input.input-type;
+
+    in property <image> icon;
+    in property <string> placeholder-text;
+    in property <bool> enabled <=> text-input.enabled;
+    in property <bool> is-show-icon: true;
+
+    callback clicked <=> icon.clicked;
+    callback edited <=> text-input.edited;
+    callback accepted <=> text-input.accepted;
+
+    width: 100px;
+    forward-focus: text-input;
+    border-radius: Theme.border-radius;
+    border-width: text-input.has-focus ? 2px : 1px;
+    border-color: text-input.has-focus ? Palette.accent-background : Palette.border;
+
+    public function paste() {
+        text-input.paste();
+    }
+
+    public function copy() {
+        text-input.copy();
+    }
+
+    HorizontalLayout {
+        spacing: Theme.spacing * 2;
+        padding-top: Theme.padding * 3;
+        padding-bottom: Theme.padding * 3;
+        padding-left: Theme.padding * 4;
+        padding-right: Theme.padding * 3;
+        alignment: LayoutAlignment.space-between;
+
+        Flickable {
+            viewport-width: text-input.preferred-width + Theme.padding;
+            width: root.width - (is-show-icon ? icon.width : 0) - parent.padding-left - parent.padding-right - (is-show-icon ? parent.spacing * 2 : 0);
+
+            Rectangle {
+                x: 0;
+                width: Math.max(parent.width, text-input.preferred-width);
+
+                text-input := TextInput {
+                    single-line: true;
+                    vertical-alignment: TextVerticalAlignment.center;
+                }
+
+                if text-input.text == "": Label {
+                    x: 0;
+                    text: root.placeholder-text;
+                    color: Theme.placeholder-text-color;
+                }
+
+                ta := TouchArea {
+                    enabled: text-input.text == "";
+                    mouse-cursor: MouseCursor.text;
+
+                    clicked => {
+                        text-input.focus();
+                    }
+                }
+            }
+        }
+
+        icon := IconBtn {
+            visible: root.is-show-icon;
+            width: text-input.height;
+            height: Theme.icon-size;
+            icon: root.icon;
+            icon-width: Theme.icon-size;
+        }
+    }
+}

@@ -1,0 +1,53 @@
+import { Theme, Icons } from "../theme.slint";
+import { Label } from "./label.slint";
+import { Logic } from "../logic.slint";
+
+export component Loading inherits Rectangle {
+    in property <string> loading-text: "Loading...";
+    in property <duration> duration: 0.5s;
+    in property <image> loading-icon: Icons.loading;
+    in property <length> icon-size: Theme.icon-size;
+    in property <color> colorize: Theme.primary-text-color;
+    in property <length> font-size: Theme.default-font-size;
+    in property <length> gap: Theme.spacing * 2;
+    in property <bool> is-show-animation: true;
+
+    public function close() {
+        self.visible = false;
+    }
+
+    public function open() {
+        self.visible = true;
+    }
+
+    if root.visible: VerticalLayout {
+        alignment: center;
+        spacing: root.gap;
+        Rectangle {
+            height: icon.height;
+            width: parent.width;
+            icon := Image {
+                height: root.icon-size;
+                width: self.height;
+                rotation-angle: !root.is-show-animation ? 0deg : 240deg * animation-tick() / root.duration;
+                source: root.loading-icon;
+                colorize: root.colorize;
+                animate rotation-angle {
+                    easing: ease-in-out;
+                    iteration-count: -1;
+                }
+            }
+        }
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+            Label {
+                text: root.loading-text;
+                font-size: root.font-size;
+                color: root.colorize;
+            }
+        }
+    }
+
+    TouchArea { }
+}

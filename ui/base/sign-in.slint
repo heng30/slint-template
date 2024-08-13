@@ -1,0 +1,151 @@
+import { Theme, Icons } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { Store } from "../store.slint";
+import { IconBtn } from "./icon-btn.slint";
+import { Label } from "./label.slint";
+import { Head } from "./head.slint";
+import { CancelBtn, ConfirmBtn } from "./btn.slint";
+import { LineInput } from "line-input.slint";
+import { SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel } from "./setting-detail.slint";
+
+export component SignIn inherits Rectangle {
+    in property <bool> is-show-header: true;
+
+    private property <string> error-message;
+
+    callback cancel();
+    callback back();
+
+    //(username, password-frist, password-second) -> error-message
+    callback confirm(string, string, string) -> string;
+
+    public function reset() {
+        error-message = "";
+        username-lineedit.text = "";
+        password-first-lineedit.text = "";
+        password-second-lineedit.text = "";
+    }
+
+    forward-focus: username-lineedit;
+
+    vbox := VerticalLayout {
+        if is-show-header: Head {
+            title: Logic.tr(Store.is-cn, "返回");
+            hbox-alignment: LayoutAlignment.start;
+            clicked => {
+                root.back();
+            }
+        }
+
+        SettingDetailInner {
+            vbox-alignment: LayoutAlignment.center;
+
+            SettingDetailInnerVbox {
+                username-txt := SettingDetailLabel {
+                    text: Logic.tr(Store.is-cn, "请输入用户名");
+                }
+
+                HorizontalLayout {
+                    spacing: Theme.spacing;
+
+                    username-lineedit := LineInput {
+                        icon: Icons.paste;
+                        width: root.width - Theme.padding * 4;
+                        placeholder-text: Logic.tr(Store.is-cn, "用户名");
+
+                        edited => {
+                            root.error-message = "";
+                        }
+
+                        clicked => {
+                            username-lineedit.text = "";
+                            username-lineedit.paste();
+                        }
+                    }
+                }
+            }
+
+            SettingDetailInnerVbox {
+                password-first-txt := SettingDetailLabel {
+                    text: Logic.tr(Store.is-cn, "请输入密码");
+                }
+
+                HorizontalLayout {
+                    spacing: Theme.spacing;
+
+                    private property <bool> is-show-password;
+
+                    password-first-lineedit := LineInput {
+                        width: root.width - Theme.padding * 4;
+                        placeholder-text: Logic.tr(Store.is-cn, "至少8个字符");
+                        icon: parent.is-show-password ? Icons.eye : Icons.close-eye;
+                        input-type: parent.is-show-password ? InputType.text : InputType.password;
+
+                        edited => {
+                            root.error-message = "";
+                        }
+
+                        clicked => {
+                            parent.is-show-password = !parent.is-show-password;
+                        }
+                    }
+                }
+            }
+
+            SettingDetailInnerVbox {
+                password-second-txt := SettingDetailLabel {
+                    text: Logic.tr(Store.is-cn, "请再次输入密码");
+                }
+
+                HorizontalLayout {
+                    spacing: Theme.spacing;
+
+                    private property <bool> is-show-password;
+
+                    password-second-lineedit := LineInput {
+                        width: root.width - Theme.padding * 4;
+                        placeholder-text: Logic.tr(Store.is-cn, "至少8个字符");
+                        icon: parent.is-show-password ? Icons.eye : Icons.close-eye;
+                        input-type: is-show-password ? InputType.text : InputType.password;
+
+                        edited => {
+                            root.error-message = "";
+                        }
+
+                        clicked => {
+                            parent.is-show-password = !parent.is-show-password;
+                        }
+                    }
+                }
+            }
+
+            if root.error-message != "": SettingDetailInnerVbox {
+                SettingDetailLabel {
+                    color: Theme.danger-color;
+                    text: root.error-message;
+                }
+            }
+
+            HorizontalLayout {
+                spacing: Theme.spacing * 10;
+                padding: Theme.padding * 5;
+
+                CancelBtn {
+                    text: Logic.tr(Store.is-cn, "取消");
+                    clicked => {
+                        root.reset();
+                        root.cancel();
+                    }
+                }
+
+                ConfirmBtn {
+                    text: Logic.tr(Store.is-cn, "登录");
+
+                    clicked => {
+                        root.error-message = root.confirm(username-lineedit.text, password-first-lineedit.text, password-second-lineedit.text);
+                    }
+                }
+            }
+        }
+    }
+}

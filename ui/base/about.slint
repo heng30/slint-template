@@ -1,0 +1,87 @@
+import { Logic } from "../logic.slint";
+import { Store } from "../store.slint";
+import { Util } from "../util.slint";
+import { Theme, Icons } from "../theme.slint";
+import { SettingDetail } from "setting-detail.slint";
+import { Label } from "label.slint";
+import { IconBtn } from "icon-btn.slint";
+import { Link } from "link.slint";
+import { Brand } from "brand.slint";
+
+
+
+
+export global AboutSetting {
+    in-out property <string> title: "sollaw v0.0.1";
+    in-out property <string> sponsor: "0xf1199999751b1a3A74590adBf95401D19AB30014";
+    in-out property <string> text: "Based on Slint-UI. Copyright 2022-2030. All rights reserved. The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.";
+}
+
+export component About inherits SettingDetail {
+    title: Logic.tr(Store.is-cn, "关 于");
+
+    VerticalLayout {
+        alignment: start;
+        spacing: Theme.spacing * 4;
+        padding: Theme.padding * 2;
+        padding-top: Theme.padding * 4;
+
+        HorizontalLayout {
+            alignment: center;
+
+            Label {
+                color: Theme.brand-color;
+                text: AboutSetting.title;
+                font-size: Theme.title1-font-size;
+            }
+        }
+
+        Label {
+            horizontal-alignment: center;
+            text: AboutSetting.text;
+            wrap: word-wrap;
+        }
+
+        VerticalLayout {
+            spacing: Theme.spacing * 2;
+            HorizontalLayout {
+                alignment: center;
+                spacing: Theme.spacing * 2;
+
+                Label {
+                    text: "🎉❤Buy Me a Coffee(MetaMask)❤🎉";
+                }
+
+                IconBtn {
+                    icon: Icons.copy;
+                    clicked => {
+                        Logic.copy-to-clipboard(AboutSetting.sponsor);
+                    }
+                }
+            }
+
+            HorizontalLayout {
+                alignment: center;
+                Link {
+                    wrap: word-wrap;
+                    text: AboutSetting.sponsor;
+                    color: Theme.placeholder-text-color;
+                    font-size: Theme.default-font-size - 2px;
+
+                    clicked => {
+                        Util.open-url("Default", "https://etherscan.io/address/" + AboutSetting.sponsor);
+                    }
+                }
+            }
+        }
+
+        HorizontalLayout {
+            alignment: center;
+            padding-top: Theme.padding * 5;
+
+            Brand {
+                width: Math.min(root.width * 50%, 300px);
+            }
+        }
+    }
+}

@@ -1,0 +1,40 @@
+import { Theme } from "../theme.slint";
+import { IconBtn } from "./icon-btn.slint";
+import { CenterLayout } from "./center-layout.slint";
+
+export component Tag inherits Rectangle {
+    in-out property text <=> tag.text;
+    in-out property text-color <=> tag.color;
+    in-out property font-size <=> tag.font-size;
+    in-out property<bool> is-show-close-btn: false;
+    in-out property<length> h-padding: Theme.padding;
+    in-out property<length> v-padding: 0px;
+
+    callback close <=> close-btn.clicked;
+
+    border-radius: Theme.border-radius;
+    background: Theme.brand-color.darker(20%);
+
+    HorizontalLayout {
+        padding-left: root.h-padding;
+        padding-right: root.h-padding;
+        padding-top: root.v-padding;
+        padding-bottom: root.v-padding;
+
+        tag := Text {
+            vertical-alignment: center;
+            font-size: Theme.default-font-size - 4px;
+            color: Theme.base-color;
+        }
+
+        CenterLayout {
+            width: root.is-show-close-btn ? self.preferred-width : 0px;
+            padding-left: Theme.padding;
+            close-btn := IconBtn {
+                visible: root.is-show-close-btn;
+                icon: @image-url("../images/close.svg");
+                width: tag.preferred-height * 0.6;
+            }
+        }
+    }
+}

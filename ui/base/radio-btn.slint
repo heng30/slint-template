@@ -1,0 +1,59 @@
+import { Theme } from "../theme.slint";
+import { Label } from "./label.slint";
+import { Palette } from "std-widgets.slint";
+
+export component RadioBtn inherits Rectangle {
+    in-out property text <=> txt.text;
+    in-out property enabled <=> ta.enabled;
+    in-out property <bool> checked;
+
+    width: hbox.preferred-width;
+    height: hbox.preferred-height;
+
+    callback check();
+
+    Rectangle {
+        x: hbox.x - (self.width - inner.width) / 2;
+        width: inner.width + Theme.spacing * 4;
+        height: self.width;
+        border-radius: self.width / 2;
+        background: ta.has-hover ? Palette.background : Colors.transparent;
+    }
+
+    hbox := HorizontalLayout {
+        spacing: Theme.spacing * 4;
+        alignment: start;
+
+        VerticalLayout {
+            alignment: center;
+            inner := Rectangle {
+                width: Theme.default-font-size * 1.1;
+                height: self.width;
+                border-width: 2px;
+                border-radius: self.width / 2;
+                border-color: root.checked ? Palette.accent-background : Theme.secondary-text-color;
+
+                if root.checked: Rectangle {
+                    width: 60%;
+                    height: self.width;
+                    background: parent.border-color;
+                    border-radius: self.width / 2;
+                }
+            }
+        }
+
+        VerticalLayout {
+            alignment: center;
+            txt := Label { }
+        }
+    }
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+        clicked => {
+            if (!root.checked) {
+                root.check();
+            }
+        }
+    }
+}

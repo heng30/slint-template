@@ -1,0 +1,180 @@
+import { Palette } from "std-widgets.slint";
+import { Store } from "./store.slint";
+import "./fonts/SourceHanSerifCN.ttf";
+import "./fonts/SourceHanSansCN.otf";
+
+export global Theme {
+    out property <bool> is-dark: Store.setting-ui.is-dark;
+    out property <length> padding: Math.max(4px, Math.round(default-font-size / 4px) * 1px);
+    out property <length> spacing: padding;
+    out property <length> border-radius: padding;
+    out property <length> scroll-width: 12px;
+    out property <length> dialog-max-width: 600px;
+    out property <length> header-height: Math.max(35px, icon-size + padding * 4);
+    out property <length> footer-height: Math.max(40px, icon-size * 2);
+
+    in-out property <length> default-width: Math.max(500px, default-font-size * 30);
+    in-out property <length> default-height: Math.max(800px, default-width + 300px);
+    in-out property <length> default-font-size: Store.setting-ui.font-size.to-float() * 1px;
+    in-out property <length> title5-font-size: default-font-size + 1px;
+    in-out property <length> title4-font-size: default-font-size + 2px;
+    in-out property <length> title3-font-size: default-font-size + 4px;
+    in-out property <length> title2-font-size: default-font-size + 6px;
+    in-out property <length> title1-font-size: default-font-size + 8px;
+
+    in-out property <string> default-font-family: Store.setting-ui.font-family;
+
+    out property <length> icon-size: Math.max(24px, default-font-size + 9px);
+    out property <length> avatar-size: icon-size + 8px;
+    out property <duration> default-animate-duration: 200ms;
+
+    out property <color> brand-color: is-dark ? #3F51B5 : #0000B8;
+    out property <color> secondary-brand-color: is-dark ? #324090 : #3F51B5;
+    out property <color> third-brand-color: secondary-brand-color.brighter(50%);
+    out property <color> success-color: is-dark ? #336633 : #67C23A;
+    out property <color> warning-color: is-dark ? #996600 : #E6A23C;
+    out property <color> danger-color: is-dark ? #CC3333 : #F56C6C;
+    out property <color> info-color:is-dark ? #6F6F6F : #909399;
+    out property <color> mark-color: Theme.warning-color;
+    out property <color> unmark-color: is-dark ? #646464 : #E8F2FD;
+
+    out property <color> base-color: is-dark ? #000000 : #FFFFFF;
+    out property <color> invert-base-color: is-dark ? #FFFFFF : #000000;
+    out property <color> base-background: is-dark ? Palette.alternate-background : #FCFCFC;
+    out property <color> secondary-background: is-dark ? base-background.brighter(20%) : base-background.darker(10%);
+    out property <color> base-background-drop-shadow: is-dark ? base-background.brighter(60%) : base-background.darker(15%);
+    out property <color> secondary-background-drop-shadow: is-dark ? secondary-background.brighter(5%) : secondary-background.darker(5%);
+
+    out property <color> primary-text-color: is-dark ? #969696 : #202123;
+    out property <color> secondary-text-color:
+        is-dark ? primary-text-color.darker(50%) : primary-text-color.brighter(50%);
+    out property <color> regular-text-color: is-dark ? primary-text-color.darker(20%) : primary-text-color.brighter(20%);
+    out property <color> placeholder-text-color: is-dark ? #4B4B4B : #A8ABB2;
+
+    out property <color> avatar-color: primary-text-color.brighter(50%);
+    out property <color> icon-color: is-dark ? #AAAAAA : #515151;
+    out property <color> base-border-color: is-dark ? #2a2a2a : #DCDFE6;
+
+    out property <color> have-read-text-color: is-dark ? #555555 : #606060;
+    out property <color> link-text-color: is-dark ? #0066AA : #0000B8;
+
+    out property <[color]> tag-colors: is-dark ? [#a3b3cc, #94c2af, #9ac0c4, #b2acca, #cca8a3, #caa6bc, #a8c085, #b0b2b6] : [#CCE0FF, #BAF3DB, #C1F0F5, #DFD8FD, #FFD2CC, #FDD0EC, #D3F1A7, #DCDFE4];
+
+    public function set-dark(flag: bool) {
+        Store.setting-ui.is-dark = flag;
+        Palette.color-scheme = is-dark ? ColorScheme.dark : ColorScheme.light;
+    }
+
+    public function toggle() {
+        Store.setting-ui.is-dark = !Store.setting-ui.is-dark;
+        Palette.color-scheme = is-dark ? ColorScheme.dark : ColorScheme.light;
+    }
+}
+
+export global Icons {
+    out property <image> empty-image;
+    out property <image> wechat-pay: @image-url("./images/wechat-pay.png");
+    out property <image> metamask-pay: @image-url("./images/metamask-pay.png");
+    out property <image> brand: @image-url("./images/brand.png");
+    out property <image> github: @image-url("./images/github.svg");
+    out property <image> rss-fill: @image-url("./images/rss-fill.svg");
+    out property <image> rss-light: @image-url("./images/rss-light.svg");
+    out property <image> setting-fill: @image-url("./images/setting-fill.svg");
+    out property <image> setting-light: @image-url("./images/setting-light.svg");
+    out property <image> add-fill: @image-url("./images/add-fill.svg");
+    out property <image> add-small: @image-url("./images/add-small.svg");
+    out property <image> add-in-rect: @image-url("./images/add-in-rect.svg");
+    out property <image> back: @image-url("./images/back.svg");
+    out property <image> menu: @image-url("./images/menu.svg");
+    out property <image> star: @image-url("./images/star.svg");
+    out property <image> no-message: @image-url("./images/no-message.svg");
+    out property <image> no-data: @image-url("./images/no-data.svg");
+    out property <image> delete: @image-url("./images/delete-light.svg");
+    out property <image> refresh: @image-url("./images/refresh.svg");
+    out property <image> cancel-fill: @image-url("./images/cancel-fill.svg");
+    out property <image> cancel: @image-url("./images/cancel-light.svg");
+    out property <image> success-fill: @image-url("./images/success-fill.svg");
+    out property <image> success: @image-url("./images/success.svg");
+    out property <image> close: @image-url("./images/close.svg");
+    out property <image> favorite-fill: @image-url("./images/favorite-fill.svg");
+    out property <image> find-light: @image-url("./images/find.svg");
+    out property <image> edit: @image-url("./images/edit.svg");
+    out property <image> copy: @image-url("./images/copy.svg");
+    out property <image> paste: @image-url("./images/paste.svg");
+    out property <image> recover: @image-url("./images/recover.svg");
+    out property <image> backup-recover: @image-url("./images/backup-recover.svg");
+    out property <image> recover-from-trash: @image-url("./images/recover-from-trash.svg");
+    out property <image> upload-cloud: @image-url("./images/upload-cloud.svg");
+    out property <image> download-cloud: @image-url("./images/download-cloud.svg");
+
+    out property <image> ui: @image-url("./images/ui.svg");
+    out property <image> sync: @image-url("./images/sync.svg");
+    out property <image> sync-failed: @image-url("./images/sync-failed.svg");
+    out property <image> proxy-light: @image-url("./images/proxy-light.svg");
+    out property <image> cache-light: @image-url("./images/clear-light.svg");
+    out property <image> about-light: @image-url("./images/about-light.svg");
+    out property <image> help-light: @image-url("./images/help-light.svg");
+    out property <image> reading: @image-url("./images/reading.svg");
+    out property <image> feedback: @image-url("./images/feedback.svg");
+    out property <image> donate: @image-url("./images/donate.svg");
+    out property <image> send: @image-url("./images/send.svg");
+    out property <image> search: @image-url("./images/search.svg");
+    out property <image> version: @image-url("./images/version.svg");
+    out property <image> download: @image-url("./images/download.svg");
+    out property <image> hide: @image-url("./images/hide.svg");
+    out property <image> loading: @image-url("./images/loading.svg");
+    out property <image> crypto: @image-url("./images/crypto.svg");
+    out property <image> recipient: @image-url("./images/recipient.svg");
+    out property <image> history: @image-url("./images/history.svg");
+    out property <image> address: @image-url("./images/address.svg");
+    out property <image> address-book: @image-url("./images/address-book.svg");
+    out property <image> eye: @image-url("./images/eye.svg");
+    out property <image> noeye: @image-url("./images/noeye.svg");
+    out property <image> close-eye: @image-url("./images/close-eye.svg");
+    out property <image> account: @image-url("./images/account.svg");
+    out property <image> switch: @image-url("./images/switch.svg");
+    out property <image> checked-box: @image-url("./images/checked-box.svg");
+    out property <image> mnemonic: @image-url("./images/mnemonic.svg");
+    out property <image> pending-fill: @image-url("./images/pending-fill.svg");
+    out property <image> error-fill: @image-url("./images/error-fill.svg");
+    out property <image> success-big-fill: @image-url("./images/success-big-fill.svg");
+    out property <image> security: @image-url("./images/security.svg");
+    out property <image> developer: @image-url("./images/developer.svg");
+    out property <image> password: @image-url("./images/password.svg");
+    out property <image> reset-in-trash: @image-url("./images/reset-in-trash.svg");
+    out property <image> debug-light: @image-url("./images/debug-light.svg");
+    out property <image> add-light: @image-url("./images/add-light.svg");
+    out property <image> management: @image-url("./images/management.svg");
+    out property <image> airdrop: @image-url("./images/airdrop.svg");
+    out property <image> max: @image-url("./images/max.svg");
+    out property <image> browser-access: @image-url("./images/browser-access.svg");
+    out property <image> warning: @image-url("./images/warning.svg");
+    out property <image> qrcode: @image-url("./images/qrcode.svg");
+    out property <image> advance-setting: @image-url("./images/advance-setting.svg");
+    out property <image> turtle: @image-url("./images/turtle.svg");
+    out property <image> rabbit: @image-url("./images/rabbit.svg");
+    out property <image> horse: @image-url("./images/horse.svg");
+    out property <image> logout: @image-url("./images/logout.svg");
+    out property <image> logout-fill: @image-url("./images/logout-fill.svg");
+
+    out property <image> solana: @image-url("./images/solana.svg");
+    out property <image> usdt: @image-url("./images/usdt.svg");
+    out property <image> usdc: @image-url("./images/usdc.svg");
+    out property <image> eth: @image-url("./images/eth.svg");
+    out property <image> doge: @image-url("./images/doge.svg");
+    out property <image> curve: @image-url("./images/curve.svg");
+    out property <image> token: @image-url("./images/token.svg");
+
+    out property <image> wechat-fill: @image-url("./images/wechat-fill.svg");
+    out property <image> wechat-light: @image-url("./images/wechat-light.svg");
+    out property <image> metamask-light: @image-url("./images/metamask-light.svg");
+
+    out property <image> landing-subscription: @image-url("./images/landing-subscription.svg");
+    out property <image> landing-reading: @image-url("./images/landing-reading.svg");
+    out property <image> landing-welcome: @image-url("./images/landing-welcome.svg");
+    out property <image> landing-language-switch: @image-url("./images/landing-language-switch.svg");
+    out property <image> landing-account: @image-url("./images/landing-account.svg");
+    out property <image> landing-send: @image-url("./images/landing-send.svg");
+    out property <image> home-light: @image-url("./images/home-light.svg");
+    out property <image> home-fill: @image-url("./images/home-fill.svg");
+}

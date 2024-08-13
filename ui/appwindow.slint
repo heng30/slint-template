@@ -1,0 +1,70 @@
+import { Theme, Icons } from "./theme.slint";
+import { Logic } from "./logic.slint";
+import { Store, SettingDetailIndex } from "./store.slint";
+import { Util } from "./util.slint";
+import { Panel } from "./panel/panel.slint";
+import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialogDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting } from "./base/widgets.slint";
+
+export component AppWindow inherits Window {
+    default-font-size: Theme.default-font-size;
+    default-font-family: Theme.default-font-family;
+    preferred-width: Theme.default-width;
+    preferred-height: Theme.default-height;
+
+    background: Theme.base-background;
+    icon: Icons.brand;
+    title: "slint-template";
+
+    Panel { }
+
+    if IconsDialogSetting.show || ConfirmDialogSetting.show: Blanket {
+        clicked => {
+            IconsDialogSetting.show = false;
+            ConfirmDialogSetting.show = false;
+        }
+    }
+
+    if IconsDialogSetting.show: IconsDialog {
+        is-prevent-event-forward: true;
+        select-index(handle-type, index, user-data) => {
+        }
+    }
+
+    if ConfirmDialogSetting.show: ConfirmDialogDialog {
+        is-prevent-event-forward: true;
+        width: Math.min(root.width * 0.9, 380px);
+    }
+
+    if ToastSetting.text != "": Toast {
+        x: root.width / 2 - self.width / 2;
+        y: 50px;
+        inner-max-width: root.width * 80%;
+        text: ToastSetting.text;
+        type: ToastSetting.text-type;
+        clicked => {
+            Logic.copy-to-clipboard(self.text);
+        }
+    }
+
+    if Store.is-show-landing-page: LandingPage {
+        details: [
+            {
+                picture: Icons.landing-account,
+                description: "",
+            },
+            {
+                picture: Icons.landing-send,
+                description: "",
+            },
+            {
+                picture: Icons.landing-welcome,
+                description: "",
+            }
+        ];
+        skipped => {
+            Store.is-show-landing-page = false;
+        }
+    }
+}
+
+export { Util, Logic, Store, Theme, Icons, IconsDialogSetting, LoadingStatus, SettingDetailIndex, AboutSetting, ToastSetting }

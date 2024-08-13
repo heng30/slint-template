@@ -1,0 +1,16 @@
+import { Theme } from "../theme.slint";
+
+export component Link inherits Text {
+    in-out property <bool> is-read;
+
+    callback clicked <=> touch.clicked;
+    out property has-hover <=> touch.has-hover;
+
+    wrap: word-wrap;
+    font-size: Theme.title5-font-size;
+    color: root.is-read ? Theme.have-read-text-color : Theme.link-text-color;
+
+    touch := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+    }
+}

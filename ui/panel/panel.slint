@@ -1,0 +1,18 @@
+import { Theme } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { Store, SettingDetailIndex,  TabIndex } from "../store.slint";
+import { Bodyer } from "./bodyer/panel.slint";
+import { Footer } from "./footer.slint";
+
+export component Panel inherits VerticalLayout {
+    padding-left: Theme.padding;
+    padding-right: Theme.padding;
+
+    property <bool> isShowFooter: Store.current-tab-index == TabIndex.Home || (Store.current-tab-index == TabIndex.Setting && Store.current-setting-detail-index == SettingDetailIndex.Home);
+
+    Bodyer {
+        height: parent.height - (isShowFooter ? (Theme.footer-height + Theme.padding) : 0);
+    }
+
+    if isShowFooter:  Footer { }
+}

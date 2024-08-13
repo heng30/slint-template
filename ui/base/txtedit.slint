@@ -1,0 +1,26 @@
+import { TextEdit, Palette } from "std-widgets.slint";
+import { Theme } from "../theme.slint";
+
+export component TxtEdit inherits Rectangle {
+    clip: true;
+    forward-focus: edit;
+    border-width: edit.has-focus ? 2px : 1px;
+    border-radius: Theme.border-radius;
+    border-color: edit.has-focus ? Palette.accent-background : Palette.border;
+
+    in-out property text <=> edit.text;
+    callback edited <=> edit.edited;
+
+    public function clear() {
+        root.text = "";
+    }
+
+    hbox := HorizontalLayout {
+        padding: Theme.padding * 2;
+        padding-right: 0;
+
+        edit := TextEdit {
+            font-size: Theme.default-font-size;
+        }
+    }
+}

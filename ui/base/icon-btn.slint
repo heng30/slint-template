@@ -1,0 +1,102 @@
+import { Palette } from "std-widgets.slint";
+import { Theme } from "../theme.slint";
+import { Label } from "./label.slint";
+
+export enum RotationType {
+    Auto,
+    Click,
+    None,
+}
+
+export component IconBtn inherits Rectangle {
+    in-out property icon <=> img.source;
+    in-out property colorize <=> img.colorize;
+    in-out property icon-width <=> img.width;
+    in-out property icon-size <=> img.width;
+    in-out property icon-rotation-angle <=> img.rotation-angle;
+    in-out property mouse-cursor <=> touch.mouse-cursor;
+    in-out property enabled-toucharea <=> touch.enabled;
+    out property has-hover <=> touch.has-hover;
+
+    in-out property <bool> show-icon-hover-background: true;
+    in-out property <bool> is-ltr: true;
+    in-out property <RotationType> rotation-type: RotationType.None;
+    in-out property <bool> use-auto-size: false;
+
+    in-out property <string> text;
+    in-out property <length> font-size: Theme.title4-font-size;
+    in-out property <color> text-color: root.colorize;
+    in-out property <int> icon-rotation-iteration-count;
+
+    callback clicked();
+
+    in-out property <color> bg-color: Colors.transparent;
+    in-out property <color> bg-pressed-color: Colors.transparent;
+
+    border-radius: Theme.border-radius;
+    background: touch.has-hover ? bg-color.darker(10%) : (touch.pressed ? bg-pressed-color : bg-color);
+
+    animate background {
+        duration: Theme.default-animate-duration;
+        easing: ease-in-out;
+    }
+
+    // only is a icon showing this hover color
+    if (text == "" && show-icon-hover-background): Rectangle {
+        x: img.x - Theme.spacing * 2 - (Math.max(Theme.icon-size, root.icon-width) - img.width) / 2;
+        width: Math.max(Theme.icon-size, root.icon-width) + Theme.spacing * 4;
+        height: self.width;
+        border-radius: self.width / 2;
+        background: touch.has-hover ? Palette.background : Colors.transparent;
+    }
+
+    hbox := HorizontalLayout {
+        alignment: center;
+        spacing: Theme.spacing * 2;
+
+        padding: root.use-auto-size ? Theme.padding : 0;
+        padding-left: root.use-auto-size ? Theme.padding * 4 : 0;
+        padding-right: root.use-auto-size ? Theme.padding * 4 : 0;
+
+        if !root.is-ltr && root.text != "": Label {
+            color: root.text-color;
+            font-size: root.font-size;
+            text: root.text;
+        }
+
+        img := Image {
+            width: Theme.icon-size;
+            colorize: Theme.icon-color;
+            rotation-angle: 0;
+
+            animate rotation-angle {
+                duration: Theme.default-animate-duration;
+                easing: ease-in-out;
+                iteration-count: root.rotation-type == RotationType.Auto ? -1 : root.icon-rotation-iteration-count;
+            }
+        }
+
+        if root.is-ltr && root.text != "": Label {
+            color: root.text-color;
+            font-size: root.font-size;
+            text: root.text;
+        }
+    }
+
+    fs := FocusScope { }
+
+    touch := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+        clicked => {
+            if (RotationType.Click == root.rotation-type) {
+                if (icon-rotation-angle == 0) {
+                    icon-rotation-angle = 360deg;
+                } else {
+                    icon-rotation-angle = 0deg;
+                }
+            }
+            fs.focus();
+            root.clicked();
+        }
+    }
+}

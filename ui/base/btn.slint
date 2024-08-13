@@ -1,0 +1,27 @@
+import { Theme, Icons } from "../theme.slint";
+import { IconBtn } from "./icon-btn.slint";
+
+export component CancelBtn inherits IconBtn {
+    use-auto-size: true;
+    icon: Icons.cancel;
+    icon-width: Theme.icon-size;
+    border-radius: self.height / 2;
+    bg-color: Theme.info-color.brighter(50%);
+    bg-pressed-color: self.bg-color.darker(30%);
+    colorize: self.bg-pressed-color.darker(100%);
+}
+
+export component ConfirmBtn inherits IconBtn {
+    use-auto-size: true;
+    icon: Icons.success;
+    border-radius: self.height / 2;
+    bg-color: Theme.success-color.darker(20%);
+    bg-pressed-color: self.bg-color.darker(30%);
+    colorize: Theme.base-color;
+}
+
+export component TextBtn inherits IconBtn {
+    use-auto-size: true;
+    background: Colors.transparent;
+    colorize: Theme.secondary-brand-color;
+}

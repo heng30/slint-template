@@ -1,0 +1,38 @@
+import { Theme, Icons } from "../theme.slint";
+import { IconBtn } from "./icon-btn.slint";
+import { Label } from "./label.slint";
+
+export component SettingEntry inherits Rectangle {
+    in-out property text <=> sib.text;
+    in-out property font-size <=> sib.font-size;
+    in-out property icon <=> sib.icon;
+    in-out property icon-colorize <=> sib.colorize;
+    in-out property icon-width <=> sib.icon-width;
+    in-out property attach-text <=> eib.text;
+
+    background: Theme.secondary-background;
+    border-radius: Theme.border-radius;
+
+    callback clicked <=> ta.clicked;
+
+    HorizontalLayout {
+        padding: Theme.padding * 2;
+        alignment: space-between;
+
+        sib := IconBtn {
+            background: Colors.transparent;
+        }
+
+        eib := IconBtn {
+            background: Colors.transparent;
+            icon: Icons.back;
+            icon-rotation-angle: 180deg;
+            colorize: root.background.darker(30%);
+            is-ltr: false;
+        }
+    }
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+    }
+}

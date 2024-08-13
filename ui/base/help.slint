@@ -1,0 +1,31 @@
+import { Theme } from "../theme.slint";
+import { Store } from "../store.slint";
+import { Logic } from "../logic.slint";
+import { SettingDetail, SettingDetailInner } from "setting-detail.slint";
+import { Label } from "label.slint";
+
+export component Help inherits SettingDetail {
+    title: Logic.tr(Store.is-cn, "帮 助");
+    in-out property <[string]> entries;
+
+    SettingDetailInner {
+        for item in entries: HorizontalLayout {
+            spacing: Theme.spacing * 4;
+
+            VerticalLayout {
+                alignment: LayoutAlignment.center;
+                Rectangle {
+                    width: 10px;
+                    height: self.width;
+                    background: Theme.regular-text-color.brighter(50%);
+                    border-radius: self.width / 2;
+                }
+            }
+
+            Label {
+                wrap: word-wrap;
+                text: item;
+            }
+        }
+    }
+}

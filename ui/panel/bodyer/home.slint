@@ -1,0 +1,19 @@
+import { Theme, Icons } from "../../theme.slint";
+import { Store } from "../../store.slint";
+import { Logic } from "../../logic.slint";
+import { Head } from "../../base/widgets.slint";
+
+component TopHead inherits Head {
+    icon: Icons.home-light;
+    title: Logic.tr(Store.is-cn, "主页");
+    hbox-alignment: LayoutAlignment.start;
+}
+
+component Body inherits Rectangle { }
+
+export component Home inherits Rectangle {
+    VerticalLayout {
+        TopHead { }
+        Body { }
+    }
+}

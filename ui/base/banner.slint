@@ -1,0 +1,20 @@
+import { Theme } from "../theme.slint";
+import { Label } from "label.slint";
+
+export component Banner inherits HorizontalLayout {
+    in-out property background <=> rec.background;
+    in-out property border-radius <=> rec.border-radius;
+    in-out property text <=> label.text;
+    in-out property font-size <=> label.font-size;
+    in-out property text-color <=> label.color;
+
+    rec := Rectangle {
+        background: Theme.warning-color;
+        height: label.preferred-height + Theme.padding * 2;
+
+        label := Label {
+            font-size: Theme.title4-font-size;
+            color: Theme.invert-base-color;
+        }
+    }
+}

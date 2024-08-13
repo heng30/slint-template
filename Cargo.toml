@@ -1,0 +1,102 @@
+[package]
+name = "slint-template"
+version = "0.1.0"
+edition = "2021"
+authors = ["Heng30 <rongheng30@gmail.com>"]
+readme = "README.md"
+keywords = ["rust"]
+license = "MIT"
+# homepage = "https://github.com/Heng30/solana-wallet-sollaw"
+# repository = "https://github.com/Heng30/solana-wallet-sollaw"
+
+[dependencies]
+log = "0.4"
+toml = "0.8"
+slint = "1.7"
+anyhow = "1.0"
+cfg-if = "1.0.0"
+once_cell = "1.19"
+webbrowser = "1.0"
+derivative = "2.2"
+serde_with = "3.8"
+serde_json = "1.0"
+
+uuid = { version = "1.9", features = ["v4"] }
+tokio = { version = "1.38", features = ["full"] }
+serde = { version = "1.0", features = ["serde_derive"] }
+
+sqldb = { version = "0.1", path = "./libs/sqldb" }
+cutil = { version = "0.1", path = "./libs/cutil", features = [
+  "default",
+  "crypto",
+  "time",
+  "http",
+] }
+
+image = { version = "0.24", optional = true }
+qrcode = { version = "0.13", optional = true }
+
+[target.'cfg(not(target_os = "android"))'.dependencies]
+clipboard = "0.5"
+env_logger = "0.10"
+platform-dirs = "0.3"
+
+[target.'cfg(target_os = "android")'.dependencies]
+android_logger = "0.13"
+terminal-clipboard = "0.4"
+
+[build-dependencies]
+cmd_lib = "1.9"
+slint-build = "1.7"
+
+[target.'cfg(target_os = "windows")'.build-dependencies]
+embed-resource = "2.4"
+
+[features]
+default = ["cutil/native-tls-vendored", "slint/backend-android-activity-06"]
+qrcode = [ "dep:image", "dep:qrcode"]
+desktop = [ ]
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[[bin]]
+path = "src/desktop.rs"
+name = "slint-template"
+required-features = ["desktop"]
+
+[package.metadata.android]
+package = "xyz.heng30.sollaw"
+build_targets = ["aarch64-linux-android"]
+resources = "./res"
+strip = "strip"
+
+[package.metadata.android.signing.dev]
+path = "./keystore/debug.keystore"
+keystore_password = "123456"
+
+[package.metadata.android.signing.release]
+path = "./keystore/release.keystore"
+keystore_password = "123456"
+
+[package.metadata.android.sdk]
+min_sdk_version = 23
+target_sdk_version = 32
+
+[[package.metadata.android.uses_permission]]
+name = "android.permission.INTERNET"
+
+[[package.metadata.android.uses_permission]]
+name = "android.permission.WRITE_EXTERNAL_STORAGE"
+
+[[package.metadata.android.uses_permission]]
+name = "android.permission.READ_EXTERNAL_STORAGE"
+
+[package.metadata.android.application]
+icon = "@mipmap/ic_launcher"
+theme = "@style/AppTheme"
+
+[package.metadata.android.application.activity]
+orientation = "portrait"
+launch_mode = "singleTop"
+always_retain_task_state = true

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--   Color for the app bar and other primary UI elements. -->
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+</resources>

@@ -1,0 +1,32 @@
+import { Theme } from "../theme.slint";
+
+export component Avatar inherits Rectangle {
+    in-out property icon <=> img.source;
+    in-out property icon-colorize <=> img.colorize;
+    in-out property<float> icon-size-rate: 0.7;
+
+    callback clicked <=> touch.clicked;
+
+    width: Theme.avatar-size;
+    height: self.width;
+    border-radius: self.height / 2;
+    border-width: 1px;
+    border-color: touch.has-hover ? Theme.brand-color : Colors.transparent;
+    background: @radial-gradient(circle, Theme.base-background 0%, Theme.secondary-background 100%);
+
+    animate border-color {
+        duration: Theme.default-animate-duration * 2;
+        easing: ease-in-out;
+    }
+
+    img := Image {
+        width: root.width * icon-size-rate;
+        height: self.width;
+        image-fit: ImageFit.contain;
+        colorize: Theme.avatar-color;
+    }
+
+    touch := TouchArea {
+        mouse-cursor: self.has-hover ? pointer : default;
+   }
+}

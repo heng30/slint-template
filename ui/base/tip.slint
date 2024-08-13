@@ -1,0 +1,26 @@
+import { Theme } from "../theme.slint";
+
+export component Tip inherits Rectangle {
+    in-out property <string> pos: "up";
+    in-out property text <=> tip-txt.text;
+    in property <length> parent-width: 0px;
+    in property <length> parent-height: 0px;
+
+    x: pos == "left" ? (-self.width - Theme.padding) : (pos == "right" ? (parent-width + Theme.padding) : -(self.width - parent-width) / 2);
+
+    y: (pos == "left" || pos == "right") ? (parent-height - self.height) / 2 : (pos == "bottom" ? parent-height + Theme.padding : -self.height - Theme.padding);
+
+    width: tip-txt.preferred-width + Theme.padding * 2;
+    height: tip-txt.preferred-height + Theme.padding / 2;
+
+    background: Theme.base-background;
+    border-color: Theme.base-border-color;
+    border-width: 1px;
+
+    tip-txt := Text {
+        horizontal-alignment: center;
+        vertical-alignment: center;
+        font-size: Theme.default-font-size - 2px;
+        color: Theme.primary-text-color;
+    }
+}

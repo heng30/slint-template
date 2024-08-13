@@ -1,0 +1,51 @@
+export enum TabIndex {
+    Home,
+    Setting,
+    None,
+}
+
+export enum SettingDetailIndex {
+    Home,
+    UI,
+    About,
+    Help,
+    Donate,
+}
+
+
+
+export struct SettingUI {
+    font-size: string,
+    font-family: string,
+    language: string,
+    is-dark: bool,
+}
+
+
+export global Store {
+    in-out property <bool> is-first-run;
+    in-out property <TabIndex> current-tab-index: TabIndex.Home;
+    in-out property <SettingDetailIndex> current-setting-detail-index: SettingDetailIndex.Home;
+
+    in-out property <bool> is-show-landing-page;
+
+    in-out property <bool> is-cn: setting-ui.language == "cn";
+    in-out property <SettingUI> setting-ui: {
+        font-size: "16",
+        font-family: "Source Han Sans CN",
+        language: "cn",
+        is-dark: false,
+    };
+
+    in-out property <[string]> helps: is-cn ? [
+        "配置文件保存目录: ~/.config/",
+        "数据库保存目录: ~/.local/share/",
+    ] : [
+        "Config directory: ~/.config/",
+        "Data directory: ~/.local/share/",
+    ];
+
+    public function switch-tab(tab-index: TabIndex) {
+        current-tab-index = tab-index;
+    }
+}
