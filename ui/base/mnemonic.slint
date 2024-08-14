@@ -22,7 +22,7 @@ export component Mnemonic inherits Rectangle {
     private property <int> max-blocks: mnemonics.length == 24 ? 2 : (mnemonics.length == 12 ? 1 : 0);
 
     out property <bool> is-mnemonic-counts-12: max-blocks != 2;
-    private property <string> switch-mnemonic-counts-btn-text: (is-mnemonic-counts-12 ? "24" : "12") + Logic.tr(Store.is-cn, "位组记词");
+    private property <string> switch-mnemonic-counts-btn-text: (is-mnemonic-counts-12 ? "24" : "12") + Logic.tr("mnemonics");
 
     callback back();
     callback copy([string]);
@@ -88,7 +88,7 @@ export component Mnemonic inherits Rectangle {
 
     VerticalLayout {
         if is-show-header: Head {
-            title: Logic.tr(Store.is-cn, root.header-title);
+            title: Logic.tr(root.header-title);
             hbox-alignment: LayoutAlignment.start;
             clicked => {
                 root.back();
@@ -201,14 +201,14 @@ export component Mnemonic inherits Rectangle {
                     spacing: Theme.spacing * 10;
 
                     CancelBtn {
-                        text: Logic.tr(Store.is-cn, "取消");
+                        text: Logic.tr("Cancel");
                         clicked => {
                             root.cancel();
                         }
                     }
 
                     ConfirmBtn {
-                        text: Logic.tr(Store.is-cn, "确认");
+                        text: Logic.tr("Confirm");
                         clicked => {
                             root.confirm();
                         }

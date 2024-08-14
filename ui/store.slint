@@ -12,8 +12,6 @@ export enum SettingDetailIndex {
     Donate,
 }
 
-
-
 export struct SettingUI {
     font-size: string,
     font-family: string,
@@ -21,19 +19,18 @@ export struct SettingUI {
     is-dark: bool,
 }
 
-
 export global Store {
     in-out property <bool> is-first-run;
+    in-out property <bool> is-show-landing-page;
+
     in-out property <TabIndex> current-tab-index: TabIndex.Home;
     in-out property <SettingDetailIndex> current-setting-detail-index: SettingDetailIndex.Home;
-
-    in-out property <bool> is-show-landing-page;
 
     in-out property <bool> is-cn: setting-ui.language == "cn";
     in-out property <SettingUI> setting-ui: {
         font-size: "16",
         font-family: "Source Han Sans CN",
-        language: "cn",
+        language: "en",
         is-dark: false,
     };
 
@@ -45,7 +42,4 @@ export global Store {
         "Data directory: ~/.local/share/",
     ];
 
-    public function switch-tab(tab-index: TabIndex) {
-        current-tab-index = tab-index;
-    }
 }

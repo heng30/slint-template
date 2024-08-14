@@ -55,8 +55,8 @@ pub fn init(ui: &AppWindow) {
     ui.global::<Logic>().on_copy_to_clipboard(move |msg| {
         let ui = ui_handle.unwrap();
         match copy_to_clipboard(&msg) {
-            Err(e) => toast_warn!(ui, format!("{}. {}: {e:?}", tr("复制失败"), tr("原因"))),
-            _ => toast_success!(ui, tr("复制成功")),
+            Err(e) => toast_warn!(ui, format!("{}. {}: {e:?}", tr("Copy failed"), tr("Reason"))),
+            _ => toast_success!(ui, tr("Copy success")),
         }
     });
 
@@ -65,7 +65,7 @@ pub fn init(ui: &AppWindow) {
         let ui = ui_handle.unwrap();
         match copy_from_clipboard() {
             Err(e) => {
-                toast_warn!(ui, format!("{}. {}: {e:?}", tr("粘贴失败"), tr("原因")));
+                toast_warn!(ui, format!("{}. {}: {e:?}", tr("Paste failed"), tr("Reason")));
                 slint::SharedString::default()
             }
             Ok(msg) => msg.into(),

@@ -1,9 +1,12 @@
 import { Theme, Icons } from "theme.slint";
+import { ToastStatus } from "./base/def.slint";
 
 export global Util {
-    callback show-toast(string, string);
+    // (message, status)
+    callback show-toast(string, ToastStatus);
 
-    pure callback qr-code(string) -> image;
+    // (message-type, user-data)
+    callback handle-confirm-dialog(string, string);
 
     callback string-fixed2(string) -> string;
     callback float-fixed2(float) -> string;
@@ -15,6 +18,11 @@ export global Util {
 
     // (low-bound, up-bound) => void
     pure callback rand-int(int, int) -> int;
+
+    pure callback qr-code(string) -> image;
+    qr-code => {
+        return Icons.no-data;
+    }
 
     pure callback local-now(string) -> string;
     local-now => {
@@ -31,23 +39,23 @@ export global Util {
         return input;
     }
 
-    public pure function text-color(type: string) -> color {
-        if (type == "success") {
+    public pure function text-color(status: ToastStatus) -> color {
+        if (status == ToastStatus.Success) {
             return Theme.success-color;
-        } else if (type == "warning") {
+        } else if (status == ToastStatus.Warning) {
             return Theme.warning-color.darker(10%);
-        } else if (type == "danger") {
+        } else if (status == ToastStatus.Danger) {
             return Theme.danger-color;
         }
         return Theme.info-color;
     }
 
-    public pure function icon-source(type: string) -> image {
-        if (type == "success") {
+    public pure function icon-source(status: ToastStatus) -> image {
+        if (status == ToastStatus.Success) {
             return @image-url("./images/success.svg");
-        } else if (type == "warning") {
+        } else if (status == ToastStatus.Warning) {
             return @image-url("./images/warning.svg");
-        } else if (type == "danger") {
+        } else if (status == ToastStatus.Danger) {
             return @image-url("./images/danger.svg");
         }
         return @image-url("./images/info.svg");

@@ -21,11 +21,11 @@ export component Footer inherits Rectangle {
             width: root.btn-width;
             height: root.btn-height;
             icon: Icons.home-light;
-            text: Logic.tr(Store.is-cn, "主页");
+            text: Logic.tr("Home");
             checked: Store.current-tab-index == TabIndex.Home;
 
             clicked => {
-                Store.switch-tab(TabIndex.Home);
+                Logic.switch-tab(TabIndex.Home);
             }
         }
 
@@ -33,11 +33,11 @@ export component Footer inherits Rectangle {
             width: root.btn-width;
             height: root.btn-height;
             icon: Icons.setting-light;
-            text: Logic.tr(Store.is-cn, "设置");
+            text: Logic.tr("Setting");
             checked: Store.current-tab-index == TabIndex.Setting;
 
             clicked => {
-                Store.switch-tab(TabIndex.Setting);
+                Logic.switch-tab(TabIndex.Setting);
             }
         }
     }

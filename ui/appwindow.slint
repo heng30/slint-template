@@ -3,7 +3,7 @@ import { Logic } from "./logic.slint";
 import { Store, SettingDetailIndex } from "./store.slint";
 import { Util } from "./util.slint";
 import { Panel } from "./panel/panel.slint";
-import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialogDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting } from "./base/widgets.slint";
+import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialogDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus } from "./base/widgets.slint";
 
 export component AppWindow inherits Window {
     default-font-size: Theme.default-font-size;
@@ -39,10 +39,8 @@ export component AppWindow inherits Window {
         x: root.width / 2 - self.width / 2;
         y: 50px;
         inner-max-width: root.width * 80%;
-        text: ToastSetting.text;
-        type: ToastSetting.text-type;
         clicked => {
-            Logic.copy-to-clipboard(self.text);
+            Logic.copy-to-clipboard(ToastSetting.text);
         }
     }
 
@@ -67,4 +65,4 @@ export component AppWindow inherits Window {
     }
 }
 
-export { Util, Logic, Store, Theme, Icons, IconsDialogSetting, LoadingStatus, SettingDetailIndex, AboutSetting, ToastSetting }
+export { Util, Logic, Store, Theme, Icons, IconsDialogSetting, LoadingStatus, SettingDetailIndex, AboutSetting, ToastSetting, ToastStatus }

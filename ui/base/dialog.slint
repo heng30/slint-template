@@ -62,14 +62,14 @@ export component Dialog inherits Rectangle {
             padding: Theme.padding * 2;
 
             cancel-btn := CancelBtn {
-                text: Logic.tr(Store.is-cn, "取消");
+                text: Logic.tr("Cancel");
                 clicked => {
                     root.cancel-clicked();
                 }
             }
 
             ConfirmBtn {
-                text: Logic.tr(Store.is-cn, "确认");
+                text: Logic.tr("Confirm");
                 clicked => {
                     root.ok-clicked();
                 }

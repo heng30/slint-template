@@ -31,7 +31,7 @@ component LangPage inherits Rectangle {
             }
 
             Label {
-                text: Logic.tr(Store.is-cn, "请选择语言");
+                text: Logic.tr("Please select language");
                 font-size: Theme.title3-font-size;
                 color: Theme.secondary-brand-color;
             }
@@ -105,7 +105,7 @@ export component LandingPage inherits Rectangle {
         HorizontalLayout {
             alignment: LayoutAlignment.end;
             skip-btn := TextBtn {
-                text: Logic.tr(Store.is-cn, "跳过");
+                text: Logic.tr("Skip");
                 colorize: Theme.have-read-text-color;
                 font-size: Theme.default-font-size - 2px;
             }
@@ -127,7 +127,7 @@ export component LandingPage inherits Rectangle {
             alignment: current-index == -1 ? LayoutAlignment.end : LayoutAlignment.space-between;
 
             if current-index > -1: TextBtn {
-                text: Logic.tr(Store.is-cn, "返回");
+                text: Logic.tr("Next");
                 colorize: Theme.have-read-text-color;
                 font-size: Theme.default-font-size - 2px;
                 clicked => {
@@ -137,8 +137,7 @@ export component LandingPage inherits Rectangle {
 
             TextBtn {
                 font-size: Theme.default-font-size - 2px;
-                text: Logic.tr(Store.is-cn,
-                            details.length == current-index + 1 ? "完成" : "下一步");
+                text: Logic.tr(details.length == current-index + 1 ? "Finish" : "Next");
                 clicked => {
                     current-index += 1;
 

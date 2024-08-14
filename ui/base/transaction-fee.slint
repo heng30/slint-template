@@ -27,19 +27,19 @@ export component TransactionFee inherits SettingDetail {
     callback cancel();
     callback confirm();
 
-    title: Logic.tr(Store.is-cn, "交易信息");
+    title: Logic.tr("Transaction detail");
 
     SettingDetailInner {
         if loading-status == LoadingStatus.Loading: Loading {
             height: 150px;
-            loading-text: Logic.tr(Store.is-cn, "正在估计交易费用...");
+            loading-text: Logic.tr("Evaluating gas fee...");
             colorize: Theme.secondary-brand-color;
             icon-size: Theme.icon-size * 2;
         }
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "区块网络");
+                text: Logic.tr("Blockchain network");
             }
 
             network-input := LineInput {
@@ -52,7 +52,7 @@ export component TransactionFee inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "发送代币");
+                text: Logic.tr("Send token");
             }
 
             send-token-input := LineInput {
@@ -65,7 +65,7 @@ export component TransactionFee inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "发送地址");
+                text: Logic.tr("Send address");
             }
 
             send-address-input := LineInput {
@@ -78,7 +78,7 @@ export component TransactionFee inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "接收地址");
+                text: Logic.tr("Recipient address");
             }
 
             recipient-address-input := LineInput {
@@ -91,7 +91,7 @@ export component TransactionFee inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "发送数量");
+                text: Logic.tr("Send amount");
             }
 
             amount-input := LineInput {
@@ -110,7 +110,7 @@ export component TransactionFee inherits SettingDetail {
 
         if loading-status == LoadingStatus.Success: SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "基础费用");
+                text: Logic.tr("Base fee");
             }
 
             LineInput {
@@ -128,7 +128,7 @@ export component TransactionFee inherits SettingDetail {
 
         if root.prioritization-fee != "": SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "优先费用");
+                text: Logic.tr("Prioritization fee");
             }
 
             LineInput {
@@ -141,7 +141,7 @@ export component TransactionFee inherits SettingDetail {
 
         if loading-status == LoadingStatus.Success && root.create-token-account-fee != "": SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "创建账户费用");
+                text: Logic.tr("Create token account fee");
             }
 
             LineInput {
@@ -159,7 +159,7 @@ export component TransactionFee inherits SettingDetail {
 
         if root.memo != "": SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "备注");
+                text: Logic.tr("Memo");
             }
 
             LineInput {
@@ -176,7 +176,7 @@ export component TransactionFee inherits SettingDetail {
 
             if loading-status == LoadingStatus.Loading: CancelBtn {
                 border-radius: Theme.border-radius;
-                text: Logic.tr(Store.is-cn, "取消");
+                text: Logic.tr("Cancel");
                 clicked => {
                     root.cancel();
                 }
@@ -185,7 +185,7 @@ export component TransactionFee inherits SettingDetail {
             if loading-status == LoadingStatus.Fail: CancelBtn {
                 border-radius: Theme.border-radius;
                 bg-color: Theme.warning-color;
-                text: Logic.tr(Store.is-cn, "估计交易费用失败");
+                text: Logic.tr("Evaluating transaction fee failed");
                 icon: Icons.warning;
                 clicked => {
                     root.back();
@@ -194,7 +194,7 @@ export component TransactionFee inherits SettingDetail {
 
             if loading-status == LoadingStatus.Success: ConfirmBtn {
                 border-radius: Theme.border-radius;
-                text: Logic.tr(Store.is-cn, "确认");
+                text: Logic.tr("Confirm");
                 clicked => {
                     root.confirm();
                 }

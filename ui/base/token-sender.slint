@@ -43,7 +43,7 @@ export component TokenSender inherits SettingDetail {
         root.prioritization-fee = "";
     }
 
-    title: Logic.tr(Store.is-cn, "发送代币");
+    title: Logic.tr("Send token");
 
     SettingDetailInner {
         HorizontalLayout {
@@ -67,7 +67,7 @@ export component TokenSender inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "区块网络");
+                text: Logic.tr("Blockchain network");
             }
 
             network-input := LineInput {
@@ -80,7 +80,7 @@ export component TokenSender inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "发送代币");
+                text: Logic.tr("Send token");
             }
 
             send-token-input := LineInput {
@@ -104,7 +104,7 @@ export component TokenSender inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "发送地址");
+                text: Logic.tr("Send address");
             }
 
             send-address-input := LineInput {
@@ -117,7 +117,7 @@ export component TokenSender inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "接收地址");
+                text: Logic.tr("Recipient address");
             }
 
             recipient-address-input := LineInput {
@@ -138,7 +138,7 @@ export component TokenSender inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "发送数量");
+                text: Logic.tr("Send amount");
             }
 
             amount-input := LineInput {
@@ -171,7 +171,7 @@ export component TokenSender inherits SettingDetail {
         }
 
         TextBtn {
-            text: Logic.tr(Store.is-cn, "高级设置");
+            text: Logic.tr("Advance setting");
             icon: Icons.advance-setting;
 
             clicked => {
@@ -181,7 +181,7 @@ export component TokenSender inherits SettingDetail {
 
         if is-show-advance-setting: SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "备注");
+                text: Logic.tr("Memo");
             }
 
             memo-input := LineInput {
@@ -201,7 +201,7 @@ export component TokenSender inherits SettingDetail {
 
         if is-show-advance-setting: SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "优先费用");
+                text: Logic.tr("Prioritization fee");
             }
 
             prioritization-fee-input := LineInput {
@@ -226,7 +226,7 @@ export component TokenSender inherits SettingDetail {
                 spacing: Theme.spacing * 2;
 
                 TextBtn {
-                    text: Logic.tr(Store.is-cn, "慢");
+                    text: Logic.tr("Slow");
                     bg-color: Theme.info-color;
                     use-auto-size: true;
                     icon: Icons.turtle;
@@ -238,7 +238,7 @@ export component TokenSender inherits SettingDetail {
                 }
 
                 TextBtn {
-                    text: Logic.tr(Store.is-cn,"正常");
+                    text: Logic.tr("Normal");
                     use-auto-size: true;
                     icon: Icons.rabbit;
 
@@ -249,7 +249,7 @@ export component TokenSender inherits SettingDetail {
                 }
 
                 TextBtn {
-                    text: Logic.tr(Store.is-cn,"快");
+                    text: Logic.tr("Fast");
                     use-auto-size: true;
                     icon: Icons.horse;
 
@@ -273,12 +273,12 @@ export component TokenSender inherits SettingDetail {
             spacing: Theme.spacing * 10;
 
             cancel-btn := CancelBtn {
-                text: Logic.tr(Store.is-cn, "取消");
+                text: Logic.tr("Cancel");
             }
 
             confirm-btn := ConfirmBtn {
                 icon: Icons.send;
-                text: Logic.tr(Store.is-cn, "确认");
+                text: Logic.tr("Confirm");
             }
         }
     }

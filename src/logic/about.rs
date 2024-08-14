@@ -4,7 +4,7 @@ use slint::ComponentHandle;
 
 pub fn init(ui: &AppWindow) {
     ui.global::<AboutSetting>().set_title(slint::format!(
-        "sollaw {}",
+        "slint-template {}",
         if VERSION.is_empty() {
             "v0.0.1"
         } else {

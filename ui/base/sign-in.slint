@@ -30,7 +30,7 @@ export component SignIn inherits Rectangle {
 
     vbox := VerticalLayout {
         if is-show-header: Head {
-            title: Logic.tr(Store.is-cn, "返回");
+            title: Logic.tr("Back");
             hbox-alignment: LayoutAlignment.start;
             clicked => {
                 root.back();
@@ -42,7 +42,7 @@ export component SignIn inherits Rectangle {
 
             SettingDetailInnerVbox {
                 username-txt := SettingDetailLabel {
-                    text: Logic.tr(Store.is-cn, "请输入用户名");
+                    text: Logic.tr("Please enter username");
                 }
 
                 HorizontalLayout {
@@ -51,7 +51,7 @@ export component SignIn inherits Rectangle {
                     username-lineedit := LineInput {
                         icon: Icons.paste;
                         width: root.width - Theme.padding * 4;
-                        placeholder-text: Logic.tr(Store.is-cn, "用户名");
+                        placeholder-text: Logic.tr("Username");
 
                         edited => {
                             root.error-message = "";
@@ -67,7 +67,7 @@ export component SignIn inherits Rectangle {
 
             SettingDetailInnerVbox {
                 password-first-txt := SettingDetailLabel {
-                    text: Logic.tr(Store.is-cn, "请输入密码");
+                    text: Logic.tr("Please input password");
                 }
 
                 HorizontalLayout {
@@ -77,7 +77,7 @@ export component SignIn inherits Rectangle {
 
                     password-first-lineedit := LineInput {
                         width: root.width - Theme.padding * 4;
-                        placeholder-text: Logic.tr(Store.is-cn, "至少8个字符");
+                        placeholder-text: Logic.tr("At least 8 chars");
                         icon: parent.is-show-password ? Icons.eye : Icons.close-eye;
                         input-type: parent.is-show-password ? InputType.text : InputType.password;
 
@@ -94,7 +94,7 @@ export component SignIn inherits Rectangle {
 
             SettingDetailInnerVbox {
                 password-second-txt := SettingDetailLabel {
-                    text: Logic.tr(Store.is-cn, "请再次输入密码");
+                    text: Logic.tr("Please enter password again");
                 }
 
                 HorizontalLayout {
@@ -104,7 +104,7 @@ export component SignIn inherits Rectangle {
 
                     password-second-lineedit := LineInput {
                         width: root.width - Theme.padding * 4;
-                        placeholder-text: Logic.tr(Store.is-cn, "至少8个字符");
+                        placeholder-text: Logic.tr("At least 8 chars");
                         icon: parent.is-show-password ? Icons.eye : Icons.close-eye;
                         input-type: is-show-password ? InputType.text : InputType.password;
 
@@ -131,7 +131,7 @@ export component SignIn inherits Rectangle {
                 padding: Theme.padding * 5;
 
                 CancelBtn {
-                    text: Logic.tr(Store.is-cn, "取消");
+                    text: Logic.tr("Cancel");
                     clicked => {
                         root.reset();
                         root.cancel();
@@ -139,7 +139,7 @@ export component SignIn inherits Rectangle {
                 }
 
                 ConfirmBtn {
-                    text: Logic.tr(Store.is-cn, "登录");
+                    text: Logic.tr("Login");
 
                     clicked => {
                         root.error-message = root.confirm(username-lineedit.text, password-first-lineedit.text, password-second-lineedit.text);

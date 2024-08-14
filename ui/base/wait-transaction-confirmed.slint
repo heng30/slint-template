@@ -18,19 +18,19 @@ export component WaitTransactionConfirmed inherits SettingDetail {
 
     callback open-signature <=> signature-input.clicked;
 
-    title: Logic.tr(Store.is-cn, "交易记录");
+    title: Logic.tr("Transaction signature");
 
     SettingDetailInner {
         if loading-status == LoadingStatus.Loading: Loading {
             height: 150px;
-            loading-text: Logic.tr(Store.is-cn, "等待交易确认...");
+            loading-text: Logic.tr("Waiting transaction confirmed...");
             colorize: Theme.secondary-brand-color;
             icon-size: Theme.icon-size * 2;
         }
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "区块网络");
+                text: Logic.tr("Blockchain network");
             }
 
             network-input := LineInput {
@@ -43,7 +43,7 @@ export component WaitTransactionConfirmed inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "发送代币");
+                text: Logic.tr("Send token");
             }
 
             send-token-input := LineInput {
@@ -56,7 +56,7 @@ export component WaitTransactionConfirmed inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "发送数量");
+                text: Logic.tr("Send amount");
             }
 
             amount-input := LineInput {
@@ -75,7 +75,7 @@ export component WaitTransactionConfirmed inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "交易记录");
+                text: Logic.tr("Transaction history");
             }
 
             signature-input := LineInput {
@@ -91,7 +91,7 @@ export component WaitTransactionConfirmed inherits SettingDetail {
 
             if loading-status == LoadingStatus.Loading: CancelBtn {
                 border-radius: Theme.border-radius;
-                text: Logic.tr(Store.is-cn, "关闭");
+                text: Logic.tr("Close");
                 clicked => {
                     root.back();
                 }
@@ -100,7 +100,7 @@ export component WaitTransactionConfirmed inherits SettingDetail {
             if loading-status == LoadingStatus.Fail: CancelBtn {
                 border-radius: Theme.border-radius;
                 bg-color: Theme.warning-color;
-                text: Logic.tr(Store.is-cn, "交易失败");
+                text: Logic.tr("Transaction failed");
                 icon: Icons.warning;
                 clicked => {
                     root.back();
@@ -109,7 +109,7 @@ export component WaitTransactionConfirmed inherits SettingDetail {
 
             if loading-status == LoadingStatus.Success: ConfirmBtn {
                 border-radius: Theme.border-radius;
-                text: Logic.tr(Store.is-cn, "交易成功");
+                text: Logic.tr("Transaction success");
                 clicked => {
                     root.back();
                 }

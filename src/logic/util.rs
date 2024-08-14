@@ -34,7 +34,7 @@ pub fn init(ui: &AppWindow) {
         };
 
         if let Err(e) = webbrowser::open_browser(browser, url.as_str()) {
-            toast_warn!(ui, format!("{}{}: {:?}", tr("打开链接失败"), tr("原因"), e));
+            toast_warn!(ui, format!("{}{}: {:?}", tr("Open link failed"), tr("Reason"), e));
         }
     });
 

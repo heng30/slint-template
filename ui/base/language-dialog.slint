@@ -6,7 +6,7 @@ import { ConfirmBtn } from "./btn.slint";
 import { RadioBtn } from "./radio-btn.slint";
 
 export component LanguageDialog inherits Dialog {
-    title: Logic.tr(Store.is-cn, "请选择语言");
+    title: Logic.tr("Please select language");
     is-hide-btns: true;
 
     in-out property<string> language: "cn";
@@ -36,7 +36,7 @@ export component LanguageDialog inherits Dialog {
             alignment: end;
 
             ConfirmBtn {
-                text: Logic.tr(Store.is-cn, "确认");
+                text: Logic.tr("Confirm");
                 clicked => {
                     Store.setting-ui.language = root.language;
                     Logic.set-setting-ui(Store.setting-ui);

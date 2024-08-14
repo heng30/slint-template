@@ -3,10 +3,10 @@ import { Theme, Icons } from "../../theme.slint";
 import { Logic } from "../../logic.slint";
 import { Util } from "../../util.slint";
 import { Store,  SettingUI, SettingDetailIndex } from "../../store.slint";
-import { LineInput, CenterLayout, ConfirmDialogSetting, Divider, Link, Brand, IconBtn, Label, Head, SettingEntry, SettingDetail, SettingDetailInner, TabBtn, SettingDetailInnerVbox, SettingDetailLabel, TxtEdit, CancelBtn, ConfirmBtn, NoDataImg, Tag, RadioBtn, TokenRecipient, SlideCard, ListTile, IconsDialogSetting, ElevatedBtn, Help, SettingDetailSwitch, About } from "../../base/widgets.slint";
+import { LineInput, CenterLayout, ConfirmDialogSetting, Divider, Link, Brand, IconBtn, Label, Head, SettingEntry, SettingDetail, SettingDetailInner, TabBtn, SettingDetailInnerVbox, SettingDetailLabel, TxtEdit, CancelBtn, ConfirmBtn, NoDataImg, Tag, RadioBtn, TokenRecipient, SlideCard, ListTile, IconsDialogSetting, ElevatedBtn, Help, SettingDetailSwitch, About, ToastStatus } from "../../base/widgets.slint";
 
 component UI inherits SettingDetail {
-    title: Logic.tr(Store.is-cn, "偏好设置");
+    title: Logic.tr("Preference");
 
     public function get() -> SettingUI {
         font-size-lineedit.clear-focus();
@@ -27,20 +27,20 @@ component UI inherits SettingDetail {
     SettingDetailInner {
         SettingDetailInnerVbox {
             font-size-txt := SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "字体大小");
+                text: Logic.tr("Font size");
             }
 
             font-size-lineedit := LineEdit {
                 input-type: number;
                 height: font-size-txt.preferred-height * 1.6;
-                placeholder-text: Logic.tr(Store.is-cn, "10 ~ 50");
+                placeholder-text: Logic.tr("10 ~ 50");
                 text: Store.setting-ui.font-size;
             }
         }
 
         SettingDetailInnerVbox {
             fonts-label := SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "字体样式");
+                text: Logic.tr("Font family");
             }
 
             fonts-combox := ComboBox {
@@ -52,7 +52,7 @@ component UI inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "选择语言");
+                text: Logic.tr("Choose language");
             }
 
             HorizontalLayout {
@@ -79,14 +79,14 @@ component UI inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "选择主题");
+                text: Logic.tr("Choose Theme");
             }
 
             HorizontalLayout {
                 HorizontalLayout {
                     width: 50%;
                     RadioBtn {
-                        text: Logic.tr(Store.is-cn, "白天");
+                        text: Logic.tr("Light");
                         checked: !Theme.is-dark;
                         check => {
                             Theme.toggle();
@@ -95,7 +95,7 @@ component UI inherits SettingDetail {
                 }
 
                 RadioBtn {
-                    text: Logic.tr(Store.is-cn, "黑暗");
+                    text: Logic.tr("Dark");
                     checked: Theme.is-dark;
                     check => {
                         Theme.toggle();
@@ -107,7 +107,7 @@ component UI inherits SettingDetail {
 }
 
 component Donate inherits SettingDetail {
-    title: Logic.tr(Store.is-cn, "捐 赠");
+    title: Logic.tr("Donate");
 
     private property <bool> is-wechat: true;
 
@@ -119,7 +119,7 @@ component Donate inherits SettingDetail {
                 width: 50%;
                 height: Theme.footer-height;
                 icon: Icons.wechat-light;
-                text: Logic.tr(Store.is-cn, "微信支付");
+                text: Logic.tr("Wechat pay");
                 checked: root.is-wechat;
                 clicked => {
                     root.is-wechat = true;
@@ -129,7 +129,7 @@ component Donate inherits SettingDetail {
             TabBtn {
                 height: Theme.footer-height;
                 icon: Icons.metamask-light;
-                text: Logic.tr(Store.is-cn, "小狐狸（加密）支付");
+                text: Logic.tr("MetaMask crypto pay");
                 checked: !root.is-wechat;
                 clicked => {
                     root.is-wechat = false;
@@ -164,7 +164,7 @@ component Body inherits VerticalLayout {
     head := Head {
         hbox-alignment: LayoutAlignment.start;
         icon: Icons.setting-fill;
-        title: Logic.tr(Store.is-cn, "设置");
+        title: Logic.tr("Setting");
     }
 
     Flickable {
@@ -174,7 +174,7 @@ component Body inherits VerticalLayout {
             spacing: Theme.spacing * 2;
 
             SettingEntry {
-                text: Logic.tr(Store.is-cn, "偏好设置");
+                text: Logic.tr("Preference");
                 icon: Icons.ui;
 
                 clicked => {
@@ -183,7 +183,7 @@ component Body inherits VerticalLayout {
             }
 
             SettingEntry {
-                text: Logic.tr(Store.is-cn, "关 于");
+                text: Logic.tr("About");
                 icon: Icons.about-light;
                 clicked => {
                     root.current-setting-detail-index = SettingDetailIndex.About;
@@ -191,7 +191,7 @@ component Body inherits VerticalLayout {
             }
 
             SettingEntry {
-                text: Logic.tr(Store.is-cn, "帮 助");
+                text: Logic.tr("Help");
                 icon: Icons.help-light;
                 clicked => {
                     root.current-setting-detail-index = SettingDetailIndex.Help;
@@ -199,7 +199,7 @@ component Body inherits VerticalLayout {
             }
 
             SettingEntry {
-                text: Logic.tr(Store.is-cn, "捐 赠");
+                text: Logic.tr("Donate");
                 icon: Icons.donate;
                 clicked => {
                     root.current-setting-detail-index = SettingDetailIndex.Donate;
@@ -207,10 +207,10 @@ component Body inherits VerticalLayout {
             }
 
             SettingEntry {
-                text: Logic.tr(Store.is-cn, "Github");
+                text: Logic.tr("Github");
                 icon: Icons.github;
                 clicked => {
-                    Util.open-url("Default","https://github.com/Heng30/solana-wallet-sollaw");
+                    Util.open-url("Default","https://github.com/Heng30/slint-template");
                 }
             }
         }
@@ -226,7 +226,7 @@ export component Setting inherits Rectangle {
         if Store.current-setting-detail-index == SettingDetailIndex.UI: UI {
             back => {
                 if (self.get().font-size == "") {
-                    Util.show-toast(Logic.tr(Store.is-cn, "非法输入，输入不能为空"), "warning");
+                    Util.show-toast(Logic.tr("Input cann't be empty"), ToastStatus.Warning);
                     return;
                 }
                 Store.current-setting-detail-index = SettingDetailIndex.Home;

@@ -49,14 +49,14 @@ export component TokenListWithSwitch inherits SettingDetail {
     }
 
     if is-loading: Loading {
-        loading-text: Logic.tr(Store.is-cn, "正在刷新...");
+        loading-text: Logic.tr("Refreshing...");
         colorize: Theme.secondary-brand-color;
         icon-size: Theme.icon-size * 2;
     }
 
     if !is-loading && entries.length == 0: Rectangle {
         NoDataImg {
-            text: Logic.tr(Store.is-cn, "没有数据");
+            text: Logic.tr("No Data");
         }
     }
 }

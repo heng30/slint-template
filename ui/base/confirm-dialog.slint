@@ -58,7 +58,7 @@ export component ConfirmDialogDialog inherits Rectangle {
             spacing: Theme.spacing * 4;
 
             TextBtn {
-                text: Logic.tr(Store.is-cn, "取消");
+                text: Logic.tr("Cancel");
                 icon: Icons.cancel;
 
                 clicked => {
@@ -68,10 +68,10 @@ export component ConfirmDialogDialog inherits Rectangle {
 
             TextBtn {
                 icon: Icons.success;
-                text: Logic.tr(Store.is-cn, "确认");
+                text: Logic.tr("Confirm");
 
                 clicked => {
-                    Logic.handle-confirm-dialog(ConfirmDialogSetting.handle-type, ConfirmDialogSetting.user-data);
+                    Util.handle-confirm-dialog(ConfirmDialogSetting.handle-type, ConfirmDialogSetting.user-data);
                     ConfirmDialogSetting.show = false;
                 }
             }

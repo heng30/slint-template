@@ -49,11 +49,11 @@ export component AddressBook inherits Rectangle {
 
     if AddressBookSetting.entries.length == 0: NoDataImg {
         width: 80%;
-        text: Logic.tr(Store.is-cn, "没有数据");
+        text: Logic.tr("No Data");
     }
 
     sd := SettingDetail {
-        title: Logic.tr(Store.is-cn, "地址簿");
+        title: Logic.tr("Address book");
 
         SettingDetailInner {
             vbox-spacing: Theme.spacing * 2;
@@ -106,7 +106,7 @@ export component AddressBookDetail inherits SettingDetail {
     // (uuid, address) -> void
     callback update-address(string, string);
 
-    title: Logic.tr(Store.is-cn, "地 址");
+    title: Logic.tr("Address");
 
     SettingDetailInner {
         HorizontalLayout {
@@ -129,7 +129,7 @@ export component AddressBookDetail inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "地址名称");
+                text: Logic.tr("Address name");
             }
 
             LineInput {
@@ -157,7 +157,7 @@ export component AddressBookDetail inherits SettingDetail {
 
         SettingDetailInnerVbox {
             SettingDetailLabel {
-                text: Logic.tr(Store.is-cn, "账户地址");
+                text: Logic.tr("Account address");
             }
 
             address-input := LineInput {
@@ -192,10 +192,10 @@ export component AddressBookDetail inherits SettingDetail {
                 text-color: Theme.danger-color;
                 border-radius: Theme.border-radius;
                 font-size: Theme.title3-font-size;
-                text: Logic.tr(Store.is-cn, "移除地址");
+                text: Logic.tr("Delete address");
 
                 clicked => {
-                    ConfirmDialogSetting.set(true, "warning", Logic.tr(Store.is-cn, "警告"), Logic.tr(Store.is-cn, "是否删除地址？"), "remove-address-book-entry", entry.uuid);
+                    ConfirmDialogSetting.set(true, "warning", Logic.tr("Warning"), Logic.tr("Delete address or not?"), "remove-address-book-entry", entry.uuid);
                 }
             }
         }

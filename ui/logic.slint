@@ -1,39 +1,25 @@
-import { Store,  SettingUI } from "store.slint";
-import { Icons } from "theme.slint";
-import { TransactionTileEntry, TransactionTileStatus } from "base/transaction-tile.slint";
-import { TokenTileEntry } from "base/token-tile.slint";
-import { PrioritizationFeeStatus } from "base/def.slint";
+import { Store,  SettingUI, TabIndex} from "store.slint";
 
 export global Logic {
-    pure callback new-mnemonics(int) -> [string];
-    pure callback paste-mnemonics() -> [string];
-    pure callback join-mnemonics([string]) -> string;
-    pure callback is-valid-mnemonic([string]) -> bool;
-    pure callback split-mnemonic(string) -> [string];
-
-
-    callback show-toast(string, string);
-
-    pure callback qr-code(string) -> image;
-    qr-code => {
-        return Icons.no-data;
-    }
-
-    // (password) -> void
-    callback login(string);
-
     callback update-cache-size();
     callback remove-all-cache();
 
     callback copy-to-clipboard(string);
     callback copy-from-clipboard() -> string;
-    callback handle-confirm-dialog(string, string);
 
     callback get-setting-ui() -> SettingUI;
     callback set-setting-ui(SettingUI);
 
-    pure callback tr(bool, string) -> string;
-    tr(is-cn, text) => {
+    pure callback inner-tr(bool, string) -> string;
+    inner-tr(is-cn, text) => {
         return text;
+    }
+
+    pure public function tr(text: string) -> string {
+        inner-tr(Store.is-cn, text)
+    }
+
+    public function switch-tab(tab-index: TabIndex) {
+        Store.current-tab-index = tab-index;
     }
 }

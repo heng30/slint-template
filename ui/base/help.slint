@@ -5,7 +5,7 @@ import { SettingDetail, SettingDetailInner } from "setting-detail.slint";
 import { Label } from "label.slint";
 
 export component Help inherits SettingDetail {
-    title: Logic.tr(Store.is-cn, "帮 助");
+    title: Logic.tr("Help");
     in-out property <[string]> entries;
 
     SettingDetailInner {

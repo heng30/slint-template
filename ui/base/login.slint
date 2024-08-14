@@ -30,7 +30,7 @@ export component Login inherits Rectangle {
 
     vbox := VerticalLayout {
         if is-show-header: Head {
-            title: Logic.tr(Store.is-cn, "返回");
+            title: Logic.tr("Back");
             hbox-alignment: LayoutAlignment.start;
             clicked => {
                 root.back();
@@ -42,7 +42,7 @@ export component Login inherits Rectangle {
 
             SettingDetailInnerVbox {
                 username-txt := SettingDetailLabel {
-                    text: Logic.tr(Store.is-cn, "请输入用户名");
+                    text: Logic.tr("Please enter username");
                 }
 
                 HorizontalLayout {
@@ -51,7 +51,7 @@ export component Login inherits Rectangle {
                     username-lineedit := LineInput {
                         icon: Icons.paste;
                         width: root.width - Theme.padding * 4;
-                        placeholder-text: Logic.tr(Store.is-cn, "用户名");
+                        placeholder-text: Logic.tr("Username");
 
                         edited => {
                             root.error-message = "";
@@ -69,13 +69,13 @@ export component Login inherits Rectangle {
                 private property <bool> is-show-password;
 
                 password-txt := SettingDetailLabel {
-                    text: Logic.tr(Store.is-cn, "请输入密码");
+                    text: Logic.tr("Please enter password");
                 }
 
                 password-lineedit := LineInput {
                     icon: parent.is-show-password ? Icons.eye : Icons.close-eye;
                     width: root.width - Theme.padding * 4;
-                    placeholder-text: Logic.tr(Store.is-cn, "至少8个字符");
+                    placeholder-text: Logic.tr("At least 8 chars");
                     input-type: is-show-password ? InputType.text : InputType.password;
 
                     edited => {
@@ -104,7 +104,7 @@ export component Login inherits Rectangle {
                 padding: Theme.padding * 5;
 
                 CancelBtn {
-                    text: Logic.tr(Store.is-cn, "取消");
+                    text: Logic.tr("Cancel");
                     clicked => {
                         root.reset();
                         root.cancel();
@@ -112,7 +112,7 @@ export component Login inherits Rectangle {
                 }
 
                 confirm-btn := ConfirmBtn {
-                    text: Logic.tr(Store.is-cn, "确认");
+                    text: Logic.tr("Confirm");
 
                     clicked => {
                         root.error-message = root.confirm(username-lineedit.text, password-lineedit.text);

@@ -15,7 +15,7 @@ pub fn init(ui: &AppWindow) {
         .set_is_show_landing_page(config::is_first_run());
 
     ui.global::<Logic>()
-        .on_tr(move |_is_cn, text| tr(text.as_str()).into());
+        .on_inner_tr(move |_is_cn, text| tr(text.as_str()).into());
 
     let ui_handle = ui.as_weak();
     ui.global::<Logic>().on_get_setting_ui(move || {
