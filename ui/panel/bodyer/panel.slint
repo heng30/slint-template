@@ -4,7 +4,6 @@ import { Home } from "./home.slint";
 import { Setting } from "./setting.slint";
 
 export component Bodyer inherits Rectangle {
-    if TabIndex.Home == Store.current-tab-index : Home {}
-    if TabIndex.Setting == Store.current-tab-index : Setting {}
+    if TabIndex.Home == Store.current-tab-index: Home { }
+    if TabIndex.Setting == Store.current-tab-index: Setting { }
 }
-

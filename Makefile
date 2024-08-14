@@ -37,10 +37,10 @@ debug-mold:
 	$(build-evn) $(run-evn) mold --run cargo run --features=desktop
 
 debug-local:
-	$(run-evn) ./target/debug/slint-template-desktop
+	$(run-evn) ./target/debug/slint-template
 
 release-local:
-	$(run-evn) ./target/release/slint-template-desktop
+	$(run-evn) ./target/release/slint-template
 
 build-desktop-debug-mold:
 	$(build-evn) $(run-evn) mold --run cargo build --features=desktop

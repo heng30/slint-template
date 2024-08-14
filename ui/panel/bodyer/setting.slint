@@ -218,8 +218,6 @@ component Body inherits VerticalLayout {
 }
 
 export component Setting inherits Rectangle {
-    private property <int> selected-account-index;
-
     if Store.current-setting-detail-index == SettingDetailIndex.Home: Body { }
 
     if Store.current-setting-detail-index != SettingDetailIndex.Home: Rectangle {
@@ -229,27 +227,27 @@ export component Setting inherits Rectangle {
                     Util.show-toast(Logic.tr("Input cann't be empty"), ToastStatus.Warning);
                     return;
                 }
-                Store.current-setting-detail-index = SettingDetailIndex.Home;
+                Logic.switch-setting-detail(SettingDetailIndex.Home);
                 Logic.set-setting-ui(self.get());
             }
         }
 
         if Store.current-setting-detail-index == SettingDetailIndex.About: About {
             back => {
-                Store.current-setting-detail-index = SettingDetailIndex.Home;
+                Logic.switch-setting-detail(SettingDetailIndex.Home);
             }
         }
 
         if Store.current-setting-detail-index == SettingDetailIndex.Help: Help {
             entries: Store.helps;
             back => {
-                Store.current-setting-detail-index = SettingDetailIndex.Home;
+                Logic.switch-setting-detail(SettingDetailIndex.Home);
             }
         }
 
         if Store.current-setting-detail-index == SettingDetailIndex.Donate: Donate {
             back => {
-                Store.current-setting-detail-index = SettingDetailIndex.Home;
+                Logic.switch-setting-detail(SettingDetailIndex.Home);
             }
         }
     }

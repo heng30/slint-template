@@ -1,4 +1,4 @@
-import { Store,  SettingUI, TabIndex} from "store.slint";
+import { Store,  SettingUI, TabIndex, SettingDetailIndex} from "store.slint";
 
 export global Logic {
     callback update-cache-size();
@@ -19,7 +19,17 @@ export global Logic {
         inner-tr(Store.is-cn, text)
     }
 
-    public function switch-tab(tab-index: TabIndex) {
-        Store.current-tab-index = tab-index;
+    public function switch-setting-detail(index: SettingDetailIndex) {
+        if (Store.current-setting-detail-index == index) {
+            return;
+        }
+        Store.current-setting-detail-index = index;
+    }
+
+    public function switch-tab(index: TabIndex) {
+        if (Store.current-tab-index == index) {
+            return;
+        }
+        Store.current-tab-index = index;
     }
 }

@@ -24,6 +24,8 @@ export global Store {
     in-out property <bool> is-show-landing-page;
 
     in-out property <TabIndex> current-tab-index: TabIndex.Home;
+
+    in-out property <float> current_switch-setting-detail-rate;
     in-out property <SettingDetailIndex> current-setting-detail-index: SettingDetailIndex.Home;
 
     in-out property <bool> is-cn: setting-ui.language == "cn";
@@ -35,11 +37,11 @@ export global Store {
     };
 
     in-out property <[string]> helps: is-cn ? [
-        "配置文件保存目录: ~/.config/",
-        "数据库保存目录: ~/.local/share/",
+        "配置文件保存目录: ~/.config/slint-template",
+        "数据库保存目录: ~/.local/share/slint-template",
     ] : [
-        "Config directory: ~/.config/",
-        "Data directory: ~/.local/share/",
+        "Config directory: ~/.config/slint-template",
+        "Data directory: ~/.local/share/slint-template",
     ];
 
 }

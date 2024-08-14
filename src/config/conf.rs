@@ -83,12 +83,12 @@ pub fn save(conf: data::Config) -> Result<()> {
 impl Config {
     pub fn init(&mut self) -> Result<()> {
         let app_name = if cfg!(not(target_os = "android")) {
-            "slint"
+            "slint-template"
         } else {
             if cfg!(debug_assertions) {
-                "xyz.heng30.slint"
+                "xyz.heng30.slint-template"
             } else {
-                "xyz.heng30.slint"
+                "xyz.heng30.slint-template"
             }
         };
 
@@ -100,8 +100,8 @@ impl Config {
     }
 
     fn init_config(&mut self, app_dirs: &AppDirs) -> Result<()> {
-        self.db_path = app_dirs.data_dir.join("slint.db");
-        self.config_path = app_dirs.config_dir.join("slint.toml");
+        self.db_path = app_dirs.data_dir.join("slint-template.db");
+        self.config_path = app_dirs.config_dir.join("slint-template.toml");
         self.cache_dir = app_dirs.data_dir.join("cache");
 
         if self.appid.is_empty() {
