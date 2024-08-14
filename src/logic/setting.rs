@@ -6,7 +6,7 @@ use crate::{
 use slint::ComponentHandle;
 
 pub fn init(ui: &AppWindow) {
-    init_setting(&ui);
+    init_setting(ui);
 
     ui.global::<Store>()
         .set_is_first_run(config::is_first_run());
@@ -34,7 +34,7 @@ pub fn init(ui: &AppWindow) {
             .set_setting_ui(setting.clone());
 
         let mut all = config::all();
-        all.ui.font_size = font_size.into();
+        all.ui.font_size = font_size;
         all.ui.font_family = setting.font_family.into();
         all.ui.language = setting.language.into();
         all.ui.is_dark = setting.is_dark;

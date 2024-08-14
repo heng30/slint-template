@@ -1,4 +1,4 @@
-use crate::slint_generatedAppWindow::{AppWindow, Util, Logic};
+use crate::slint_generatedAppWindow::{AppWindow, Logic, Util};
 use slint::ComponentHandle;
 
 pub fn init(ui: &AppWindow) {
@@ -7,6 +7,7 @@ pub fn init(ui: &AppWindow) {
         .on_handle_confirm_dialog(move |handle_type, _user_data| {
             let ui = ui_handle.unwrap();
 
+            #[allow(clippy::single_match)]
             match handle_type.as_str() {
                 "remove-all-cache" => {
                     ui.global::<Logic>().invoke_remove_all_cache();

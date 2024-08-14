@@ -52,9 +52,9 @@ pub fn all() -> data::Config {
 pub fn reset(mut conf: Config) {
     let mut c = CONFIG.lock().unwrap();
 
-    conf.config_path = c.config_path.clone();
-    conf.db_path = c.db_path.clone();
-    conf.cache_dir = c.cache_dir.clone();
+    conf.config_path.clone_from(&c.config_path);
+    conf.db_path.clone_from(&c.db_path);
+    conf.cache_dir.clone_from(&c.cache_dir);
     conf.is_first_run = c.is_first_run;
 
     *c = conf;
@@ -84,12 +84,10 @@ impl Config {
     pub fn init(&mut self) -> Result<()> {
         let app_name = if cfg!(not(target_os = "android")) {
             "slint-template"
+        } else if cfg!(debug_assertions) {
+            "xyz.heng30.dev.slint-template"
         } else {
-            if cfg!(debug_assertions) {
-                "xyz.heng30.slint-template"
-            } else {
-                "xyz.heng30.slint-template"
-            }
+            "xyz.heng30.slint-template"
         };
 
         let app_dirs = AppDirs::new(Some(app_name), true).unwrap();
@@ -144,7 +142,7 @@ impl Config {
     pub fn save(&self) -> Result<()> {
         match toml::to_string_pretty(self) {
             Ok(text) => Ok(fs::write(&self.config_path, text)
-                .with_context(|| format!("save config failed"))?),
+                .with_context(|| "save config failed".to_string())?),
             Err(e) => anyhow::bail!(format!("convert config from toml format failed. {e:?}")),
         }
     }

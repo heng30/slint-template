@@ -2,12 +2,12 @@
 name = "slint-template"
 version = "0.1.0"
 edition = "2021"
-authors = ["Heng30 <rongheng30@gmail.com>"]
+license = "MIT"
 readme = "README.md"
 keywords = ["rust"]
-license = "MIT"
-# homepage = "https://github.com/Heng30/solana-wallet-sollaw"
-# repository = "https://github.com/Heng30/solana-wallet-sollaw"
+authors = ["Heng30 <rongheng30@gmail.com>"]
+homepage = "https://github.com/Heng30/slint-template"
+repository = "https://github.com/Heng30/slint-template"
 
 [dependencies]
 log = "0.4"

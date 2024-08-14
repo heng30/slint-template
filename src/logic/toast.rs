@@ -4,10 +4,10 @@ use slint::{ComponentHandle, Timer, TimerMode, Weak};
 #[macro_export]
 macro_rules! toast_warn {
     ($ui:expr, $msg:expr) => {
-        $ui.global::<crate::slint_generatedAppWindow::Util>()
+        $ui.global::<$crate::slint_generatedAppWindow::Util>()
             .invoke_show_toast(
                 slint::format!("{}", $msg),
-                crate::slint_generatedAppWindow::ToastStatus::Warning,
+                $crate::slint_generatedAppWindow::ToastStatus::Warning,
             )
     };
 }
@@ -15,10 +15,10 @@ macro_rules! toast_warn {
 #[macro_export]
 macro_rules! toast_success {
     ($ui:expr, $msg:expr) => {
-        $ui.global::<crate::slint_generatedAppWindow::Util>()
+        $ui.global::<$crate::slint_generatedAppWindow::Util>()
             .invoke_show_toast(
                 slint::format!("{}", $msg),
-                crate::slint_generatedAppWindow::ToastStatus::Success,
+                $crate::slint_generatedAppWindow::ToastStatus::Success,
             )
     };
 }
@@ -27,10 +27,10 @@ macro_rules! toast_success {
 #[macro_export]
 macro_rules! toast_info {
     ($ui:expr, $msg:expr) => {
-        $ui.global::<crate::slint_generatedAppWindow::Util>()
+        $ui.global::<$crate::slint_generatedAppWindow::Util>()
             .invoke_show_toast(
                 slint::format!("{}", $msg),
-                crate::slint_generatedAppWindow::ToastStatus::Info,
+                $crate::slint_generatedAppWindow::ToastStatus::Info,
             )
     };
 }
