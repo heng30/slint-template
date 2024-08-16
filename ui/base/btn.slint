@@ -1,14 +1,16 @@
 import { Theme, Icons } from "../theme.slint";
 import { IconBtn } from "./icon-btn.slint";
+import { Logic } from "../logic.slint";
 
 export component CancelBtn inherits IconBtn {
     use-auto-size: true;
     icon: Icons.cancel;
-    icon-width: Theme.icon-size;
+    icon-size: Theme.icon-size;
     border-radius: self.height / 2;
     bg-color: Theme.info-color.brighter(50%);
     bg-pressed-color: self.bg-color.darker(30%);
     colorize: self.bg-pressed-color.darker(100%);
+    text: Logic.tr("Cancel");
 }
 
 export component ConfirmBtn inherits IconBtn {
@@ -18,6 +20,7 @@ export component ConfirmBtn inherits IconBtn {
     bg-color: Theme.success-color.darker(20%);
     bg-pressed-color: self.bg-color.darker(30%);
     colorize: Theme.base-color;
+    text: Logic.tr("Confirm");
 }
 
 export component TextBtn inherits IconBtn {

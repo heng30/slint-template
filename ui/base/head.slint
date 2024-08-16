@@ -9,7 +9,7 @@ export component Head inherits Rectangle {
     in-out property <bool> is-show-divider;
     in-out property <string> title;
     in-out property icon <=> ic.icon;
-    in-out property icon-width <=> ic.icon-width;
+    in-out property icon-size <=> ic.icon-size;
     in-out property <LayoutAlignment> hbox-alignment: LayoutAlignment.stretch;
 
     callback clicked <=> ic.clicked;
@@ -20,7 +20,7 @@ export component Head inherits Rectangle {
         padding-right: Theme.padding;
 
         ic := IconBtn {
-            icon-width: Theme.icon-size;
+            icon-size: Theme.icon-size;
             background: Colors.transparent;
             icon: Icons.back;
             text: root.title;

@@ -11,7 +11,6 @@ export enum RotationType {
 export component IconBtn inherits Rectangle {
     in-out property icon <=> img.source;
     in-out property colorize <=> img.colorize;
-    in-out property icon-width <=> img.width;
     in-out property icon-size <=> img.width;
     in-out property icon-rotation-angle <=> img.rotation-angle;
     in-out property mouse-cursor <=> touch.mouse-cursor;
@@ -43,8 +42,8 @@ export component IconBtn inherits Rectangle {
 
     // only is a icon showing this hover color
     if (text == "" && show-icon-hover-background): Rectangle {
-        x: img.x - Theme.spacing * 2 - (Math.max(Theme.icon-size, root.icon-width) - img.width) / 2;
-        width: Math.max(Theme.icon-size, root.icon-width) + Theme.spacing * 4;
+        x: img.x - Theme.spacing * 2 - (Math.max(Theme.icon-size, root.icon-size) - img.width) / 2;
+        width: Math.max(Theme.icon-size, root.icon-size) + Theme.spacing * 4;
         height: self.width;
         border-radius: self.width / 2;
         background: touch.has-hover ? Palette.background : Colors.transparent;
@@ -65,6 +64,7 @@ export component IconBtn inherits Rectangle {
         }
 
         img := Image {
+            vertical-alignment: center;
             width: Theme.icon-size;
             colorize: Theme.icon-color;
             rotation-angle: 0;

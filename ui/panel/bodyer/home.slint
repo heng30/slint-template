@@ -1,7 +1,7 @@
 import { Theme, Icons } from "../../theme.slint";
 import { Store } from "../../store.slint";
 import { Logic } from "../../logic.slint";
-import { Head, Label } from "../../base/widgets.slint";
+import { Head, Label, TabBtns, ConfirmBtn } from "../../base/widgets.slint";
 
 component TopHead inherits Head {
     icon: Icons.home-fill;
@@ -10,9 +10,28 @@ component TopHead inherits Head {
 }
 
 component Body inherits Rectangle {
-    Label {
-        text: "HOME";
-        font-size: Theme.title1-font-size;
+    VerticalLayout {
+        alignment: center;
+        spacing: Theme.spacing * 2;
+
+        HorizontalLayout {
+            alignment: center;
+            TabBtns {
+                items: [
+                    { icon: Icons.cancel-fill, text: "Cancel" },
+                    { icon: Icons.address, text: "Address" },
+                    { icon: Icons.airdrop, text: "Airdrop" }
+                ];
+            }
+        }
+
+        VerticalLayout {
+            alignment: center;
+            HorizontalLayout {
+                alignment: center;
+                ConfirmBtn { }
+            }
+        }
     }
 }
 
