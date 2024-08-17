@@ -1,6 +1,15 @@
 import { Theme } from "../theme.slint";
 import { TextBtn } from "btn.slint";
 
+// Example:
+// TabBtns {
+//     items: [
+//         { icon: Icons.cancel-fill, text: "Cancel" },
+//         { icon: Icons.address, text: "Address" },
+//         { icon: Icons.airdrop, text: "Airdrop" }
+//     ];
+// }
+
 export component TabBtns inherits Rectangle {
     in-out property <[{icon: image, text: string}]> items;
     in-out property <length> font-size: Theme.default-font-size;

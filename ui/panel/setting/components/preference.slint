@@ -1,0 +1,102 @@
+import { LineEdit, ComboBox } from "std-widgets.slint";
+import { Theme, Logic, Store, SettingUI } from "../def.slint";
+import { SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn } from "../../../base/widgets.slint";
+
+export component Preference inherits Rectangle {
+    public function get() -> SettingUI {
+        font-size-lineedit.clear-focus();
+
+        return {
+            font-size: font-size-lineedit.text,
+            font-family: fonts-combox.current-value,
+            language: Store.setting-ui.language,
+            is-dark: Store.setting-ui.is-dark,
+        };
+    }
+
+    init => {
+        font-size-lineedit.text = Store.setting-ui.font-size;
+        fonts-combox.current-value = Store.setting-ui.font-family;
+    }
+
+    SettingDetailInner {
+        SettingDetailInnerVbox {
+            font-size-txt := SettingDetailLabel {
+                text: Logic.tr("Font size");
+            }
+
+            font-size-lineedit := LineEdit {
+                input-type: number;
+                height: font-size-txt.preferred-height * 1.6;
+                placeholder-text: Logic.tr("10 ~ 50");
+                text: Store.setting-ui.font-size;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            fonts-label := SettingDetailLabel {
+                text: Logic.tr("Font family");
+            }
+
+            fonts-combox := ComboBox {
+                height: fonts-label.preferred-height * 1.6;
+                model: ["Default", "Source Han Serif CN", "Source Han Sans CN"];
+                current-value: Store.setting-ui.font-family;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Choose language");
+            }
+
+            HorizontalLayout {
+                HorizontalLayout {
+                    width: 50%;
+                    cn-radio := RadioBtn {
+                        text: "中文";
+                        checked: Store.setting-ui.language == "cn";
+                        check => {
+                            Store.setting-ui.language = "cn";
+                        }
+                    }
+                }
+
+                en-radio := RadioBtn {
+                    text: "English";
+                    checked: Store.setting-ui.language == "en";
+                    check => {
+                        Store.setting-ui.language = "en";
+                    }
+                }
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Choose Theme");
+            }
+
+            HorizontalLayout {
+                HorizontalLayout {
+                    width: 50%;
+                    RadioBtn {
+                        text: Logic.tr("Light");
+                        checked: !Theme.is-dark;
+                        check => {
+                            Theme.toggle();
+                        }
+                    }
+                }
+
+                RadioBtn {
+                    text: Logic.tr("Dark");
+                    checked: Theme.is-dark;
+                    check => {
+                        Theme.toggle();
+                    }
+                }
+            }
+        }
+    }
+}

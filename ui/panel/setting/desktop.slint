@@ -1,0 +1,145 @@
+import { Logic, Theme, Store, Util, Icons, SettingUI, SettingDetailIndex } from "def.slint";
+import { IconBtn, SettingEntryV2, Head, SettingDetail, ToastStatus, About, Help } from "../../base/widgets.slint";
+import { Preference } from "components/preference.slint";
+import { Donate } from "components/donate.slint";
+
+component LeftPanel inherits Rectangle {
+    background: Theme.secondary-background;
+
+    private property <SettingDetailIndex> previous-setting-detail-index: SettingDetailIndex.Home;
+
+    // (previous-index, current-index) -> void
+    callback switch(SettingDetailIndex, SettingDetailIndex) -> bool;
+
+    function update-index(index: SettingDetailIndex) {
+        if (root.switch(previous-setting-detail-index, index)) {
+            previous-setting-detail-index = index;
+        }
+    }
+
+    init => {
+        Store.current-setting-detail-index = SettingDetailIndex.Preference;
+    }
+
+    Flickable {
+        width: root.width;
+        viewport-height: vbox.preferred-height;
+
+        vbox := VerticalLayout {
+            alignment: LayoutAlignment.start;
+            spacing: Theme.spacing * 4;
+
+            SettingEntryV2 {
+                text: Logic.tr("Preference");
+                icon: Icons.ui;
+                width: root.width;
+                background: Store.current-setting-detail-index == SettingDetailIndex.Preference ? Theme.base-background : root.background;
+
+                clicked => {
+                    update-index(SettingDetailIndex.Preference);
+                }
+            }
+
+            SettingEntryV2 {
+                text: Logic.tr("Help");
+                icon: Icons.help-light;
+                width: root.width;
+                background: Store.current-setting-detail-index == SettingDetailIndex.Help ? Theme.base-background : root.background;
+
+                clicked => {
+                    update-index(SettingDetailIndex.Help);
+                }
+            }
+
+            SettingEntryV2 {
+                text: Logic.tr("Donate");
+                icon: Icons.donate;
+                width: root.width;
+                background: Store.current-setting-detail-index == SettingDetailIndex.Donate ? Theme.base-background : root.background;
+
+                clicked => {
+                    update-index(SettingDetailIndex.Donate);
+                }
+            }
+        }
+    }
+}
+
+component RightPanel inherits Rectangle {
+    public function preference-get() -> SettingUI {
+        return preference.get();
+    }
+
+    preference := Preference {
+        visible: Store.current-setting-detail-index == SettingDetailIndex.Preference;
+    }
+
+    if Store.current-setting-detail-index == SettingDetailIndex.About: About { }
+
+    if Store.current-setting-detail-index == SettingDetailIndex.Help: Help {
+        is-show-header: false;
+        entries: Store.helps;
+    }
+
+    if Store.current-setting-detail-index == SettingDetailIndex.Donate: Donate { }
+}
+
+export component Setting inherits Rectangle {
+    function save(index: SettingDetailIndex) -> bool {
+        if (index == SettingDetailIndex.Preference) {
+            if (rp.preference-get().font-size == "") {
+                Util.show-toast(Logic.tr("Input cann't be empty"), ToastStatus.Warning);
+                return false;
+            }
+            Logic.set-setting-ui(rp.preference-get());
+        }
+        return true;
+    }
+
+    HorizontalLayout {
+        LeftPanel {
+            width: Math.max(root.width * 0.3, 160px);
+            switch(previous-index, current-index) => {
+                if (!root.save(previous-index)) {
+                    return false;
+                }
+                Logic.switch-setting-detail(current-index);
+                return true;
+            }
+        }
+
+        rp := RightPanel { }
+    }
+}
+
+export component SettingIconsBar inherits Rectangle {
+    width: hbox.preferred-width;
+    height: hbox.preferred-height;
+    border-radius: Theme.border-radius;
+
+    hbox := HorizontalLayout {
+        padding: Theme.padding * 4;
+        spacing: Theme.spacing * 4;
+
+        IconBtn {
+            icon: Icons.setting-light;
+            clicked => {
+                // root.current-setting-detail-index = SettingDetailIndex.About;
+            }
+        }
+
+        IconBtn {
+            icon: Icons.about-light;
+            clicked => {
+                // root.current-setting-detail-index = SettingDetailIndex.About;
+            }
+        }
+
+        IconBtn {
+            icon: Icons.github;
+            clicked => {
+                Util.open-url("Default","https://github.com/Heng30/slint-template");
+            }
+        }
+    }
+}

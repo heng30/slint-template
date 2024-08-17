@@ -3,6 +3,8 @@ import { Store } from "../../store.slint";
 import { Logic } from "../../logic.slint";
 import { Head, Label, TabBtns, ConfirmBtn } from "../../base/widgets.slint";
 
+import { Setting, SettingIconsBar } from "../setting/desktop.slint";
+
 component TopHead inherits Head {
     icon: Icons.home-fill;
     title: Logic.tr("Home");
@@ -10,29 +12,11 @@ component TopHead inherits Head {
 }
 
 component Body inherits Rectangle {
-    VerticalLayout {
-        alignment: center;
-        spacing: Theme.spacing * 2;
+    Setting { }
 
-        HorizontalLayout {
-            alignment: center;
-            TabBtns {
-                items: [
-                    { icon: Icons.cancel-fill, text: "Cancel" },
-                    { icon: Icons.address, text: "Address" },
-                    { icon: Icons.airdrop, text: "Airdrop" }
-                ];
-            }
+        SettingIconsBar {
+            background: pink;
         }
-
-        VerticalLayout {
-            alignment: center;
-            HorizontalLayout {
-                alignment: center;
-                ConfirmBtn { }
-            }
-        }
-    }
 }
 
 export component Home inherits Rectangle {

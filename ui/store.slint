@@ -1,3 +1,8 @@
+export enum DeviceType {
+    Desktop,
+    Mobile,
+}
+
 export enum TabIndex {
     Home,
     Setting,
@@ -6,7 +11,7 @@ export enum TabIndex {
 
 export enum SettingDetailIndex {
     Home,
-    UI,
+    Preference,
     About,
     Help,
     Donate,
@@ -19,7 +24,12 @@ export struct SettingUI {
     is-dark: bool,
 }
 
+//////////////////////////////// Logic Struct Start ////////////////////////////////
+
+//////////////////////////////// Logic Struct End  ////////////////////////////////
+
 export global Store {
+    in-out property <DeviceType> device-type: DeviceType.Desktop;
     in-out property <bool> is-first-run;
     in-out property <bool> is-show-landing-page;
 
@@ -42,4 +52,7 @@ export global Store {
         "Data directory: ~/.local/share/slint-template",
     ];
 
+//////////////////////////////// Logic Start ////////////////////////////////
+
+//////////////////////////////// Logic End  ////////////////////////////////
 }

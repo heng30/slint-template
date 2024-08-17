@@ -1,0 +1,119 @@
+import { Logic, Theme, Store, Util, Icons, SettingUI, SettingDetailIndex } from "def.slint";
+import { Head, SettingEntry, SettingDetail, ToastStatus, About, Help } from "../../base/widgets.slint";
+import { Preference as PreferenceInner } from "components/preference.slint";
+import { Donate as DonateInner } from "components/donate.slint";
+
+component Preference inherits SettingDetail {
+    title: Logic.tr("Preference");
+
+    public function get() -> SettingUI {
+        return inner.get();
+    }
+
+    inner := PreferenceInner { }
+}
+
+component Donate inherits SettingDetail {
+    title: Logic.tr("Donate");
+    DonateInner { }
+}
+
+component Body inherits VerticalLayout {
+    alignment: start;
+    spacing: Theme.spacing;
+
+    in-out property current-setting-detail-index <=> Store.current-setting-detail-index;
+
+    callback switch(SettingDetailIndex);
+
+    head := Head {
+        hbox-alignment: LayoutAlignment.start;
+        icon: Icons.setting-fill;
+        title: Logic.tr("Setting");
+    }
+
+    Flickable {
+        viewport-height: vbox.preferred-height;
+
+        vbox := VerticalLayout {
+            spacing: Theme.spacing * 2;
+
+            SettingEntry {
+                text: Logic.tr("Preference");
+                icon: Icons.ui;
+
+                clicked => {
+                    root.current-setting-detail-index = SettingDetailIndex.Preference;
+                }
+            }
+
+            SettingEntry {
+                text: Logic.tr("About");
+                icon: Icons.about-light;
+                clicked => {
+                    root.current-setting-detail-index = SettingDetailIndex.About;
+                }
+            }
+
+            SettingEntry {
+                text: Logic.tr("Help");
+                icon: Icons.help-light;
+                clicked => {
+                    root.current-setting-detail-index = SettingDetailIndex.Help;
+                }
+            }
+
+            SettingEntry {
+                text: Logic.tr("Donate");
+                icon: Icons.donate;
+                clicked => {
+                    root.current-setting-detail-index = SettingDetailIndex.Donate;
+                }
+            }
+
+            SettingEntry {
+                text: Logic.tr("Github");
+                icon: Icons.github;
+                clicked => {
+                    Util.open-url("Default","https://github.com/Heng30/slint-template");
+                }
+            }
+        }
+    }
+}
+
+export component Setting inherits Rectangle {
+    if Store.current-setting-detail-index == SettingDetailIndex.Home: Body { }
+
+    if Store.current-setting-detail-index != SettingDetailIndex.Home: Rectangle {
+        if Store.current-setting-detail-index == SettingDetailIndex.Preference: Preference {
+            back => {
+                if (self.get().font-size == "") {
+                    Util.show-toast(Logic.tr("Input cann't be empty"), ToastStatus.Warning);
+                    return;
+                }
+                Logic.switch-setting-detail(SettingDetailIndex.Home);
+                Logic.set-setting-ui(self.get());
+            }
+        }
+
+        if Store.current-setting-detail-index == SettingDetailIndex.About: About {
+            back => {
+                Logic.switch-setting-detail(SettingDetailIndex.Home);
+            }
+        }
+
+        if Store.current-setting-detail-index == SettingDetailIndex.Help: Help {
+            entries: Store.helps;
+            back => {
+                Logic.switch-setting-detail(SettingDetailIndex.Home);
+            }
+        }
+
+        if Store.current-setting-detail-index == SettingDetailIndex.Donate: Donate {
+            back => {
+                Logic.switch-setting-detail(SettingDetailIndex.Home);
+            }
+        }
+    }
+}

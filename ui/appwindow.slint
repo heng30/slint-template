@@ -1,6 +1,6 @@
 import { Theme, Icons } from "./theme.slint";
 import { Logic } from "./logic.slint";
-import { Store, SettingDetailIndex } from "./store.slint";
+import { Store, SettingDetailIndex, DeviceType } from "./store.slint";
 import { Util } from "./util.slint";
 import { Panel } from "./panel/panel.slint";
 import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialogDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus } from "./base/widgets.slint";
@@ -65,4 +65,4 @@ export component AppWindow inherits Window {
     }
 }
 
-export { Util, Logic, Store, Theme, Icons, IconsDialogSetting, LoadingStatus, SettingDetailIndex, AboutSetting, ToastSetting, ToastStatus }
+export { Util, Logic, Store, Theme, Icons, IconsDialogSetting, LoadingStatus, SettingDetailIndex, AboutSetting, ToastSetting, ToastStatus, DeviceType }

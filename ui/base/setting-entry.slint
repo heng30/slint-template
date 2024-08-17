@@ -36,3 +36,33 @@ export component SettingEntry inherits Rectangle {
         mouse-cursor: MouseCursor.pointer;
     }
 }
+
+export component SettingEntryV2 inherits Rectangle {
+    in-out property text <=> label.text;
+    in-out property font-size <=> label.font-size;
+    in-out property icon <=> img.source;
+    in-out property icon-colorize <=> img.colorize;
+    in-out property icon-size <=> img.width;
+
+    callback clicked <=> ta.clicked;
+
+    HorizontalLayout {
+        padding: Theme.padding * 2;
+        spacing: Theme.spacing * 2;
+        alignment: LayoutAlignment.start;
+
+        img := Image {
+            vertical-alignment: center;
+            width: Theme.icon-size;
+            colorize: Theme.icon-color;
+        }
+
+        label := Label {
+            color: root.icon-colorize;
+        }
+    }
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+    }
+}
