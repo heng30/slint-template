@@ -1,4 +1,4 @@
-import { Theme, Store, TabIndex, SettingDetailIndex, Logic } from "../def.slint";
+import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def.slint";
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
 import { Blanket } from "../../base/widgets.slint";
 
@@ -24,7 +24,8 @@ export component DesktopPanel inherits Rectangle {
         }
     }
 
-    if is-show-setting-dialog: SettingDialog {
+    SettingDialog {
+        visible: is-show-setting-dialog;
         width: Math.min(1000px, root.width * 0.8);
     }
 

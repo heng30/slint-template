@@ -109,20 +109,33 @@ component Setting inherits Rectangle {
         return true;
     }
 
-    HorizontalLayout {
-        LeftPanel {
-            width: Math.max(root.width * 0.3, 200px);
-            switch(previous-index, current-index) => {
-                if (!root.save(previous-index)) {
-                    return false;
-                }
+    lp := LeftPanel {
+        x: 0;
+        width: Math.max(root.width * 0.3, 160px);
+        switch(previous-index, current-index) => {
+            if (!root.save(previous-index)) {
+                return false;
+            }
+            Logic.switch-setting-detail(current-index);
+            return true;
+        }
+    }
 
-                Logic.switch-setting-detail(current-index);
-                return true;
+    mp := Rectangle {
+        x: lp.width;
+        width: Theme.padding;
+
+        TouchArea {
+            mouse-cursor: MouseCursor.col-resize;
+            moved => {
+                lp.width = Math.max(0px, lp.width - (self.pressed-x - self.mouse-x))
             }
         }
+    }
 
-        rp := RightPanel { }
+    rp := RightPanel {
+        x: mp.x + mp.width;
+        width: root.width - self.x;
     }
 }
 

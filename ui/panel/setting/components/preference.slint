@@ -2,13 +2,10 @@ import { LineEdit, ComboBox } from "std-widgets.slint";
 import { Theme, Logic, Store, SettingUI } from "../../def.slint";
 import { SettingDetailInner, SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn } from "../../../base/widgets.slint";
 
-
 export component Preference inherits SettingDetail {
     title: Logic.tr("Preference");
 
     public function get() -> SettingUI {
-        font-size-lineedit.clear-focus();
-
         return {
             font-size: font-size-lineedit.text,
             font-family: fonts-combox.current-value,
@@ -61,6 +58,7 @@ export component Preference inherits SettingDetail {
                         checked: Store.setting-ui.language == "cn";
                         check => {
                             Store.setting-ui.language = "cn";
+                            Logic.set-setting-ui(root.get());
                         }
                     }
                 }
@@ -70,6 +68,7 @@ export component Preference inherits SettingDetail {
                     checked: Store.setting-ui.language == "en";
                     check => {
                         Store.setting-ui.language = "en";
+                        Logic.set-setting-ui(root.get());
                     }
                 }
             }

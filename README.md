@@ -33,3 +33,4 @@
 - [Viewer for Slint](https://github.com/slint-ui/slint/tree/master/tools/viewer)
 - [LSP (Language Server Protocol) Server for Slint](https://github.com/slint-ui/slint/tree/master/tools/lsp)
 - [developer.android.com](https://developer.android.com/guide)
+- [color4bg](https://www.color4bg.com/zh-hans/)
