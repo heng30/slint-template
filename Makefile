@@ -4,6 +4,7 @@ pwd=${shell pwd}
 build-evn=SLINT_STYLE=material
 run-evn=RUST_LOG=debug,sqlx=off,reqwest=off
 version=`git describe --tags --abbrev=0`
+app-name=slint-template
 
 all: desktop-build-release
 
@@ -12,7 +13,7 @@ android-build:
 
 android-build-release:
 	$(build-evn) cargo apk build --lib --release
-	cp -f target/release/apk/slint-template.apk target/slint-template-${version}.apk
+	cp -f target/release/apk/${app-name}.apk target/${app-name}-${version}.apk
 
 android-debug:
 	$(run-evn) cargo apk run --lib
@@ -21,10 +22,10 @@ desktop-debug:
 	$(build-evn) $(run-evn) cargo run --features=desktop
 
 desktop-run-debug:
-	$(run-evn) ./target/debug/slint-template
+	$(run-evn) ./target/debug/${app-name}
 
 desktop-run-release:
-	$(run-evn) ./target/release/slint-template
+	$(run-evn) ./target/release/${app-name}
 
 desktop-build-debug:
 	$(build-evn) $(run-evn) cargo build --features=desktop

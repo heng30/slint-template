@@ -1,0 +1,23 @@
+import { Theme } from "../../theme.slint";
+import { Store, TabIndex, SettingDetailIndex } from "../../store.slint";
+import { Home } from "./home.slint";
+import { Setting } from "../setting/mobile.slint";
+import { Footer } from "footer.slint";
+
+export component Bodyer inherits Rectangle {
+    if TabIndex.Home == Store.current-tab-index: Home { }
+    if TabIndex.Setting == Store.current-tab-index: Setting { }
+}
+
+export component MobilePanel inherits VerticalLayout {
+    padding-left: Theme.padding;
+    padding-right: Theme.padding;
+
+    property <bool> isShowFooter: Store.current-tab-index == TabIndex.Home || (Store.current-tab-index == TabIndex.Setting && Store.current-setting-detail-index == SettingDetailIndex.Home);
+
+    Bodyer {
+        height: parent.height - (isShowFooter ? (Theme.footer-height + Theme.padding) : 0);
+    }
+
+    if isShowFooter:  Footer { }
+}

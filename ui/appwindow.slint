@@ -1,16 +1,15 @@
-import { Theme, Icons } from "./theme.slint";
-import { Logic } from "./logic.slint";
-import { Store, SettingDetailIndex, DeviceType } from "./store.slint";
 import { Util } from "./util.slint";
+import { Logic } from "./logic.slint";
+import { Theme, Icons } from "./theme.slint";
+import { Store, SettingDetailIndex, DeviceType, SettingProxy } from "./store.slint";
 import { Panel } from "./panel/panel.slint";
 import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialogDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus } from "./base/widgets.slint";
 
 export component AppWindow inherits Window {
-    default-font-size: Theme.default-font-size;
-    default-font-family: Theme.default-font-family;
     preferred-width: Theme.default-width;
     preferred-height: Theme.default-height;
-
+    default-font-size: Theme.default-font-size;
+    default-font-family: Theme.default-font-family;
     background: Theme.base-background;
     icon: Icons.brand;
     title: "slint-template";
@@ -65,4 +64,4 @@ export component AppWindow inherits Window {
     }
 }
 
-export { Util, Logic, Store, Theme, Icons, IconsDialogSetting, LoadingStatus, SettingDetailIndex, AboutSetting, ToastSetting, ToastStatus, DeviceType }
+export { Util, Logic, Store, Theme, Icons, IconsDialogSetting, LoadingStatus, SettingDetailIndex, AboutSetting, ToastSetting, ToastStatus, DeviceType , SettingProxy}

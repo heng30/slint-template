@@ -1,8 +1,10 @@
-import { Theme, Logic, Icons } from "../def.slint";
-import { SettingDetailInner, TabBtn } from "../../../base/widgets.slint";
+import { Theme, Logic, Icons } from "../../def.slint";
+import { SettingDetail, SettingDetailInner, TabBtn } from "../../../base/widgets.slint";
 
-export component Donate inherits Rectangle {
+export component Donate inherits SettingDetail {
     private property <bool> is-wechat: true;
+
+    title: Logic.tr("Donate");
 
     SettingDetailInner {
         vbox-alignment: LayoutAlignment.stretch;

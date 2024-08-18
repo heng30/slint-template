@@ -1,30 +1,12 @@
-import { Logic, Theme, Store, Util, Icons, SettingUI, SettingDetailIndex } from "def.slint";
+import { Logic, Theme, Store, Util, Icons, SettingUI, SettingDetailIndex } from "../def.slint";
 import { Head, SettingEntry, SettingDetail, ToastStatus, About, Help } from "../../base/widgets.slint";
-import { Preference as PreferenceInner } from "components/preference.slint";
-import { Donate as DonateInner } from "components/donate.slint";
-
-component Preference inherits SettingDetail {
-    title: Logic.tr("Preference");
-
-    public function get() -> SettingUI {
-        return inner.get();
-    }
-
-    inner := PreferenceInner { }
-}
-
-component Donate inherits SettingDetail {
-    title: Logic.tr("Donate");
-    DonateInner { }
-}
+import { Preference } from "components/preference.slint";
+import { Donate  } from "components/donate.slint";
+import { Proxy  } from "components/proxy.slint";
 
 component Body inherits VerticalLayout {
     alignment: start;
     spacing: Theme.spacing;
-
-    in-out property current-setting-detail-index <=> Store.current-setting-detail-index;
-
-    callback switch(SettingDetailIndex);
 
     head := Head {
         hbox-alignment: LayoutAlignment.start;
@@ -43,7 +25,16 @@ component Body inherits VerticalLayout {
                 icon: Icons.ui;
 
                 clicked => {
-                    root.current-setting-detail-index = SettingDetailIndex.Preference;
+                    Logic.switch-setting-detail(SettingDetailIndex.Preference);
+                }
+            }
+
+            SettingEntry {
+                text: Logic.tr("Proxy");
+                icon: Icons.proxy-light;
+
+                clicked => {
+                    Logic.switch-setting-detail(SettingDetailIndex.Proxy);
                 }
             }
 
@@ -51,7 +42,7 @@ component Body inherits VerticalLayout {
                 text: Logic.tr("About");
                 icon: Icons.about-light;
                 clicked => {
-                    root.current-setting-detail-index = SettingDetailIndex.About;
+                    Logic.switch-setting-detail(SettingDetailIndex.About);
                 }
             }
 
@@ -59,7 +50,7 @@ component Body inherits VerticalLayout {
                 text: Logic.tr("Help");
                 icon: Icons.help-light;
                 clicked => {
-                    root.current-setting-detail-index = SettingDetailIndex.Help;
+                    Logic.switch-setting-detail(SettingDetailIndex.Help);
                 }
             }
 
@@ -67,7 +58,7 @@ component Body inherits VerticalLayout {
                 text: Logic.tr("Donate");
                 icon: Icons.donate;
                 clicked => {
-                    root.current-setting-detail-index = SettingDetailIndex.Donate;
+                    Logic.switch-setting-detail(SettingDetailIndex.Donate);
                 }
             }
 
@@ -83,17 +74,28 @@ component Body inherits VerticalLayout {
 }
 
 export component Setting inherits Rectangle {
+    init => {
+        Logic.switch-setting-detail(SettingDetailIndex.Home);
+    }
+
     if Store.current-setting-detail-index == SettingDetailIndex.Home: Body { }
 
     if Store.current-setting-detail-index != SettingDetailIndex.Home: Rectangle {
         if Store.current-setting-detail-index == SettingDetailIndex.Preference: Preference {
             back => {
                 if (self.get().font-size == "") {
-                    Util.show-toast(Logic.tr("Input cann't be empty"), ToastStatus.Warning);
+                    Util.show-toast(Logic.tr("Input can not be empty"), ToastStatus.Warning);
                     return;
                 }
                 Logic.switch-setting-detail(SettingDetailIndex.Home);
                 Logic.set-setting-ui(self.get());
+            }
+        }
+
+        if Store.current-setting-detail-index == SettingDetailIndex.Proxy: Proxy {
+            back => {
+                Logic.switch-setting-detail(SettingDetailIndex.Home);
+                Logic.set-setting-proxy(self.get());
             }
         }
 

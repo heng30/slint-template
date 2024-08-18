@@ -1,0 +1,34 @@
+import { Theme, Store, TabIndex, SettingDetailIndex, Logic } from "../def.slint";
+import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
+import { Blanket } from "../../base/widgets.slint";
+
+export component DesktopPanel inherits Rectangle {
+    private property <bool> is-show-setting-dialog: !(Store.current-setting-detail-index == SettingDetailIndex.None || Store.current-setting-detail-index == SettingDetailIndex.About);
+    private property <bool> is-show-about-dialog: Store.current-setting-detail-index == SettingDetailIndex.About;
+
+    VerticalLayout {
+        padding: Theme.padding * 2;
+        alignment: LayoutAlignment.end;
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+
+            SettingIconsBar {
+                background: Theme.secondary-background;
+            }
+        }
+    }
+
+    if is-show-setting-dialog || is-show-about-dialog: Blanket {
+        clicked => {
+            Logic.switch-setting-detail(SettingDetailIndex.None);
+        }
+    }
+
+    if is-show-setting-dialog: SettingDialog {
+        width: Math.min(1000px, root.width * 0.8);
+    }
+
+    if is-show-about-dialog: AboutDialog {
+        width: Math.min(1000px, root.width * 0.8);
+    }
+}

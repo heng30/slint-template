@@ -7,5 +7,4 @@ pub async fn init(_db_path: &str) {
     // entry::new(def::ACCOUNTS_TABLE)
     //     .await
     //     .expect("account table failed");
-
 }

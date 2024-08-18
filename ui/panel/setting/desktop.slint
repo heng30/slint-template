@@ -1,24 +1,19 @@
-import { Logic, Theme, Store, Util, Icons, SettingUI, SettingDetailIndex } from "def.slint";
-import { IconBtn, SettingEntryV2, Head, SettingDetail, ToastStatus, About, Help } from "../../base/widgets.slint";
+import { Logic, Theme, Store, Util, Icons, SettingUI, SettingProxy, SettingDetailIndex } from "../def.slint";
+import { IconBtn, SettingEntryV2, Head, SettingDetail, ToastStatus, About, Help, Dialog } from "../../base/widgets.slint";
 import { Preference } from "components/preference.slint";
 import { Donate } from "components/donate.slint";
+import { Proxy } from "components/proxy.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
-
-    private property <SettingDetailIndex> previous-setting-detail-index: SettingDetailIndex.Home;
 
     // (previous-index, current-index) -> void
     callback switch(SettingDetailIndex, SettingDetailIndex) -> bool;
 
     function update-index(index: SettingDetailIndex) {
-        if (root.switch(previous-setting-detail-index, index)) {
-            previous-setting-detail-index = index;
+        if (root.switch(Store.previous-setting-detail-index, index)) {
+            Store.previous-setting-detail-index = index;
         }
-    }
-
-    init => {
-        Store.current-setting-detail-index = SettingDetailIndex.Preference;
     }
 
     Flickable {
@@ -27,12 +22,10 @@ component LeftPanel inherits Rectangle {
 
         vbox := VerticalLayout {
             alignment: LayoutAlignment.start;
-            spacing: Theme.spacing * 4;
 
             SettingEntryV2 {
                 text: Logic.tr("Preference");
                 icon: Icons.ui;
-                width: root.width;
                 background: Store.current-setting-detail-index == SettingDetailIndex.Preference ? Theme.base-background : root.background;
 
                 clicked => {
@@ -41,9 +34,18 @@ component LeftPanel inherits Rectangle {
             }
 
             SettingEntryV2 {
+                text: Logic.tr("Proxy");
+                icon: Icons.proxy-light;
+                background: Store.current-setting-detail-index == SettingDetailIndex.Proxy ? Theme.base-background : root.background;
+
+                clicked => {
+                    update-index(SettingDetailIndex.Proxy);
+                }
+            }
+
+            SettingEntryV2 {
                 text: Logic.tr("Help");
                 icon: Icons.help-light;
-                width: root.width;
                 background: Store.current-setting-detail-index == SettingDetailIndex.Help ? Theme.base-background : root.background;
 
                 clicked => {
@@ -54,7 +56,6 @@ component LeftPanel inherits Rectangle {
             SettingEntryV2 {
                 text: Logic.tr("Donate");
                 icon: Icons.donate;
-                width: root.width;
                 background: Store.current-setting-detail-index == SettingDetailIndex.Donate ? Theme.base-background : root.background;
 
                 clicked => {
@@ -70,45 +71,88 @@ component RightPanel inherits Rectangle {
         return preference.get();
     }
 
-    preference := Preference {
-        visible: Store.current-setting-detail-index == SettingDetailIndex.Preference;
+    public function proxy-get() -> SettingProxy {
+        return proxy.get();
     }
 
-    if Store.current-setting-detail-index == SettingDetailIndex.About: About { }
+    preference := Preference {
+        visible: Store.current-setting-detail-index == SettingDetailIndex.Preference;
+        is-show-header: false;
+    }
+
+    proxy := Proxy {
+        visible: Store.current-setting-detail-index == SettingDetailIndex.Proxy;
+        is-show-header: false;
+    }
 
     if Store.current-setting-detail-index == SettingDetailIndex.Help: Help {
         is-show-header: false;
         entries: Store.helps;
     }
 
-    if Store.current-setting-detail-index == SettingDetailIndex.Donate: Donate { }
+    if Store.current-setting-detail-index == SettingDetailIndex.Donate: Donate {
+        is-show-header: false;
+    }
 }
 
-export component Setting inherits Rectangle {
-    function save(index: SettingDetailIndex) -> bool {
+component Setting inherits Rectangle {
+    public function save(index: SettingDetailIndex) -> bool {
         if (index == SettingDetailIndex.Preference) {
             if (rp.preference-get().font-size == "") {
-                Util.show-toast(Logic.tr("Input cann't be empty"), ToastStatus.Warning);
+                Util.show-toast(Logic.tr("Input can not be empty"), ToastStatus.Warning);
                 return false;
             }
             Logic.set-setting-ui(rp.preference-get());
+        } else if (index == SettingDetailIndex.Proxy) {
+            Logic.set-setting-proxy(rp.proxy-get());
         }
         return true;
     }
 
     HorizontalLayout {
         LeftPanel {
-            width: Math.max(root.width * 0.3, 160px);
+            width: Math.max(root.width * 0.3, 200px);
             switch(previous-index, current-index) => {
                 if (!root.save(previous-index)) {
                     return false;
                 }
+
                 Logic.switch-setting-detail(current-index);
                 return true;
             }
         }
 
         rp := RightPanel { }
+    }
+}
+
+export component SettingDialog inherits Dialog {
+    title: Logic.tr("Setting");
+    is-hide-btns: true;
+    is-prevent-event-forward: true;
+
+    setting := Setting {
+        height: 650px;
+    }
+
+    cancel-clicked => {
+        setting.save(Store.current-setting-detail-index);
+        Logic.switch-setting-detail(SettingDetailIndex.None);
+    }
+}
+
+export component AboutDialog inherits Dialog {
+    title: Logic.tr("About");
+    is-hide-btns: true;
+    is-prevent-event-forward: true;
+
+    About {
+        height: 650px;
+        is-show-header: false;
+    }
+
+    cancel-clicked => {
+        Logic.switch-setting-detail(SettingDetailIndex.None);
     }
 }
 
@@ -122,16 +166,16 @@ export component SettingIconsBar inherits Rectangle {
         spacing: Theme.spacing * 4;
 
         IconBtn {
-            icon: Icons.setting-light;
+            icon: Icons.setting-fill;
             clicked => {
-                // root.current-setting-detail-index = SettingDetailIndex.About;
+                Logic.switch-setting-detail(SettingDetailIndex.Preference);
             }
         }
 
         IconBtn {
-            icon: Icons.about-light;
+            icon: Icons.about-fill;
             clicked => {
-                // root.current-setting-detail-index = SettingDetailIndex.About;
+                Logic.switch-setting-detail(SettingDetailIndex.About);
             }
         }
 

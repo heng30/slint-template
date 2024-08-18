@@ -75,9 +75,12 @@ async fn android_main(app: slint::android::AndroidApp) {
     log::debug!("start...");
 
     slint::android::init(app).unwrap();
+
     ui_before().await;
     let ui = AppWindow::new().unwrap();
+    ui.global::<Store>().set_device_type(DeviceType::Mobile);
     ui_after(&ui);
+
     ui.run().unwrap();
 
     log::debug!("exit...");
@@ -89,6 +92,7 @@ pub async fn desktop_main() {
 
     ui_before().await;
     let ui = AppWindow::new().unwrap();
+    ui.global::<Store>().set_device_type(DeviceType::Desktop);
     ui_after(&ui);
 
     ui.run().unwrap();

@@ -4,6 +4,7 @@ use log::debug;
 use once_cell::sync::Lazy;
 use std::{fs, path::PathBuf, sync::Mutex};
 
+const CARGO_TOML: &str = include_str!("../../Cargo.toml");
 static CONFIG: Lazy<Mutex<Config>> = Lazy::new(|| Mutex::new(Config::default()));
 
 #[cfg(not(target_os = "android"))]
@@ -65,6 +66,10 @@ pub fn ui() -> data::UI {
     CONFIG.lock().unwrap().ui.clone()
 }
 
+pub fn proxy() -> data::Proxy {
+    CONFIG.lock().unwrap().proxy.clone()
+}
+
 pub fn db_path() -> PathBuf {
     CONFIG.lock().unwrap().db_path.clone()
 }
@@ -82,24 +87,43 @@ pub fn save(conf: data::Config) -> Result<()> {
 
 impl Config {
     pub fn init(&mut self) -> Result<()> {
-        let app_name = if cfg!(not(target_os = "android")) {
-            "slint-template"
-        } else if cfg!(debug_assertions) {
-            "xyz.heng30.dev.slint-template"
+        let metadata = toml::from_str::<toml::Table>(CARGO_TOML).expect("Parse Cargo.toml error");
+        let app_name = metadata
+            .get("package")
+            .unwrap()
+            .get("name")
+            .unwrap()
+            .to_string()
+            .trim_matches('"')
+            .to_string();
+
+        let pkg_name = if cfg!(not(target_os = "android")) {
+            app_name.clone()
         } else {
-            "xyz.heng30.slint-template"
+            metadata
+                .get("package")
+                .unwrap()
+                .get("metadata")
+                .unwrap()
+                .get("android")
+                .unwrap()
+                .get("package")
+                .unwrap()
+                .to_string()
+                .trim_matches('"')
+                .to_string()
         };
 
-        let app_dirs = AppDirs::new(Some(app_name), true).unwrap();
-        self.init_config(&app_dirs)?;
+        let app_dirs = AppDirs::new(Some(&pkg_name), true).unwrap();
+        self.init_config(&app_dirs, &app_name)?;
         self.load().with_context(|| "load config file failed")?;
         debug!("{:?}", self);
         Ok(())
     }
 
-    fn init_config(&mut self, app_dirs: &AppDirs) -> Result<()> {
-        self.db_path = app_dirs.data_dir.join("slint-template.db");
-        self.config_path = app_dirs.config_dir.join("slint-template.toml");
+    fn init_config(&mut self, app_dirs: &AppDirs, app_name: &str) -> Result<()> {
+        self.db_path = app_dirs.data_dir.join(format!("{app_name}.db"));
+        self.config_path = app_dirs.config_dir.join(format!("{app_name}.toml"));
         self.cache_dir = app_dirs.data_dir.join("cache");
 
         if self.appid.is_empty() {
@@ -119,6 +143,7 @@ impl Config {
                 Ok(c) => {
                     self.appid = c.appid;
                     self.ui = c.ui;
+                    self.proxy = c.proxy;
                     Ok(())
                 }
                 Err(_) => {

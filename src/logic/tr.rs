@@ -60,7 +60,7 @@ pub fn tr(text: &str) -> String {
         ("Remove cache success", "清除缓存成功"),
         ("Over the limit of 2048 word counts", "超过1000字数限制"),
         ("UI", "界 面"),
-        ("Preference", "偏好设置"),
+        ("Preference", "偏 好"),
         ("Account", "账户管理"),
         ("Reading", "阅 读"),
         ("Sync", "同 步"),

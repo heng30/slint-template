@@ -1,7 +1,7 @@
 use super::tr::tr;
 use crate::{
     config,
-    slint_generatedAppWindow::{AppWindow, Logic, Store, Theme},
+    slint_generatedAppWindow::{AppWindow, Logic, Store, Theme, SettingProxy},
 };
 use slint::ComponentHandle;
 
@@ -38,6 +38,28 @@ pub fn init(ui: &AppWindow) {
         all.ui.font_family = setting.font_family.into();
         all.ui.language = setting.language.into();
         all.ui.is_dark = setting.is_dark;
+        _ = config::save(all);
+    });
+
+    ui.global::<Logic>().on_get_setting_proxy(move || {
+        let config = config::proxy();
+
+        SettingProxy {
+            proxy_type: "Http".into(),
+            http_url: config.http_url.into(),
+            http_port: slint::format!("{}", config.http_port),
+            socks5_url: config.socks5_url.into(),
+            socks5_port: slint::format!("{}", config.socks5_port),
+        }
+    });
+
+    ui.global::<Logic>().on_set_setting_proxy(move |setting| {
+        let mut all = config::all();
+
+        all.proxy.http_url = setting.http_url.into();
+        all.proxy.http_port = setting.http_port.parse().unwrap_or(3218);
+        all.proxy.socks5_url = setting.socks5_url.into();
+        all.proxy.socks5_port = setting.socks5_port.parse().unwrap_or(1080);
         _ = config::save(all);
     });
 }

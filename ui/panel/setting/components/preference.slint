@@ -1,8 +1,11 @@
 import { LineEdit, ComboBox } from "std-widgets.slint";
-import { Theme, Logic, Store, SettingUI } from "../def.slint";
-import { SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn } from "../../../base/widgets.slint";
+import { Theme, Logic, Store, SettingUI } from "../../def.slint";
+import { SettingDetailInner, SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn } from "../../../base/widgets.slint";
 
-export component Preference inherits Rectangle {
+
+export component Preference inherits SettingDetail {
+    title: Logic.tr("Preference");
+
     public function get() -> SettingUI {
         font-size-lineedit.clear-focus();
 
