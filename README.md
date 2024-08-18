@@ -1,13 +1,13 @@
-<div style="display: flex, margin: 8px">
-    <img src="./screenshot/1.png" width="100"/>
-    <img src="./screenshot/2.png" width="100"/>
-    <img src="./screenshot/3.png" width="100"/>
-    <img src="./screenshot/4.png" width="100"/>
-    <img src="./screenshot/5.png" width="100"/>
-    <img src="./screenshot/6.png" width="100"/>
-    <img src="./screenshot/7.png" width="100"/>
-    <img src="./screenshot/8.png" width="100"/>
-</div>
+<!-- <div style="display: flex, margin: 8px"> -->
+    <!-- <img src="./screenshot/1.png" width="100"/> -->
+    <!-- <img src="./screenshot/2.png" width="100"/> -->
+    <!-- <img src="./screenshot/3.png" width="100"/> -->
+    <!-- <img src="./screenshot/4.png" width="100"/> -->
+    <!-- <img src="./screenshot/5.png" width="100"/> -->
+    <!-- <img src="./screenshot/6.png" width="100"/> -->
+    <!-- <img src="./screenshot/7.png" width="100"/> -->
+    <!-- <img src="./screenshot/8.png" width="100"/> -->
+<!-- </div> -->
 
 [中文文档](./README.zh-CN.md)
 
@@ -22,9 +22,9 @@
 #### How to build?
 - Install `Rust` and `Cargo`
 - Install Android `sdk`, `ndk`, `jdk17`, and set environment variables
-- Run `make` to build a release version android APK
-- Run `make debug` to run it on desktop platform
-- Run `make build-desktop-release` to build a release version desktop APK
+- Run `make android-build-release` to build a release version android APK
+- Run `make desktop-debug` to run it on desktop platform
+- Run `make desktop-build-release` to build a release version desktop application
 - Refer to [Makefile](./Makefile) for more information
 
 ### Reference

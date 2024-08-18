@@ -1,13 +1,13 @@
-<div style="display: flex, margin: 8px">
-    <img src="./screenshot/1.png" width="100"/>
-    <img src="./screenshot/2.png" width="100"/>
-    <img src="./screenshot/3.png" width="100"/>
-    <img src="./screenshot/4.png" width="100"/>
-    <img src="./screenshot/5.png" width="100"/>
-    <img src="./screenshot/6.png" width="100"/>
-    <img src="./screenshot/7.png" width="100"/>
-    <img src="./screenshot/8.png" width="100"/>
-</div>
+<!-- <div style="display: flex, margin: 8px"> -->
+<!--     <img src="./screenshot/1.png" width="100"/> -->
+<!--     <img src="./screenshot/2.png" width="100"/> -->
+<!--     <img src="./screenshot/3.png" width="100"/> -->
+<!--     <img src="./screenshot/4.png" width="100"/> -->
+<!--     <img src="./screenshot/5.png" width="100"/> -->
+<!--     <img src="./screenshot/6.png" width="100"/> -->
+<!--     <img src="./screenshot/7.png" width="100"/> -->
+<!--     <img src="./screenshot/8.png" width="100"/> -->
+<!-- </div> -->
 
 [English Documentation](./README.md)
 
@@ -22,9 +22,9 @@
 ### 如何构建?
 - 安装 `Rust` 和 `Cargo`
 - 安装 Android `sdk`, `ndk`, `jdk17`, 和设置对应的环境变量
-- 运行 `make` 编译安卓平台程序
-- 运行 `make debug` 调试桌面平台程序
-- 运行 `make build-desktop-release` 编译桌面平台程序
+- 运行 `make android-build-release` 编译安卓平台程序
+- 运行 `make desktop-debug` 调试桌面平台程序
+- 运行 `make desktop-build-release` 编译桌面平台程序
 - 参考 [Makefile](./Makefile) 了解更多信息
 
 ### 参考

@@ -68,15 +68,15 @@ required-features = ["desktop"]
 [package.metadata.android]
 package = "xyz.heng30.slint_template"
 build_targets = ["aarch64-linux-android"]
-resources = "./res"
+resources = "./android/res"
 strip = "strip"
 
 [package.metadata.android.signing.dev]
-path = "./keystore/debug.keystore"
+path = "./android/keystore/debug.keystore"
 keystore_password = "123456"
 
 [package.metadata.android.signing.release]
-path = "./keystore/release.keystore"
+path = "./android/keystore/release.keystore"
 keystore_password = "123456"
 
 [package.metadata.android.sdk]
