@@ -1,6 +1,6 @@
 import { LineEdit, ComboBox } from "std-widgets.slint";
-import { Theme, Logic, Store, SettingUI } from "../../def.slint";
-import { SettingDetailInner, SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn } from "../../../base/widgets.slint";
+import { Theme, Logic, Store, Icons, SettingUI } from "../../def.slint";
+import { SettingDetailInner, SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn, SettingDetailSwitch } from "../../../base/widgets.slint";
 
 export component Preference inherits SettingDetail {
     title: Logic.tr("Preference");
@@ -9,6 +9,7 @@ export component Preference inherits SettingDetail {
         return {
             font-size: font-size-lineedit.text,
             font-family: fonts-combox.current-value,
+            is-use-system-bar: system-bar-switch.checked,
             language: Store.setting-ui.language,
             is-dark: Store.setting-ui.is-dark,
         };
@@ -17,6 +18,7 @@ export component Preference inherits SettingDetail {
     init => {
         font-size-lineedit.text = Store.setting-ui.font-size;
         fonts-combox.current-value = Store.setting-ui.font-family;
+        system-bar-switch.checked = Store.setting-ui.is-use-system-bar;
     }
 
     SettingDetailInner {
@@ -42,6 +44,14 @@ export component Preference inherits SettingDetail {
                 height: fonts-label.preferred-height * 1.6;
                 model: ["Default", "Source Han Serif CN", "Source Han Sans CN"];
                 current-value: Store.setting-ui.font-family;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            system-bar-switch := SettingDetailSwitch {
+                icon: Icons.status;
+                text: Logic.tr("Enable system status bar");
+                checked: Store.setting-ui.is-use-system-bar;
             }
         }
 

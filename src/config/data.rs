@@ -36,6 +36,9 @@ pub struct UI {
     #[derivative(Default(value = "\"Default\".to_string()"))]
     pub font_family: String,
 
+    #[derivative(Default(value = "true"))]
+    pub is_use_system_bar: bool,
+
     #[derivative(Default(value = "\"cn\".to_string()"))]
     pub language: String,
 

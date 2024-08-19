@@ -1,6 +1,6 @@
 use super::tr::tr;
 use crate::{
-    slint_generatedAppWindow::{AppWindow, Util},
+    slint_generatedAppWindow::{AppPosType, AppWindow, Util},
     toast_warn,
 };
 use cutil::{
@@ -13,6 +13,75 @@ use std::str::FromStr;
 use webbrowser::{self, Browser};
 
 pub fn init(ui: &AppWindow) {
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>().on_hide_window(move || {
+        _ = ui_handle.unwrap().hide();
+    });
+
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>().on_show_window(move || {
+        _ = ui_handle.unwrap().show();
+    });
+
+    ui.global::<Util>().on_close_window(move || {
+        std::process::exit(0);
+    });
+
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>().on_min_window(move |minimized| {
+        ui_handle.unwrap().window().set_minimized(minimized);
+    });
+
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>().on_get_is_min_window(move || {
+        ui_handle.unwrap().window().is_minimized()
+    });
+
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>().on_max_window(move |maximized| {
+        ui_handle.unwrap().window().set_maximized(maximized);
+    });
+
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>().on_get_is_max_window(move || {
+        ui_handle.unwrap().window().is_maximized()
+    });
+
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>().on_fullscreen(move |fullscreen| {
+        ui_handle.unwrap().window().set_fullscreen(fullscreen);
+    });
+
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>().on_get_is_fullscreen(move || {
+        ui_handle.unwrap().window().is_fullscreen()
+    });
+
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>().on_get_scale_factor(move || {
+        ui_handle.unwrap().window().scale_factor()
+    });
+
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>().on_get_current_pos(move || {
+        let pos = ui_handle.unwrap().window().position();
+        AppPosType {
+            x: pos.x as f32,
+            y: pos.y as f32,
+        }
+    });
+
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>().on_set_current_pos(move |pos| {
+        ui_handle
+            .unwrap()
+            .window()
+            .set_position(slint::PhysicalPosition {
+                x: pos.x as i32,
+                y: pos.y as i32,
+            })
+    });
+
     ui.global::<Util>().on_string_fixed2(move |n| {
         let n = n.to_string().parse::<f32>().unwrap_or(0.0f32);
         slint::format!("{:2}", (n * 100.0).round() / 100.0)

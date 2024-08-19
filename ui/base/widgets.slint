@@ -1,4 +1,4 @@
-import { LoadingStatus, PrioritizationFeeStatus, ToastStatus } from "def.slint";
+import { LoadingStatus, PrioritizationFeeStatus, ToastStatus, AppPosType } from "def.slint";
 import { Toast, ToastSetting } from "toast.slint";
 import { TabBtn } from "tab-btn.slint";
 import { TabBtns } from "tab-btns.slint";
@@ -49,8 +49,10 @@ import { TokenSender } from "token-sender.slint";
 import { TokenRecipient } from "token-recipient.slint";
 import { TransactionFee } from "transaction-fee.slint";
 import { WaitTransactionConfirmed } from "wait-transaction-confirmed.slint";
+import { StatusBar } from "status-bar.slint";
 
 export {
+    AppPosType,
     LoadingStatus,
     PrioritizationFeeStatus,
     ToastStatus,
@@ -125,5 +127,6 @@ export {
     TokenSender,
     TokenRecipient,
     TransactionFee,
-    WaitTransactionConfirmed
+    WaitTransactionConfirmed,
+    StatusBar
 }

@@ -265,6 +265,7 @@ pub fn tr(text: &str) -> String {
         ("Slow", "慢"),
         ("Normal", "正常"),
         ("Fast", "快"),
+        ("Enable system status bar", "启用系统状态栏"),
         ("Invalid prioritization fee", "非法优先费用"),
         (
             "Please setting max prioritization fee",

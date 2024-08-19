@@ -8,11 +8,9 @@ import { IconBtn } from "icon-btn.slint";
 import { Link } from "link.slint";
 import { Brand } from "brand.slint";
 
-
-
-
 export global AboutSetting {
-    in-out property <string> title: "slint-template v0.0.1";
+    in-out property <string> app-name: "slint-template";
+    in-out property <string> version: "v0.0.1";
     in-out property <string> sponsor: "0xf1199999751b1a3A74590adBf95401D19AB30014";
     in-out property <string> text: "Based on Slint-UI. Copyright 2022-2030. All rights reserved. The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.";
 }
@@ -31,7 +29,7 @@ export component About inherits SettingDetail {
 
             Label {
                 color: Theme.brand-color;
-                text: AboutSetting.title;
+                text: AboutSetting.app-name + " " + AboutSetting.version;
                 font-size: Theme.title1-font-size;
             }
         }

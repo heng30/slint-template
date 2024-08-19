@@ -174,8 +174,11 @@ export component SettingIconsBar inherits Rectangle {
     height: hbox.preferred-height;
     border-radius: Theme.border-radius;
 
+    in-out property h-padding <=> hbox.padding;
+    in-out property h-spacing <=> hbox.spacing;
+
     hbox := HorizontalLayout {
-        padding: Theme.padding * 4;
+        padding: Theme.padding * 2;
         spacing: Theme.spacing * 4;
 
         IconBtn {

@@ -3,7 +3,7 @@ import { Logic } from "./logic.slint";
 import { Theme, Icons } from "./theme.slint";
 import { Store, SettingDetailIndex, DeviceType, SettingProxy } from "./store.slint";
 import { Panel } from "./panel/panel.slint";
-import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialogDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus } from "./base/widgets.slint";
+import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialogDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus, AppPosType, StatusBar } from "./base/widgets.slint";
 
 export component AppWindow inherits Window {
     preferred-width: Theme.default-width;
@@ -11,10 +11,20 @@ export component AppWindow inherits Window {
     default-font-size: Theme.default-font-size;
     default-font-family: Theme.default-font-family;
     background: Theme.base-background;
+    title: AboutSetting.app-name;
     icon: Icons.brand;
-    title: "slint-template";
+    no-frame: !Store.setting-ui.is-use-system-bar;
 
-    Panel { }
+    VerticalLayout {
+        if root.no-frame: StatusBar {
+            background: pink;
+            is-show-icon: true;
+            icon: root.icon;
+            title: root.title;
+        }
+
+        Panel { }
+    }
 
     if IconsDialogSetting.show || ConfirmDialogSetting.show: Blanket {
         clicked => {
@@ -64,4 +74,6 @@ export component AppWindow inherits Window {
     }
 }
 
-export { Util, Logic, Store, Theme, Icons, IconsDialogSetting, LoadingStatus, SettingDetailIndex, AboutSetting, ToastSetting, ToastStatus, DeviceType , SettingProxy}
+export {
+    AppPosType, Util, Logic, Store, Theme, Icons, IconsDialogSetting, LoadingStatus, SettingDetailIndex, AboutSetting, ToastSetting, ToastStatus, DeviceType , SettingProxy
+    }
