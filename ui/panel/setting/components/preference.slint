@@ -1,5 +1,5 @@
 import { LineEdit, ComboBox } from "std-widgets.slint";
-import { Theme, Logic, Store, Icons, SettingUI } from "../../def.slint";
+import { Theme, Logic, Store, Icons, SettingUI, DeviceType } from "../../def.slint";
 import { SettingDetailInner, SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn, SettingDetailSwitch } from "../../../base/widgets.slint";
 
 export component Preference inherits SettingDetail {
@@ -9,7 +9,7 @@ export component Preference inherits SettingDetail {
         return {
             font-size: font-size-lineedit.text,
             font-family: fonts-combox.current-value,
-            is-use-system-bar: system-bar-switch.checked,
+            is-use-system-bar: Store.setting-ui.is-use-system-bar,
             language: Store.setting-ui.language,
             is-dark: Store.setting-ui.is-dark,
         };
@@ -18,7 +18,6 @@ export component Preference inherits SettingDetail {
     init => {
         font-size-lineedit.text = Store.setting-ui.font-size;
         fonts-combox.current-value = Store.setting-ui.font-family;
-        system-bar-switch.checked = Store.setting-ui.is-use-system-bar;
     }
 
     SettingDetailInner {
@@ -47,11 +46,15 @@ export component Preference inherits SettingDetail {
             }
         }
 
-        SettingDetailInnerVbox {
+        if Store.device-type == DeviceType.Desktop: SettingDetailInnerVbox {
             system-bar-switch := SettingDetailSwitch {
                 icon: Icons.status;
                 text: Logic.tr("Enable system status bar");
                 checked: Store.setting-ui.is-use-system-bar;
+                toggle => {
+                    Store.setting-ui.is-use-system-bar = self.checked;
+                    Logic.set-setting-ui(root.get());
+                }
             }
         }
 
