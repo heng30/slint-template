@@ -1,4 +1,4 @@
-import { Store,  SettingUI, SettingProxy, TabIndex, SettingDetailIndex } from "store.slint";
+import { Store,  SettingPreference, SettingProxy, TabIndex, SettingDetailIndex } from "store.slint";
 
 export global Logic {
     callback update-cache-size();
@@ -7,8 +7,8 @@ export global Logic {
     callback copy-to-clipboard(string);
     callback copy-from-clipboard() -> string;
 
-    callback get-setting-ui() -> SettingUI;
-    callback set-setting-ui(SettingUI);
+    callback get-setting-preference() -> SettingPreference;
+    callback set-setting-preference(SettingPreference);
 
     callback get-setting-proxy() -> SettingProxy;
     callback set-setting-proxy(SettingProxy);

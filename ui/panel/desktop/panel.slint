@@ -8,7 +8,7 @@ export component DesktopPanel inherits Rectangle {
     private property <bool> is-show-about-dialog: Store.current-setting-detail-index == SettingDetailIndex.About;
 
     VerticalLayout {
-        if Store.setting-ui.no-frame: StatusBar {
+        if Store.setting-preference.no-frame: StatusBar {
             background: Theme.secondary-background;
             is-show-icon: true;
             icon: Icons.brand;

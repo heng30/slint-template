@@ -1,4 +1,4 @@
-import { Logic, Theme, Store, Util, Icons, SettingUI, SettingDetailIndex } from "../def.slint";
+import { Logic, Theme, Store, Util, Icons, SettingPreference, SettingDetailIndex } from "../def.slint";
 import { Head, SettingEntry, SettingDetail, ToastStatus, About, Help } from "../../base/widgets.slint";
 import { Preference } from "components/preference.slint";
 import { Donate  } from "components/donate.slint";
@@ -88,7 +88,7 @@ export component Setting inherits Rectangle {
                     return;
                 }
                 Logic.switch-setting-detail(SettingDetailIndex.Home);
-                Logic.set-setting-ui(self.get());
+                Logic.set-setting-preference(self.get());
             }
         }
 

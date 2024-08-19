@@ -1,4 +1,4 @@
-import { Logic, Theme, Store, Util, Icons, SettingUI, SettingProxy, SettingDetailIndex } from "../def.slint";
+import { Logic, Theme, Store, Util, Icons, SettingPreference, SettingProxy, SettingDetailIndex, DeviceType } from "../def.slint";
 import { IconBtn, SettingEntryV2, Head, SettingDetail, ToastStatus, About, Help, Dialog } from "../../base/widgets.slint";
 import { Preference } from "components/preference.slint";
 import { Donate } from "components/donate.slint";
@@ -75,7 +75,7 @@ component LeftPanel inherits Rectangle {
 }
 
 component RightPanel inherits Rectangle {
-    public function preference-get() -> SettingUI {
+    public function preference-get() -> SettingPreference {
         return preference.get();
     }
 
@@ -106,11 +106,20 @@ component RightPanel inherits Rectangle {
 component Setting inherits Rectangle {
     public function save(index: SettingDetailIndex) -> bool {
         if (index == SettingDetailIndex.Preference) {
-            if (rp.preference-get().font-size == "") {
+            if (rp.preference-get().font-size == "" || rp.preference-get().win-width == "" || rp.preference-get().win-height == "") {
                 Util.show-toast(Logic.tr("Input can not be empty"), ToastStatus.Warning);
                 return false;
             }
-            Logic.set-setting-ui(rp.preference-get());
+
+            if (Store.device-type == DeviceType.Desktop) {
+                Store.setting-preference.win-width = rp.preference-get().win-width;
+                Store.setting-preference.win-height = rp.preference-get().win-height;
+            }
+
+            Store.setting-preference.font-size = rp.preference-get().font-size;
+            Store.setting-preference.font-family = rp.preference-get().font-family;
+
+            Logic.set-setting-preference(rp.preference-get());
         } else if (index == SettingDetailIndex.Proxy) {
             Logic.set-setting-proxy(rp.proxy-get());
         }

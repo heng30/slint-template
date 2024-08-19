@@ -22,14 +22,20 @@ pub struct Config {
     #[serde(default = "appid_default")]
     pub appid: String,
 
-    pub ui: UI,
+    pub preference: Preference,
 
     pub proxy: Proxy,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Derivative)]
 #[derivative(Default)]
-pub struct UI {
+pub struct Preference {
+    #[derivative(Default(value = "1500"))]
+    pub win_width: u32,
+
+    #[derivative(Default(value = "800"))]
+    pub win_height: u32,
+
     #[derivative(Default(value = "16"))]
     pub font_size: u32,
 

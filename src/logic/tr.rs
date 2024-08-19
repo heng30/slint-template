@@ -2,7 +2,7 @@ use crate::config;
 use std::collections::HashMap;
 
 pub fn tr(text: &str) -> String {
-    if config::ui().language == "en" {
+    if config::preference().language == "en" {
         return text.to_string();
     }
 
@@ -109,6 +109,8 @@ pub fn tr(text: &str) -> String {
         ("Proxy address", "代理地址"),
         ("Proxy port", "代理端口"),
         ("Warning", "警告"),
+        ("Info", "提示"),
+        ("Reboot to take setting effect", "重启使配置生效"),
         ("RSS", "订阅"),
         ("Collection", "收藏夹"),
         ("Find", "发现"),
@@ -281,6 +283,9 @@ pub fn tr(text: &str) -> String {
         ("Frameless window", "无边框窗口"),
         ("Window always on top", "窗口总是在最上层"),
         ("Quick application or not?", "是否退出程序？"),
+        ("Window size", "窗口大小"),
+        ("width", "宽"),
+        ("height", "高"),
     ]);
 
     if let Some(txt) = items.get(text) {

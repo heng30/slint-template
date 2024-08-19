@@ -4,25 +4,24 @@ import "./fonts/SourceHanSerifCN.ttf";
 import "./fonts/SourceHanSansCN.otf";
 
 export global Theme {
-    out property <bool> is-dark: Store.setting-ui.is-dark;
+    out property <bool> is-dark: Store.setting-preference.is-dark;
     out property <length> padding: Math.max(4px, Math.round(default-font-size / 4px) * 1px);
     out property <length> spacing: padding;
     out property <length> border-radius: padding;
     out property <length> scroll-width: 12px;
-    out property <length> dialog-max-width: 600px;
     out property <length> header-height: Math.max(32px, icon-size + padding * 2);
     out property <length> footer-height: Math.max(40px, icon-size + default-font-size);
 
-    in-out property <length> default-width: Math.max(500px, default-font-size * 30);
-    in-out property <length> default-height: Math.max(800px, default-width + 300px);
-    in-out property <length> default-font-size: Store.setting-ui.font-size.to-float() * 1px;
+    in-out property <length> default-width: Store.setting-preference.win-width.to-float() * 1px;
+    in-out property <length> default-height: Store.setting-preference.win-height.to-float() * 1px;
+
+    in-out property <string> default-font-family: Store.setting-preference.font-family;
+    in-out property <length> default-font-size: Store.setting-preference.font-size.to-float() * 1px;
     in-out property <length> title5-font-size: default-font-size + 1px;
     in-out property <length> title4-font-size: default-font-size + 2px;
     in-out property <length> title3-font-size: default-font-size + 4px;
     in-out property <length> title2-font-size: default-font-size + 6px;
     in-out property <length> title1-font-size: default-font-size + 8px;
-
-    in-out property <string> default-font-family: Store.setting-ui.font-family;
 
     out property <length> icon-size: Math.max(24px, default-font-size + 8px);
     out property <length> avatar-size: icon-size + Theme.padding * 2;
@@ -60,12 +59,12 @@ export global Theme {
     out property <[color]> tag-colors: is-dark ? [#A3B3CC, #94C2AF, #9AC0C4, #B2ACCA, #CCA8A3, #CAA6BC, #A8C085, #B0B2B6] : [#CCE0FF, #BAF3DB, #C1F0F5, #DFD8FD, #FFD2CC, #FDD0EC, #D3F1A7, #DCDFE4];
 
     public function set-dark(flag: bool) {
-        Store.setting-ui.is-dark = flag;
+        Store.setting-preference.is-dark = flag;
         Palette.color-scheme = is-dark ? ColorScheme.dark : ColorScheme.light;
     }
 
     public function toggle() {
-        Store.setting-ui.is-dark = !Store.setting-ui.is-dark;
+        Store.setting-preference.is-dark = !Store.setting-preference.is-dark;
         Palette.color-scheme = is-dark ? ColorScheme.dark : ColorScheme.light;
     }
 }

@@ -67,8 +67,8 @@ pub fn reset(mut conf: Config) {
     _ = c.save();
 }
 
-pub fn ui() -> data::UI {
-    CONFIG.lock().unwrap().ui.clone()
+pub fn preference() -> data::Preference {
+    CONFIG.lock().unwrap().preference.clone()
 }
 
 pub fn proxy() -> data::Proxy {
@@ -148,7 +148,7 @@ impl Config {
             Ok(text) => match toml::from_str::<Config>(&text) {
                 Ok(c) => {
                     self.appid = c.appid;
-                    self.ui = c.ui;
+                    self.preference = c.preference;
                     self.proxy = c.proxy;
                     Ok(())
                 }

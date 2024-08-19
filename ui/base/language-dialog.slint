@@ -38,8 +38,8 @@ export component LanguageDialog inherits Dialog {
             ConfirmBtn {
                 text: Logic.tr("Confirm");
                 clicked => {
-                    Store.setting-ui.language = root.language;
-                    Logic.set-setting-ui(Store.setting-ui);
+                    Store.setting-preference.language = root.language;
+                    Logic.set-setting-preference(Store.setting-preference);
                     Store.is-first-run = false;
                 }
             }

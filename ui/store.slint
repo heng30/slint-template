@@ -19,7 +19,9 @@ export enum SettingDetailIndex {
     None,
 }
 
-export struct SettingUI {
+export struct SettingPreference {
+    win-width: string,
+    win-height: string,
     font-size: string,
     font-family: string,
     language: string,
@@ -50,8 +52,10 @@ export global Store {
     in-out property <SettingDetailIndex> previous-setting-detail-index: SettingDetailIndex.Preference;
     in-out property <SettingDetailIndex> current-setting-detail-index: SettingDetailIndex.None;
 
-    in-out property <bool> is-cn: setting-ui.language == "cn";
-    in-out property <SettingUI> setting-ui: {
+    in-out property <bool> is-cn: setting-preference.language == "cn";
+    in-out property <SettingPreference> setting-preference: {
+        win-width: 1500,
+        win-height: 800,
         font-size: "16",
         font-family: "Source Han Sans CN",
         language: "en",

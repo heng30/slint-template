@@ -38,19 +38,19 @@ component LangPage inherits Rectangle {
 
             RadioBtn {
                 text: "中文";
-                checked: Store.setting-ui.language == "cn";
+                checked: Store.setting-preference.language == "cn";
                 check => {
-                    Store.setting-ui.language = "cn";
-                    Logic.set-setting-ui(Store.setting-ui);
+                    Store.setting-preference.language = "cn";
+                    Logic.set-setting-preference(Store.setting-preference);
                 }
             }
 
             RadioBtn {
                 text: "English";
-                checked: Store.setting-ui.language == "en";
+                checked: Store.setting-preference.language == "en";
                 check => {
-                    Store.setting-ui.language = "en";
-                    Logic.set-setting-ui(Store.setting-ui);
+                    Store.setting-preference.language = "en";
+                    Logic.set-setting-preference(Store.setting-preference);
                 }
             }
         }
