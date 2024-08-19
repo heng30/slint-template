@@ -27,6 +27,8 @@ component LeftPanel inherits Rectangle {
                 text: Logic.tr("Preference");
                 icon: Icons.ui;
                 background: Store.current-setting-detail-index == SettingDetailIndex.Preference ? Theme.base-background : root.background;
+                is-show-indicator: Store.current-setting-detail-index == SettingDetailIndex.Preference;
+                icon-colorize: Store.current-setting-detail-index == SettingDetailIndex.Preference ? Theme.secondary-brand-color : Theme.regular-text-color;
 
                 clicked => {
                     update-index(SettingDetailIndex.Preference);
@@ -37,6 +39,8 @@ component LeftPanel inherits Rectangle {
                 text: Logic.tr("Proxy");
                 icon: Icons.proxy-light;
                 background: Store.current-setting-detail-index == SettingDetailIndex.Proxy ? Theme.base-background : root.background;
+                is-show-indicator: Store.current-setting-detail-index == SettingDetailIndex.Proxy;
+                icon-colorize: Store.current-setting-detail-index == SettingDetailIndex.Proxy ? Theme.secondary-brand-color : Theme.regular-text-color;
 
                 clicked => {
                     update-index(SettingDetailIndex.Proxy);
@@ -47,6 +51,8 @@ component LeftPanel inherits Rectangle {
                 text: Logic.tr("Help");
                 icon: Icons.help-light;
                 background: Store.current-setting-detail-index == SettingDetailIndex.Help ? Theme.base-background : root.background;
+                is-show-indicator: Store.current-setting-detail-index == SettingDetailIndex.Help;
+                icon-colorize: Store.current-setting-detail-index == SettingDetailIndex.Help ? Theme.secondary-brand-color : Theme.regular-text-color;
 
                 clicked => {
                     update-index(SettingDetailIndex.Help);
@@ -57,6 +63,8 @@ component LeftPanel inherits Rectangle {
                 text: Logic.tr("Donate");
                 icon: Icons.donate;
                 background: Store.current-setting-detail-index == SettingDetailIndex.Donate ? Theme.base-background : root.background;
+                is-show-indicator: Store.current-setting-detail-index == SettingDetailIndex.Donate;
+                icon-colorize: Store.current-setting-detail-index == SettingDetailIndex.Donate ? Theme.secondary-brand-color : Theme.regular-text-color;
 
                 clicked => {
                     update-index(SettingDetailIndex.Donate);
@@ -144,8 +152,10 @@ export component SettingDialog inherits Dialog {
     is-hide-btns: true;
     is-prevent-event-forward: true;
 
+    in-out property <length> inner-height: 650px;
+
     setting := Setting {
-        height: 650px;
+        height: root.inner-height;
     }
 
     cancel-clicked => {
@@ -159,8 +169,10 @@ export component AboutDialog inherits Dialog {
     is-hide-btns: true;
     is-prevent-event-forward: true;
 
+    in-out property <length> inner-height: 650px;
+
     About {
-        height: 650px;
+        height: root.inner-height;
         is-show-header: false;
     }
 
@@ -174,6 +186,8 @@ export component SettingIconsBar inherits Rectangle {
     height: hbox.preferred-height;
     border-radius: Theme.border-radius;
 
+    in-out property <bool> show-icon-hover-background: false;
+    in-out property <length> icon-size: Theme.icon-size;
     in-out property h-padding <=> hbox.padding;
     in-out property h-spacing <=> hbox.spacing;
 
@@ -183,6 +197,8 @@ export component SettingIconsBar inherits Rectangle {
 
         IconBtn {
             icon: Icons.setting-fill;
+            icon-size: root.icon-size;
+            show-icon-hover-background: root.show-icon-hover-background;
             clicked => {
                 Logic.switch-setting-detail(SettingDetailIndex.Preference);
             }
@@ -190,6 +206,8 @@ export component SettingIconsBar inherits Rectangle {
 
         IconBtn {
             icon: Icons.about-fill;
+            icon-size: root.icon-size;
+            show-icon-hover-background: root.show-icon-hover-background;
             clicked => {
                 Logic.switch-setting-detail(SettingDetailIndex.About);
             }
@@ -197,6 +215,8 @@ export component SettingIconsBar inherits Rectangle {
 
         IconBtn {
             icon: Icons.github;
+            icon-size: root.icon-size;
+            show-icon-hover-background: root.show-icon-hover-background;
             clicked => {
                 Util.open-url("Default","https://github.com/Heng30/slint-template");
             }

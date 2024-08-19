@@ -8,15 +8,13 @@ import { CancelBtn, TextBtn } from "./btn.slint";
 
 export global ConfirmDialogSetting {
     in-out property <bool> show;
-    out property <string> title-type: "warning";
     out property <string> title-text: "警告";
     out property <string> body-text;
     out property <string> handle-type;
     out property <string> user-data;
 
-    public function set(show: bool, title-type: string, title-text: string, body-text: string, handle-type: string, user-data: string) {
+    public function set(show: bool, title-text: string, body-text: string, handle-type: string, user-data: string) {
         self.show = show;
-        self.title-type = title-type;
         self.title-text = title-text;
         self.body-text = body-text;
         self.handle-type = handle-type;
@@ -25,13 +23,13 @@ export global ConfirmDialogSetting {
 }
 
 export component ConfirmDialogDialog inherits Rectangle {
-    preferred-width: 200px;
-    height: vbox.preferred-height;
+    height: vbox.preferred-height + Theme.padding * 2;
     background: Theme.base-background;
     border-radius: Theme.border-radius;
 
     in-out property <bool> is-prevent-event-forward: false;
     in-out property <string> title: ConfirmDialogSetting.title-text;
+    in-out property vbox-preferred-width <=> vbox.preferred-width;
 
     if is-prevent-event-forward: TouchArea { }
 

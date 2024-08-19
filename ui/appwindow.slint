@@ -3,7 +3,8 @@ import { Logic } from "./logic.slint";
 import { Theme, Icons } from "./theme.slint";
 import { Store, SettingDetailIndex, DeviceType, SettingProxy } from "./store.slint";
 import { Panel } from "./panel/panel.slint";
-import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialogDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus, AppPosType, StatusBar } from "./base/widgets.slint";
+import { SettingIconsBar } from "./panel/setting/desktop.slint";
+import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialogDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus, AppPosType } from "./base/widgets.slint";
 
 export component AppWindow inherits Window {
     preferred-width: Theme.default-width;
@@ -11,20 +12,12 @@ export component AppWindow inherits Window {
     default-font-size: Theme.default-font-size;
     default-font-family: Theme.default-font-family;
     background: Theme.base-background;
-    title: AboutSetting.app-name;
     icon: Icons.brand;
-    no-frame: !Store.setting-ui.is-use-system-bar;
+    title: AboutSetting.app-name;
+    no-frame: Store.setting-ui.no-frame;
+    always-on-top: Store.setting-ui.always-on-top;
 
-    VerticalLayout {
-        if Store.device-type == DeviceType.Desktop && root.no-frame: StatusBar {
-            background: pink;
-            is-show-icon: true;
-            icon: root.icon;
-            title: root.title;
-        }
-
-        Panel { }
-    }
+    Panel { }
 
     if IconsDialogSetting.show || ConfirmDialogSetting.show: Blanket {
         clicked => {
@@ -41,7 +34,7 @@ export component AppWindow inherits Window {
 
     if ConfirmDialogSetting.show: ConfirmDialogDialog {
         is-prevent-event-forward: true;
-        width: Math.min(root.width * 0.9, 380px);
+        width: Math.min(root.width * 0.9, self.vbox-preferred-width * 2);
     }
 
     if ToastSetting.text != "": Toast {

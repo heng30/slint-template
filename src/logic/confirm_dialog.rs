@@ -12,6 +12,9 @@ pub fn init(ui: &AppWindow) {
                 "remove-all-cache" => {
                     ui.global::<Logic>().invoke_remove_all_cache();
                 }
+                "close-window" => {
+                    ui.global::<Util>().invoke_close_window();
+                }
                 _ => (),
             }
         });

@@ -33,9 +33,8 @@ pub fn init(ui: &AppWindow) {
     });
 
     let ui_handle = ui.as_weak();
-    ui.global::<Util>().on_get_is_min_window(move || {
-        ui_handle.unwrap().window().is_minimized()
-    });
+    ui.global::<Util>()
+        .on_get_is_min_window(move || ui_handle.unwrap().window().is_minimized());
 
     let ui_handle = ui.as_weak();
     ui.global::<Util>().on_max_window(move |maximized| {
@@ -43,9 +42,8 @@ pub fn init(ui: &AppWindow) {
     });
 
     let ui_handle = ui.as_weak();
-    ui.global::<Util>().on_get_is_max_window(move || {
-        ui_handle.unwrap().window().is_maximized()
-    });
+    ui.global::<Util>()
+        .on_get_is_max_window(move || ui_handle.unwrap().window().is_maximized());
 
     let ui_handle = ui.as_weak();
     ui.global::<Util>().on_fullscreen(move |fullscreen| {
@@ -53,33 +51,32 @@ pub fn init(ui: &AppWindow) {
     });
 
     let ui_handle = ui.as_weak();
-    ui.global::<Util>().on_get_is_fullscreen(move || {
-        ui_handle.unwrap().window().is_fullscreen()
-    });
+    ui.global::<Util>()
+        .on_get_is_fullscreen(move || ui_handle.unwrap().window().is_fullscreen());
 
     let ui_handle = ui.as_weak();
-    ui.global::<Util>().on_get_scale_factor(move || {
-        ui_handle.unwrap().window().scale_factor()
-    });
+    ui.global::<Util>()
+        .on_get_scale_factor(move || ui_handle.unwrap().window().scale_factor());
 
     let ui_handle = ui.as_weak();
     ui.global::<Util>().on_get_current_pos(move || {
-        let pos = ui_handle.unwrap().window().position();
-        AppPosType {
-            x: pos.x as f32,
-            y: pos.y as f32,
-        }
+        let ui = ui_handle.unwrap();
+        let scale = ui.window().scale_factor();
+        let pos = slint::LogicalPosition::from_physical(ui.window().position(), scale);
+
+        AppPosType { x: pos.x, y: pos.y }
     });
 
     let ui_handle = ui.as_weak();
     ui.global::<Util>().on_set_current_pos(move |pos| {
-        ui_handle
-            .unwrap()
-            .window()
-            .set_position(slint::PhysicalPosition {
-                x: pos.x as i32,
-                y: pos.y as i32,
-            })
+        let ui = ui_handle.unwrap();
+        let scale = ui.window().scale_factor();
+        let pos = slint::PhysicalPosition::from_logical(
+            slint::LogicalPosition { x: pos.x, y: pos.y },
+            scale,
+        );
+
+        ui.window().set_position(pos)
     });
 
     ui.global::<Util>().on_string_fixed2(move |n| {

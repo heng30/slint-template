@@ -278,18 +278,9 @@ pub fn tr(text: &str) -> String {
             "Refresh account balance failed. The account is not found",
             "更新账户余额失败. 账户不存在",
         ),
-        (
-            "Create account and recover account from mnemonics",
-            "创建账户和使用组记词恢复账户",
-        ),
-        (
-            "Show, send and receive Sol and tokens of Solana",
-            "查看、发送和接收Sol代币和Solana的通证",
-        ),
-        (
-            "Welcome! Enjoying you journey of crypto",
-            "欢迎使用，享受你的加密之旅",
-        ),
+        ("Frameless window", "无边框窗口"),
+        ("Window always on top", "窗口总是在最上层"),
+        ("Quick application or not?", "是否退出程序？"),
     ]);
 
     if let Some(txt) = items.get(text) {

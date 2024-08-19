@@ -36,11 +36,14 @@ pub struct UI {
     #[derivative(Default(value = "\"Default\".to_string()"))]
     pub font_family: String,
 
-    #[derivative(Default(value = "true"))]
-    pub is_use_system_bar: bool,
-
     #[derivative(Default(value = "\"cn\".to_string()"))]
     pub language: String,
+
+    #[derivative(Default(value = "false"))]
+    pub always_on_top: bool,
+
+    #[derivative(Default(value = "false"))]
+    pub no_frame: bool,
 
     pub is_dark: bool,
 }

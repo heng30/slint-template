@@ -1,24 +1,23 @@
 import { AppPosType } from "def.slint";
 import { Theme, Icons } from "../theme.slint";
+import { Logic } from "../logic.slint";
 import { Util } from "../util.slint";
 import { Label } from "label.slint";
 import { IconBtn } from "icon-btn.slint";
+import { ConfirmDialogSetting } from "confirm-dialog.slint";
 
 export component StatusBar inherits Rectangle {
     in-out property <length> icon-size: Theme.default-font-size;
+    in-out property <bool> show-icon-hover-background: false;
 
     in-out property <bool> is-show-icon;
     in-out property <image> icon;
     in-out property <string> title;
 
     private property <AppPosType> origin-pos;
-    private property <physical-length> offset-x;
-    private property <physical-length> offset-y;
-
-    function reset() {
-        offset-x = 0;
-        offset-y = 0;
-    }
+    private property <length> offset-x;
+    private property <length> offset-y;
+    private property <bool> enable-move;
 
     background: Theme.base-background;
     height: Theme.header-height;
@@ -27,19 +26,26 @@ export component StatusBar inherits Rectangle {
         mouse-cursor: MouseCursor.grabbing;
 
         moved => {
-            parent.offset-x = self.pressed-x - self.mouse-x;
-            parent.offset-y = self.pressed-y - self.mouse-y;
+            if (!root.enable-move) {
+                return;
+            }
+            root.origin-pos = Util.get-current-pos();
+            root.offset-x = self.pressed-x - self.mouse-x;
+            root.offset-y = self.pressed-y - self.mouse-y;
 
-            Util.set-current-pos( {
-                x: origin-pos.x - parent.offset-x,
-                y: origin-pos.y - parent.offset-y,
+            Util.set-current-pos({
+                x: root.origin-pos.x - root.offset-x,
+                y: root.origin-pos.y - root.offset-y,
             });
         }
 
         pointer-event(event) => {
-            if (event.button == PointerEventButton.left && event.kind == PointerEventKind.down) {
-                parent.reset();
-                parent.origin-pos = Util.get-current-pos();
+            if (event.button == PointerEventButton.left) {
+                if (event.kind == PointerEventKind.down) {
+                    root.enable-move = true;
+                } else {
+                    root.enable-move = false;
+                }
             }
         }
     }
@@ -65,43 +71,49 @@ export component StatusBar inherits Rectangle {
         }
 
         HorizontalLayout {
-            spacing: Theme.spacing * 2;
-            IconBtn {
-                icon: Icons.status-bar-max;
-                icon-size: root.icon-size;
-                colorize: Colors.green;
-                show-icon-hover-background: false;
+            alignment: LayoutAlignment.end;
 
-                clicked => {
-                    if (Util.get-is-max-window()) {
-                        Util.max-window(false);
-                        self.icon = Icons.status-bar-max;
-                    } else {
-                        Util.max-window(true);
-                        self.icon = Icons.status-bar-normal;
+            @children
+
+            HorizontalLayout {
+                spacing: Theme.spacing * 2;
+                IconBtn {
+                    icon: Icons.status-bar-max;
+                    icon-size: root.icon-size;
+                    colorize: Theme.success-color;
+                    show-icon-hover-background: root.show-icon-hover-background;
+
+                    clicked => {
+                        if (Util.get-is-max-window()) {
+                            Util.max-window(false);
+                            self.icon = Icons.status-bar-max;
+                        } else {
+                            Util.max-window(true);
+                            self.icon = Icons.status-bar-normal;
+                        }
                     }
                 }
-            }
 
-            IconBtn {
-                icon: Icons.status-bar-min;
-                icon-size: root.icon-size;
-                colorize: Colors.blue;
-                show-icon-hover-background: false;
+                IconBtn {
+                    icon: Icons.status-bar-min;
+                    icon-size: root.icon-size;
+                    colorize: Theme.secondary-brand-color;
+                    show-icon-hover-background: root.show-icon-hover-background;
 
-                clicked => {
-                    Util.min-window(true);
+                    clicked => {
+                        Util.min-window(true);
+                    }
                 }
-            }
 
-            IconBtn {
-                icon: Icons.status-bar-close;
-                icon-size: root.icon-size;
-                colorize: Colors.red;
-                show-icon-hover-background: false;
+                IconBtn {
+                    icon: Icons.status-bar-close;
+                    icon-size: root.icon-size;
+                    colorize: Theme.danger-color;
+                    show-icon-hover-background: root.show-icon-hover-background;
 
-                clicked => {
-                    Util.close-window();
+                    clicked => {
+                        ConfirmDialogSetting.set(true, Logic.tr("Warning"), Logic.tr("Quick application or not?"), "close-window", "");
+                    }
                 }
             }
         }

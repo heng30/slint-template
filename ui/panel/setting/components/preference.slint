@@ -9,8 +9,9 @@ export component Preference inherits SettingDetail {
         return {
             font-size: font-size-lineedit.text,
             font-family: fonts-combox.current-value,
-            is-use-system-bar: Store.setting-ui.is-use-system-bar,
             language: Store.setting-ui.language,
+            always-on-top: Store.setting-ui.always-on-top,
+            no-frame: Store.setting-ui.no-frame,
             is-dark: Store.setting-ui.is-dark,
         };
     }
@@ -47,12 +48,24 @@ export component Preference inherits SettingDetail {
         }
 
         if Store.device-type == DeviceType.Desktop: SettingDetailInnerVbox {
-            system-bar-switch := SettingDetailSwitch {
+            SettingDetailSwitch {
                 icon: Icons.status;
-                text: Logic.tr("Enable system status bar");
-                checked: Store.setting-ui.is-use-system-bar;
+                text: Logic.tr("Frameless window");
+                checked: Store.setting-ui.no-frame;
                 toggle => {
-                    Store.setting-ui.is-use-system-bar = self.checked;
+                    Store.setting-ui.no-frame = self.checked;
+                    Logic.set-setting-ui(root.get());
+                }
+            }
+        }
+
+        if Store.device-type == DeviceType.Desktop: SettingDetailInnerVbox {
+            SettingDetailSwitch {
+                icon: Icons.stackoverflow;
+                text: Logic.tr("Window always on top");
+                checked: Store.setting-ui.always-on-top;
+                toggle => {
+                    Store.setting-ui.always-on-top = self.checked;
                     Logic.set-setting-ui(root.get());
                 }
             }

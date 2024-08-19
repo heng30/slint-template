@@ -195,7 +195,7 @@ export component AddressBookDetail inherits SettingDetail {
                 text: Logic.tr("Delete address");
 
                 clicked => {
-                    ConfirmDialogSetting.set(true, "warning", Logic.tr("Warning"), Logic.tr("Delete address or not?"), "remove-address-book-entry", entry.uuid);
+                    ConfirmDialogSetting.set(true, Logic.tr("Warning"), Logic.tr("Delete address or not?"), "remove-address-book-entry", entry.uuid);
                 }
             }
         }

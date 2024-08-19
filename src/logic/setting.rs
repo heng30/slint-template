@@ -36,8 +36,9 @@ pub fn init(ui: &AppWindow) {
         let mut all = config::all();
         all.ui.font_size = font_size;
         all.ui.font_family = setting.font_family.into();
-        all.ui.is_use_system_bar = setting.is_use_system_bar;
         all.ui.language = setting.language.into();
+        all.ui.always_on_top = setting.always_on_top;
+        all.ui.no_frame = setting.no_frame;
         all.ui.is_dark = setting.is_dark;
         _ = config::save(all);
     });
@@ -72,8 +73,9 @@ fn init_setting(ui: &AppWindow) {
     let font_size = u32::min(50, u32::max(10, config.font_size));
     ui_setting.font_size = slint::format!("{}", font_size);
     ui_setting.font_family = config.font_family.into();
-    ui_setting.is_use_system_bar = config.is_use_system_bar;
     ui_setting.language = config.language.into();
+    ui_setting.always_on_top = config.always_on_top;
+    ui_setting.no_frame = config.no_frame;
     ui_setting.is_dark = config.is_dark;
 
     ui.global::<Theme>().invoke_set_dark(config.is_dark);
