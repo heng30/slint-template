@@ -16,7 +16,7 @@ export component AppWindow inherits Window {
     no-frame: !Store.setting-ui.is-use-system-bar;
 
     VerticalLayout {
-        if root.no-frame: StatusBar {
+        if Store.device-type == DeviceType.Desktop && root.no-frame: StatusBar {
             background: pink;
             is-show-icon: true;
             icon: root.icon;
