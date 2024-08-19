@@ -128,7 +128,7 @@ component Setting inherits Rectangle {
         TouchArea {
             mouse-cursor: MouseCursor.col-resize;
             moved => {
-                lp.width = Math.max(0px, lp.width - (self.pressed-x - self.mouse-x))
+                lp.width = Math.min(Math.max(0px, lp.width - (self.pressed-x - self.mouse-x)), root.width - self.width)
             }
         }
     }

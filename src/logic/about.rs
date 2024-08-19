@@ -1,10 +1,11 @@
 use crate::slint_generatedAppWindow::{AboutSetting, AppWindow};
-use crate::version::VERSION;
+use crate::{config::app_name, version::VERSION};
 use slint::ComponentHandle;
 
 pub fn init(ui: &AppWindow) {
     ui.global::<AboutSetting>().set_title(slint::format!(
-        "slint-template {}",
+        "{} {}",
+        app_name(),
         if VERSION.is_empty() {
             "v0.0.1"
         } else {

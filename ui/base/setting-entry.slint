@@ -43,22 +43,60 @@ export component SettingEntryV2 inherits Rectangle {
     in-out property icon <=> img.source;
     in-out property icon-colorize <=> img.colorize;
     in-out property icon-size <=> img.width;
+    out property has-hover <=> ta.has-hover;
+
+    in-out property <bool> is-show-indicator;
+    in-out property <length> h-padding: Theme.padding * 2;
+    in-out property <length> v-padding: Theme.padding * 2;
+
+    in-out property <bool> is-show-right-icon;
+    in-out property <image> right-icon: Icons.star;
+    in-out property <color> right-icon-colorize;
 
     callback clicked <=> ta.clicked;
 
     hbox := HorizontalLayout {
-        padding: Theme.padding * 2;
-        spacing: Theme.spacing * 2;
-        alignment: LayoutAlignment.start;
+        padding-left: h-padding;
+        padding-right: h-padding;
+        padding-top: v-padding;
+        padding-bottom: v-padding;
 
-        img := Image {
-            vertical-alignment: center;
-            width: Theme.icon-size;
-            colorize: Theme.icon-color;
+        alignment: LayoutAlignment.space-between;
+
+        HorizontalLayout {
+            spacing: Theme.spacing * 2;
+
+            if is-show-indicator: VerticalLayout {
+                alignment: LayoutAlignment.center;
+
+                Rectangle {
+                    width: 4px;
+                    height: root.icon-size;
+                    border-radius: self.width / 2;
+                    background: root.icon-colorize;
+                }
+            }
+
+            img := Image {
+                vertical-alignment: center;
+                width: Theme.icon-size;
+                colorize: Theme.icon-color;
+            }
+
+            VerticalLayout {
+                padding-left: Theme.padding * 2;
+                alignment: LayoutAlignment.center;
+                label := Label {
+                    color: root.icon-colorize;
+                }
+            }
         }
 
-        label := Label {
-            color: root.icon-colorize;
+        if is-show-right-icon: Image {
+            vertical-alignment: center;
+            width: root.icon-size;
+            colorize: root.right-icon-colorize;
+            source: root.right-icon;
         }
     }
 

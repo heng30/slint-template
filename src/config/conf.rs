@@ -41,6 +41,11 @@ pub fn appid() -> String {
     CONFIG.lock().unwrap().appid.clone()
 }
 
+#[allow(dead_code)]
+pub fn app_name() -> String {
+    CONFIG.lock().unwrap().app_name.clone()
+}
+
 pub fn is_first_run() -> bool {
     CONFIG.lock().unwrap().is_first_run
 }
@@ -88,7 +93,8 @@ pub fn save(conf: data::Config) -> Result<()> {
 impl Config {
     pub fn init(&mut self) -> Result<()> {
         let metadata = toml::from_str::<toml::Table>(CARGO_TOML).expect("Parse Cargo.toml error");
-        let app_name = metadata
+
+        self.app_name = metadata
             .get("package")
             .unwrap()
             .get("name")
@@ -98,7 +104,7 @@ impl Config {
             .to_string();
 
         let pkg_name = if cfg!(not(target_os = "android")) {
-            app_name.clone()
+            self.app_name.clone()
         } else {
             metadata
                 .get("package")
@@ -115,15 +121,15 @@ impl Config {
         };
 
         let app_dirs = AppDirs::new(Some(&pkg_name), true).unwrap();
-        self.init_config(&app_dirs, &app_name)?;
+        self.init_config(&app_dirs)?;
         self.load().with_context(|| "load config file failed")?;
         debug!("{:?}", self);
         Ok(())
     }
 
-    fn init_config(&mut self, app_dirs: &AppDirs, app_name: &str) -> Result<()> {
-        self.db_path = app_dirs.data_dir.join(format!("{app_name}.db"));
-        self.config_path = app_dirs.config_dir.join(format!("{app_name}.toml"));
+    fn init_config(&mut self, app_dirs: &AppDirs) -> Result<()> {
+        self.db_path = app_dirs.data_dir.join(format!("{}.db", self.app_name));
+        self.config_path = app_dirs.config_dir.join(format!("{}.toml", self.app_name));
         self.cache_dir = app_dirs.data_dir.join("cache");
 
         if self.appid.is_empty() {

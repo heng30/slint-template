@@ -16,6 +16,9 @@ pub struct Config {
     #[serde(skip)]
     pub is_first_run: bool,
 
+    #[serde(skip)]
+    pub app_name: String,
+
     #[serde(default = "appid_default")]
     pub appid: String,
 

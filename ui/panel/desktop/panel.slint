@@ -6,6 +6,26 @@ export component DesktopPanel inherits Rectangle {
     private property <bool> is-show-setting-dialog: !(Store.current-setting-detail-index == SettingDetailIndex.None || Store.current-setting-detail-index == SettingDetailIndex.About);
     private property <bool> is-show-about-dialog: Store.current-setting-detail-index == SettingDetailIndex.About;
 
+    HorizontalLayout {
+        padding: Theme.padding * 2;
+        padding-top: Theme.padding * 5;
+        spacing: Theme.spacing;
+        for item in [
+            Theme.third-brand-color,
+            Theme.base-background,
+            Theme.secondary-background,
+            Theme.base-background-drop-shadow,
+            Theme.secondary-background-drop-shadow,
+            Theme.secondary-text-color,
+            Theme.regular-text-color,
+            Theme.avatar-color,
+        ]: Rectangle {
+            width: 20px;
+            height: 20px;
+            background: item;
+        }
+    }
+
     VerticalLayout {
         padding: Theme.padding * 2;
         alignment: LayoutAlignment.end;
