@@ -53,7 +53,8 @@ slint-build = "1.7"
 embed-resource = "2.4"
 
 [features]
-default = ["cutil/native-tls-vendored", "slint/backend-android-activity-06"]
+default = []
+android = ["cutil/native-tls-vendored", "slint/backend-android-activity-06"]
 qrcode = [ "dep:image", "dep:qrcode"]
 desktop = [ ]
 

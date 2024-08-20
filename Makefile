@@ -9,14 +9,14 @@ app-name=slint-template
 all: desktop-build-release
 
 android-build:
-	$(build-evn) cargo apk build --lib
+	$(build-evn) cargo apk build --lib --features=android
 
 android-build-release:
-	$(build-evn) cargo apk build --lib --release
+	$(build-evn) cargo apk build --lib --release --features=android
 	cp -f target/release/apk/${app-name}.apk target/${app-name}-${version}.apk
 
 android-debug:
-	$(run-evn) cargo apk run --lib
+	$(run-evn) cargo apk run --lib --features=android
 
 desktop-debug:
 	$(build-evn) $(run-evn) cargo run --features=desktop

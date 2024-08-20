@@ -23,8 +23,11 @@ pub fn init(ui: &AppWindow) {
         ui.global::<Store>().get_setting_preference()
     });
 
+    let ui_handle = ui.as_weak();
     ui.global::<Logic>()
         .on_set_setting_preference(move |mut setting| {
+            let ui = ui_handle.unwrap();
+
             let font_size = u32::min(50, u32::max(10, setting.font_size.parse().unwrap_or(16)));
             setting.font_size = slint::format!("{}", font_size);
 
@@ -40,6 +43,12 @@ pub fn init(ui: &AppWindow) {
             all.preference.no_frame = setting.no_frame;
             all.preference.is_dark = setting.is_dark;
             _ = config::save(all);
+
+            if cfg!(feature = "desktop") {
+                ui.global::<crate::Util>().invoke_update_window_size();
+            } else {
+                _ = ui;
+            }
         });
 
     ui.global::<Logic>().on_get_setting_proxy(move || {

@@ -19,6 +19,9 @@ export global Util {
     callback get-current-pos() -> AppPosType;
     callback set-current-pos(AppPosType);
 
+    callback update-window-size();
+    callback set-window-center();
+
     // (message, status)
     callback show-toast(string, ToastStatus);
 

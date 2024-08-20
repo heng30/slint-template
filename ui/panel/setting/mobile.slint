@@ -87,8 +87,11 @@ export component Setting inherits Rectangle {
                     Util.show-toast(Logic.tr("Input can not be empty"), ToastStatus.Warning);
                     return;
                 }
-                Logic.switch-setting-detail(SettingDetailIndex.Home);
+
+                Store.setting-preference.font-size = self.get().font-size;
+                Store.setting-preference.font-family = self.get().font-family;
                 Logic.set-setting-preference(self.get());
+                Logic.switch-setting-detail(SettingDetailIndex.Home);
             }
         }
 

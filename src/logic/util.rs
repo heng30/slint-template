@@ -1,5 +1,6 @@
 use super::tr::tr;
 use crate::{
+    config,
     slint_generatedAppWindow::{AppPosType, AppWindow, Util},
     toast_warn,
 };
@@ -76,7 +77,41 @@ pub fn init(ui: &AppWindow) {
             scale,
         );
 
-        ui.window().set_position(pos)
+        ui.window().set_position(pos);
+    });
+
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>().on_update_window_size(move || {
+        let ui = ui_handle.unwrap();
+        let preference = config::preference();
+
+        let scale = ui.window().scale_factor();
+        let psize = slint::PhysicalSize::from_logical(
+            slint::LogicalSize {
+                width: preference.win_width as f32,
+                height: preference.win_height as f32,
+            },
+            scale,
+        );
+        ui.window().set_size(psize);
+    });
+
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>().on_set_window_center(move || {
+        let ui = ui_handle.unwrap();
+        let preference = config::preference();
+
+        let scale = ui.window().scale_factor();
+        let _psize = slint::PhysicalSize::from_logical(
+            slint::LogicalSize {
+                width: preference.win_width as f32,
+                height: preference.win_height as f32,
+            },
+            scale,
+        );
+
+        todo!("Get the monitor size to calculate the position");
+        // ui.window().set_position(pos)
     });
 
     ui.global::<Util>().on_string_fixed2(move |n| {

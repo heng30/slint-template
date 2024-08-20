@@ -11,10 +11,12 @@ export component CircleProgress inherits Rectangle {
     in-out property <float> progress;
     in-out property <length> radius: 80px;
     in-out property <length> ring-width: 16px;
-    in-out property <color> ring-fill: Theme.third-brand-color;
+
+    in-out property <color> finished-ring-fill: Theme.third-brand-color;
+    in-out property <color> unfinished-ring-fill: Theme.secondary-background;
 
     in-out property <color> finished-text-background: Theme.success-color;
-    in-out property <color> unfinished-text-background: Theme.secondary-background;
+    in-out property <color> unfinished-text-background: Theme.base-background;
 
     in-out property <string> finished-text: Logic.tr("Finished");
     in-out property <string> unfinished-text: root.calc-percent(root.ring-angle) + "%";
@@ -28,6 +30,40 @@ export component CircleProgress inherits Rectangle {
     height: self.width;
 
     Rectangle {
+        Path {
+            viewbox-x: 0;
+            viewbox-y: 0;
+            viewbox-width: root.radius / 1px * 2;
+            viewbox-height: self.viewbox-width;
+
+            stroke: Colors.transparent;
+            stroke-width: 0;
+            fill: root.ring-angle >= 360deg ? root.finished-ring-fill : root.unfinished-ring-fill;
+
+            MoveTo {
+                x: 0;
+                y: root.radius / 1px;
+            }
+
+            ArcTo {
+                radius-x: Util.lenght2float(root.radius);
+                radius-y: Util.lenght2float(root.radius);
+                sweep: true;
+                x: root.radius * 2 / 1px;
+                y: root.radius / 1px;
+            }
+
+            ArcTo {
+                radius-x: Util.lenght2float(root.radius);
+                radius-y: Util.lenght2float(root.radius);
+                sweep: true;
+                x: 0;
+                y: root.radius / 1px;
+            }
+
+            Close { }
+        }
+
         if ring-angle > 0deg && ring-angle < 360deg: Path {
             private property <angle> inner-ring-angle: Util.bound(1, root.ring-angle / 1deg, 365) * 1deg;
             private property <float> outline-end-x: Util.lenght2float(root.radius) * (1 - Math.cos(inner-ring-angle));
@@ -43,7 +79,7 @@ export component CircleProgress inherits Rectangle {
 
             stroke: Colors.transparent;
             stroke-width: 0;
-            fill: root.ring-fill;
+            fill: root.finished-ring-fill;
 
             MoveTo {
                 x: 0;
@@ -79,40 +115,6 @@ export component CircleProgress inherits Rectangle {
             ArcTo {
                 radius-x: Util.lenght2float(root.ring-width / 2);
                 radius-y: Util.lenght2float(root.ring-width / 2);
-                sweep: true;
-                x: 0;
-                y: root.radius / 1px;
-            }
-
-            Close { }
-        }
-
-        if root.ring-angle >= 360deg: Path {
-            viewbox-x: 0;
-            viewbox-y: 0;
-            viewbox-width: root.radius / 1px * 2;
-            viewbox-height: self.viewbox-width;
-
-            stroke: Colors.transparent;
-            stroke-width: 0;
-            fill: root.ring-fill;
-
-            MoveTo {
-                x: 0;
-                y: root.radius / 1px;
-            }
-
-            ArcTo {
-                radius-x: Util.lenght2float(root.radius);
-                radius-y: Util.lenght2float(root.radius);
-                sweep: true;
-                x: root.radius * 2 / 1px;
-                y: root.radius / 1px;
-            }
-
-            ArcTo {
-                radius-x: Util.lenght2float(root.radius);
-                radius-y: Util.lenght2float(root.radius);
                 sweep: true;
                 x: 0;
                 y: root.radius / 1px;
