@@ -2,6 +2,8 @@ import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
 import { Blanket, StatusBar, Divider, AboutSetting } from "../../base/widgets.slint";
 
+import { CircleProgress } from "../../base/widgets.slint";
+import { Util } from "../../util.slint";
 
 export component DesktopPanel inherits Rectangle {
     private property <bool> is-show-setting-dialog: !(Store.current-setting-detail-index == SettingDetailIndex.None || Store.current-setting-detail-index == SettingDetailIndex.About);
@@ -34,7 +36,26 @@ export component DesktopPanel inherits Rectangle {
 
         VerticalLayout {
             padding: Theme.padding * 2;
-            alignment: LayoutAlignment.end;
+            spacing: Theme.spacing * 5;
+            vertical-stretch: 1;
+            alignment: LayoutAlignment.center;
+
+            HorizontalLayout {
+                alignment: center;
+                spacing: Theme.spacing * 10;
+
+                Rectangle {
+                    width: cp.width;
+                    height: cp.height;
+
+                    cp := CircleProgress {
+                        ring-width: 15px;
+                        unfinished-text-background: Theme.secondary-background;
+                        ring-angle: Util.progress-angle(360deg, 5s);
+                    }
+                }
+            }
+
             HorizontalLayout {
                 alignment: LayoutAlignment.center;
 

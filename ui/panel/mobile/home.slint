@@ -1,8 +1,10 @@
 import { Theme, Icons } from "../../theme.slint";
 import { Store, SettingDetailIndex } from "../../store.slint";
 import { Logic } from "../../logic.slint";
-
 import { Label, Head } from "../../base/widgets.slint";
+
+import { CircleProgress } from "../../base/widgets.slint";
+import { Util } from "../../util.slint";
 
 component TopHead inherits Head {
     icon: Icons.home-fill;
@@ -11,8 +13,9 @@ component TopHead inherits Head {
 }
 
 component Body inherits Rectangle {
-    Label {
-        text: "HOME";
+    CircleProgress {
+        ring-width: 15px;
+        ring-angle: Util.progress-angle(360deg, 5s);
     }
 }
 

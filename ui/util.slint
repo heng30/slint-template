@@ -78,11 +78,19 @@ export global Util {
         return @image-url("./images/info.svg");
     }
 
-    public pure function bound(low: int, value: int, height: int) -> int {
+    pure public function bound(low: int, value: int, height: int) -> int {
         return Math.max(low, Math.min(value, height));
     }
 
     pure public function get-token-icon(symbol: string, mint-address: string, icon-extension: string) -> image {
         return Icons.token;
+    }
+
+    pure public function lenght2float(len: length) -> float {
+        return len / 1px;
+    }
+
+    pure public function progress-angle(total-angle: angle, interval: duration) -> angle {
+        return Math.mod(total-angle / 1deg * animation-tick() / interval, total-angle / 1deg) * 1deg;
     }
 }
