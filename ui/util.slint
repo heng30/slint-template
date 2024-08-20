@@ -91,6 +91,10 @@ export global Util {
     }
 
     pure public function progress-angle(total-angle: angle, interval: duration) -> angle {
-        return Math.mod(total-angle / 1deg * animation-tick() / interval, total-angle / 1deg) * 1deg;
+        return Math.mod(total-angle / 1deg * animation-tick() / interval, (total-angle + 1deg) / 1deg) * 1deg;
+    }
+
+    pure public function progress-value(interval: duration) -> float {
+        return progress-angle(360deg, interval) / 360deg;
     }
 }

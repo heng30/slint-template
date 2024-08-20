@@ -2,7 +2,7 @@ import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
 import { Blanket, StatusBar, Divider, AboutSetting } from "../../base/widgets.slint";
 
-import { CircleProgress } from "../../base/widgets.slint";
+import { CircleProgress, Rate } from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 export component DesktopPanel inherits Rectangle {
@@ -40,29 +40,35 @@ export component DesktopPanel inherits Rectangle {
             vertical-stretch: 1;
             alignment: LayoutAlignment.center;
 
-            HorizontalLayout {
+            VerticalLayout {
                 alignment: center;
                 spacing: Theme.spacing * 10;
 
-                Rectangle {
-                    width: cp.width;
-                    height: cp.height;
-
-                    cp := CircleProgress {
+                HorizontalLayout {
+                    alignment: center;
+                    CircleProgress {
                         ring-width: 15px;
                         unfinished-text-background: Theme.secondary-background;
-                        ring-angle: Util.progress-angle(360deg, 5s);
+                        progress: Util.progress-value(20s);
                     }
                 }
-            }
 
-            HorizontalLayout {
-                alignment: LayoutAlignment.center;
+                HorizontalLayout {
+                    alignment: center;
+                    Rate {
+                        rate: 4;
+                        icon-size: Theme.icon-size * 2;
+                    }
+                }
 
-                SettingIconsBar {
-                    background: Theme.secondary-background;
-                    h-padding: Theme.spacing * 2;
-                    h-spacing: Theme.padding * 5;
+                HorizontalLayout {
+                    alignment: LayoutAlignment.center;
+
+                    SettingIconsBar {
+                        background: Theme.secondary-background;
+                        h-padding: Theme.spacing * 2;
+                        h-spacing: Theme.padding * 5;
+                    }
                 }
             }
         }

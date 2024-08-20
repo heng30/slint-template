@@ -4,23 +4,25 @@ import { Logic } from "../logic.slint";
 import { Label } from "label.slint";
 
 export component CircleProgress inherits Rectangle {
-    pure public function calc-percentage(ring-angle: angle) -> int {
+    pure function calc-percent(ring-angle: angle) -> int {
         return Util.bound(0, ring-angle * 100 / 360deg, 100);
     }
 
+    in-out property <float> progress;
     in-out property <length> radius: 80px;
     in-out property <length> ring-width: 16px;
-    in-out property <angle> ring-angle: 120deg;
     in-out property <color> ring-fill: Theme.third-brand-color;
 
     in-out property <color> finished-text-background: Theme.success-color;
     in-out property <color> unfinished-text-background: Theme.secondary-background;
 
     in-out property <string> finished-text: Logic.tr("Finished");
-    in-out property <string> unfinished-text: root.calc-percentage(root.ring-angle) + "%";
+    in-out property <string> unfinished-text: root.calc-percent(root.ring-angle) + "%";
     in-out property <color> finished-text-color: Colors.white;
     in-out property <color> unfinished-text-color: Theme.regular-text-color;
     in-out property font-size <=> txt.font-size;
+
+    private property <angle> ring-angle: 360deg * progress;
 
     width: radius * 2;
     height: self.width;

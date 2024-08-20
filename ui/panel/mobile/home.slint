@@ -15,7 +15,7 @@ component TopHead inherits Head {
 component Body inherits Rectangle {
     CircleProgress {
         ring-width: 15px;
-        ring-angle: Util.progress-angle(360deg, 5s);
+        progress: Util.progress-value(5s);
     }
 }
 
