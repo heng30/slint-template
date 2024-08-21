@@ -2,7 +2,7 @@ import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
 import { Blanket, StatusBar, Divider, AboutSetting } from "../../base/widgets.slint";
 
-import { CircleProgress, Rate, ProgressBar, LayoutType } from "../../base/widgets.slint";
+import { CircleProgress, RecordIndicator, ProgressBar, LayoutType } from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 export component DesktopPanel inherits Rectangle {
@@ -72,9 +72,9 @@ export component DesktopPanel inherits Rectangle {
 
                 HorizontalLayout {
                     alignment: center;
-                    Rate {
-                        rate: 4;
-                        icon-size: Theme.icon-size * 2;
+                    ri := RecordIndicator {
+                        is-start: true;
+                        size: 30px;
                     }
                 }
 
