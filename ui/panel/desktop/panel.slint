@@ -2,7 +2,7 @@ import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
 import { Blanket, StatusBar, Divider, AboutSetting } from "../../base/widgets.slint";
 
-import { CircleProgress, Rate } from "../../base/widgets.slint";
+import { CircleProgress, Rate, ProgressBar, LayoutType } from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 export component DesktopPanel inherits Rectangle {
@@ -48,6 +48,24 @@ export component DesktopPanel inherits Rectangle {
                     alignment: center;
                     CircleProgress {
                         ring-width: 15px;
+                        progress: Util.progress-value(5s);
+                    }
+                }
+
+                HorizontalLayout {
+                    alignment: center;
+                    ProgressBar {
+                        is-moving-text: true;
+                        progress: Util.progress-value(5s);
+                    }
+                }
+
+                HorizontalLayout {
+                    alignment: center;
+                    ProgressBar {
+                        width: 40px;
+                        height: 150px;
+                        layout-type: LayoutType.Vertical;
                         progress: Util.progress-value(5s);
                     }
                 }

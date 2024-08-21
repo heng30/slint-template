@@ -1,0 +1,58 @@
+import { Theme } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { Util } from "../util.slint";
+import { LayoutType } from "def.slint";
+import { Label } from "label.slint";
+
+export component ProgressBar inherits Rectangle {
+    pure function calc-percent(progress: float) -> int {
+        return Util.bound(0, progress * 100, 100);
+    }
+
+    in-out property <float> progress;
+    in-out property <bool> is-moving-text;
+    in-out property <LayoutType> layout-type: LayoutType.Horizontal;
+
+    in-out property <color> finished-progress-color: Theme.third-brand-color;
+    in-out property <color> unfinished-progress-color: Theme.secondary-background;
+
+    in-out property <string> finished-text: Logic.tr("Finished");
+    in-out property <string> unfinished-text: calc-percent(progress) + "%";
+    in-out property <color> finished-text-color: Colors.white;
+    in-out property <color> unfinished-text-color: Theme.regular-text-color;
+    in-out property <color> finished-text-background: Theme.success-color;
+    in-out property <length> font-size: Theme.default-font-size;
+
+    private property <int> progress-percent: calc-percent(progress);
+    private property <bool> is-finished: root.progress-percent >= 100;
+
+    // don't change this property
+    background: layout-type == LayoutType.Horizontal ? unfinished-progress-color : (is-finished ? finished-text-background : finished-progress-color);
+
+    height: 40px;
+    width: 300px;
+    border-radius: Theme.border-radius;
+
+    Rectangle {
+        x: 0;
+        y: 0;
+        width: root.layout-type == LayoutType.Horizontal ? root.width * root.progress : root.width;
+        height: root.layout-type == LayoutType.Horizontal ? root.height : root.height * (1 - root.progress);
+        border-radius: root.border-radius;
+        background: root.is-finished ? root.finished-text-background : (root.layout-type == LayoutType.Horizontal ? finished-progress-color : unfinished-progress-color);
+    }
+
+    if !is-moving-text || root.is-finished: Label {
+        text: root.is-finished ? root.finished-text : root.unfinished-text;
+        color: root.is-finished ? root.finished-text-color : root.unfinished-text-color;
+        font-size: root.font-size;
+    }
+
+    if is-moving-text && !root.is-finished: Label {
+        x: root.layout-type == LayoutType.Horizontal ? parent.width * root.progress + Theme.padding * 2 : (parent.width - self.preferred-width) / 2;
+        y: root.layout-type == LayoutType.Horizontal ? (parent.height - self.preferred-height) / 2 : parent.height * (1 - root.progress) - self.preferred-height - Theme.padding * 2;
+        text: root.unfinished-text;
+        color: root.unfinished-text-color;
+        font-size: root.font-size;
+    }
+}

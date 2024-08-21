@@ -1,4 +1,4 @@
-import { LoadingStatus, PrioritizationFeeStatus, ToastStatus, AppPosType } from "def.slint";
+import { LoadingStatus, PrioritizationFeeStatus, ToastStatus, AppPosType, LayoutType } from "def.slint";
 import { Toast, ToastSetting } from "toast.slint";
 import { TabBtn } from "tab-btn.slint";
 import { TabBtns } from "tab-btns.slint";
@@ -52,10 +52,12 @@ import { WaitTransactionConfirmed } from "wait-transaction-confirmed.slint";
 import { StatusBar } from "status-bar.slint";
 import { CircleProgress } from "circle-progress.slint";
 import { Rate } from "rate.slint";
+import { ProgressBar } from "progress-bar.slint";
 
 export {
     AppPosType,
     LoadingStatus,
+    LayoutType,
     PrioritizationFeeStatus,
     ToastStatus,
     Toast,
@@ -132,5 +134,6 @@ export {
     WaitTransactionConfirmed,
     StatusBar,
     CircleProgress,
-    Rate
+    Rate,
+    ProgressBar
 }

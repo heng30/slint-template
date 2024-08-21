@@ -28,8 +28,8 @@ export global Util {
     // (message-type, user-data)
     callback handle-confirm-dialog(string, string);
 
-    callback string-fixed2(string) -> string;
-    callback float-fixed2(float) -> string;
+    pure callback string-fixed2(string) -> string;
+    pure callback float-fixed2(float) -> string;
 
     // (browser, url) => void
     callback open-url(string, string);

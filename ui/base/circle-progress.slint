@@ -12,8 +12,8 @@ export component CircleProgress inherits Rectangle {
     in-out property <length> radius: 80px;
     in-out property <length> ring-width: 16px;
 
-    in-out property <color> finished-ring-fill: Theme.third-brand-color;
-    in-out property <color> unfinished-ring-fill: Theme.secondary-background;
+    in-out property <color> finished-progress-color: Theme.third-brand-color;
+    in-out property <color> unfinished-progress-color: Theme.secondary-background;
 
     in-out property <color> finished-text-background: Theme.success-color;
     in-out property <color> unfinished-text-background: Theme.base-background;
@@ -38,7 +38,7 @@ export component CircleProgress inherits Rectangle {
 
             stroke: Colors.transparent;
             stroke-width: 0;
-            fill: root.ring-angle >= 360deg ? root.finished-ring-fill : root.unfinished-ring-fill;
+            fill: root.ring-angle >= 360deg ? root.finished-progress-color : root.unfinished-progress-color;
 
             MoveTo {
                 x: 0;
@@ -79,7 +79,7 @@ export component CircleProgress inherits Rectangle {
 
             stroke: Colors.transparent;
             stroke-width: 0;
-            fill: root.finished-ring-fill;
+            fill: root.finished-progress-color;
 
             MoveTo {
                 x: 0;
