@@ -96,7 +96,7 @@ export component DesktopPanel inherits Rectangle {
 
                     ProcessStep {
                         layout-type: LayoutType.Vertical;
-                        text-font-size: Theme.title1-font-size;
+                        text-font-size: Theme.title3-font-size;
                         steps: ["第一步", "第二步", "第三步", "完成"];
                         current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
                     }

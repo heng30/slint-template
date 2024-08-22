@@ -3,6 +3,12 @@ import { Theme } from "../theme.slint";
 import { Util } from "../util.slint";
 import { Label } from "label.slint";
 
+// Example
+// ProcessStep {
+//     steps: ["First Step", "Second Step", "Third Step", "Finished"];
+//     current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
+// }
+
 export component ProcessStep inherits Rectangle {
     in-out property <[string]> steps;
     in-out property <int> current-step;
@@ -43,7 +49,7 @@ export component ProcessStep inherits Rectangle {
                 spacing: Theme.padding * 2;
 
                 Rectangle {
-                    width: Math.max(htxt.preferred-width, htxt.preferred-height) + Theme.padding * 4;
+                    width: Math.max(htxt.preferred-width, htxt.preferred-height) + Theme.padding * 2;
                     height: self.width;
                     border-radius: self.width / 2;
                     background: index < real-current-step ? finished-color : (index == real-current-step ? (real-current-step != root.steps.length - 1 ? process-color : finished-color) : unfinished-color);
@@ -95,7 +101,7 @@ export component ProcessStep inherits Rectangle {
                 spacing: Theme.padding * 2;
 
                 step-circle := Rectangle {
-                    width: Math.max(vtxt.preferred-width, vtxt.preferred-height) + Theme.padding * 4;
+                    width: Math.max(vtxt.preferred-width, vtxt.preferred-height) + Theme.padding * 2;
                     height: self.width;
                     border-radius: self.width / 2;
                     background: index < real-current-step ? finished-color : (index == real-current-step ? (real-current-step != root.steps.length - 1 ? process-color : finished-color) : unfinished-color);
