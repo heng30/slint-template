@@ -1,0 +1,137 @@
+import { LayoutType } from "def.slint";
+import { Theme } from "../theme.slint";
+import { Util } from "../util.slint";
+import { Label } from "label.slint";
+
+export component ProcessStep inherits Rectangle {
+    in-out property <[string]> steps;
+    in-out property <int> current-step;
+    in-out property <LayoutType> layout-type;
+
+    in-out property <length> number-font-size: Theme.title3-font-size;
+    in-out property <length> text-font-size: Theme.title5-font-size;
+    in-out property <color> text-font-color: Theme.regular-text-color;
+
+    in-out property <color> finished-color: Theme.success-color;
+    in-out property <color> finished-number-color: Theme.base-color;
+
+    in-out property <color> process-color: Theme.third-brand-color;
+    in-out property <color> process-number-color: Theme.base-color;
+    in-out property <length> process-line-width: layout-type == LayoutType.Horizontal ? 100px : Theme.default-font-size / 4;
+    in-out property <length> process-line-height: layout-type == LayoutType.Horizontal ? Theme.default-font-size / 4 : 100px;
+
+    in-out property <color> unfinished-color: Theme.secondary-background;
+    in-out property <color> unfinished-number-color: Theme.regular-text-color;
+
+    in-out property <int> real-current-step: Math.clamp(0, current-step, root.steps.length - 1);
+
+    private property <float> process-value: Util.progress-value(1s);
+
+    if LayoutType.Horizontal == root.layout-type: HorizontalLayout {
+        spacing: Theme.padding * 2;
+
+        init => {
+            root.preferred-width = self.preferred-width;
+            root.preferred-height = self.preferred-height;
+        }
+
+        for item[index] in steps: VerticalLayout {
+            alignment: LayoutAlignment.space-between;
+            spacing: root.text-font-size / 2;
+
+            HorizontalLayout {
+                spacing: Theme.padding * 2;
+
+                Rectangle {
+                    width: Math.max(htxt.preferred-width, htxt.preferred-height) + Theme.padding * 4;
+                    height: self.width;
+                    border-radius: self.width / 2;
+                    background: index < real-current-step ? finished-color : (index == real-current-step ? (real-current-step != root.steps.length - 1 ? process-color : finished-color) : unfinished-color);
+
+                    htxt := Label {
+                        text: index + 1;
+                        font-size: root.number-font-size;
+                        color: index < real-current-step ? finished-number-color : (index == real-current-step ? (real-current-step != root.steps.length - 1 ? process-number-color : finished-number-color) : unfinished-number-color);
+                    }
+                }
+
+                if index != root.steps.length - 1: VerticalLayout {
+                    alignment: LayoutAlignment.center;
+                    Rectangle {
+                        width: process-line-width;
+                        height: process-line-height;
+                        border-radius: self.height / 2;
+                        background: index < real-current-step ? finished-color : unfinished-color;
+                        if index == current-step: Rectangle {
+                            x: process-value * parent.width;
+                            width: 25%;
+                            background: process-color;
+                        }
+                    }
+                }
+            }
+
+            if item != "": Label {
+                text: item;
+                font-size: root.text-font-size;
+                color: root.text-font-color;
+            }
+        }
+    }
+
+    if LayoutType.Vertical == root.layout-type: VerticalLayout {
+        spacing: Theme.padding * 2;
+
+        init => {
+            root.preferred-width = self.preferred-width;
+            root.preferred-height = self.preferred-height;
+        }
+
+        for item[index] in steps: HorizontalLayout {
+            alignment: LayoutAlignment.start;
+            spacing: root.text-font-size;
+
+            VerticalLayout {
+                spacing: Theme.padding * 2;
+
+                step-circle := Rectangle {
+                    width: Math.max(vtxt.preferred-width, vtxt.preferred-height) + Theme.padding * 4;
+                    height: self.width;
+                    border-radius: self.width / 2;
+                    background: index < real-current-step ? finished-color : (index == real-current-step ? (real-current-step != root.steps.length - 1 ? process-color : finished-color) : unfinished-color);
+
+                    vtxt := Label {
+                        text: index + 1;
+                        font-size: root.number-font-size;
+                        color: index < real-current-step ? finished-number-color : (index == real-current-step ? (real-current-step != root.steps.length - 1 ? process-number-color : finished-number-color) : unfinished-number-color);
+                    }
+                }
+
+                if index != root.steps.length - 1: HorizontalLayout {
+                    alignment: LayoutAlignment.center;
+                    Rectangle {
+                        width: process-line-width;
+                        height: process-line-height;
+                        border-radius: self.width / 2;
+                        background: index < real-current-step ? finished-color : unfinished-color;
+                        if index == current-step: Rectangle {
+                            y: root.process-value * parent.height;
+                            height: 25%;
+                            background: process-color;
+                        }
+                    }
+                }
+            }
+
+            if item != "": Rectangle {
+                height: step-circle.height;
+
+                Label {
+                    text: item;
+                    font-size: root.text-font-size;
+                    color: root.text-font-color;
+                }
+            }
+        }
+    }
+}

@@ -100,4 +100,8 @@ export global Util {
     pure public function progress-value(interval: duration) -> float {
         return progress-angle(360deg, interval) / 360deg;
     }
+
+    pure public function progress-value-int(max-int: int, interval: duration) -> int {
+        return Math.floor(progress-value(interval) * (max-int + 1));
+    }
 }

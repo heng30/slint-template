@@ -2,7 +2,7 @@ import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
 import { Blanket, StatusBar, Divider, AboutSetting, ToolTip, ToolTipSetting } from "../../base/widgets.slint";
 
-import { CircleProgress, RecordIndicator, ProgressBar, LayoutType, ComponentPosition } from "../../base/widgets.slint";
+import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar, LayoutType, ComponentPosition } from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 export component DesktopPanel inherits Rectangle {
@@ -19,6 +19,7 @@ export component DesktopPanel inherits Rectangle {
 
             HorizontalLayout {
                 padding-right: Theme.padding * 2;
+
                 SettingIconsBar {
                     icon-size: Theme.default-font-size;
                     h-spacing: Theme.spacing * 3;
@@ -78,6 +79,26 @@ export component DesktopPanel inherits Rectangle {
                     ri := RecordIndicator {
                         is-start: true;
                         size: 30px;
+                    }
+                }
+
+                HorizontalLayout {
+                    alignment: center;
+
+                    ProcessStep {
+                        steps: ["First Step", "Second Step", "Third Step", "Finished"];
+                        current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
+                    }
+                }
+
+                HorizontalLayout {
+                    alignment: center;
+
+                    ProcessStep {
+                        layout-type: LayoutType.Vertical;
+                        text-font-size: Theme.title1-font-size;
+                        steps: ["第一步", "第二步", "第三步", "完成"];
+                        current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
                     }
                 }
 
