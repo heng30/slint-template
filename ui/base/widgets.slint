@@ -1,4 +1,4 @@
-import { LoadingStatus, PrioritizationFeeStatus, ToastStatus, AppPosType, LayoutType } from "def.slint";
+import { LoadingStatus, PrioritizationFeeStatus, ToastStatus, AppPosType, LayoutType, ComponentPosition } from "def.slint";
 import { Toast, ToastSetting } from "toast.slint";
 import { TabBtn } from "tab-btn.slint";
 import { TabBtns } from "tab-btns.slint";
@@ -54,11 +54,13 @@ import { CircleProgress } from "circle-progress.slint";
 import { Rate } from "rate.slint";
 import { ProgressBar } from "progress-bar.slint";
 import { RecordIndicator } from "record-indicator.slint";
+import { ToolTip, ToolTipSetting } from "tooltip.slint";
 
 export {
     AppPosType,
     LoadingStatus,
     LayoutType,
+    ComponentPosition,
     PrioritizationFeeStatus,
     ToastStatus,
     Toast,
@@ -137,5 +139,7 @@ export {
     CircleProgress,
     Rate,
     ProgressBar,
-    RecordIndicator
+    RecordIndicator,
+    ToolTip,
+    ToolTipSetting
 }

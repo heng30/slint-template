@@ -5,6 +5,7 @@ import { Util } from "../util.slint";
 import { Label } from "label.slint";
 import { IconBtn } from "icon-btn.slint";
 import { ConfirmDialogSetting } from "confirm-dialog.slint";
+import { ComponentPosition } from "def.slint";
 
 export component StatusBar inherits Rectangle {
     in-out property <length> icon-size: Theme.default-font-size;
@@ -13,6 +14,9 @@ export component StatusBar inherits Rectangle {
     in-out property <bool> is-show-icon;
     in-out property <image> icon;
     in-out property <string> title;
+
+    in-out property <bool> is-show-tip: false;
+    in-out property <ComponentPosition> tip-position: ComponentPosition.Bottom;
 
     private property <AppPosType> origin-pos;
     private property <length> offset-x;
@@ -82,6 +86,9 @@ export component StatusBar inherits Rectangle {
                     icon-size: root.icon-size;
                     colorize: Theme.success-color;
                     show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("maximal");
 
                     clicked => {
                         if (Util.get-is-max-window()) {
@@ -99,6 +106,9 @@ export component StatusBar inherits Rectangle {
                     icon-size: root.icon-size;
                     colorize: Theme.secondary-brand-color;
                     show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("minimal");
 
                     clicked => {
                         Util.min-window(true);
@@ -110,6 +120,9 @@ export component StatusBar inherits Rectangle {
                     icon-size: root.icon-size;
                     colorize: Theme.danger-color;
                     show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("close");
 
                     clicked => {
                         ConfirmDialogSetting.set(true, Logic.tr("Warning"), Logic.tr("Quick application or not?"), "close-window", "");

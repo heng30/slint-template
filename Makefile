@@ -1,7 +1,7 @@
 #!/bin/sh
 
 pwd=${shell pwd}
-build-evn=SLINT_STYLE=material
+build-evn=SLINT_STYLE=material SLINT_ENABLE_EXPERIMENTAL_FEATURES=1
 run-evn=RUST_LOG=debug,sqlx=off,reqwest=off
 version=`git describe --tags --abbrev=0`
 app-name=slint-template
@@ -56,13 +56,13 @@ clean:
 	cargo clean
 
 slint-view:
-	slint-viewer --style material --auto-reload -I ui ./ui/appwindow.slint
+	SLINT_ENABLE_EXPERIMENTAL_FEATURES=1 slint-viewer --style material --auto-reload -I ui ./ui/appwindow.slint
 
 slint-view-light:
-	slint-viewer --style material-light --auto-reload -I ui ./ui/appwindow.slint
+	SLINT_ENABLE_EXPERIMENTAL_FEATURES=1 slint-viewer --style material-light --auto-reload -I ui ./ui/appwindow.slint
 
 slint-view-dark:
-	slint-viewer --style material-dark --auto-reload -I ui ./ui/appwindow.slint
+	SLINT_ENABLE_EXPERIMENTAL_FEATURES=1 slint-viewer --style material-dark --auto-reload -I ui ./ui/appwindow.slint
 
 get-font-name:
 	fc-scan ./ui/fonts/SourceHanSerifCN.ttf | grep fullname

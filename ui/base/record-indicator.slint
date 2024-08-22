@@ -17,7 +17,7 @@ export component RecordIndicator inherits Rectangle {
         height: self.width;
         border-radius: self.width / 2;
         background: root.living-color;
-        drop-shadow-color: root.living-color.brighter(10%);
-        drop-shadow-blur: self.width * 0.5;
+        drop-shadow-color: root.living-color.brighter(20%);
+        drop-shadow-blur: Math.round(self.width / 1px * 0.5) * 1px;
     }
 }

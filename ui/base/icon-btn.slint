@@ -1,6 +1,8 @@
 import { Palette } from "std-widgets.slint";
+import { ComponentPosition } from "def.slint";
 import { Theme } from "../theme.slint";
-import { Label } from "./label.slint";
+import { Label } from "label.slint";
+import { ToolTipSetting } from "tooltip.slint";
 
 export enum RotationType {
     Auto,
@@ -26,6 +28,10 @@ export component IconBtn inherits Rectangle {
     in-out property <length> font-size: Theme.title4-font-size;
     in-out property <color> text-color: root.colorize;
     in-out property <int> icon-rotation-iteration-count;
+
+    in-out property <bool> is-show-tip;
+    in-out property <string> tip;
+    in-out property <ComponentPosition> tip-position;
 
     callback clicked();
 
@@ -97,6 +103,24 @@ export component IconBtn inherits Rectangle {
             }
             fs.focus();
             root.clicked();
+        }
+
+        changed has-hover => {
+            if (!is-show-tip) {
+                return;
+            }
+
+            if (self.has-hover) {
+                ToolTipSetting.show(
+                                    self.absolute-position.x,
+                                    self.absolute-position.y,
+                                    parent.width,
+                                    parent.height,
+                                    root.tip-position,
+                                    root.tip);
+            } else {
+                ToolTipSetting.hide();
+            }
         }
     }
 }

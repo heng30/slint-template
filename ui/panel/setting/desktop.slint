@@ -1,5 +1,5 @@
 import { Logic, Theme, Store, Util, Icons, SettingPreference, SettingProxy, SettingDetailIndex, DeviceType } from "../def.slint";
-import { IconBtn, SettingEntryV2, Head, SettingDetail, ToastStatus, About, Help, Dialog } from "../../base/widgets.slint";
+import { IconBtn, SettingEntryV2, Head, SettingDetail, ToastStatus, About, Help, Dialog, ComponentPosition } from "../../base/widgets.slint";
 import { Preference } from "components/preference.slint";
 import { Donate } from "components/donate.slint";
 import { Proxy } from "components/proxy.slint";
@@ -197,6 +197,8 @@ export component SettingIconsBar inherits Rectangle {
 
     in-out property <bool> show-icon-hover-background: false;
     in-out property <length> icon-size: Theme.icon-size;
+    in-out property <bool> is-show-tip: false;
+    in-out property <ComponentPosition> tip-position;
     in-out property h-padding <=> hbox.padding;
     in-out property h-spacing <=> hbox.spacing;
 
@@ -208,6 +210,10 @@ export component SettingIconsBar inherits Rectangle {
             icon: Icons.setting-fill;
             icon-size: root.icon-size;
             show-icon-hover-background: root.show-icon-hover-background;
+            is-show-tip: root.is-show-tip;
+            tip-position: root.tip-position;
+            tip: Logic.tr("setting");
+
             clicked => {
                 Logic.switch-setting-detail(SettingDetailIndex.Preference);
             }
@@ -217,6 +223,10 @@ export component SettingIconsBar inherits Rectangle {
             icon: Icons.about-fill;
             icon-size: root.icon-size;
             show-icon-hover-background: root.show-icon-hover-background;
+            is-show-tip: root.is-show-tip;
+            tip-position: root.tip-position;
+            tip: Logic.tr("about");
+
             clicked => {
                 Logic.switch-setting-detail(SettingDetailIndex.About);
             }
@@ -226,6 +236,10 @@ export component SettingIconsBar inherits Rectangle {
             icon: Icons.github;
             icon-size: root.icon-size;
             show-icon-hover-background: root.show-icon-hover-background;
+            is-show-tip: root.is-show-tip;
+            tip-position: root.tip-position;
+            tip: Logic.tr("github");
+
             clicked => {
                 Util.open-url("Default","https://github.com/Heng30/slint-template");
             }

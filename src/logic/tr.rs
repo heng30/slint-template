@@ -286,6 +286,11 @@ pub fn tr(text: &str) -> String {
         ("Window size", "窗口大小"),
         ("width", "宽"),
         ("height", "高"),
+        ("setting","设置"),
+        ("about","关于"),
+        ("maximal","最大化"),
+        ("minimal","最小化"),
+        ("close","关闭"),
     ]);
 
     if let Some(txt) = items.get(text) {

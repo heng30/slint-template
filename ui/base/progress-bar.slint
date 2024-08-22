@@ -36,10 +36,16 @@ export component ProgressBar inherits Rectangle {
     Rectangle {
         x: 0;
         y: 0;
-        width: root.layout-type == LayoutType.Horizontal ? root.width * root.progress : root.width;
-        height: root.layout-type == LayoutType.Horizontal ? root.height : root.height * (1 - root.progress);
+        clip: true;
         border-radius: root.border-radius;
-        background: root.is-finished ? root.finished-text-background : (root.layout-type == LayoutType.Horizontal ? finished-progress-color : unfinished-progress-color);
+
+        Rectangle {
+            x: 0;
+            y: 0;
+            width: root.layout-type == LayoutType.Horizontal ? root.width * root.progress : root.width;
+            height: root.layout-type == LayoutType.Horizontal ? root.height : root.height * (1 - root.progress);
+            background: root.is-finished ? root.finished-text-background : (root.layout-type == LayoutType.Horizontal ? finished-progress-color : unfinished-progress-color);
+        }
     }
 
     if !is-moving-text || root.is-finished: Label {

@@ -1,8 +1,8 @@
 import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def.slint";
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
-import { Blanket, StatusBar, Divider, AboutSetting } from "../../base/widgets.slint";
+import { Blanket, StatusBar, Divider, AboutSetting, ToolTip, ToolTipSetting } from "../../base/widgets.slint";
 
-import { CircleProgress, RecordIndicator, ProgressBar, LayoutType } from "../../base/widgets.slint";
+import { CircleProgress, RecordIndicator, ProgressBar, LayoutType, ComponentPosition } from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 export component DesktopPanel inherits Rectangle {
@@ -10,11 +10,12 @@ export component DesktopPanel inherits Rectangle {
     private property <bool> is-show-about-dialog: Store.current-setting-detail-index == SettingDetailIndex.About;
 
     VerticalLayout {
-        if Store.setting-preference.no-frame: StatusBar {
+        if Store.setting-preference.no-frame: sb := StatusBar {
             background: Theme.secondary-background;
             is-show-icon: true;
             icon: Icons.brand;
             title: AboutSetting.app-name;
+            is-show-tip: true;
 
             HorizontalLayout {
                 padding-right: Theme.padding * 2;
@@ -22,6 +23,8 @@ export component DesktopPanel inherits Rectangle {
                     icon-size: Theme.default-font-size;
                     h-spacing: Theme.spacing * 3;
                     show-icon-hover-background: false;
+                    is-show-tip: sb.is-show-tip;
+                    tip-position: sb.tip-position;
                 }
 
                 VerticalLayout {
@@ -104,5 +107,10 @@ export component DesktopPanel inherits Rectangle {
 
     if is-show-about-dialog: AboutDialog {
         width: Math.min(1300px, root.width * 0.8);
+    }
+
+    if ToolTipSetting.is-show: ToolTip {
+        window-width: root.width;
+        window-height: root.height;
     }
 }
