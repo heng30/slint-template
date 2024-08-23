@@ -5,9 +5,11 @@ import { IconBtn } from "./icon-btn.slint";
 
 export component LineInput inherits Rectangle {
     in-out property text <=> text-input.text;
+    in-out property font-size <=> text-input.font-size;
     in property input-type <=> text-input.input-type;
 
     in property <image> icon;
+    in property icon-colorize <=> icon.colorize;
     in property <string> placeholder-text;
     in property <bool> enabled <=> text-input.enabled;
     in property <bool> is-show-icon: true;
@@ -55,6 +57,7 @@ export component LineInput inherits Rectangle {
                     x: 0;
                     text: root.placeholder-text;
                     color: Theme.placeholder-text-color;
+                    font-size: text-input.font-size - 2px;
                 }
 
                 ta := TouchArea {

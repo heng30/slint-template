@@ -105,19 +105,14 @@ export component DesktopPanel inherits Rectangle {
                 HorizontalLayout {
                     alignment: LayoutAlignment.center;
 
-                    SettingIconsBar {
-                        background: Theme.secondary-background;
-                        h-padding: Theme.spacing * 2;
-                        h-spacing: Theme.padding * 5;
-                    }
-                }
-
-                HorizontalLayout {
-                    alignment: LayoutAlignment.center;
-
                     Pagination {
-                        total-pages: 4;
-                        jump-page(page) => {
+                        private property <int> current-page: Util.progress-value-int(6, 6s);
+                        changed current-page => {
+                            self.set-current-page(self.current-page);
+                        }
+
+                        total-pages: 6;
+                        jump(page) => {
                             debug(page);
                         }
                     }
@@ -128,9 +123,21 @@ export component DesktopPanel inherits Rectangle {
 
                     Pagination {
                         total-pages: 30;
-                        jump-page(page) => {
+
+
+                        jump(page) => {
                             debug(page);
                         }
+                    }
+                }
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.center;
+
+                    SettingIconsBar {
+                        background: Theme.secondary-background;
+                        h-padding: Theme.spacing * 2;
+                        h-spacing: Theme.padding * 5;
                     }
                 }
             }

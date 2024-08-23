@@ -291,6 +291,7 @@ pub fn tr(text: &str) -> String {
         ("maximal","最大化"),
         ("minimal","最小化"),
         ("close","关闭"),
+        ("Jump to", "跳转到"),
     ]);
 
     if let Some(txt) = items.get(text) {

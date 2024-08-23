@@ -29,7 +29,7 @@ export component ProcessStep inherits Rectangle {
     in-out property <color> unfinished-color: Theme.secondary-background;
     in-out property <color> unfinished-number-color: Theme.regular-text-color;
 
-    in-out property <int> real-current-step: Math.clamp(0, current-step, root.steps.length - 1);
+    in-out property <int> real-current-step: Math.clamp(current-step, 0, root.steps.length - 1);
 
     private property <float> process-value: Util.progress-value(1s);
 

@@ -1,7 +1,10 @@
+import { LineEdit } from "std-widgets.slint";
 import { Theme, Icons } from "../theme.slint";
 import { Logic } from "../logic.slint";
+import { Util } from "../util.slint";
 import { IconBtn } from "icon-btn.slint";
 import { TextBtnWithoutIcon } from "btn.slint";
+import { Label } from "label.slint";
 
 export component Pagination inherits Rectangle {
     in-out property <int> total-pages: 10;
@@ -10,12 +13,20 @@ export component Pagination inherits Rectangle {
 
     in-out property <length> font-size: Theme.title1-font-size;
     in-out property <length> icon-size: Theme.icon-size * 1.3;
+    in-out property <bool> is-show-jump-input: true;
 
+    private property <bool> is-show-more: true;
     private property <int> start-page: 0;
     private property <int> real-show-pages-half: Math.round(show-pages / 2);
-    private property <int> real-current-page: Math.clamp(0, init-page, total-pages - show-pages - 1);
+    private property <int> real-current-page: Math.clamp(init-page, 0, total-pages - show-pages - 1);
 
-    callback jump-page(int);
+    callback jump(int);
+
+    public function set-current-page(page: int) {
+        root.real-current-page = Math.clamp(page, 0, root.total-pages - 1);
+        root.start-page = Math.clamp(root.real-current-page, 0,root.total-pages - root.show-pages);
+        is-show-more = root.start-page < root.total-pages - root.show-pages;
+    }
 
     if show-pages >= total-pages: HorizontalLayout {
         init => {
@@ -23,16 +34,17 @@ export component Pagination inherits Rectangle {
             root.preferred-height = self.preferred-height;
         }
 
-        spacing: Theme.spacing * 4;
+        spacing: Theme.spacing * 2;
 
         IconBtn {
             icon: Icons.arrow-left-round;
             use-auto-size: true;
             icon-size: root.icon-size;
+            enabled-toucharea: root.real-current-page > 0;
 
             clicked => {
                 root.real-current-page = Math.max(0, root.real-current-page - 1);
-                jump-page(root.real-current-page);
+                jump(root.real-current-page);
             }
         }
 
@@ -48,7 +60,7 @@ export component Pagination inherits Rectangle {
 
                 clicked => {
                     root.real-current-page = index;
-                    jump-page(root.real-current-page);
+                    jump(root.real-current-page);
                 }
             }
         }
@@ -58,25 +70,25 @@ export component Pagination inherits Rectangle {
             icon: Icons.arrow-right-round;
             use-auto-size: true;
             icon-size: root.icon-size;
+            enabled-toucharea: root.real-current-page < root.total-pages - 1;
 
             clicked => {
                 root.real-current-page = Math.min(root.total-pages - 1, root.real-current-page + 1);
-                jump-page(root.real-current-page);
+                jump(root.real-current-page);
             }
         }
     }
 
     if show-pages < total-pages: HorizontalLayout {
-        private property <bool> is-show-more: true;
-
         init => {
             root.preferred-width = self.preferred-width;
             root.preferred-height = self.preferred-height;
         }
 
-        spacing: Theme.spacing * 4;
+        spacing: Theme.spacing * 2;
 
         IconBtn {
+            enabled-toucharea: root.real-current-page > 0;
             icon: Icons.arrow-left-round;
             use-auto-size: true;
             icon-size: root.icon-size;
@@ -90,54 +102,57 @@ export component Pagination inherits Rectangle {
                 if (root.real-current-page < root.start-page) {
                     root.start-page = Math.max(0, root.real-current-page - root.real-show-pages-half + 1);
                 }
-                jump-page(root.real-current-page);
+                jump(root.real-current-page);
             }
         }
 
-        HorizontalLayout {
-            spacing: Theme.spacing * 4;
-            for index in real-show-pages-half: TextBtnWithoutIcon {
-                is-circle: true;
-                background: root.real-current-page == start-page + index ? Theme.third-brand-color : Colors.transparent;
-
-                text: start-page + index + 1;
-                font-size: root.font-size;
-                text-color: root.real-current-page == start-page + index ? Colors.white : Theme.primary-text-color;
-
-                clicked => {
-                    root.real-current-page = start-page + index;
-                    jump-page(root.real-current-page);
-                }
-            }
-
-            if is-show-more: TextBtnWithoutIcon {
-                text: "...";
-                font-size: root.font-size;
-
-                clicked => {
-                    root.real-current-page = Math.min(root.start-page + root.real-show-pages-half, root.total-pages - root.show-pages);
-                    root.start-page = root.real-current-page;
-                    is-show-more = start-page + show-pages < total-pages;
-
-                    jump-page(root.real-current-page);
-                }
-            }
-
+        VerticalLayout {
+            alignment: LayoutAlignment.center;
             HorizontalLayout {
                 spacing: Theme.spacing * 4;
-
                 for index in real-show-pages-half: TextBtnWithoutIcon {
-                    private property <int> inner-real-current-page: total-pages - real-show-pages-half + index;
-
                     is-circle: true;
-                    text: inner-real-current-page + 1;
+                    background: root.real-current-page == start-page + index ? Theme.third-brand-color : Colors.transparent;
+
+                    text: start-page + index + 1;
                     font-size: root.font-size;
-                    background: root.real-current-page == inner-real-current-page ? Theme.third-brand-color : Colors.transparent;
-                    text-color: root.real-current-page == inner-real-current-page ? Colors.white : Theme.primary-text-color;
+                    text-color: root.real-current-page == start-page + index ? Colors.white : Theme.primary-text-color;
 
                     clicked => {
-                        root.real-current-page = inner-real-current-page;
-                        jump-page(root.real-current-page);
+                        root.real-current-page = start-page + index;
+                        jump(root.real-current-page);
+                    }
+                }
+
+                if is-show-more: TextBtnWithoutIcon {
+                    text: "...";
+                    font-size: root.font-size;
+
+                    clicked => {
+                        root.real-current-page = Math.min(root.start-page + root.real-show-pages-half, root.total-pages - root.show-pages);
+                        root.start-page = root.real-current-page;
+                        is-show-more = start-page + show-pages < total-pages;
+
+                        jump(root.real-current-page);
+                    }
+                }
+
+                HorizontalLayout {
+                    spacing: Theme.spacing * 4;
+
+                    for index in real-show-pages-half: TextBtnWithoutIcon {
+                        private property <int> inner-real-current-page: total-pages - real-show-pages-half + index;
+
+                        is-circle: true;
+                        text: inner-real-current-page + 1;
+                        font-size: root.font-size;
+                        background: root.real-current-page == inner-real-current-page ? Theme.third-brand-color : Colors.transparent;
+                        text-color: root.real-current-page == inner-real-current-page ? Colors.white : Theme.primary-text-color;
+
+                        clicked => {
+                            root.real-current-page = inner-real-current-page;
+                            jump(root.real-current-page);
+                        }
                     }
                 }
             }
@@ -148,10 +163,63 @@ export component Pagination inherits Rectangle {
             icon: Icons.arrow-right-round;
             use-auto-size: true;
             icon-size: root.icon-size;
+            enabled-toucharea: root.real-current-page < root.total-pages - 1;
 
             clicked => {
                 root.real-current-page = Math.min(root.total-pages - 1, root.real-current-page + 1);
-                jump-page(root.real-current-page);
+                jump(root.real-current-page);
+            }
+        }
+
+        if root.is-show-jump-input: HorizontalLayout {
+            spacing: Theme.spacing * 2;
+
+            Label {
+                text: Logic.tr("Jump to");
+                font-size: root.font-size;
+            }
+
+            Rectangle {
+                background: Theme.secondary-background;
+                border-radius: Theme.border-radius;
+
+                HorizontalLayout {
+                    spacing: Theme.spacing * 4;
+                    padding: Theme.padding;
+
+                    Rectangle {
+                        clip: true;
+                        width: ltxt.preferred-width + Theme.padding;
+                        height: ltxt.preferred-height * 1.2;
+                        border-radius: Theme.border-radius;
+                        background: Theme.base-background;
+
+                        TextInput {
+                            width: 80%;
+                            height: 80%;
+                            input-type: number;
+                            font-size: root.font-size - 2px;
+                            single-line: true;
+                            vertical-alignment: TextVerticalAlignment.center;
+                            text: root.real-current-page + 1;
+                            color: ltxt.color;
+
+                            accepted => {
+                                root.set-current-page(self.text.to-float() - 1);
+                                self.text = root.real-current-page + 1;
+                                jump(root.real-current-page);
+                            }
+                        }
+                    }
+
+                    HorizontalLayout {
+                        padding-right: Theme.padding * 2;
+                        ltxt := Label {
+                            font-size: root.font-size;
+                            text: "/ " + root.total-pages;
+                        }
+                    }
+                }
             }
         }
     }
