@@ -12,6 +12,7 @@ export component Pagination inherits Rectangle {
     in-out property <int> show-pages: 6;
 
     in-out property <length> font-size: Theme.title1-font-size;
+    in-out property <color> text-color: Theme.regular-text-color;
     in-out property <length> icon-size: Theme.icon-size * 1.3;
     in-out property <bool> is-show-jump-input: true;
 
@@ -41,6 +42,7 @@ export component Pagination inherits Rectangle {
             use-auto-size: true;
             icon-size: root.icon-size;
             enabled-toucharea: root.real-current-page > 0;
+            colorize: root.text-color;
 
             clicked => {
                 root.real-current-page = Math.max(0, root.real-current-page - 1);
@@ -56,7 +58,7 @@ export component Pagination inherits Rectangle {
 
                 text: start-page + index + 1;
                 font-size: root.font-size;
-                text-color: root.real-current-page == index ? Colors.white : Theme.primary-text-color;
+                text-color: root.real-current-page == index ? Colors.white : root.text-color;
 
                 clicked => {
                     root.real-current-page = index;
@@ -71,6 +73,7 @@ export component Pagination inherits Rectangle {
             use-auto-size: true;
             icon-size: root.icon-size;
             enabled-toucharea: root.real-current-page < root.total-pages - 1;
+            colorize: root.text-color;
 
             clicked => {
                 root.real-current-page = Math.min(root.total-pages - 1, root.real-current-page + 1);
@@ -92,6 +95,7 @@ export component Pagination inherits Rectangle {
             icon: Icons.arrow-left-round;
             use-auto-size: true;
             icon-size: root.icon-size;
+            colorize: root.text-color;
 
             clicked => {
                 root.real-current-page = Math.max(0, root.real-current-page - 1);
@@ -116,7 +120,7 @@ export component Pagination inherits Rectangle {
 
                     text: start-page + index + 1;
                     font-size: root.font-size;
-                    text-color: root.real-current-page == start-page + index ? Colors.white : Theme.primary-text-color;
+                    text-color: root.real-current-page == start-page + index ? Colors.white : root.text-color;
 
                     clicked => {
                         root.real-current-page = start-page + index;
@@ -127,6 +131,7 @@ export component Pagination inherits Rectangle {
                 if is-show-more: TextBtnWithoutIcon {
                     text: "...";
                     font-size: root.font-size;
+                    text-color: root.text-color;
 
                     clicked => {
                         root.real-current-page = Math.min(root.start-page + root.real-show-pages-half, root.total-pages - root.show-pages);
@@ -147,7 +152,7 @@ export component Pagination inherits Rectangle {
                         text: inner-real-current-page + 1;
                         font-size: root.font-size;
                         background: root.real-current-page == inner-real-current-page ? Theme.third-brand-color : Colors.transparent;
-                        text-color: root.real-current-page == inner-real-current-page ? Colors.white : Theme.primary-text-color;
+                        text-color: root.real-current-page == inner-real-current-page ? Colors.white : root.text-color;
 
                         clicked => {
                             root.real-current-page = inner-real-current-page;
@@ -164,6 +169,7 @@ export component Pagination inherits Rectangle {
             use-auto-size: true;
             icon-size: root.icon-size;
             enabled-toucharea: root.real-current-page < root.total-pages - 1;
+            colorize: root.text-color;
 
             clicked => {
                 root.real-current-page = Math.min(root.total-pages - 1, root.real-current-page + 1);
@@ -177,6 +183,7 @@ export component Pagination inherits Rectangle {
             Label {
                 text: Logic.tr("Jump to");
                 font-size: root.font-size;
+                color: root.text-color;
             }
 
             Rectangle {
@@ -202,7 +209,7 @@ export component Pagination inherits Rectangle {
                             single-line: true;
                             vertical-alignment: TextVerticalAlignment.center;
                             text: root.real-current-page + 1;
-                            color: ltxt.color;
+                            color: root.text-color;
 
                             accepted => {
                                 root.set-current-page(self.text.to-float() - 1);
@@ -217,6 +224,7 @@ export component Pagination inherits Rectangle {
                         ltxt := Label {
                             font-size: root.font-size;
                             text: "/ " + root.total-pages;
+                            color: root.text-color;
                         }
                     }
                 }
