@@ -2,7 +2,7 @@ import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
 import { Blanket, StatusBar, Divider, AboutSetting, ToolTip, ToolTipSetting } from "../../base/widgets.slint";
 
-import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar, LayoutType, ComponentPosition } from "../../base/widgets.slint";
+import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar, LayoutType, ComponentPosition, Pagination } from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 export component DesktopPanel inherits Rectangle {
@@ -67,7 +67,7 @@ export component DesktopPanel inherits Rectangle {
                 HorizontalLayout {
                     alignment: center;
                     ProgressBar {
-                        width: 40px;
+                        width: 50px;
                         height: 150px;
                         layout-type: LayoutType.Vertical;
                         progress: Util.progress-value(5s);
@@ -109,6 +109,28 @@ export component DesktopPanel inherits Rectangle {
                         background: Theme.secondary-background;
                         h-padding: Theme.spacing * 2;
                         h-spacing: Theme.padding * 5;
+                    }
+                }
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.center;
+
+                    Pagination {
+                        total-pages: 4;
+                        jump-page(page) => {
+                            debug(page);
+                        }
+                    }
+                }
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.center;
+
+                    Pagination {
+                        total-pages: 30;
+                        jump-page(page) => {
+                            debug(page);
+                        }
                     }
                 }
             }

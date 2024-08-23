@@ -1,6 +1,7 @@
 import { Theme, Icons } from "../theme.slint";
 import { IconBtn } from "./icon-btn.slint";
 import { Logic } from "../logic.slint";
+import { Label } from "label.slint";
 
 export component CancelBtn inherits IconBtn {
     use-auto-size: true;
@@ -27,4 +28,29 @@ export component TextBtn inherits IconBtn {
     use-auto-size: true;
     background: Colors.transparent;
     colorize: Theme.secondary-brand-color;
+}
+
+export component TextBtnWithoutIcon inherits Rectangle {
+    in-out property text <=> label.text;
+    in-out property text-color <=> label.color;
+    out property has-hover <=> ta.has-hover;
+
+    in-out property <length> font-size: Theme.default-font-size;
+    in-out property <color> bg-color: Colors.transparent;
+    in-out property <color> bg-pressed-color: self.bg-color;
+
+    callback clicked <=> ta.clicked;
+
+    width: Math.max(label.preferred-width, label.preferred-height) + Theme.padding;
+    height: self.width;
+    border-radius: Theme.border-radius;
+    background: ta.pressed ? bg-pressed-color : (ta.has-hover ? bg-color.darker(10%) : bg-color);
+
+    label := Label {
+        font-size: root.font-size;
+    }
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+    }
 }

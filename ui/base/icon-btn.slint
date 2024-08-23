@@ -33,13 +33,13 @@ export component IconBtn inherits Rectangle {
     in-out property <string> tip;
     in-out property <ComponentPosition> tip-position;
 
+    in-out property <color> bg-color: Colors.transparent;
+    in-out property <color> bg-pressed-color: self.bg-color;
+
     callback clicked();
 
-    in-out property <color> bg-color: Colors.transparent;
-    in-out property <color> bg-pressed-color: Colors.transparent;
-
     border-radius: Theme.border-radius;
-    background: touch.has-hover ? bg-color.darker(10%) : (touch.pressed ? bg-pressed-color : bg-color);
+    background: touch.pressed ? bg-pressed-color : (touch.has-hover ? bg-color.darker(10%) : bg-color);
 
     animate background {
         duration: Theme.default-animate-duration;
@@ -109,7 +109,6 @@ export component IconBtn inherits Rectangle {
             if (!is-show-tip) {
                 return;
             }
-
             if (self.has-hover) {
                 ToolTipSetting.show(
                                     self.absolute-position.x,
