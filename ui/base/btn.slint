@@ -44,7 +44,7 @@ export component TextBtnWithoutIcon inherits Rectangle {
     in-out property <color> bg-color: Colors.transparent;
     in-out property <color> bg-pressed-color: self.bg-color;
 
-    callback clicked <=> ta.clicked;
+    callback clicked;
 
     width: is-circle ? Math.max(label.preferred-width, label.preferred-height) + Theme.padding * 2 : label.preferred-width + Theme.padding * 2;
     height: is-circle ? self.width : label.preferred-height + Theme.padding;
@@ -56,7 +56,14 @@ export component TextBtnWithoutIcon inherits Rectangle {
         wrap: no-wrap;
     }
 
+    fs := FocusScope { }
+
     ta := TouchArea {
         mouse-cursor: MouseCursor.pointer;
+
+        clicked => {
+            fs.focus();
+            root.clicked();
+        }
     }
 }
