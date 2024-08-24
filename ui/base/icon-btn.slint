@@ -22,7 +22,10 @@ export component IconBtn inherits Rectangle {
     in-out property <bool> show-icon-hover-background: true;
     in-out property <bool> is-ltr: true;
     in-out property <RotationType> rotation-type: RotationType.None;
+
     in-out property <bool> use-auto-size: false;
+    in-out property <length> auto-size-vpadding: Theme.padding;
+    in-out property <length> auto-size-hpadding: Theme.padding * 4;
 
     in-out property <string> text;
     in-out property <length> font-size: Theme.title4-font-size;
@@ -37,6 +40,8 @@ export component IconBtn inherits Rectangle {
     in-out property <color> bg-pressed-color: self.bg-color;
 
     callback clicked();
+    callback entered();
+    callback leave();
 
     border-radius: Theme.border-radius;
     background: touch.pressed ? bg-pressed-color : (touch.has-hover ? bg-color.darker(10%) : bg-color);
@@ -59,9 +64,9 @@ export component IconBtn inherits Rectangle {
         alignment: center;
         spacing: Theme.spacing * 2;
 
-        padding: root.use-auto-size ? Theme.padding : 0;
-        padding-left: root.use-auto-size ? Theme.padding * 4 : 0;
-        padding-right: root.use-auto-size ? Theme.padding * 4 : 0;
+        padding: root.use-auto-size ? root.auto-size-vpadding : 0;
+        padding-left: root.use-auto-size ? root.auto-size-hpadding : 0;
+        padding-right: root.use-auto-size ? root.auto-size-hpadding : 0;
 
         if !root.is-ltr && root.text != "": Label {
             color: root.text-color;
@@ -106,19 +111,24 @@ export component IconBtn inherits Rectangle {
         }
 
         changed has-hover => {
-            if (!is-show-tip) {
-                return;
-            }
             if (self.has-hover) {
-                ToolTipSetting.show(
+                root.entered();
+            } else {
+                root.leave();
+            }
+
+            if (is-show-tip) {
+                if (self.has-hover) {
+                    ToolTipSetting.show(
                                     self.absolute-position.x,
                                     self.absolute-position.y,
                                     parent.width,
                                     parent.height,
                                     root.tip-position,
                                     root.tip);
-            } else {
-                ToolTipSetting.hide();
+                } else {
+                    ToolTipSetting.hide();
+                }
             }
         }
     }

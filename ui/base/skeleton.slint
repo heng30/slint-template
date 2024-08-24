@@ -8,7 +8,8 @@ export enum SkeletonType {
     Avatar,
     AvatarWithDetail,
     Paragraph,
-    Table
+    Table,
+    List
 }
 
 component InnerItem inherits Rectangle {
@@ -40,14 +41,14 @@ export component Skeleton inherits Rectangle {
     in-out property <bool> enabled-active: true;
     in-out property <color> active-item-color: self.item-color.brighter(20%);
     in-out property <float> active-opacity: 0.2;
-    in-out property <duration> active-duration: 600ms;
+    in-out property <duration> active-duration: 800ms;
 
     pure public function from-number(index: int) -> SkeletonType {
         if (index == 0) {
             return SkeletonType.Content;
         } else if (index == 1) {
             return SkeletonType.Picture;
-        }  else if (index == 2) {
+        } else if (index == 2) {
             return SkeletonType.Number;
         } else if (index == 3) {
             return SkeletonType.Avatar;
@@ -55,8 +56,10 @@ export component Skeleton inherits Rectangle {
             return SkeletonType.AvatarWithDetail;
         } else if (index == 5) {
             return SkeletonType.Paragraph;
-        } else {
+        } else if (index == 6) {
             return SkeletonType.Table;
+        } else {
+            return SkeletonType.List;
         }
     }
 
@@ -290,13 +293,26 @@ export component Skeleton inherits Rectangle {
             }
 
             InnerItem {
-                width: root.width * 45%;
+                width: root.width * 50%;
                 height: root.height * 15%;
                 background: root.item-color;
                 active-item-color: root.active-item-color;
                 active-opacity: root.active-opacity;
                 active-duration: root.active-duration;
             }
+        }
+    }
+
+    if root.type == SkeletonType.List: VerticalLayout {
+        alignment: LayoutAlignment.space-between;
+
+        for index in 4: InnerItem {
+            width: root.width;
+            height: root.height * 17.5%;
+            background: root.item-color;
+            active-item-color: root.active-item-color;
+            active-opacity: root.active-opacity;
+            active-duration: root.active-duration;
         }
     }
 }

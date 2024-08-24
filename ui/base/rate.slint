@@ -6,16 +6,28 @@ export component Rate inherits HorizontalLayout {
     in-out property <int> rate: 3;
     in-out property <length> icon-size: Theme.icon-size;
 
-    spacing: Theme.spacing * 2;
     alignment: LayoutAlignment.start;
 
+    private property <int> cache-rate;
+
     for index in count: IconBtn {
-        icon: Icons.star;
+        icon: Icons.star-round;
         icon-size: icon-size;
         colorize: index < rate ? Theme.mark-color : Theme.unmark-color;
+        use-auto-size: true;
+        auto-size-hpadding: Theme.padding;
 
         clicked => {
+            cache-rate = index + 1;
+        }
+
+        entered => {
+            cache-rate = root.rate;
             rate = index + 1;
+        }
+
+        leave => {
+            rate = root.cache-rate;
         }
     }
 }

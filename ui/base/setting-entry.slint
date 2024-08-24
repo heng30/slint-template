@@ -13,7 +13,7 @@ export component SettingEntry inherits Rectangle {
     background: Theme.secondary-background;
     border-radius: Theme.border-radius;
 
-    callback clicked <=> ta.clicked;
+    callback clicked();
 
     HorizontalLayout {
         padding: Theme.padding * 2;
@@ -32,8 +32,14 @@ export component SettingEntry inherits Rectangle {
         }
     }
 
+    fs := FocusScope { }
+
     ta := TouchArea {
         mouse-cursor: MouseCursor.pointer;
+
+        clicked => {
+            fs.focus();
+        }
     }
 }
 
@@ -53,7 +59,7 @@ export component SettingEntryV2 inherits Rectangle {
     in-out property <image> right-icon: Icons.star;
     in-out property <color> right-icon-colorize;
 
-    callback clicked <=> ta.clicked;
+    callback clicked();
 
     hbox := HorizontalLayout {
         padding-left: h-padding;
@@ -100,7 +106,14 @@ export component SettingEntryV2 inherits Rectangle {
         }
     }
 
+    fs := FocusScope { }
+
     ta := TouchArea {
         mouse-cursor: MouseCursor.pointer;
+
+        clicked => {
+            fs.focus();
+            root.clicked();
+        }
     }
 }
