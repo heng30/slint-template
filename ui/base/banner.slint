@@ -1,20 +1,41 @@
-import { Theme } from "../theme.slint";
+import { Theme, Icons } from "../theme.slint";
 import { Label } from "label.slint";
+import { IconBtn } from "icon-btn.slint";
 
-export component Banner inherits HorizontalLayout {
-    in-out property background <=> rec.background;
-    in-out property border-radius <=> rec.border-radius;
+export component Banner inherits Rectangle {
     in-out property text <=> label.text;
     in-out property font-size <=> label.font-size;
     in-out property text-color <=> label.color;
 
-    rec := Rectangle {
-        background: Theme.warning-color;
-        height: label.preferred-height + Theme.padding * 2;
+    in-out property <bool> is-show-close: true;
+    in-out property <length> icon-size: Theme.icon-size;
+    in-out property <color> icon-colorize: Theme.icon-color;
 
-        label := Label {
-            font-size: Theme.title4-font-size;
-            color: Theme.invert-base-color;
+    callback close();
+
+    preferred-width: label.preferred-width + icon-size + Theme.padding * 30;
+    preferred-height: label.preferred-height + Theme.padding * 4;
+    background: Theme.warning-color;
+    border-radius: Theme.border-radius;
+
+    label := Label {
+        font-size: Theme.title4-font-size;
+        color: Theme.invert-base-color;
+    }
+
+    if root.is-show-close: HorizontalLayout {
+        alignment: LayoutAlignment.end;
+        padding-right: Theme.padding * 2;
+
+        IconBtn {
+            icon: Icons.close;
+            icon-size: root.icon-size;
+            colorize: root.icon-colorize;
+            show-icon-hover-background: false;
+
+            clicked => {
+                root.close();
+            }
         }
     }
 }
