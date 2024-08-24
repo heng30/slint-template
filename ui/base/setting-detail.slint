@@ -61,11 +61,9 @@ export component SettingDetailSwitch inherits Rectangle {
     background: Theme.secondary-background;
     border-radius: Theme.border-radius;
 
-    callback toggle <=> eib.toggled;
+    callback toggled();
 
-    ta := TouchArea {
-        mouse-cursor: root.enabled ? MouseCursor.pointer : MouseCursor.none;
-    }
+    fs := FocusScope { }
 
     vbox := HorizontalLayout {
         padding: Theme.padding * 2;
@@ -75,6 +73,11 @@ export component SettingDetailSwitch inherits Rectangle {
             background: Colors.transparent;
         }
 
-        eib := Switch { }
+        eib := Switch {
+            toggled => {
+                fs.focus();
+                root.toggled();
+            }
+        }
     }
 }

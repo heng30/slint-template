@@ -162,6 +162,16 @@ pub fn init(ui: &AppWindow) {
         });
 
     ui.global::<Util>()
+        .on_append_str_to_items(move |items, text| {
+            let items = items
+                .as_any()
+                .downcast_ref::<VecModel<SharedString>>()
+                .expect("We know we set a VecModel earlier");
+
+            items.push(text);
+        });
+
+    ui.global::<Util>()
         .on_format_number_with_commas(move |number_str| {
             number::format_number_with_commas(number_str.as_str()).into()
         });

@@ -101,7 +101,7 @@ export component Preference inherits SettingDetail {
                 icon: Icons.status;
                 text: Logic.tr("Frameless window");
                 checked: root.no-frame;
-                toggle => {
+                toggled => {
                     root.no-frame = self.checked;
                     Logic.set-setting-preference(root.get());
                     ConfirmDialogSetting.set(true, Logic.tr("Info"), Logic.tr("Reboot to take setting effect"), "close-window", "");
@@ -114,7 +114,7 @@ export component Preference inherits SettingDetail {
                 icon: Icons.stackoverflow;
                 text: Logic.tr("Window always on top");
                 checked: root.always-on-top;
-                toggle => {
+                toggled => {
                     root.always-on-top = self.checked;
                     Logic.set-setting-preference(root.get());
                     ConfirmDialogSetting.set(true, Logic.tr("Info"), Logic.tr("Reboot to take setting effect"), "close-window", "");
