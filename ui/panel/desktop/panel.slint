@@ -2,7 +2,7 @@ import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
 import { Blanket, StatusBar, Divider, AboutSetting, ToolTip, ToolTipSetting } from "../../base/widgets.slint";
 
-import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar, LayoutType, ComponentPosition, Pagination, BreadCrumb } from "../../base/widgets.slint";
+import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar, LayoutType, ComponentPosition, Pagination, SkeletonType, Skeleton } from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 export component DesktopPanel inherits Rectangle {
@@ -110,8 +110,10 @@ export component DesktopPanel inherits Rectangle {
                 HorizontalLayout {
                     alignment: LayoutAlignment.center;
 
-                    BreadCrumb {
-                        items: ["home", "blue", "slint", "learn"];
+                    Skeleton {
+                        width: 800px;
+                        height: 400px;
+                        type: self.from-number(Util.progress-value-int(7, 7s));
                     }
                 }
 

@@ -95,15 +95,19 @@ export global Util {
         return len / 1px;
     }
 
-    pure public function progress-angle(total-angle: angle, interval: duration) -> angle {
-        return Math.mod(total-angle / 1deg * animation-tick() / interval, (total-angle + 1deg) / 1deg) * 1deg;
-    }
-
     pure public function progress-value(interval: duration) -> float {
-        return progress-angle(360deg, interval) / 360deg;
+        return Math.mod(animation-tick(), interval) / interval;
     }
 
     pure public function progress-value-int(max-int: int, interval: duration) -> int {
-        return Math.floor(progress-value(interval) * (max-int + 1));
+        return Math.floor(progress-value(interval) * max-int);
+    }
+
+    pure public function progress-angle(total-angle: angle, interval: duration) -> angle {
+        return progress-value(interval) * total-angle;
+    }
+
+    pure public function progress-sin(angle: angle, interval: duration) -> float {
+        return progress-value(interval) * Math.sin(angle);
     }
 }
