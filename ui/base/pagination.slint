@@ -35,7 +35,7 @@ export component Pagination inherits Rectangle {
             root.preferred-height = self.preferred-height;
         }
 
-        spacing: Theme.spacing * 2;
+        spacing: Theme.spacing;
 
         IconBtn {
             icon: Icons.arrow-left-round;
@@ -88,7 +88,7 @@ export component Pagination inherits Rectangle {
             root.preferred-height = self.preferred-height;
         }
 
-        spacing: Theme.spacing * 2;
+        spacing: Theme.spacing;
 
         IconBtn {
             enabled-toucharea: root.real-current-page > 0;
@@ -178,11 +178,12 @@ export component Pagination inherits Rectangle {
         }
 
         if root.is-show-jump-input: HorizontalLayout {
-            spacing: Theme.spacing * 2;
+            private property <length> inner-font-size: root.font-size - 2px;
+            spacing: Theme.spacing;
 
             Label {
                 text: Logic.tr("Jump to");
-                font-size: root.font-size;
+                font-size: inner-font-size;
                 color: root.text-color;
             }
 
@@ -191,13 +192,14 @@ export component Pagination inherits Rectangle {
                 border-radius: Theme.border-radius;
 
                 HorizontalLayout {
-                    spacing: Theme.spacing * 4;
+                    spacing: Theme.spacing * 2;
                     padding: Theme.padding;
+                    padding-right: Theme.padding * 2;
 
                     Rectangle {
                         clip: true;
                         width: ltxt.preferred-width + Theme.padding;
-                        height: ltxt.preferred-height * 1.2;
+                        height: ltxt.preferred-height;
                         border-radius: Theme.border-radius;
                         background: Theme.base-background;
 
@@ -205,7 +207,7 @@ export component Pagination inherits Rectangle {
                             width: 80%;
                             height: 80%;
                             input-type: number;
-                            font-size: root.font-size - 2px;
+                            font-size: inner-font-size;
                             single-line: true;
                             vertical-alignment: TextVerticalAlignment.center;
                             text: root.real-current-page + 1;
@@ -214,18 +216,16 @@ export component Pagination inherits Rectangle {
                             accepted => {
                                 root.set-current-page(self.text.to-float() - 1);
                                 self.text = root.real-current-page + 1;
+                                self.clear-focus();
                                 jump(root.real-current-page);
                             }
                         }
                     }
 
-                    HorizontalLayout {
-                        padding-right: Theme.padding * 2;
-                        ltxt := Label {
-                            font-size: root.font-size;
-                            text: "/ " + root.total-pages;
-                            color: root.text-color;
-                        }
+                    ltxt := Label {
+                        font-size: inner-font-size;
+                        text: "/ " + root.total-pages;
+                        color: root.text-color;
                     }
                 }
             }

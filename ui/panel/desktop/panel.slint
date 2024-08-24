@@ -2,7 +2,7 @@ import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
 import { Blanket, StatusBar, Divider, AboutSetting, ToolTip, ToolTipSetting } from "../../base/widgets.slint";
 
-import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar, LayoutType, ComponentPosition, Pagination } from "../../base/widgets.slint";
+import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar, LayoutType, ComponentPosition, Pagination, BreadCrumb } from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 export component DesktopPanel inherits Rectangle {
@@ -92,17 +92,6 @@ export component DesktopPanel inherits Rectangle {
                 }
 
                 HorizontalLayout {
-                    alignment: center;
-
-                    ProcessStep {
-                        layout-type: LayoutType.Vertical;
-                        text-font-size: Theme.title3-font-size;
-                        steps: ["第一步", "第二步", "第三步", "完成"];
-                        current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
-                    }
-                }
-
-                HorizontalLayout {
                     alignment: LayoutAlignment.center;
 
                     Pagination {
@@ -121,13 +110,8 @@ export component DesktopPanel inherits Rectangle {
                 HorizontalLayout {
                     alignment: LayoutAlignment.center;
 
-                    Pagination {
-                        total-pages: 30;
-
-
-                        jump(page) => {
-                            debug(page);
-                        }
+                    BreadCrumb {
+                        items: ["home", "blue", "slint", "learn"];
                     }
                 }
 

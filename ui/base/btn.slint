@@ -46,7 +46,7 @@ export component TextBtnWithoutIcon inherits Rectangle {
 
     callback clicked;
 
-    width: is-circle ? Math.max(label.preferred-width, label.preferred-height) + Theme.padding * 2 : label.preferred-width + Theme.padding * 2;
+    width: is-circle ? Math.max(label.preferred-width, label.preferred-height) + Theme.padding : label.preferred-width + Theme.padding * 2;
     height: is-circle ? self.width : label.preferred-height + Theme.padding;
     border-radius: is-circle ? self.width / 2 : Theme.border-radius;
     background: ta.pressed ? bg-pressed-color : (ta.has-hover ? bg-color.darker(10%) : bg-color);

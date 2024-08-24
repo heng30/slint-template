@@ -34,6 +34,8 @@ export global Util {
     // (browser, url) => void
     callback open-url(string, string);
 
+    callback remove-str-items-after([string], int);
+
     pure callback text-len(string) -> int;
 
     // (low-bound, up-bound) => void

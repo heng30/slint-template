@@ -289,6 +289,7 @@ pub fn tr(text: &str) -> String {
         ("setting","设置"),
         ("about","关于"),
         ("maximal","最大化"),
+        ("normal", "正常大小"),
         ("minimal","最小化"),
         ("close","关闭"),
         ("Jump to", "跳转到"),

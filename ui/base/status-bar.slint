@@ -94,9 +94,11 @@ export component StatusBar inherits Rectangle {
                         if (Util.get-is-max-window()) {
                             Util.max-window(false);
                             self.icon = Icons.status-bar-max;
+                            self.tip = Logic.tr("maximal");
                         } else {
                             Util.max-window(true);
                             self.icon = Icons.status-bar-normal;
+                            self.tip = Logic.tr("normal");
                         }
                     }
                 }

@@ -9,7 +9,7 @@ use cutil::{
     rand::{self, Rng},
     time,
 };
-use slint::ComponentHandle;
+use slint::{ComponentHandle, Model, SharedString, VecModel};
 use std::str::FromStr;
 use webbrowser::{self, Browser};
 
@@ -141,6 +141,25 @@ pub fn init(ui: &AppWindow) {
             );
         }
     });
+
+    ui.global::<Util>()
+        .on_remove_str_items_after(move |items, index| {
+            let index = i32::max(0, index) as usize;
+
+            let items = items
+                .as_any()
+                .downcast_ref::<VecModel<SharedString>>()
+                .expect("We know we set a VecModel earlier");
+
+            if index >= items.row_count() - 1 {
+                return;
+            }
+
+            let count = items.row_count() - 1 - index;
+            for _ in 0..count {
+                items.remove(index + 1);
+            }
+        });
 
     ui.global::<Util>()
         .on_format_number_with_commas(move |number_str| {
