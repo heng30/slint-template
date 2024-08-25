@@ -1,4 +1,3 @@
-import { LayoutType } from "def.slint";
 import { Theme } from "../theme.slint";
 import { Util } from "../util.slint";
 import { Label } from "label.slint";
@@ -12,7 +11,7 @@ import { Label } from "label.slint";
 export component ProcessStep inherits Rectangle {
     in-out property <[string]> steps;
     in-out property <int> current-step;
-    in-out property <LayoutType> layout-type;
+    in-out property <Orientation> orientation;
 
     in-out property <length> number-font-size: Theme.title3-font-size;
     in-out property <length> text-font-size: Theme.title5-font-size;
@@ -23,8 +22,8 @@ export component ProcessStep inherits Rectangle {
 
     in-out property <color> process-color: Theme.third-brand-color;
     in-out property <color> process-number-color: Colors.white;
-    in-out property <length> process-line-width: layout-type == LayoutType.Horizontal ? 100px : Theme.default-font-size / 4;
-    in-out property <length> process-line-height: layout-type == LayoutType.Horizontal ? Theme.default-font-size / 4 : 100px;
+    in-out property <length> process-line-width: orientation == Orientation.horizontal ? 100px : Theme.default-font-size / 4;
+    in-out property <length> process-line-height: orientation == Orientation.horizontal ? Theme.default-font-size / 4 : 100px;
 
     in-out property <color> unfinished-color: Theme.secondary-background;
     in-out property <color> unfinished-number-color: Theme.regular-text-color;
@@ -33,7 +32,7 @@ export component ProcessStep inherits Rectangle {
 
     private property <float> process-value: Util.progress-value(1s);
 
-    if LayoutType.Horizontal == root.layout-type: HorizontalLayout {
+    if Orientation.horizontal == root.orientation: HorizontalLayout {
         spacing: Theme.padding * 2;
 
         init => {
@@ -85,7 +84,7 @@ export component ProcessStep inherits Rectangle {
         }
     }
 
-    if LayoutType.Vertical == root.layout-type: VerticalLayout {
+    if Orientation.vertical == root.orientation: VerticalLayout {
         spacing: Theme.padding * 2;
 
         init => {

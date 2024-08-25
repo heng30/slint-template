@@ -2,7 +2,7 @@ import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
 import { Blanket, StatusBar, Divider, AboutSetting, ToolTip, ToolTipSetting } from "../../base/widgets.slint";
 
-import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar, LayoutType, ComponentPosition, Pagination, SkeletonType, Skeleton, PinCodes, Badge, Banner, CheckBtn, Select, ComponentPosition } from "../../base/widgets.slint";
+import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar,  ComponentPosition, Pagination, SkeletonType, Skeleton, PinCodes, Badge, Banner, CheckBtn, Select, ComponentPosition, Slider} from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 export component DesktopPanel inherits Rectangle {
@@ -69,17 +69,8 @@ export component DesktopPanel inherits Rectangle {
                     ProgressBar {
                         width: 50px;
                         height: 150px;
-                        layout-type: LayoutType.Vertical;
+                        orientation: Orientation.vertical;
                         progress: Util.progress-value(5s);
-                    }
-                }
-
-                HorizontalLayout {
-                    alignment: center;
-                    PinCodes {
-                        finished(codes) => {
-                            debug(codes[0], codes[1], codes[2], codes[3], codes[4], codes[5]);
-                        }
                     }
                 }
 
@@ -110,18 +101,20 @@ export component DesktopPanel inherits Rectangle {
 
                 HorizontalLayout {
                     alignment: LayoutAlignment.center;
-                    spacing: Theme.spacing * 5;
 
-                    Select {
-                        popup-max-height: 100px;
-                        popup-position: ComponentPosition.Top;
-                        current-value: "Hello";
-                        values: ["Hello", "World", "Good"];
-                    }
+                    Slider {
+                        // enabled: false;
+                        value: 30;
+                        minimum: 20;
+                        maximum: 80;
 
-                    Select {
-                        current-value: "Hello";
-                        values: ["Hello", "World", "Good", "Nice"];
+                        changed(value) => {
+                            debug(value);
+                        }
+
+                        released(value) => {
+                            debug(value);
+                        }
                     }
                 }
 

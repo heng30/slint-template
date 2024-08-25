@@ -32,7 +32,6 @@ export component Proxy inherits SettingDetail {
 
     SettingDetailInner {
         type-select := Select {
-            height: http-url-txt.preferred-height * 1.6;
             values: ["Http", "Socks5"];
             current-value: self.values[0];
         }
