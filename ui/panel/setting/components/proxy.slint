@@ -1,6 +1,5 @@
-import { ComboBox } from "std-widgets.slint";
 import { Store, Logic, Theme, SettingProxy } from "../../def.slint";
-import { SettingDetail, SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel, LineInput } from "../../../base/widgets.slint";
+import { SettingDetail, SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel, LineInput, Select } from "../../../base/widgets.slint";
 
 export component Proxy inherits SettingDetail {
     title: Logic.tr("Proxy");
@@ -11,7 +10,7 @@ export component Proxy inherits SettingDetail {
 
     public function get() -> SettingProxy {
         return {
-            proxy-type: type-combox.current-value,
+            proxy-type: type-select.current-value,
             http-url: http-url-lineedit.text,
             http-port: http-port-lineedit.text,
             socks5-url: socks5-url-lineedit.text,
@@ -20,27 +19,27 @@ export component Proxy inherits SettingDetail {
     }
 
     public function set(setting: SettingProxy) {
-        type-combox.current-value = setting.proxy-type;
+        type-select.current-value = setting.proxy-type;
         http-url-lineedit.text = setting.http-url;
         http-port-lineedit.text = setting.http-port;
         socks5-url-lineedit.text = setting.socks5-url;
         socks5-port-lineedit.text = setting.socks5-port;
 
-        if (type-combox.current-value == "") {
-            type-combox.current-value = type-combox.model[0];
+        if (type-select.current-value == "") {
+            type-select.current-value = type-select.values[0];
         }
     }
 
     SettingDetailInner {
-        type-combox := ComboBox {
+        type-select := Select {
             height: http-url-txt.preferred-height * 1.6;
-            model: ["Http", "Socks5"];
-            current-value: self.model[0];
+            values: ["Http", "Socks5"];
+            current-value: self.values[0];
         }
 
         Rectangle {
             VerticalLayout {
-                visible: type-combox.current-value == "Http";
+                visible: type-select.current-value == "Http";
                 spacing: Theme.spacing * 4;
 
                 SettingDetailInnerVbox {
@@ -66,7 +65,7 @@ export component Proxy inherits SettingDetail {
             }
 
             VerticalLayout {
-                visible: type-combox.current-value == "Socks5";
+                visible: type-select.current-value == "Socks5";
                 spacing: Theme.spacing * 4;
 
                 SettingDetailInnerVbox {

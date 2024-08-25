@@ -1,6 +1,5 @@
-import { ComboBox } from "std-widgets.slint";
 import { Theme, Logic, Store, Icons, SettingPreference, DeviceType } from "../../def.slint";
-import { SettingDetailInner, SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn, SettingDetailSwitch, ConfirmDialogSetting, Label, LineInput } from "../../../base/widgets.slint";
+import { SettingDetailInner, SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn, SettingDetailSwitch, ConfirmDialogSetting, Label, LineInput, Select } from "../../../base/widgets.slint";
 
 export component Preference inherits SettingDetail {
     title: Logic.tr("Preference");
@@ -15,7 +14,7 @@ export component Preference inherits SettingDetail {
             win-width: root.win-width,
             win-height: root.win-height,
             font-size: font-size-lineedit.text,
-            font-family: fonts-combox.current-value,
+            font-family: fonts-select.current-value,
             language: Store.setting-preference.language,
             always-on-top: root.always-on-top,
             no-frame: root.no-frame,
@@ -25,7 +24,7 @@ export component Preference inherits SettingDetail {
 
     init => {
         font-size-lineedit.text = Store.setting-preference.font-size;
-        fonts-combox.current-value = Store.setting-preference.font-family;
+        fonts-select.current-value = Store.setting-preference.font-family;
         root.win-width = Store.setting-preference.win-width;
         root.win-height = Store.setting-preference.win-height;
         root.always-on-top = Store.setting-preference.always-on-top;
@@ -86,9 +85,8 @@ export component Preference inherits SettingDetail {
                 text: Logic.tr("Font family");
             }
 
-            fonts-combox := ComboBox {
-                height: fonts-label.preferred-height * 1.6;
-                model: ["Default", "Source Han Serif CN", "Source Han Sans CN"];
+            fonts-select := Select {
+                values: ["Default", "Source Han Serif CN", "Source Han Sans CN"];
                 current-value: Store.setting-preference.font-family;
             }
         }
