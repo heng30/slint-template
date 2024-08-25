@@ -1,6 +1,6 @@
-import { LineEdit, ComboBox } from "std-widgets.slint";
+import { ComboBox } from "std-widgets.slint";
 import { Theme, Logic, Store, Icons, SettingPreference, DeviceType } from "../../def.slint";
-import { SettingDetailInner, SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn, SettingDetailSwitch, ConfirmDialogSetting, Label } from "../../../base/widgets.slint";
+import { SettingDetailInner, SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn, SettingDetailSwitch, ConfirmDialogSetting, Label, LineInput } from "../../../base/widgets.slint";
 
 export component Preference inherits SettingDetail {
     title: Logic.tr("Preference");
@@ -41,10 +41,9 @@ export component Preference inherits SettingDetail {
             HorizontalLayout {
                 spacing: Theme.spacing * 2;
 
-                win-width-lineedit := LineEdit {
+                win-width-lineedit := LineInput {
                     horizontal-stretch: 1;
                     input-type: number;
-                    height: font-size-txt.preferred-height * 1.6;
                     placeholder-text: Logic.tr("width");
                     text: root.win-width;
 
@@ -57,10 +56,9 @@ export component Preference inherits SettingDetail {
                     text: "X";
                 }
 
-                win-height-lineedit := LineEdit {
+                win-height-lineedit := LineInput {
                     horizontal-stretch: 1;
                     input-type: number;
-                    height: font-size-txt.preferred-height * 1.6;
                     placeholder-text: Logic.tr("height");
                     text: root.win-height;
 
@@ -76,7 +74,7 @@ export component Preference inherits SettingDetail {
                 text: Logic.tr("Font size");
             }
 
-            font-size-lineedit := LineEdit {
+            font-size-lineedit := LineInput {
                 input-type: number;
                 height: font-size-txt.preferred-height * 1.6;
                 placeholder-text: Logic.tr("10 ~ 50");

@@ -1,7 +1,7 @@
-import { Theme } from "../theme.slint";
+import { Theme, Icons } from "../theme.slint";
 import { Label } from "./label.slint";
 
-export component RadioBtn inherits Rectangle {
+export component CheckBtn inherits Rectangle {
     in-out property text <=> txt.text;
     in-out property enabled <=> ta.enabled;
     in-out property <bool> checked;
@@ -10,7 +10,7 @@ export component RadioBtn inherits Rectangle {
     width: hbox.preferred-width;
     height: hbox.preferred-height;
 
-    callback check();
+    callback toggled();
 
     if ta.enabled: Rectangle {
         x: hbox.x - (self.width - inner.width) / 2;
@@ -27,17 +27,17 @@ export component RadioBtn inherits Rectangle {
         VerticalLayout {
             alignment: center;
             inner := Rectangle {
-                width: Theme.default-font-size * 1.1;
+                width: Theme.default-font-size * 1.3;
                 height: self.width;
                 border-width: 2px;
-                border-radius: self.width / 2;
+                border-radius: Theme.border-radius;
                 border-color: root.enabled ? (root.checked ? Theme.third-brand-color : Theme.secondary-text-color) : Theme.diabled-color;
 
-                if root.checked: Rectangle {
+                if root.checked: Image {
                     width: 60%;
                     height: self.width;
-                    background: parent.border-color;
-                    border-radius: self.width / 2;
+                    colorize: parent.border-color;
+                    source: Icons.checked;
                 }
             }
         }
@@ -54,12 +54,11 @@ export component RadioBtn inherits Rectangle {
 
     ta := TouchArea {
         mouse-cursor: MouseCursor.pointer;
+
         clicked => {
             fs.focus();
-
-            if (!root.checked) {
-                root.check();
-            }
+            root.checked = !root.checked;
+            root.toggled();
         }
     }
 }

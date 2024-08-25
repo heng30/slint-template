@@ -1,4 +1,3 @@
-import { Palette } from "std-widgets.slint";
 import { ComponentPosition } from "def.slint";
 import { Theme } from "../theme.slint";
 import { Label } from "label.slint";
@@ -57,7 +56,7 @@ export component IconBtn inherits Rectangle {
         width: Math.max(Theme.icon-size, root.icon-size) + Theme.spacing * 4;
         height: self.width;
         border-radius: self.width / 2;
-        background: touch.has-hover ? Palette.background : Colors.transparent;
+        background: touch.has-hover ? Theme.hover-background : Colors.transparent;
     }
 
     hbox := HorizontalLayout {

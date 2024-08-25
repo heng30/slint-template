@@ -1,6 +1,6 @@
-import { ComboBox, LineEdit } from "std-widgets.slint";
+import { ComboBox } from "std-widgets.slint";
 import { Store, Logic, Theme, SettingProxy } from "../../def.slint";
-import { SettingDetail, SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel } from "../../../base/widgets.slint";
+import { SettingDetail, SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel, LineInput } from "../../../base/widgets.slint";
 
 export component Proxy inherits SettingDetail {
     title: Logic.tr("Proxy");
@@ -48,8 +48,7 @@ export component Proxy inherits SettingDetail {
                         text: Logic.tr("Proxy address");
                     }
 
-                    http-url-lineedit := LineEdit {
-                        height: http-url-txt.preferred-height * 1.6;
+                    http-url-lineedit := LineInput {
                         placeholder-text: "127.0.0.1";
                     }
                 }
@@ -59,9 +58,8 @@ export component Proxy inherits SettingDetail {
                         text: Logic.tr("Proxy port");
                     }
 
-                    http-port-lineedit := LineEdit {
+                    http-port-lineedit := LineInput {
                         input-type: number;
-                        height: http-port-txt.preferred-height * 1.6;
                         placeholder-text: "3128";
                     }
                 }
@@ -76,8 +74,7 @@ export component Proxy inherits SettingDetail {
                         text: Logic.tr("Proxy address");
                     }
 
-                    socks5-url-lineedit := LineEdit {
-                        height: socks5-url-txt.preferred-height * 1.6;
+                    socks5-url-lineedit := LineInput {
                         placeholder-text: "127.0.0.1";
                     }
                 }
@@ -87,9 +84,8 @@ export component Proxy inherits SettingDetail {
                         text: Logic.tr("Proxy port");
                     }
 
-                    socks5-port-lineedit := LineEdit {
+                    socks5-port-lineedit := LineInput {
                         input-type: number;
-                        height: socks5-port-txt.preferred-height * 1.6;
                         placeholder-text: "1080";
                     }
                 }

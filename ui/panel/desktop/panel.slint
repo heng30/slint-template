@@ -2,7 +2,7 @@ import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
 import { Blanket, StatusBar, Divider, AboutSetting, ToolTip, ToolTipSetting } from "../../base/widgets.slint";
 
-import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar, LayoutType, ComponentPosition, Pagination, SkeletonType, Skeleton, PinCodes, Badge, Banner } from "../../base/widgets.slint";
+import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar, LayoutType, ComponentPosition, Pagination, SkeletonType, Skeleton, PinCodes, Badge, Banner, CheckBtn } from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 export component DesktopPanel inherits Rectangle {
@@ -110,14 +110,23 @@ export component DesktopPanel inherits Rectangle {
 
                 HorizontalLayout {
                     alignment: LayoutAlignment.center;
+                    spacing: Theme.spacing * 5;
 
-                    Banner {
+                    CheckBtn {
+                        enabled: false;
                         text: "Hello world";
+                    }
 
-                        Badge {
-                            text: "99+";
-                            target-component-width: parent.width;
-                            target-component-height: parent.height;
+                    CheckBtn {
+                        enabled: false;
+                        text: "Hello world";
+                        checked: true;
+                    }
+
+                    CheckBtn {
+                        text: "Hello world";
+                        checked: true;
+                        toggled => {
                         }
                     }
                 }
