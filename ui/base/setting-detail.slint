@@ -1,8 +1,8 @@
-import { Switch } from "std-widgets.slint";
 import { Theme, Icons } from "../theme.slint";
 import { IconBtn } from "./icon-btn.slint";
 import { Label } from "./label.slint";
 import { Head } from "./head.slint";
+import { SwitchBtn } from "switch-btn.slint";
 
 export component SettingDetail inherits Rectangle {
     callback back;
@@ -73,7 +73,7 @@ export component SettingDetailSwitch inherits Rectangle {
             background: Colors.transparent;
         }
 
-        eib := Switch {
+        eib := SwitchBtn {
             toggled => {
                 fs.focus();
                 root.toggled();
