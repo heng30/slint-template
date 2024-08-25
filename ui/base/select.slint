@@ -1,0 +1,127 @@
+import { ComponentPosition } from "def.slint";
+import { Theme, Icons } from "../theme.slint";
+import { Label } from "label.slint";
+
+export component Select inherits Rectangle {
+    in-out property <bool> enabled: true;
+    in-out property <int> current-index;
+    in-out property <string> current-value;
+    in-out property <[string]> values;
+
+    in-out property <length> popup-max-height: 300px;
+    in-out property <ComponentPosition> popup-position:  ComponentPosition.Bottom;
+
+    in-out property <length> font-size: Theme.title1-font-size;
+    in-out property <length> hpadding: Theme.padding * 4;
+    in-out property <length> vpadding: Theme.padding * 2;
+    in-out property <length> spacing: Theme.spacing * 2;
+
+    width: 200px;
+    height: hbox.preferred-height;
+    background: Theme.secondary-background;
+    border-radius: Theme.border-radius;
+    border-width: fs.has-focus ? 2px : 0;
+    border-color: Theme.focus-color;
+
+    public function show() {
+        pop.show();
+    }
+
+    public function hide() {
+        pop.close();
+    }
+
+    hbox := HorizontalLayout {
+        alignment: LayoutAlignment.space-between;
+        padding-left: root.hpadding;
+        padding-right: root.hpadding;
+        padding-top: root.vpadding;
+        padding-bottom: root.vpadding;
+        spacing: Theme.spacing * 2;
+
+        lb := Label {
+            text: root.current-value;
+            font-size: root.font-size;
+            overflow: elide;
+        }
+
+        Image {
+            height: lb.preferred-height;
+            width: self.height;
+            source: Icons.arrow-down;
+            colorize: lb.color;
+        }
+    }
+
+    fs := FocusScope { }
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+        clicked => {
+            fs.focus();
+            pop.show();
+        }
+    }
+
+    pop := PopupWindow {
+        y: root.popup-position == ComponentPosition.Top ? -pop.height - root.vpadding : root.height + root.vpadding;
+
+        width: root.width;
+        height: Math.min(root.popup-max-height, hbox.preferred-height * root.values.length + vpadding * 2);
+
+        Rectangle {
+            background: Theme.base-background;
+            border-width: 1px;
+            border-color: Theme.base-border-color;
+            border-radius: Theme.border-radius;
+
+            Flickable {
+                height: pop.height - root.vpadding;
+                viewport-height: pop.height;
+
+                for value[index] in root.values: Rectangle {
+                    y: root.vpadding + pop-hbox.preferred-height * index;
+                    width: pop.width - 2px;
+                    height: pop-hbox.preferred-height;
+                    background: pop-ta.has-hover ? Theme.hover-background : Theme.base-background;
+
+                    init => {
+                        parent.viewport-height = self.y + self.height + root.vpadding;
+                    }
+
+                    pop-hbox := HorizontalLayout {
+                        private property <bool> is-selected: value == root.current-value || index == root.current-index;
+
+                        alignment: LayoutAlignment.space-between;
+                        padding-left: root.hpadding;
+                        padding-right: root.hpadding;
+                        padding-top: root.vpadding;
+                        padding-bottom: root.vpadding;
+                        spacing: Theme.spacing * 2;
+
+                        pop-lb := Label {
+                            overflow: elide;
+                            text: value;
+                            font-size: root.font-size;
+                            color: is-selected ? Theme.third-brand-color : Theme.primary-text-color;
+                        }
+
+                        if is-selected: Image {
+                            height: pop-lb.preferred-height * 0.6;
+                            width: self.height;
+                            source: Icons.checked;
+                            colorize: pop-lb.color;
+                        }
+                    }
+
+                    pop-ta := TouchArea {
+                        clicked => {
+                            root.current-index = index;
+                            root.current-value = value;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
