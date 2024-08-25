@@ -20,6 +20,11 @@ export component SwitchBtn inherits Rectangle {
     callback toggled();
 
     indicator := Rectangle {
+        animate x {
+            duration: Theme.default-animate-duration;
+            easing: ease-in-out;
+        }
+
         x: root.checked ? root.width - self.width - root.hpadding : root.hpadding;
         width: root.indicator-size;
         height: self.width;

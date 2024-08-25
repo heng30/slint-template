@@ -16,13 +16,13 @@ export component ProcessStep inherits Rectangle {
 
     in-out property <length> number-font-size: Theme.title3-font-size;
     in-out property <length> text-font-size: Theme.title5-font-size;
-    in-out property <color> text-font-color: Theme.regular-text-color;
+    in-out property <color> text-color: Theme.regular-text-color;
 
     in-out property <color> finished-color: Theme.success-color;
     in-out property <color> finished-number-color: Theme.base-color;
 
     in-out property <color> process-color: Theme.third-brand-color;
-    in-out property <color> process-number-color: Theme.base-color;
+    in-out property <color> process-number-color: Colors.white;
     in-out property <length> process-line-width: layout-type == LayoutType.Horizontal ? 100px : Theme.default-font-size / 4;
     in-out property <length> process-line-height: layout-type == LayoutType.Horizontal ? Theme.default-font-size / 4 : 100px;
 
@@ -80,7 +80,7 @@ export component ProcessStep inherits Rectangle {
             if item != "": Label {
                 text: item;
                 font-size: root.text-font-size;
-                color: root.text-font-color;
+                color: root.text-color;
             }
         }
     }
@@ -135,7 +135,7 @@ export component ProcessStep inherits Rectangle {
                 Label {
                     text: item;
                     font-size: root.text-font-size;
-                    color: root.text-font-color;
+                    color: root.text-color;
                 }
             }
         }
