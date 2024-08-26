@@ -38,6 +38,11 @@ export global Util {
 
     callback append-str-to-items([string], string);
 
+    callback search-str-items-by([string], string) -> [string];
+    search-str-items-by(items, text) => {
+        return items;
+    }
+
     pure callback text-len(string) -> int;
 
     // (low-bound, up-bound) => void

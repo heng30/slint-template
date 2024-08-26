@@ -2,7 +2,7 @@ import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
 import { Blanket, StatusBar, Divider, AboutSetting, ToolTip, ToolTipSetting } from "../../base/widgets.slint";
 
-import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar,  ComponentPosition, Pagination, SkeletonType, Skeleton, PinCodes, Badge, Banner, CheckBtn, Select, ComponentPosition, Slider, CollapseEntry, Collapse } from "../../base/widgets.slint";
+import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar,  ComponentPosition, Pagination, SkeletonType, Skeleton, PinCodes, Badge, Banner, CheckBtn, Select, ComponentPosition, Slider, CollapseEntry, Collapse, Search } from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 export component DesktopPanel inherits Rectangle {
@@ -58,25 +58,21 @@ export component DesktopPanel inherits Rectangle {
 
                 HorizontalLayout {
                     alignment: center;
+                    height: 500px;
 
-                    Collapse {
-                        is-accordion: true;
-                        entries: [
-                            {
-                                disabled: true,
-                                title: "This is panel header 1",
-                                description: "Hi, bytedance dance dance. This is the docsite of Semi UI.",
-                                is-open: true
-                            },
-                            {
-                                title: "This is panel header 2",
-                                description: "Hi, bytedance dance dance. This is the docsite of Semi UI.",
-                            },
-                            {
-                                title: "This is panel header 3",
-                                description: "Hi, bytedance dance dance. This is the docsite of Semi UI.",
-                            },
-                        ];
+                    Search {
+                        width: 500px;
+                        values: ["Hello", "World", "Nice", "Good"];
+                        // popup-position: ComponentPosition.Top;
+                        enabled-popup: true;
+
+                        search(text) => {
+                            debug(text);
+                        }
+
+                        edited(text) => {
+                            debug(text);
+                        }
                     }
                 }
             }

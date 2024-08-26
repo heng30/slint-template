@@ -17,7 +17,7 @@ export component Collapse inherits Rectangle {
 
     in-out property <color> title-color: Theme.primary-text-color;
     in-out property <length> title-font-size: Theme.title3-font-size;
-    in-out property <int> title-font-weight: 700;
+    in-out property <int> title-font-weight: Theme.bold-font-weight;
 
     in-out property <length> description-font-size: Theme.default-font-size;
     in-out property <color> description-color: Theme.regular-text-color;
@@ -48,6 +48,7 @@ export component Collapse inherits Rectangle {
                     padding-bottom: root.vpadding;
 
                     lb := Label {
+                        overflow: elide;
                         text: entry.title;
                         font-size: root.title-font-size;
                         color: entry.disabled ? Theme.disabled-color : root.title-color;

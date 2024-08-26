@@ -9,7 +9,7 @@ use cutil::{
     rand::{self, Rng},
     time,
 };
-use slint::{ComponentHandle, Model, SharedString, VecModel};
+use slint::{ComponentHandle, Model, ModelRc, SharedString, VecModel};
 use std::str::FromStr;
 use webbrowser::{self, Browser};
 
@@ -169,6 +169,20 @@ pub fn init(ui: &AppWindow) {
                 .expect("We know we set a VecModel earlier");
 
             items.push(text);
+        });
+
+    ui.global::<Util>()
+        .on_search_str_items_by(move |items, text| {
+            if text.is_empty() {
+                return ModelRc::default();
+            }
+
+            let items = items
+                .iter()
+                .filter(|item| item.to_lowercase().contains(text.to_lowercase().as_str()))
+                .collect::<Vec<SharedString>>();
+
+            ModelRc::new(VecModel::from_slice(&items[..]))
         });
 
     ui.global::<Util>()

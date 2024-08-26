@@ -23,6 +23,9 @@ export global Theme {
     in-out property <length> title2-font-size: default-font-size + 6px;
     in-out property <length> title1-font-size: default-font-size + 8px;
 
+    in-out property <int> normal-font-weight: 400;
+    in-out property <int> bold-font-weight: 700;
+
     out property <length> icon-size: Math.max(24px, default-font-size + 8px);
     out property <length> avatar-size: icon-size + Theme.padding * 2;
     out property <duration> default-animate-duration: 200ms;
