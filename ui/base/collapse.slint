@@ -3,7 +3,7 @@ import { Label } from "label.slint";
 import { Divider } from "divider.slint";
 
 export struct CollapseEntry {
-    enabled: bool,
+    disabled: bool,
     title: string,
     description: string,
     is-open: bool,
@@ -50,7 +50,7 @@ export component Collapse inherits Rectangle {
                     lb := Label {
                         text: entry.title;
                         font-size: root.title-font-size;
-                        color: root.title-color;
+                        color: entry.disabled ? Theme.disabled-color : root.title-color;
                         font-weight: root.title-font-weight;
                     }
 
@@ -66,6 +66,8 @@ export component Collapse inherits Rectangle {
                 }
 
                 ta := TouchArea {
+                    enabled: !entry.disabled;
+
                     clicked => {
                         entry.is-open = !entry.is-open;
 
@@ -92,7 +94,7 @@ export component Collapse inherits Rectangle {
                 desc-lb := Label {
                     text: entry.description;
                     font-size: root.description-font-size;
-                    color: root.description-color;
+                    color: entry.disabled ? Theme.disabled-color : root.description-color;
                     wrap: word-wrap;
                 }
             }
