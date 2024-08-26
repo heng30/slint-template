@@ -64,10 +64,10 @@ export component Select inherits Rectangle {
     }
 
     pop := PopupWindow {
-        y: root.popup-position == ComponentPosition.Top ? -pop.height - root.vpadding : root.height + root.vpadding;
+        y: root.popup-position == ComponentPosition.Top ? -pop.height - Theme.padding : root.height + Theme.padding;
 
         width: root.width;
-        height: Math.min(root.popup-max-height, hbox.preferred-height * root.values.length + root.vpadding * 3);
+        height: Math.min(root.popup-max-height, hbox.preferred-height * root.values.length + Theme.padding * 2);
 
         Rectangle {
             background: Theme.base-background;
@@ -77,16 +77,16 @@ export component Select inherits Rectangle {
 
             Flickable {
                 width: pop.width - 2px;
-                height: pop.height - root.vpadding;
+                height: pop.height;
                 viewport-height: pop.height;
 
                 for value[index] in root.values: Rectangle {
-                    y: root.vpadding + pop-hbox.preferred-height * index;
+                    y: Theme.padding + pop-hbox.preferred-height * index;
                     height: pop-hbox.preferred-height;
                     background: pop-ta.has-hover ? Theme.hover-background : Theme.base-background;
 
                     init => {
-                        parent.viewport-height = self.y + self.height + root.vpadding;
+                        parent.viewport-height = self.y + self.height + Theme.padding;
                     }
 
                     pop-hbox := HorizontalLayout {

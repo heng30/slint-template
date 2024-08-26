@@ -2,7 +2,7 @@ import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
 import { Blanket, StatusBar, Divider, AboutSetting, ToolTip, ToolTipSetting } from "../../base/widgets.slint";
 
-import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar,  ComponentPosition, Pagination, SkeletonType, Skeleton, PinCodes, Badge, Banner, CheckBtn, Select, ComponentPosition, Slider} from "../../base/widgets.slint";
+import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar,  ComponentPosition, Pagination, SkeletonType, Skeleton, PinCodes, Badge, Banner, CheckBtn, Select, ComponentPosition, Slider, CollapseEntry, Collapse } from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 export component DesktopPanel inherits Rectangle {
@@ -58,74 +58,81 @@ export component DesktopPanel inherits Rectangle {
 
                 HorizontalLayout {
                     alignment: center;
-                    ProgressBar {
-                        is-moving-text: true;
-                        progress: Util.progress-value(5s);
+
+                    Collapse {
+                        is-accordion: true;
+                        entries: [
+                            {
+                                enabled: false,
+                                title: "This is panel header 1",
+                                description: "Hi, bytedance dance dance. This is the docsite of Semi UI.",
+                            },
+                            {
+                                enabled: true,
+                                title: "This is panel header 2",
+                                description: "Hi, bytedance dance dance. This is the docsite of Semi UI.",
+                            },
+                            {
+                                enabled: true,
+                                title: "This is panel header 3",
+                                description: "Hi, bytedance dance dance. This is the docsite of Semi UI.",
+                            },
+                        ];
                     }
                 }
+            }
 
-                HorizontalLayout {
-                    alignment: center;
-                    ProgressBar {
-                        width: 50px;
-                        height: 150px;
-                        orientation: Orientation.vertical;
-                        progress: Util.progress-value(5s);
+            HorizontalLayout {
+                alignment: center;
+
+                ProcessStep {
+                    steps: ["First Step", "Second Step", "Third Step", "Finished"];
+                    current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
+                }
+            }
+
+            HorizontalLayout {
+                alignment: LayoutAlignment.center;
+
+                Pagination {
+                    private property <int> current-page: Util.progress-value-int(6, 6s);
+                    changed current-page => {
+                        self.set-current-page(self.current-page);
+                    }
+
+                    total-pages: 6;
+                    jump(page) => {
+                        debug(page);
                     }
                 }
+            }
 
-                HorizontalLayout {
-                    alignment: center;
+            HorizontalLayout {
+                alignment: LayoutAlignment.center;
 
-                    ProcessStep {
-                        steps: ["First Step", "Second Step", "Third Step", "Finished"];
-                        current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
-                    }
-                }
-
-                HorizontalLayout {
-                    alignment: LayoutAlignment.center;
-
-                    Pagination {
-                        private property <int> current-page: Util.progress-value-int(6, 6s);
-                        changed current-page => {
-                            self.set-current-page(self.current-page);
-                        }
-
-                        total-pages: 6;
-                        jump(page) => {
-                            debug(page);
-                        }
-                    }
-                }
-
-                HorizontalLayout {
-                    alignment: LayoutAlignment.center;
-
-                    Slider {
-                        // enabled: false;
+                Slider {
+                    // enabled: false;
                         value: 30;
-                        minimum: 20;
-                        maximum: 80;
+                    minimum: 20;
+                    maximum: 80;
 
-                        changed(value) => {
-                            debug(value);
-                        }
+                    changed(value) => {
+                        debug(value);
+                    }
 
-                        released(value) => {
-                            debug(value);
-                        }
+                    released(value) => {
+                        debug(value);
                     }
                 }
+            }
 
-                HorizontalLayout {
-                    alignment: LayoutAlignment.center;
+            HorizontalLayout {
+                alignment: LayoutAlignment.center;
 
-                    SettingIconsBar {
-                        background: Theme.secondary-background;
-                        h-padding: Theme.spacing * 2;
-                        h-spacing: Theme.padding * 5;
-                    }
+                SettingIconsBar {
+                    background: Theme.secondary-background;
+                    h-padding: Theme.spacing * 2;
+                    h-spacing: Theme.padding * 5;
                 }
             }
         }
