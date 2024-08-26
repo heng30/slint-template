@@ -1,9 +1,7 @@
 import { Theme, Store, TabIndex, SettingDetailIndex, Logic, Icons } from "../def.slint";
 import { SettingDialog, AboutDialog, SettingIconsBar } from "../setting/desktop.slint";
-import { Blanket, StatusBar, Divider, AboutSetting, ToolTip, ToolTipSetting } from "../../base/widgets.slint";
-
-import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar,  ComponentPosition, Pagination, SkeletonType, Skeleton, PinCodes, Badge, Banner, CheckBtn, Select, ComponentPosition, Slider, CollapseEntry, Collapse, Search } from "../../base/widgets.slint";
-import { Util } from "../../util.slint";
+import { Blanket, StatusBar, Divider, AboutSetting, ToolTip, ToolTipSetting, PopupAction, PopupActionSetting } from "../../base/widgets.slint";
+import { Home } from "home.slint";
 
 export component DesktopPanel inherits Rectangle {
     private property <bool> is-show-setting-dialog: !(Store.current-setting-detail-index == SettingDetailIndex.None || Store.current-setting-detail-index == SettingDetailIndex.About);
@@ -38,99 +36,7 @@ export component DesktopPanel inherits Rectangle {
             }
         }
 
-        VerticalLayout {
-            padding: Theme.padding * 2;
-            spacing: Theme.spacing * 5;
-            vertical-stretch: 1;
-            alignment: LayoutAlignment.center;
-
-            VerticalLayout {
-                alignment: center;
-                spacing: Theme.spacing * 10;
-
-                HorizontalLayout {
-                    alignment: center;
-                    CircleProgress {
-                        ring-width: 15px;
-                        progress: Util.progress-value(5s);
-                    }
-                }
-
-                HorizontalLayout {
-                    alignment: center;
-                    height: 500px;
-
-                    Search {
-                        width: 500px;
-                        values: ["Hello", "World", "Nice", "Good"];
-                        // popup-position: ComponentPosition.Top;
-                        enabled-popup: true;
-
-                        search(text) => {
-                            debug(text);
-                        }
-
-                        edited(text) => {
-                            debug(text);
-                        }
-                    }
-                }
-            }
-
-            HorizontalLayout {
-                alignment: center;
-
-                ProcessStep {
-                    steps: ["First Step", "Second Step", "Third Step", "Finished"];
-                    current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
-                }
-            }
-
-            HorizontalLayout {
-                alignment: LayoutAlignment.center;
-
-                Pagination {
-                    private property <int> current-page: Util.progress-value-int(6, 6s);
-                    changed current-page => {
-                        self.set-current-page(self.current-page);
-                    }
-
-                    total-pages: 6;
-                    jump(page) => {
-                        debug(page);
-                    }
-                }
-            }
-
-            HorizontalLayout {
-                alignment: LayoutAlignment.center;
-
-                Slider {
-                    // enabled: false;
-                        value: 30;
-                    minimum: 20;
-                    maximum: 80;
-
-                    changed(value) => {
-                        debug(value);
-                    }
-
-                    released(value) => {
-                        debug(value);
-                    }
-                }
-            }
-
-            HorizontalLayout {
-                alignment: LayoutAlignment.center;
-
-                SettingIconsBar {
-                    background: Theme.secondary-background;
-                    h-padding: Theme.spacing * 2;
-                    h-spacing: Theme.padding * 5;
-                }
-            }
-        }
+        Home { }
     }
 
     if is-show-setting-dialog || is-show-about-dialog: Blanket {
@@ -146,6 +52,11 @@ export component DesktopPanel inherits Rectangle {
 
     if is-show-about-dialog: AboutDialog {
         width: Math.min(1300px, root.width * 0.8);
+    }
+
+    if PopupActionSetting.is-show: PopupAction {
+        window-width: root.width;
+        window-height: root.height;
     }
 
     if ToolTipSetting.is-show: ToolTip {

@@ -3,6 +3,7 @@ use crate::slint_generatedAppWindow::AppWindow;
 mod about;
 mod clipboard;
 mod confirm_dialog;
+mod popup_action;
 mod setting;
 mod toast;
 mod tr;
@@ -13,6 +14,7 @@ pub fn init(ui: &AppWindow) {
     clipboard::init(ui);
     toast::init(ui);
     confirm_dialog::init(ui);
+    popup_action::init(ui);
     about::init(ui);
     setting::init(ui);
 }

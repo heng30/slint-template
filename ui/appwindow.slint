@@ -4,7 +4,7 @@ import { Theme, Icons } from "./theme.slint";
 import { Store, SettingDetailIndex, DeviceType, SettingProxy } from "./store.slint";
 import { Panel } from "./panel/panel.slint";
 import { SettingIconsBar } from "./panel/setting/desktop.slint";
-import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialogDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus, AppPosType } from "./base/widgets.slint";
+import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialogDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus, AppPosType, PopupActionSetting } from "./base/widgets.slint";
 
 export component AppWindow inherits Window {
     preferred-width: Theme.default-width;
@@ -68,5 +68,5 @@ export component AppWindow inherits Window {
 }
 
 export {
-    AppPosType, Util, Logic, Store, Theme, Icons, IconsDialogSetting, LoadingStatus, SettingDetailIndex, AboutSetting, ToastSetting, ToastStatus, DeviceType , SettingProxy
+    AppPosType, Util, Logic, Store, Theme, Icons, IconsDialogSetting, LoadingStatus, SettingDetailIndex, AboutSetting, ToastSetting, ToastStatus, DeviceType , SettingProxy, PopupActionSetting
     }

@@ -1,0 +1,86 @@
+import { Theme, Icons } from "../../theme.slint";
+import { Util } from "../../util.slint";
+import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar,  ComponentPosition, Pagination, SkeletonType, Skeleton, PinCodes, Badge, Banner, CheckBtn, Select, ComponentPosition, Slider, CollapseEntry, Collapse, Search, PopupActionEntry, PopupActionSetting, IconBtn, Label } from "../../base/widgets.slint";
+import { SettingIconsBar }  from "../setting/desktop.slint";
+
+export component Home inherits Rectangle {
+    VerticalLayout {
+        padding: Theme.padding * 2;
+        spacing: Theme.spacing * 5;
+        vertical-stretch: 1;
+        alignment: LayoutAlignment.center;
+
+        VerticalLayout {
+            alignment: center;
+            spacing: Theme.spacing * 10;
+
+            HorizontalLayout {
+                alignment: center;
+                CircleProgress {
+                    ring-width: 15px;
+                    progress: Util.progress-value(5s);
+                }
+            }
+
+            HorizontalLayout {
+                alignment: center;
+                height: 500px;
+
+                Search {
+                    width: 500px;
+                    values: ["Hello", "World", "Nice", "Good"];
+                    enabled-popup: true;
+
+                    search(text) => {
+                        debug(text);
+                    }
+
+                    edited(text) => {
+                        debug(text);
+                    }
+                }
+            }
+        }
+
+        HorizontalLayout {
+            alignment: center;
+
+            ProcessStep {
+                steps: ["First Step", "Second Step", "Third Step", "Finished"];
+                current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
+            }
+        }
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+
+            Rectangle {
+                background: red;
+                width: 300px;
+                height: 300px;
+
+                ta := TouchArea {
+                    pointer-event(event) => {
+                        if (event.kind == PointerEventKind.down && event.button == PointerEventButton.right) {
+                            PopupActionSetting.show(parent.absolute-position.x + self.mouse-x, parent.absolute-position.y + self.mouse-y, [
+                                { icon: Icons.delete, text: "Delete", action: "delete-item" },
+                                { icon: Icons.add-fill, text: "Add", action: "add-item" },
+                                { icon: Icons.recover-from-trash, text: "Remove trash", action: "remove-all-cache" }
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+
+            SettingIconsBar {
+                background: Theme.secondary-background;
+                h-padding: Theme.spacing * 2;
+                h-spacing: Theme.padding * 5;
+            }
+        }
+    }
+}

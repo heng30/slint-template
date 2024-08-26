@@ -5,6 +5,19 @@ import { Util } from "../util.slint";
 import { LineInput } from "line-input.slint";
 import { Label } from "label.slint";
 
+// Example:
+// Search {
+//     width: 500px;
+//     values: ["Hello", "World", "Nice", "Good"];
+//     enabled-popup: true;
+//     search(text) => {
+//         debug(text);
+//     }
+//     edited(text) => {
+//         debug(text);
+//     }
+// }
+
 export component Search inherits Rectangle {
     in-out property text <=> input.text;
 
@@ -29,7 +42,6 @@ export component Search inherits Rectangle {
             root.is-show-popup = false;
             return;
         }
-
         matched-values = Util.search-str-items-by(root.values, text);
         if (matched-values.length > 0) {
             root.is-show-popup = true;
@@ -44,29 +56,36 @@ export component Search inherits Rectangle {
     border-radius: Theme.border-radius;
     border-color: Theme.focus-color;
 
-    fs := FocusScope {}
-
-    input := LineInput {
-        is-show-icon: true;
-        icon: Icons.search;
-        placeholder-text: Logic.tr("Search");
-        border-radius: root.border-radius;
-        font-size: root.font-size;
-
-        clicked => {
-            root.search(self.text);
+    fs := FocusScope {
+        key-pressed(event) => {
+            if (event.text == Key.Escape) {
+                fs.focus();
+                root.is-show-popup = false;
+            }
+            accept
         }
 
-        accepted => {
-            root.search(self.text);
-        }
+        input := LineInput {
+            is-show-icon: true;
+            icon: Icons.search;
+            placeholder-text: Logic.tr("Search");
+            border-radius: root.border-radius;
+            font-size: root.font-size;
 
-        edited => {
-            if (root.enabled-popup) {
-                root.inner-search(self.text);
+            clicked => {
+                root.search(self.text);
             }
 
-            root.edited(self.text);
+            accepted => {
+                root.search(self.text);
+            }
+
+            edited => {
+                if (root.enabled-popup) {
+                    root.inner-search(self.text);
+                }
+                root.edited(self.text);
+            }
         }
     }
 

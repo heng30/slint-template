@@ -3,6 +3,19 @@ import { Logic } from "../logic.slint";
 import { ProgressBar } from "progress-bar.slint";
 import { Label } from "label.slint";
 
+// Example:
+// Slider {
+//     value: 30;
+//     minimum: 20;
+//     maximum: 80;
+//     changed(value) => {
+//         debug(value);
+//     }
+//     released(value) => {
+//         debug(value);
+//     }
+// }
+
 export component Slider inherits Rectangle {
     in-out property <float> value: 0;
     in-out property <float> minimum: 0;
