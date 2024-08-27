@@ -26,9 +26,7 @@ component LeftPanel inherits Rectangle {
             SettingEntryV2 {
                 text: Logic.tr("Preference");
                 icon: Icons.ui;
-                background: Store.current-setting-detail-index == SettingDetailIndex.Preference ? Theme.base-background : root.background;
-                is-show-indicator: Store.current-setting-detail-index == SettingDetailIndex.Preference;
-                icon-colorize: Store.current-setting-detail-index == SettingDetailIndex.Preference ? Theme.secondary-brand-color : Theme.regular-text-color;
+                background: Store.current-setting-detail-index == SettingDetailIndex.Preference ? Theme.checked-background: root.background;
 
                 clicked => {
                     update-index(SettingDetailIndex.Preference);
@@ -38,9 +36,7 @@ component LeftPanel inherits Rectangle {
             SettingEntryV2 {
                 text: Logic.tr("Proxy");
                 icon: Icons.proxy-light;
-                background: Store.current-setting-detail-index == SettingDetailIndex.Proxy ? Theme.base-background : root.background;
-                is-show-indicator: Store.current-setting-detail-index == SettingDetailIndex.Proxy;
-                icon-colorize: Store.current-setting-detail-index == SettingDetailIndex.Proxy ? Theme.secondary-brand-color : Theme.regular-text-color;
+                background: Store.current-setting-detail-index == SettingDetailIndex.Proxy ? Theme.checked-background: root.background;
 
                 clicked => {
                     update-index(SettingDetailIndex.Proxy);
@@ -50,9 +46,7 @@ component LeftPanel inherits Rectangle {
             SettingEntryV2 {
                 text: Logic.tr("Help");
                 icon: Icons.help-light;
-                background: Store.current-setting-detail-index == SettingDetailIndex.Help ? Theme.base-background : root.background;
-                is-show-indicator: Store.current-setting-detail-index == SettingDetailIndex.Help;
-                icon-colorize: Store.current-setting-detail-index == SettingDetailIndex.Help ? Theme.secondary-brand-color : Theme.regular-text-color;
+                background: Store.current-setting-detail-index == SettingDetailIndex.Help ? Theme.checked-background : root.background;
 
                 clicked => {
                     update-index(SettingDetailIndex.Help);
@@ -62,9 +56,7 @@ component LeftPanel inherits Rectangle {
             SettingEntryV2 {
                 text: Logic.tr("Donate");
                 icon: Icons.donate;
-                background: Store.current-setting-detail-index == SettingDetailIndex.Donate ? Theme.base-background : root.background;
-                is-show-indicator: Store.current-setting-detail-index == SettingDetailIndex.Donate;
-                icon-colorize: Store.current-setting-detail-index == SettingDetailIndex.Donate ? Theme.secondary-brand-color : Theme.regular-text-color;
+                background: Store.current-setting-detail-index == SettingDetailIndex.Donate ? Theme.checked-background : root.background;
 
                 clicked => {
                     update-index(SettingDetailIndex.Donate);
@@ -75,6 +67,8 @@ component LeftPanel inherits Rectangle {
 }
 
 component RightPanel inherits Rectangle {
+    background: Theme.base-background;
+
     public function preference-get() -> SettingPreference {
         return preference.get();
     }

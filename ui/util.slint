@@ -1,5 +1,5 @@
 import { Theme, Icons } from "theme.slint";
-import { ToastStatus, AppPosType } from "./base/def.slint";
+import { ToastStatus, AppPosType, TreeEntry } from "./base/def.slint";
 
 export global Util {
     callback hide-window();
@@ -37,6 +37,11 @@ export global Util {
     callback remove-str-items-after([string], int);
 
     callback append-str-to-items([string], string);
+
+    pure callback find-tree-children-nodes([TreeEntry], string) -> [TreeEntry];
+    find-tree-children-nodes(entries, target-node) => {
+        return entries;
+    }
 
     callback search-str-items-by([string], string) -> [string];
     search-str-items-by(items, text) => {
@@ -116,5 +121,9 @@ export global Util {
 
     pure public function progress-sin(angle: angle, interval: duration) -> float {
         return progress-value(interval) * Math.sin(angle);
+    }
+
+    pure public function rand-animation-tick(min-v: int, max-v: int) -> int {
+        return Math.mod(animation-tick() / 1ms, max-v - min-v + 1) + min-v;
     }
 }

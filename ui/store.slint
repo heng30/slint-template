@@ -40,6 +40,11 @@ export struct SettingProxy {
 
 //////////////////////////////// Logic Struct Start ////////////////////////////////
 
+export enum ComponentIndex {
+    Tree,
+    Step,
+}
+
 //////////////////////////////// Logic Struct End  ////////////////////////////////
 
 export global Store {
@@ -51,6 +56,7 @@ export global Store {
 
     in-out property <SettingDetailIndex> previous-setting-detail-index: SettingDetailIndex.Preference;
     in-out property <SettingDetailIndex> current-setting-detail-index: SettingDetailIndex.None;
+    // in-out property <SettingDetailIndex> current-setting-detail-index: SettingDetailIndex.Preference;
 
     in-out property <bool> is-cn: setting-preference.language == "cn";
     in-out property <SettingPreference> setting-preference: {
@@ -72,7 +78,9 @@ export global Store {
         "Data directory: ~/.local/share/slint-template",
     ];
 
-//////////////////////////////// Logic Start ////////////////////////////////
+    //////////////////////////////// Logic Start ////////////////////////////////
 
-//////////////////////////////// Logic End  ////////////////////////////////
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.Step;
+
+    //////////////////////////////// Logic End  ////////////////////////////////
 }

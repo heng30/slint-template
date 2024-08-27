@@ -1,73 +1,60 @@
 import { Theme, Icons } from "../../theme.slint";
 import { Util } from "../../util.slint";
-import { ProcessStep, CircleProgress, RecordIndicator, ProgressBar,  ComponentPosition, Pagination, SkeletonType, Skeleton, PinCodes, Badge, Banner, CheckBtn, Select, ComponentPosition, Slider, CollapseEntry, Collapse, Search, PopupActionEntry, PopupActionSetting, IconBtn, Label } from "../../base/widgets.slint";
+import { Logic } from "../../logic.slint";
+import { Store, ComponentIndex } from "../../store.slint";
 import { SettingIconsBar }  from "../setting/desktop.slint";
 
-export component Home inherits Rectangle {
+import { SettingEntryV2, CenterLayout, IconsDialogSetting } from "../../base/widgets.slint";
+import { TreeExample } from "examples/tree.slint";
+import { StepExample } from "examples/step.slint";
+
+
+component LeftPanel inherits Rectangle {
+    background: Theme.secondary-background;
+    border-radius: Theme.border-radius * 2;
+    clip: true;
+
+    function update-index(index: ComponentIndex) {
+        Store.current-component-index = index;
+    }
+
     VerticalLayout {
-        padding: Theme.padding * 2;
-        spacing: Theme.spacing * 5;
-        vertical-stretch: 1;
-        alignment: LayoutAlignment.center;
+        alignment: LayoutAlignment.space-between;
+        Flickable {
+            width: root.width;
+            viewport-height: vbox.preferred-height;
 
-        VerticalLayout {
-            alignment: center;
-            spacing: Theme.spacing * 10;
+            vbox := VerticalLayout {
+                alignment: LayoutAlignment.start;
+                private property <int> current-icon-index: 0;
 
-            HorizontalLayout {
-                alignment: center;
-                CircleProgress {
-                    ring-width: 15px;
-                    progress: Util.progress-value(5s);
-                }
-            }
+                SettingEntryV2 {
+                    text: Logic.tr("Tree");
+                    background: Store.current-component-index == ComponentIndex.Tree ? Theme.checked-background : root.background;
+                    font-size: Theme.title3-font-size;
 
-            HorizontalLayout {
-                alignment: center;
-                height: 500px;
-
-                Search {
-                    width: 500px;
-                    values: ["Hello", "World", "Nice", "Good"];
-                    enabled-popup: true;
-
-                    search(text) => {
-                        debug(text);
+                    init => {
+                        self.icon = IconsDialogSetting.icons[current-icon-index];
+                        current-icon-index = Math.mod(current-icon-index + 1, IconsDialogSetting.icons.length);
                     }
 
-                    edited(text) => {
-                        debug(text);
+                    clicked => {
+                        update-index(ComponentIndex.Tree);
                     }
                 }
-            }
-        }
 
-        HorizontalLayout {
-            alignment: center;
+                SettingEntryV2 {
+                    text: Logic.tr("Step");
+                    background: Store.current-component-index == ComponentIndex.Step ? Theme.checked-background : root.background;
+                    font-size: Theme.title3-font-size;
 
-            ProcessStep {
-                steps: ["First Step", "Second Step", "Third Step", "Finished"];
-                current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
-            }
-        }
+                    init => {
+                        self.icon = IconsDialogSetting.icons[current-icon-index];
+                        current-icon-index = Math.mod(current-icon-index + 1, IconsDialogSetting.icons.length);
+                    }
 
-        HorizontalLayout {
-            alignment: LayoutAlignment.center;
-
-            Rectangle {
-                background: red;
-                width: 300px;
-                height: 300px;
-
-                ta := TouchArea {
-                    pointer-event(event) => {
-                        if (event.kind == PointerEventKind.down && event.button == PointerEventButton.right) {
-                            PopupActionSetting.show(parent.absolute-position.x + self.mouse-x, parent.absolute-position.y + self.mouse-y, [
-                                { icon: Icons.delete, text: "Delete", action: "delete-item" },
-                                { icon: Icons.add-fill, text: "Add", action: "add-item" },
-                                { icon: Icons.recover-from-trash, text: "Remove trash", action: "remove-all-cache" }
-                            ]);
-                        }
+                    clicked => {
+                        update-index(ComponentIndex.Step);
                     }
                 }
             }
@@ -75,12 +62,51 @@ export component Home inherits Rectangle {
 
         HorizontalLayout {
             alignment: LayoutAlignment.center;
+            padding: Theme.padding * 4;
 
             SettingIconsBar {
-                background: Theme.secondary-background;
+                icon-size: Theme.icon-size * 1.6;
                 h-padding: Theme.spacing * 2;
                 h-spacing: Theme.padding * 5;
             }
+        }
+    }
+}
+
+component RightPanel inherits Rectangle {
+    CenterLayout {
+        alignment: LayoutAlignment.center;
+
+        if Store.current-component-index == ComponentIndex.Tree: TreeExample { }
+        if Store.current-component-index == ComponentIndex.Step: StepExample { }
+    }
+}
+
+export component Home inherits VerticalLayout {
+    padding: Theme.padding;
+
+    Rectangle {
+        lp := LeftPanel {
+            x: 0;
+            width: Math.max(root.width * 0.2, 500px);
+        }
+
+        mp := Rectangle {
+            x: lp.width;
+            width: Theme.padding;
+
+            TouchArea {
+                mouse-cursor: MouseCursor.col-resize;
+                moved => {
+                    lp.width = Math.min(Math.max(0px, lp.width - (self.pressed-x - self.mouse-x)), root.width - self.width)
+                }
+            }
+        }
+
+        RightPanel {
+
+            x: mp.x + mp.width;
+            width: root.width - self.x;
         }
     }
 }

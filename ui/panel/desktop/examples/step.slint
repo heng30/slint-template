@@ -1,0 +1,29 @@
+import { Util } from "../../def.slint";
+import { Theme } from "../../def.slint";
+import { ProcessStep } from "../../../base/widgets.slint";
+
+export component StepExample inherits Rectangle {
+
+    VerticalLayout {
+        spacing: Theme.spacing * 10;
+        alignment: LayoutAlignment.center;
+
+        VerticalLayout {
+            alignment: LayoutAlignment.start;
+            ProcessStep {
+                steps: ["First Step", "Second Step", "Third Step", "Finished"];
+                current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
+            }
+        }
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+
+            ProcessStep {
+                orientation: Orientation.vertical;
+                steps: ["First Step", "Second Step", "Third Step", "Finished"];
+                current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
+            }
+        }
+    }
+}

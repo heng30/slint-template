@@ -180,7 +180,21 @@ pub fn init(ui: &AppWindow) {
             let items = items
                 .iter()
                 .filter(|item| item.to_lowercase().contains(text.to_lowercase().as_str()))
-                .collect::<Vec<SharedString>>();
+                .collect::<Vec<_>>();
+
+            ModelRc::new(VecModel::from_slice(&items[..]))
+        });
+
+    ui.global::<Util>()
+        .on_find_tree_children_nodes(move |items, target_node| {
+            if target_node.is_empty() {
+                return ModelRc::default();
+            }
+
+            let items = items
+                .iter()
+                .filter(|item| item.parent_node == target_node)
+                .collect::<Vec<_>>();
 
             ModelRc::new(VecModel::from_slice(&items[..]))
         });

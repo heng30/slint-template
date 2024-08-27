@@ -44,9 +44,10 @@ export global Theme {
 
     out property <color> base-color: is-dark ? #000000 : #FFFFFF;
     out property <color> invert-base-color: is-dark ? #FFFFFF : #000000;
-    out property <color> base-background: is-dark ? #1C1C1C : #FCFCFC;
-    out property <color> secondary-background: is-dark ? #222222 : #E5E5E5;
+    out property <color> base-background: is-dark ? #16161A : #FFFFFF;
+    out property <color> secondary-background: is-dark ? #232429 : #F5F5F5;
     out property <color> hover-background: is-dark ? #262626 : #EFEFEF;
+    out property <color> checked-background: is-dark ? #2D3F54 : #EAF5FF;
     out property <color> base-background-drop-shadow: is-dark ? #2D2D2D : #DBDBDB;
     out property <color> secondary-background-drop-shadow: is-dark ? #2C2C2C : #DADADA;
 
@@ -201,10 +202,14 @@ export global Icons {
     out property <image> stackoverflow: @image-url("./images/stackoverflow.svg");
 
     out property <image> arrow-left: @image-url("./images/arrow-left.svg");
-    out property <image> arrow-right: @image-url("./images/arrow-right.svg");
+    out property <image> arrow-left-fill: @image-url("./images/arrow-left-fill.svg");
     out property <image> arrow-left-round: @image-url("./images/arrow-left-round.svg");
+    out property <image> arrow-right: @image-url("./images/arrow-right.svg");
+    out property <image> arrow-right-fill: @image-url("./images/arrow-right-fill.svg");
     out property <image> arrow-right-round: @image-url("./images/arrow-right-round.svg");
     out property <image> arrow-up: @image-url("./images/arrow-up.svg");
+    out property <image> arrow-up-fill: @image-url("./images/arrow-up-fill.svg");
     out property <image> arrow-down: @image-url("./images/arrow-down.svg");
+    out property <image> arrow-down-fill: @image-url("./images/arrow-down-fill.svg");
     out property <image> checked: @image-url("./images/checked.svg");
 }
