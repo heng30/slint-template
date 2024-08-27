@@ -37,7 +37,7 @@ export component AppWindow inherits Window {
         width: Math.min(root.width * 0.9, self.vbox-preferred-width * 2);
     }
 
-    if ToastSetting.text != "": Toast {
+    if ToastSetting.text != "" && ToastSetting.status != ToastStatus.None: Toast {
         x: root.width / 2 - self.width / 2;
         y: 50px;
         inner-max-width: root.width * 80%;

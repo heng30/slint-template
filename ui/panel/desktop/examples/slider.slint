@@ -32,7 +32,7 @@ export component SliderExample inherits Flickable {
                     }
                 }
 
-                detail: Store.is-cn ? "默认最小值为0, 默认最多指为100" : "Default minimum value is 0 and maximum value is 100";
+                detail: Store.is-cn ? "默认最小值为0, 默认最大值为100" : "Default minimum value is 0 and maximum value is 100";
 
                 code: "Slider {\n    width: 500px;\n    height: 20px;\n    value: 30;\n    minimum: 20;\n    maximum: 80;\n    changed(value) => {\n        debug(value);\n    }\n    released(value) => {\n        debug(value);\n    }\n}";
             }

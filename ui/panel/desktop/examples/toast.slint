@@ -27,10 +27,10 @@ export component ToastExample inherits Flickable {
                         bg-color: Theme.success-color;
                         text-color: Colors.white;
                         colorize: Colors.white;
-                        text: Logic.tr("success");
+                        text: Logic.tr("Success");
 
                         clicked() => {
-                            ToastSetting.set("Success Message", ToastStatus.Success);
+                            Util.show-toast("Success Message", ToastStatus.Success);
                         }
                     }
                 }
@@ -58,7 +58,7 @@ export component ToastExample inherits Flickable {
                         text: Logic.tr("Danger");
 
                         clicked() => {
-                            ToastSetting.set("Danger Message", ToastStatus.Danger);
+                            Util.show-toast("Danger Message", ToastStatus.Danger);
                         }
                     }
                 }
@@ -86,7 +86,7 @@ export component ToastExample inherits Flickable {
                         text: Logic.tr("Info");
 
                         clicked() => {
-                            ToastSetting.set("Info Message", ToastStatus.Info);
+                            Util.show-toast("Info Message", ToastStatus.Info);
                         }
                     }
                 }
@@ -114,7 +114,7 @@ export component ToastExample inherits Flickable {
                         text: Logic.tr("Warning");
 
                         clicked() => {
-                            ToastSetting.set("Warning Message", ToastStatus.Warning);
+                            Util.show-toast("Warning Message", ToastStatus.Warning);
                         }
                     }
                 }
