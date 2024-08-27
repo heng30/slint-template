@@ -43,6 +43,102 @@ export enum ComponentIndex {
     Tree,
     Step,
     Progress,
+    Slider,
+    Button,
+    Toast,
+
+////////////
+    TabBtn,
+    TabBtns,
+    Label,
+    Tag,
+    NoMessageImg,
+    NoDataImg,
+    Divider,
+    Link,
+    Dialog,
+    CenterLayout,
+    ConfirmDialog,
+    Blanket,
+    IconsDialog,
+    Head,
+    Brand,
+    LanguageDialog,
+    ListTile,
+    News,
+    SlideCard,
+    Drawer,
+    Mnemonic,
+    Avatar,
+
+    About,
+    AboutSetting,
+    Help,
+    ResetPassword,
+    Banner,
+    AccountBalance,
+
+    StatusBar,
+    CircleProgress,
+    Rate,
+    ProgressBar,
+    RecordIndicator,
+    ToolTip,
+    Pagination,
+    BreadCrumb,
+    Skeleton,
+    PinCodes,
+    Badge,
+    Select,
+    Collapse,
+    Search,
+
+    PopupAction,
+    PopupActionEntry,
+
+    TokenTile,
+    TokenTileEntry,
+    TokenTileWithSwitchEntry,
+    TokenList,
+    TokenListWithSwitch,
+    TokenSender,
+    TokenRecipient,
+
+    AddressBook,
+    AddressBookEntry,
+    AddressBookDetail,
+    AddressBookSetting,
+
+    TransactionFee,
+    TransactionTile,
+    TransactionTileEntry,
+    TransactionTileStatus,
+    WaitTransactionConfirmed,
+
+
+    SignIn,
+    Login,
+    Password,
+
+
+
+
+
+    Setting,
+    SettingEntry,
+    SettingEntryV2,
+    SettingDetail,
+
+    Loading,
+    LandingPage,
+
+
+
+    Input,
+    TextEdit,
+    LineInput,
+
+
 }
 
 //////////////////////////////// Logic Struct End  ////////////////////////////////
@@ -80,7 +176,7 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
 
-    in-out property <ComponentIndex> current-component-index: ComponentIndex.Tree;
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.Button;
     in-out property <[{title: string, component-index: ComponentIndex}]> component-entries: [
         {
             title: is-cn ? "树" : "Tree",
@@ -93,6 +189,18 @@ export global Store {
         {
             title: is-cn ? "进度条" : "Progress",
             component-index: ComponentIndex.Progress,
+        },
+        {
+            title: is-cn ? "滑动条" : "Slider",
+            component-index: ComponentIndex.Slider,
+        },
+        {
+            title: is-cn ? "按钮" : "Button",
+            component-index: ComponentIndex.Button,
+        },
+        {
+            title: is-cn ? "弹出信息" : "Toast",
+            component-index: ComponentIndex.Toast,
         }
     ];
 

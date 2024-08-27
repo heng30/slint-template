@@ -4,7 +4,7 @@ import { Theme, Icons } from "./theme.slint";
 import { Store, SettingDetailIndex, DeviceType, SettingProxy } from "./store.slint";
 import { Panel } from "./panel/panel.slint";
 import { SettingIconsBar } from "./panel/setting/desktop.slint";
-import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialogDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus, AppPosType, PopupActionSetting } from "./base/widgets.slint";
+import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus, AppPosType, PopupActionSetting } from "./base/widgets.slint";
 
 export component AppWindow inherits Window {
     preferred-width: Theme.default-width;
@@ -32,7 +32,7 @@ export component AppWindow inherits Window {
         }
     }
 
-    if ConfirmDialogSetting.show: ConfirmDialogDialog {
+    if ConfirmDialogSetting.show: ConfirmDialog {
         is-prevent-event-forward: true;
         width: Math.min(root.width * 0.9, self.vbox-preferred-width * 2);
     }

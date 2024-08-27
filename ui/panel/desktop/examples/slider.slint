@@ -1,0 +1,59 @@
+import { Util, Theme, Store } from "../../def.slint";
+import { Slider, ExampleComponent } from "../../../base/widgets.slint";
+
+export component SliderExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Slider {
+                    width: 500px;
+                    height: 20px;
+                    value: 30;
+                    minimum: 20;
+                    maximum: 80;
+                    changed(value) => {
+                        debug(value);
+                    }
+                    released(value) => {
+                        debug(value);
+                    }
+                }
+
+                detail: Store.is-cn ? "默认最小值为0, 默认最多指为100" : "Default minimum value is 0 and maximum value is 100";
+
+                code: "Slider {\n    width: 500px;\n    height: 20px;\n    value: 30;\n    minimum: 20;\n    maximum: 80;\n    changed(value) => {\n        debug(value);\n    }\n    released(value) => {\n        debug(value);\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Slider {
+                    orientation: Orientation.vertical;
+                    width: 20px;
+                    height: 300px;
+                    value: 50;
+                }
+
+                code: "Slider {\n    orientation: Orientation.vertical;\n    width: 20px;\n    height: 300px;\n    value: 50;\n}";
+            }
+        }
+    }
+}

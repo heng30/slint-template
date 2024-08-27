@@ -1,0 +1,271 @@
+import { Util, Theme, Store, Icons, Logic } from "../../def.slint";
+import { IconBtn, ConfirmBtn, CancelBtn, TextBtn, TextBtnWithoutIcon, ExampleComponent, ElevatedBtn, RadioBtn, CheckBtn, SwitchBtn } from "../../../base/widgets.slint";
+
+export component ButtonExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    spacing: Theme.spacing * 20;
+
+                    SwitchBtn {
+                        toggled => {
+                            debug(self.checked);
+                        }
+                    }
+
+                    SwitchBtn {
+                        enabled: false;
+                    }
+                }
+
+                code: "HorizontalLayout {\n    spacing: Theme.spacing * 20;\n\n    SwitchBtn {\n        toggled => {\n            debug(self.checked);\n        }\n    }\n\n    SwitchBtn {\n        enabled: false;\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    spacing: Theme.spacing * 20;
+
+                    CheckBtn {
+                        text: Logic.tr(self.checked ? "Checked" : "Unchecked");
+
+                        toggled => {
+                            debug(self.checked);
+                        }
+                    }
+
+                    CheckBtn {
+                        text: Logic.tr("Disable");
+                        enabled: false;
+                    }
+                }
+
+                code: "HorizontalLayout {\n    spacing: Theme.spacing * 20;\n\n    CheckBtn {\n        text: Logic.tr(self.checked ? \"Checked\" : \"Unchecked\");\n\n        toggled => {\n            debug(self.checked);\n        }\n    }\n\n    CheckBtn {\n        text: Logic.tr(\"Disable\");\n        enabled: false;\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    spacing: Theme.spacing * 20;
+
+                    RadioBtn {
+                        text: Logic.tr("Unchecked");
+
+                        check => {
+                            self.checked = !self.checked;
+                            debug(self.checked);
+                        }
+                    }
+
+                    RadioBtn {
+                        text: Logic.tr("Checked");
+                        checked: true;
+
+                        check => {
+                            debug(self.checked);
+                        }
+                    }
+
+                    RadioBtn {
+                        text: Logic.tr("Disable");
+                        enabled: false;
+                    }
+                }
+
+                code: "HorizontalLayout {\n    spacing: Theme.spacing * 20;\n\n    RadioBtn {\n        text: Logic.tr(\"Unchecked\");\n\n        check => {\n            self.checked = !self.checked;\n            debug(self.checked);\n        }\n    }\n\n    RadioBtn {\n        text: Logic.tr(\"Checked\");\n        checked: true;\n\n        check => {\n            debug(self.checked);\n        }\n    }\n\n    RadioBtn {\n        text: Logic.tr(\"Disable\");\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                ElevatedBtn {
+                    icon: Icons.delete;
+
+                    clicked() => {
+                        debug("clicked");
+                    }
+                }
+
+                code: "ElevatedBtn {\n    icon: Icons.delete;\n\n    clicked() => {\n        debug(\"clicked\");\n    }\n} ";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                IconBtn {
+                    height: 50px;
+                    width: 300px;
+                    icon: Icons.delete;
+                    bg-color: Theme.danger-color;
+                    text-color: Colors.white;
+                    colorize: Colors.white;
+                    text: Logic.tr("Delete");
+
+                    clicked() => {
+                        debug("clicked");
+                    }
+                }
+
+                code: "IconBtn {\n    height: 50px;\n    width: 300px;\n    icon: Icons.delete;\n    bg-color: Theme.danger-color;\n    text-color: Colors.white;\n    colorize: Colors.white;\n    text: Logic.tr(\"Delete\");\n\n    clicked() => {\n        debug(\"clicked\");\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    IconBtn {
+                        use-auto-size: true;
+                        icon: Icons.delete;
+                        bg-color: Theme.danger-color;
+                        text-color: Colors.white;
+                        colorize: Colors.white;
+                        text: Logic.tr("Delete");
+                        auto-size-vpadding: Theme.padding * 2;
+                        auto-size-hpadding: Theme.padding * 10;
+
+                        clicked() => {
+                            debug("clicked");
+                        }
+                    }
+                }
+
+                code: "IconBtn {\n    use-auto-size: true;\n    icon: Icons.delete;\n    bg-color: Theme.danger-color;\n    text-color: Colors.white;\n    colorize: Colors.white;\n    text: Logic.tr(\"Delete\");\n    auto-size-vpadding: Theme.padding * 2;\n    auto-size-hpadding: Theme.padding * 10;\n\n    clicked() => {\n        debug(\"clicked\");\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    ConfirmBtn {
+                        icon: Icons.success-fill;
+                        text: Logic.tr("Confirm");
+                        clicked() => {
+                            debug("clicked");
+                        }
+                    }
+                }
+
+                code: "HorizontalLayout {\n    alignment: LayoutAlignment.start;\n\n    ConfirmBtn {\n        icon: Icons.success;\n        text: Logic.tr(\"Confirm\");\n        clicked() => {\n            debug(\"clicked\");\n        }\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    CancelBtn {
+                        icon: Icons.cancel-fill;
+                        text: Logic.tr("Cancel");
+                        clicked() => {
+                            debug("clicked");
+                        }
+                    }
+                }
+
+                code: "HorizontalLayout {\n    alignment: LayoutAlignment.start;\n\n    CancelBtn {\n        icon: Icons.close;\n        text: Logic.tr(\"Cancel\");\n        clicked() => {\n            debug(\"clicked\");\n        }\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    TextBtn {
+                        icon: Icons.cancel;
+                        text: Logic.tr("Cancel");
+                        clicked() => {
+                            debug("clicked");
+                        }
+                    }
+                }
+
+                code: "HorizontalLayout {\n    alignment: LayoutAlignment.start;\n\n    TextBtn {\n        icon: Icons.close;\n        text: Logic.tr(\"Cancel\");\n        clicked() => {\n            debug(\"clicked\");\n        }\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    TextBtnWithoutIcon {
+                        text: Logic.tr("Cancel");
+                        text-color: Theme.danger-color;
+                        clicked() => {
+                            debug("clicked");
+                        }
+                    }
+                }
+
+                code: "HorizontalLayout {\n    alignment: LayoutAlignment.start;\n\n    TextBtnWithoutIcon {\n        icon: Icons.close;\n        text: Logic.tr(\"Cancel\");\n        clicked() => {\n            debug(\"clicked\");\n        }\n    }\n}";
+            }
+        }
+    }
+}

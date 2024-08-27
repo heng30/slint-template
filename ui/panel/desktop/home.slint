@@ -8,7 +8,9 @@ import { SettingEntryV2, CenterLayout, IconsDialogSetting } from "../../base/wid
 import { TreeExample } from "examples/tree.slint";
 import { StepExample } from "examples/step.slint";
 import { ProgressExample } from "examples/progress.slint";
-
+import { SliderExample } from "examples/slider.slint";
+import { ButtonExample } from "examples/button.slint";
+import { ToastExample } from "examples/toast.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
@@ -60,13 +62,12 @@ component LeftPanel inherits Rectangle {
 }
 
 component RightPanel inherits Rectangle {
-    CenterLayout {
-        alignment: LayoutAlignment.center;
-
-        if Store.current-component-index == ComponentIndex.Tree: TreeExample { }
-        if Store.current-component-index == ComponentIndex.Step: StepExample { }
-        if Store.current-component-index == ComponentIndex.Progress: ProgressExample { }
-    }
+    if Store.current-component-index == ComponentIndex.Tree: TreeExample { }
+    if Store.current-component-index == ComponentIndex.Step: StepExample { }
+    if Store.current-component-index == ComponentIndex.Progress: ProgressExample { }
+    if Store.current-component-index == ComponentIndex.Slider: SliderExample { }
+    if Store.current-component-index == ComponentIndex.Button: ButtonExample { }
+    if Store.current-component-index == ComponentIndex.Toast: ToastExample { }
 }
 
 export component Home inherits VerticalLayout {

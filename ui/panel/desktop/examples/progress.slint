@@ -7,14 +7,16 @@ export component ProgressExample inherits Flickable {
 
     vbox := VerticalLayout {
         spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
         alignment: LayoutAlignment.center;
-        preferred-width: 1000px;
 
         HorizontalLayout {
+            width: root.width;
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: vbox.preferred-width;
+                width: Math.max(1000px, root.width * 0.8);
 
                 CircleProgress {
                     ring-width: 20px;
@@ -22,15 +24,16 @@ export component ProgressExample inherits Flickable {
                     progress: Util.progress-value(3s);
                 }
 
-                code: "CircleProgress {\n                    ring-width: 20px;\n                    radius: 100px;\n                    progress: Util.progress-value(3s);\n}";
+                code: "CircleProgress {\n    ring-width: 20px;\n    radius: 100px;\n    progress: Util.progress-value(3s);\n}";
             }
         }
 
         HorizontalLayout {
+            width: root.width;
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: vbox.preferred-width;
+                width: Math.max(1000px, root.width * 0.8);
 
                 ProgressBar {
                     width: 300px;
@@ -39,15 +42,16 @@ export component ProgressExample inherits Flickable {
                     is-moving-text: true;
                 }
 
-                code: "ProgressBar {\n                    width: 300px;\n                    height: 50px;\n                    progress: Util.progress-value(3s);\n                    is-moving-text: true;\n}";
+                code: "ProgressBar {\n    width: 300px;\n    height: 50px;\n    progress: Util.progress-value(3s);\n    is-moving-text: true;\n}";
             }
         }
 
         HorizontalLayout {
+            width: root.width;
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: vbox.preferred-width;
+                width: Math.max(1000px, root.width * 0.8);
 
                 ProgressBar {
                     orientation: Orientation.vertical;
@@ -56,7 +60,7 @@ export component ProgressExample inherits Flickable {
                     progress: Util.progress-value(3s);
                 }
 
-                code: "ProgressBar {\n                    orientation: Orientation.vertical;\n                    width: 50px;\n                    height: 200px;\n                    progress: Util.progress-value(3s);\n}";
+                code: "ProgressBar {\n    orientation: Orientation.vertical;\n    width: 50px;\n    height: 200px;\n    progress: Util.progress-value(3s);\n}";
             }
         }
     }

@@ -1,0 +1,126 @@
+import { Util, Theme, Store, Icons, Logic } from "../../def.slint";
+import { IconBtn, ToastSetting, ToastStatus, ExampleComponent } from "../../../base/widgets.slint";
+
+export component ToastExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    IconBtn {
+                        use-auto-size: true;
+                        icon: Icons.success-fill;
+                        bg-color: Theme.success-color;
+                        text-color: Colors.white;
+                        colorize: Colors.white;
+                        text: Logic.tr("success");
+
+                        clicked() => {
+                            ToastSetting.set("Success Message", ToastStatus.Success);
+                        }
+                    }
+                }
+
+                code: "IconBtn {\n    use-auto-size: true;\n    icon: Icons.success-fill;\n    bg-color: Theme.success-color;\n    text-color: Colors.white;\n    colorize: Colors.white;\n    text: Logic.tr(\"success\");\n\n    clicked() => {\n        ToastSetting.set(\"Success Message\", ToastStatus.Success);\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    IconBtn {
+                        use-auto-size: true;
+                        icon: Icons.delete;
+                        bg-color: Theme.danger-color;
+                        text-color: Colors.white;
+                        colorize: Colors.white;
+                        text: Logic.tr("Danger");
+
+                        clicked() => {
+                            ToastSetting.set("Danger Message", ToastStatus.Danger);
+                        }
+                    }
+                }
+
+                code: "IconBtn {\n    use-auto-size: true;\n    icon: Icons.delete;\n    bg-color: Theme.danger-color;\n    text-color: Colors.white;\n    colorize: Colors.white;\n    text: Logic.tr(\"Danger\");\n\n    clicked() => {\n        ToastSetting.set(\"Danger Message\", ToastStatus.Danger);\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    IconBtn {
+                        use-auto-size: true;
+                        icon: Icons.account;
+                        bg-color: Theme.info-color;
+                        text-color: Colors.white;
+                        colorize: Colors.white;
+                        text: Logic.tr("Info");
+
+                        clicked() => {
+                            ToastSetting.set("Info Message", ToastStatus.Info);
+                        }
+                    }
+                }
+
+                code: "IconBtn {\n    use-auto-size: true;\n    icon: Icons.account;\n    bg-color: Theme.danger-color;\n    text-color: Colors.white;\n    colorize: Colors.white;\n    text: Logic.tr(\"Info\");\n\n    clicked() => {\n        ToastSetting.set(\"Info Message\", ToastStatus.Info);\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    IconBtn {
+                        use-auto-size: true;
+                        icon: Icons.account;
+                        bg-color: Theme.warning-color;
+                        text-color: Colors.white;
+                        colorize: Colors.white;
+                        text: Logic.tr("Warning");
+
+                        clicked() => {
+                            ToastSetting.set("Warning Message", ToastStatus.Warning);
+                        }
+                    }
+                }
+
+                code: "IconBtn {\n    use-auto-size: true;\n    icon: Icons.account;\n    bg-color: Theme.danger-color;\n    text-color: Colors.white;\n    colorize: Colors.white;\n    text: Logic.tr(\"Warning\");\n\n    clicked() => {\n        ToastSetting.set(\"Warning Message\", ToastStatus.Warning);\n    }\n}";
+            }
+        }
+    }
+}
