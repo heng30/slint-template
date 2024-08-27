@@ -1,0 +1,63 @@
+import { Util, Theme } from "../../def.slint";
+import { ProgressBar, CircleProgress, ExampleComponent } from "../../../base/widgets.slint";
+
+export component ProgressExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        alignment: LayoutAlignment.center;
+        preferred-width: 1000px;
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: vbox.preferred-width;
+
+                CircleProgress {
+                    ring-width: 20px;
+                    radius: 100px;
+                    progress: Util.progress-value(3s);
+                }
+
+                code: "CircleProgress {\n                    ring-width: 20px;\n                    radius: 100px;\n                    progress: Util.progress-value(3s);\n}";
+            }
+        }
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: vbox.preferred-width;
+
+                ProgressBar {
+                    width: 300px;
+                    height: 50px;
+                    progress: Util.progress-value(3s);
+                    is-moving-text: true;
+                }
+
+                code: "ProgressBar {\n                    width: 300px;\n                    height: 50px;\n                    progress: Util.progress-value(3s);\n                    is-moving-text: true;\n}";
+            }
+        }
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: vbox.preferred-width;
+
+                ProgressBar {
+                    orientation: Orientation.vertical;
+                    width: 50px;
+                    height: 200px;
+                    progress: Util.progress-value(3s);
+                }
+
+                code: "ProgressBar {\n                    orientation: Orientation.vertical;\n                    width: 50px;\n                    height: 200px;\n                    progress: Util.progress-value(3s);\n}";
+            }
+        }
+    }
+}

@@ -1,28 +1,43 @@
-import { Util } from "../../def.slint";
-import { Theme } from "../../def.slint";
-import { ProcessStep } from "../../../base/widgets.slint";
+import { Theme, Util } from "../../def.slint";
+import { ProcessStep, ExampleComponent } from "../../../base/widgets.slint";
 
-export component StepExample inherits Rectangle {
+export component StepExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
 
-    VerticalLayout {
-        spacing: Theme.spacing * 10;
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
         alignment: LayoutAlignment.center;
+        preferred-width: 1000px;
 
         VerticalLayout {
             alignment: LayoutAlignment.start;
-            ProcessStep {
-                steps: ["First Step", "Second Step", "Third Step", "Finished"];
-                current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
+
+            ExampleComponent {
+                width: vbox.preferred-width;
+
+                ProcessStep {
+                    steps: ["First Step", "Second Step", "Third Step", "Finished"];
+                    current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
+                }
+
+                code: "ProcessStep {\n                    steps: [\"First Step\", \"Second Step\", \"Third Step\", \"Finished\"];\n                    current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);\n}";
             }
         }
 
         HorizontalLayout {
             alignment: LayoutAlignment.center;
 
-            ProcessStep {
-                orientation: Orientation.vertical;
-                steps: ["First Step", "Second Step", "Third Step", "Finished"];
-                current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
+            ExampleComponent {
+                width: vbox.preferred-width;
+
+                ProcessStep {
+                    orientation: Orientation.vertical;
+                    steps: ["First Step", "Second Step", "Third Step", "Finished"];
+                    current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
+                }
+
+                code: "ProcessStep {\n                    orientation: Orientation.vertical;\n                    steps: [\"First Step\", \"Second Step\", \"Third Step\", \"Finished\"];\n                    current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);\n} ";
             }
         }
     }

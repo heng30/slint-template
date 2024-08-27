@@ -293,6 +293,8 @@ pub fn tr(text: &str) -> String {
         ("minimal", "最小化"),
         ("close", "关闭"),
         ("Jump to", "跳转到"),
+        ("Example", "例子"),
+        ("Detail", "说明"),
     ]);
 
     if let Some(txt) = items.get(text) {

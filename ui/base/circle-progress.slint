@@ -3,6 +3,13 @@ import { Util } from "../util.slint";
 import { Logic } from "../logic.slint";
 import { Label } from "label.slint";
 
+// Example:
+// CircleProgress {
+//     ring-width: 20px;
+//     radius: 100px;
+//     progress: Util.progress-value(3s);
+// }
+
 export component CircleProgress inherits Rectangle {
     pure function calc-percent(ring-angle: angle) -> int {
         return Util.bound(0, ring-angle * 100 / 360deg, 100);

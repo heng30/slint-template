@@ -1,51 +1,73 @@
-import { Tree } from "../../../base/widgets.slint";
+import { Theme, Store } from "../../def.slint";
+import { Tree, ExampleComponent } from "../../../base/widgets.slint";
 
-export component TreeExample inherits Rectangle {
-    Tree {
-        level-one-entries: [{
-            is-open: true,
-            current-node: "亚洲",
-        }, {
-            current-node: "北美洲",
-        }];
+export component TreeExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
 
-        level-two-entries: [
-            {
-                is-open: true,
-                parent-node: "亚洲",
-                current-node: "中国",
-            },
-            {
-                parent-node: "北美洲",
-                current-node: "美国",
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        alignment: LayoutAlignment.center;
+        preferred-width: 1000px;
+
+        ExampleComponent {
+            width: vbox.preferred-width;
+
+            Tree {
+                border-width: 1px;
+                border-color: Theme.base-border-color;
+                border-radius: Theme.border-radius;
+
+                level-one-entries: [{
+                    is-open: true,
+                    current-node: "亚洲",
+                }, {
+                    current-node: "北美洲",
+                }];
+
+                level-two-entries: [
+                    {
+                        is-open: true,
+                        parent-node: "亚洲",
+                        current-node: "中国",
+                    },
+                    {
+                        parent-node: "北美洲",
+                        current-node: "美国",
+                    }
+                ];
+
+                level-three-entries: [
+                    {
+                        parent-node: "中国",
+                        current-node: "珠海",
+                        key: "zhuhai",
+                    },
+                    {
+                        parent-node: "中国",
+                        current-node: "广州",
+                        key: "guangzhou",
+                    },
+                    {
+                        parent-node: "美国",
+                        current-node: "纽约",
+                    },
+                    {
+                        parent-node: "美国",
+                        current-node: "加州",
+                    }
+                ];
+
+                clicked(entries, path, key) => {
+                    debug(entries[0], entries[1], entries[3]);
+                    debug(path);
+                    debug(key);
+                }
             }
-        ];
 
-        level-three-entries: [
-            {
-                parent-node: "中国",
-                current-node: "珠海",
-                key: "zhuhai",
-            },
-            {
-                parent-node: "中国",
-                current-node: "广州",
-                key: "guangzhou",
-            },
-            {
-                parent-node: "美国",
-                current-node: "纽约",
-            },
-            {
-                parent-node: "美国",
-                current-node: "加州",
-            }
-        ];
+            detail: Store.is-cn ? "树层次最多支持3层" : "The most level of a tree sould no more than 3";
 
-        clicked(entries, path, key) => {
-            debug(entries[0], entries[1], entries[3]);
-            debug(path);
-            debug(key);
+            code: "Tree {\n                border-width: 1px;\n                border-color: Theme.base-border-color;\n                border-radius: Theme.border-radius;\n\n                level-one-entries: [{\n                    is-open: true,\n                    current-node: \"亚洲\",\n                }, {\n                    current-node: \"北美洲\",\n                }];\n\n                level-two-entries: [\n                    {\n                        is-open: true,\n                        parent-node: \"亚洲\",\n                        current-node: \"中国\",\n                    },\n                    {\n                        parent-node: \"北美洲\",\n                        current-node: \"美国\",\n                    }\n                ];\n\n                level-three-entries: [\n                    {\n                        parent-node: \"中国\",\n                        current-node: \"珠海\",\n                        key: \"zhuhai\",\n                    },\n                    {\n                        parent-node: \"中国\",\n                        current-node: \"广州\",\n                        key: \"guangzhou\",\n                    },\n                    {\n                        parent-node: \"美国\",\n                        current-node: \"纽约\",\n                    },\n                    {\n                        parent-node: \"美国\",\n                        current-node: \"加州\",\n                    }\n                ];\n\n                clicked(entries, path, key) => {\n                    debug(entries[0], entries[1], entries[3]);\n                    debug(path);\n                    debug(key);\n                }\n}";
         }
     }
 }

@@ -39,10 +39,10 @@ export struct SettingProxy {
 }
 
 //////////////////////////////// Logic Struct Start ////////////////////////////////
-
 export enum ComponentIndex {
     Tree,
     Step,
+    Progress,
 }
 
 //////////////////////////////// Logic Struct End  ////////////////////////////////
@@ -80,7 +80,21 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
 
-    in-out property <ComponentIndex> current-component-index: ComponentIndex.Step;
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.Tree;
+    in-out property <[{title: string, component-index: ComponentIndex}]> component-entries: [
+        {
+            title: is-cn ? "树" : "Tree",
+            component-index: ComponentIndex.Tree,
+        },
+        {
+            title: is-cn ? "步骤" : "Step",
+            component-index: ComponentIndex.Step,
+        },
+        {
+            title: is-cn ? "进度条" : "Progress",
+            component-index: ComponentIndex.Progress,
+        }
+    ];
 
     //////////////////////////////// Logic End  ////////////////////////////////
 }

@@ -7,6 +7,7 @@ import { SettingIconsBar }  from "../setting/desktop.slint";
 import { SettingEntryV2, CenterLayout, IconsDialogSetting } from "../../base/widgets.slint";
 import { TreeExample } from "examples/tree.slint";
 import { StepExample } from "examples/step.slint";
+import { ProgressExample } from "examples/progress.slint";
 
 
 component LeftPanel inherits Rectangle {
@@ -28,10 +29,10 @@ component LeftPanel inherits Rectangle {
                 alignment: LayoutAlignment.start;
                 private property <int> current-icon-index: 0;
 
-                SettingEntryV2 {
-                    text: Logic.tr("Tree");
-                    background: Store.current-component-index == ComponentIndex.Tree ? Theme.checked-background : root.background;
+                for entry[index] in Store.component-entries: SettingEntryV2 {
+                    text: entry.title;
                     font-size: Theme.title3-font-size;
+                    background: Store.current-component-index == entry.component-index ? Theme.checked-background : Colors.transparent;
 
                     init => {
                         self.icon = IconsDialogSetting.icons[current-icon-index];
@@ -39,22 +40,7 @@ component LeftPanel inherits Rectangle {
                     }
 
                     clicked => {
-                        update-index(ComponentIndex.Tree);
-                    }
-                }
-
-                SettingEntryV2 {
-                    text: Logic.tr("Step");
-                    background: Store.current-component-index == ComponentIndex.Step ? Theme.checked-background : root.background;
-                    font-size: Theme.title3-font-size;
-
-                    init => {
-                        self.icon = IconsDialogSetting.icons[current-icon-index];
-                        current-icon-index = Math.mod(current-icon-index + 1, IconsDialogSetting.icons.length);
-                    }
-
-                    clicked => {
-                        update-index(ComponentIndex.Step);
+                        update-index(entry.component-index);
                     }
                 }
             }
@@ -67,7 +53,7 @@ component LeftPanel inherits Rectangle {
             SettingIconsBar {
                 icon-size: Theme.icon-size * 1.6;
                 h-padding: Theme.spacing * 2;
-                h-spacing: Theme.padding * 5;
+                h-spacing: Theme.padding * 8;
             }
         }
     }
@@ -79,6 +65,7 @@ component RightPanel inherits Rectangle {
 
         if Store.current-component-index == ComponentIndex.Tree: TreeExample { }
         if Store.current-component-index == ComponentIndex.Step: StepExample { }
+        if Store.current-component-index == ComponentIndex.Progress: ProgressExample { }
     }
 }
 
