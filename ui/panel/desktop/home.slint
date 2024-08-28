@@ -28,6 +28,13 @@ import { LoadingExample } from "examples/loading.slint";
 import { TabBtnExample } from "examples/tab-btn.slint";
 import { PopupActionExample } from "examples/popup-action.slint";
 import { BannerExample } from "examples/banner.slint";
+import { DividerExample } from "examples/divider.slint";
+import { LinkExample } from "examples/link.slint";
+import { BlanketExample } from "examples/blanket.slint";
+import { AvatarExample } from "examples/avatar.slint";
+import { BrandExample }  from "examples/brand.slint";
+import { EmptyExample }  from "examples/empty.slint";
+import { LandingPageExample }  from "examples/landing-page.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
@@ -102,6 +109,13 @@ component RightPanel inherits Rectangle {
     if Store.current-component-index == ComponentIndex.TabBtn: TabBtnExample { }
     if Store.current-component-index == ComponentIndex.PopupAction: PopupActionExample { }
     if Store.current-component-index == ComponentIndex.Banner: BannerExample { }
+    if Store.current-component-index == ComponentIndex.Divider: DividerExample { }
+    if Store.current-component-index == ComponentIndex.Link: LinkExample { }
+    if Store.current-component-index == ComponentIndex.Blanket: BlanketExample { }
+    if Store.current-component-index == ComponentIndex.Avatar: AvatarExample { }
+    if Store.current-component-index == ComponentIndex.Brand: BrandExample { }
+    if Store.current-component-index == ComponentIndex.Empty: EmptyExample { }
+    if Store.current-component-index == ComponentIndex.LandingPage: LandingPageExample { }
 }
 
 export component Home inherits VerticalLayout {

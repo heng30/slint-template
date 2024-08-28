@@ -1,0 +1,65 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { Label, LandingPage, ExampleComponent } from "../../../base/widgets.slint";
+
+export component LandingPageExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Rectangle {
+                    height: 800px;
+
+                    lb := Label {
+                        visible: false;
+                        text: "Finished";
+                        font-size: Theme.title1-font-size;
+                    }
+
+                    TouchArea {
+                        enabled: lb.visible;
+                        clicked => {
+                            lb.visible = false;
+                            lp.visible = true;
+                        }
+                    }
+
+                    lp := LandingPage {
+                        details: [
+                            {
+                                picture: Icons.landing-account,
+                                description: "Landing Page 1",
+                            },
+                            {
+                                picture: Icons.landing-send,
+                                description: "Landing Page 2",
+                            },
+                            {
+                                picture: Icons.landing-welcome,
+                                description: "Landing Page 3",
+                            }
+                        ];
+
+                        skipped => {
+                            lp.visible = false;
+                            lb.visible = true;
+                        }
+                    }
+                }
+
+                code: "Rectangle {\n    height: 800px;\n\n    lb := Label {\n        visible: false;\n        text: \"Finished\";\n        font-size: Theme.title1-font-size;\n    }\n\n    TouchArea {\n        enabled: lb.visible;\n        clicked => {\n            lb.visible = false;\n            lp.visible = true;\n        }\n    }\n\n    lp := LandingPage {\n        details: [\n            {\n                picture: Icons.landing-account,\n                description: \"Landing Page 1\",\n            },\n            {\n                picture: Icons.landing-send,\n                description: \"Landing Page 2\",\n            },\n            {\n                picture: Icons.landing-welcome,\n                description: \"Landing Page 3\",\n            }\n        ];\n\n        skipped => {\n            lp.visible = false;\n            lb.visible = true;\n        }\n    }\n}";
+            }
+        }
+    }
+}

@@ -1,0 +1,40 @@
+import { Util, Theme, Icons, Logic } from "../../def.slint";
+import { NoMessageImg, NoDataImg, ExampleComponent } from "../../../base/widgets.slint";
+
+export component EmptyExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    spacing: Theme.spacing * 10;
+
+                    NoMessageImg {
+                        width: 500px;
+                        img-width: 300px;
+                        text: Logic.tr("No Message");
+                    }
+
+                    NoDataImg {
+                        width: 500px;
+                        text: Logic.tr("No Data");
+                    }
+                }
+
+                code: "HorizontalLayout {\n    spacing: Theme.spacing * 10;\n\n    NoMessageImg {\n        width: 500px;\n        img-width: 300px;\n        text: Logic.tr(\"No Message\");\n    }\n\n    NoDataImg {\n        width: 500px;\n        text: Logic.tr(\"No Data\");\n    }\n}";
+            }
+        }
+    }
+}

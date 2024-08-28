@@ -1,0 +1,35 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { Avatar, ExampleComponent } from "../../../base/widgets.slint";
+
+export component AvatarExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Avatar {
+                    width: 200px;
+                    background: Theme.secondary-background;
+                    icon: Icons.account;
+                    icon-size-rate: 0.6;
+
+                    clicked => {
+                    }
+                }
+
+                code: "Avatar {\n    width: 200px;\n    background: Theme.secondary-background;\n    icon: Icons.account;\n    icon-size-rate: 0.6;\n\n    clicked => {}\n}";
+            }
+        }
+    }
+}

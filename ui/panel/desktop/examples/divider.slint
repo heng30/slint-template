@@ -1,0 +1,41 @@
+import { Util, Theme } from "../../def.slint";
+import { Divider, ExampleComponent } from "../../../base/widgets.slint";
+
+export component DividerExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                VerticalLayout {
+                    spacing: Theme.spacing * 2;
+
+                    Divider {
+                        width: 500px;
+                        height: 5px;
+                        background: red;
+                    }
+
+                    Divider {
+                        width: 5px;
+                        height: 200px;
+                        background: blue;
+                    }
+                }
+
+                code: "VerticalLayout {\n    spacing: Theme.spacing * 2;\n\n    Divider {\n        width: 500px;\n        height: 5px;\n        background: red;\n    }\n\n    Divider {\n        width: 5px;\n        height: 200px;\n        background: blue;\n    }\n}";
+            }
+        }
+    }
+}

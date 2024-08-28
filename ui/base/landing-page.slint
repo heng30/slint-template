@@ -127,7 +127,7 @@ export component LandingPage inherits Rectangle {
             alignment: current-index == -1 ? LayoutAlignment.end : LayoutAlignment.space-between;
 
             if current-index > -1: TextBtn {
-                text: Logic.tr("Next");
+                text: Logic.tr("Prev");
                 colorize: Theme.have-read-text-color;
                 font-size: Theme.default-font-size - 2px;
                 clicked => {

@@ -1,0 +1,39 @@
+import { Util, Theme } from "../../def.slint";
+import { Blanket, ExampleComponent } from "../../../base/widgets.slint";
+
+export component BlanketExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Rectangle {
+                    width: 400px;
+                    height: 400px;
+                    background: red;
+
+                    bl := Blanket { }
+
+                    TouchArea {
+                        clicked => {
+                            bl.visible = !bl.visible;
+                        }
+                    }
+                }
+
+                code: "Rectangle {\n    width: 400px;\n    height: 400px;\n    background: red;\n\n    bl := Blanket { }\n\n    TouchArea {\n        clicked => {\n            bl.visible = !bl.visible;\n        }\n    }\n}";
+            }
+        }
+    }
+}

@@ -63,18 +63,17 @@ export enum ComponentIndex {
     TabBtn,
     PopupAction,
     Banner,
-
-////////////
-    LandingPage,
-    StatusBar,
-    Blanket,
     Divider,
     Link,
-    Brand,
+    Blanket,
     Avatar,
+    Brand,
+    Empty,
+    LandingPage,
 
-    NoMessageImg,
-    NoDataImg,
+////////////
+    StatusBar,
+
     Dialog,
     CenterLayout,
     ConfirmDialog,
@@ -154,7 +153,7 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
 
-    in-out property <ComponentIndex> current-component-index: ComponentIndex.Banner;
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.LandingPage;
     in-out property <[{title: string, component-index: ComponentIndex}]> component-entries: [
         {
             title: is-cn ? "树" : "Tree",
@@ -247,6 +246,34 @@ export global Store {
         {
             title: is-cn ? "横幅" : "Banner",
             component-index: ComponentIndex.Banner,
+        },
+        {
+            title: is-cn ? "分割线" : "Divider",
+            component-index: ComponentIndex.Divider,
+        },
+        {
+            title: is-cn ? "分割线" : "Link",
+            component-index: ComponentIndex.Link,
+        },
+        {
+            title: is-cn ? "遮罩" : "Blanket",
+            component-index: ComponentIndex.Blanket,
+        },
+        {
+            title: is-cn ? "头像" : "Avatar",
+            component-index: ComponentIndex.Avatar,
+        },
+        {
+            title: is-cn ? "品牌" : "Brand",
+            component-index: ComponentIndex.Brand,
+        },
+        {
+            title: is-cn ? "空页面" : "Empty",
+            component-index: ComponentIndex.Empty,
+        },
+        {
+            title: is-cn ? "欢迎页面" : "LandingPage",
+            component-index: ComponentIndex.LandingPage,
         },
     ];
 
