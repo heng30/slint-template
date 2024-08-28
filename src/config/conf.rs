@@ -75,6 +75,7 @@ pub fn proxy() -> data::Proxy {
     CONFIG.lock().unwrap().proxy.clone()
 }
 
+#[cfg(feature = "database")]
 pub fn db_path() -> PathBuf {
     CONFIG.lock().unwrap().db_path.clone()
 }

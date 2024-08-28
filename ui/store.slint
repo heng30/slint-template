@@ -59,39 +59,38 @@ export enum ComponentIndex {
     Badge,
     Label,
     Tag,
+    Loading,
+    TabBtn,
+    PopupAction,
+    Banner,
 
 ////////////
-    TabBtn,
-    TabBtns,
+    LandingPage,
     StatusBar,
+    Blanket,
+    Divider,
+    Link,
+    Brand,
+    Avatar,
 
     NoMessageImg,
     NoDataImg,
-    Divider,
-    Link,
     Dialog,
     CenterLayout,
     ConfirmDialog,
-    Blanket,
     IconsDialog,
     Head,
-    Brand,
     LanguageDialog,
     ListTile,
     News,
     SlideCard,
     Drawer,
     Mnemonic,
-    Avatar,
 
     About,
-    AboutSetting,
     Help,
     ResetPassword,
-    Banner,
     AccountBalance,
-
-    PopupAction,
 
     TokenTile,
     TokenTileEntry,
@@ -104,7 +103,6 @@ export enum ComponentIndex {
     AddressBook,
     AddressBookEntry,
     AddressBookDetail,
-    AddressBookSetting,
 
     TransactionFee,
     TransactionTile,
@@ -116,14 +114,9 @@ export enum ComponentIndex {
     Login,
     Password,
 
-    Setting,
     SettingEntry,
     SettingEntryV2,
     SettingDetail,
-
-    Loading,
-    LandingPage,
-
 }
 
 //////////////////////////////// Logic Struct End  ////////////////////////////////
@@ -161,7 +154,7 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
 
-    in-out property <ComponentIndex> current-component-index: ComponentIndex.Tag;
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.Banner;
     in-out property <[{title: string, component-index: ComponentIndex}]> component-entries: [
         {
             title: is-cn ? "树" : "Tree",
@@ -238,6 +231,22 @@ export global Store {
         {
             title: is-cn ? "标签" : "Tag",
             component-index: ComponentIndex.Tag,
+        },
+        {
+            title: is-cn ? "加载" : "Loading",
+            component-index: ComponentIndex.Loading,
+        },
+        {
+            title: is-cn ? "标签页" : "TabBtn",
+            component-index: ComponentIndex.TabBtn,
+        },
+        {
+            title: is-cn ? "弹出动作列表" : "PopupAction",
+            component-index: ComponentIndex.PopupAction,
+        },
+        {
+            title: is-cn ? "横幅" : "Banner",
+            component-index: ComponentIndex.Banner,
         },
     ];
 

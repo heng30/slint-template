@@ -24,6 +24,10 @@ import { InputExample } from "examples/input.slint";
 import { BadgeExample } from "examples/badge.slint";
 import { LabelExample } from "examples/label.slint";
 import { TagExample } from "examples/tag.slint";
+import { LoadingExample } from "examples/loading.slint";
+import { TabBtnExample } from "examples/tab-btn.slint";
+import { PopupActionExample } from "examples/popup-action.slint";
+import { BannerExample } from "examples/banner.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
@@ -94,6 +98,10 @@ component RightPanel inherits Rectangle {
     if Store.current-component-index == ComponentIndex.Badge: BadgeExample { }
     if Store.current-component-index == ComponentIndex.Label: LabelExample { }
     if Store.current-component-index == ComponentIndex.Tag: TagExample { }
+    if Store.current-component-index == ComponentIndex.Loading: LoadingExample { }
+    if Store.current-component-index == ComponentIndex.TabBtn: TabBtnExample { }
+    if Store.current-component-index == ComponentIndex.PopupAction: PopupActionExample { }
+    if Store.current-component-index == ComponentIndex.Banner: BannerExample { }
 }
 
 export component Home inherits VerticalLayout {

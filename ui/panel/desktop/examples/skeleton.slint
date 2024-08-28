@@ -76,7 +76,7 @@ export component SkeletonExample inherits Flickable {
                         type: item.ty;
                     }
 
-                    detail: Store.is-cn ? "类型：" : "Type: " + item.ty-detail;
+                    detail: (Store.is-cn ? "类型：" : "Type: ") + item.ty-detail;
                     code: "Skeleton {\n    width: item.width;\n    height: item.height;\n    type: item.ty;\n}";
                 }
             }

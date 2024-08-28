@@ -6,9 +6,11 @@ slint::include_modules!();
 extern crate derivative;
 
 mod config;
-mod db;
 mod logic;
 mod version;
+
+#[cfg(feature = "database")]
+mod db;
 
 #[cfg(not(target_os = "android"))]
 pub fn init_logger() {
@@ -61,7 +63,12 @@ fn init_logger() {
 async fn ui_before() {
     init_logger();
     config::init();
-    db::init(config::db_path().to_str().expect("invalid db path")).await;
+
+    cfg_if::cfg_if! {
+        if #[cfg(feature = "database")] {
+            db::init(config::db_path().to_str().expect("invalid db path")).await;
+        }
+    }
 }
 
 fn ui_after(ui: &AppWindow) {

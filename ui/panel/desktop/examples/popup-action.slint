@@ -1,0 +1,49 @@
+import { Util, Store, Theme, Icons } from "../../def.slint";
+import { Label, PopupAction, PopupActionSetting, ExampleComponent } from "../../../base/widgets.slint";
+
+export component PopupActionExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Rectangle {
+                    background: red;
+                    width: 600px;
+                    height: 300px;
+                    border-radius: Theme.border-radius;
+
+                    Label {
+                        text: Store.is-cn ? "单击右键跳出弹框" : "Right click to enable popup action";
+                        color: Colors.white;
+                    }
+
+                    ta := TouchArea {
+                        pointer-event(event) => {
+                            if (event.button == PointerEventButton.right) {
+                                PopupActionSetting.show(parent.absolute-position.x + self.mouse-x, parent.absolute-position.y + self.mouse-y, [
+                                    { icon: Icons.delete, text: "Delete", action: "delete-item" },
+                                    { icon: Icons.add-fill, text: "Add", action: "add-item" },
+                                    { icon: Icons.recover-from-trash, text: "Remove trash", action: "remove-all-cache" }
+                                ]);
+                            }
+                        }
+                    }
+                }
+
+                code: "export component AppWindow inherits Window {\n    if PopupActionSetting.is-show: PopupAction {\n        window-width: root.width;\n        window-height: root.height;\n    }\n\n    Rectangle {\n        background: red;\n        width: 600px;\n        height: 300px;\n        border-radius: Theme.border-radius;\n\n        Label {\n            text: Store.is-cn ? \"单击右键跳出弹框\" : \"Right click to enable popup action\";\n            color: Colors.white;\n        }\n\n        ta := TouchArea {\n            pointer-event(event) => {\n                if (event.button == PointerEventButton.right) {\n                    PopupActionSetting.show(parent.absolute-position.x + self.mouse-x, parent.absolute-position.y + self.mouse-y, [\n                        { icon: Icons.delete, text: \"Delete\", action: \"delete-item\" },\n                        { icon: Icons.add-fill, text: \"Add\", action: \"add-item\" },\n                        { icon: Icons.recover-from-trash, text: \"Remove trash\", action: \"remove-all-cache\" }\n                    ]);\n                }\n            }\n        }\n    }\n}";
+            }
+        }
+    }
+}

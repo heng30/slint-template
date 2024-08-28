@@ -1,0 +1,72 @@
+import { Util, Theme, Logic, Icons } from "../../def.slint";
+import { TabBtn, TabBtns, ExampleComponent } from "../../../base/widgets.slint";
+
+export component TabBtnExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    padding-top: Theme.padding;
+
+                    TabBtn {
+                        width: 200px;
+                        height: 50px;
+                        icon: Icons.home-light;
+                        text: Logic.tr("Home");
+                        checked: true;
+                        clicked => {
+                        }
+                    }
+
+                    TabBtn {
+                        width: 200px;
+                        height: 50px;
+                        icon: Icons.setting-light;
+                        text: Logic.tr("Setting");
+                        checked: false;
+                        clicked => {
+                        }
+                    }
+                }
+
+                code: "HorizontalLayout {\n    padding-top: Theme.padding;\n\n    TabBtn {\n        width: 200px;\n        height: 50px;\n        icon: Icons.home-light;\n        text: Logic.tr(\"Home\");\n        checked: true;\n        clicked => { }\n    }\n\n    TabBtn {\n        width: 200px;\n        height: 50px;\n        icon: Icons.setting-light;\n        text: Logic.tr(\"Setting\");\n        checked: false;\n        clicked => { }\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                TabBtns {
+                    items: [
+                        { icon: Icons.cancel-fill, text: "Cancel" },
+                        { icon: Icons.address, text: "Address" },
+                        { icon: Icons.airdrop, text: "Airdrop" }
+                    ];
+
+                    clicked(index) => {
+                        debug(index);
+                    }
+                }
+
+                code: "TabBtns {\n    items: [\n        { icon: Icons.cancel-fill, text: \"Cancel\" },\n        { icon: Icons.address, text: \"Address\" },\n        { icon: Icons.airdrop, text: \"Airdrop\" }\n    ];\n\n    clicked(index) => {\n        debug(index);\n    }\n}";
+            }
+        }
+    }
+}

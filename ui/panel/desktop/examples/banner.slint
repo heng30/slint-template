@@ -1,0 +1,35 @@
+import { Util, Theme } from "../../def.slint";
+import { Banner, ExampleComponent } from "../../../base/widgets.slint";
+
+export component BannerExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Banner {
+                    width: 500px;
+                    text: "This is a banner";
+                    text-color: Colors.white;
+
+                    close => {
+                        debug("close");
+                    }
+                }
+
+                code: "Banner {\n    width: 500px;\n    text: \"This is a banner\";\n    text-color: Colors.white;\n\n    close => {\n        debug(\"close\");\n    }\n}";
+            }
+        }
+    }
+}

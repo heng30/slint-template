@@ -1,0 +1,38 @@
+import { Util, Theme } from "../../def.slint";
+import { Loading, ExampleComponent } from "../../../base/widgets.slint";
+
+export component LoadingExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Rectangle {
+                    width: 400px;
+                    height: 400px;
+                    border-width: 2px;
+                    border-radius: Theme.border-radius;
+                    border-color: Theme.base-border-color;
+
+                    Loading {
+                        icon-size: Theme.icon-size * 2;
+                        colorize: Colors.blue;
+                    }
+                }
+
+                code: "Rectangle {\n    width: 400px;\n    height: 400px;\n    border-width: 2px;\n    border-radius: Theme.border-radius;\n    border-color: Theme.base-border-color;\n\n   Loading {\n       icon-size: Theme.icon-size * 2;\n       colorize: Colors.blue;\n    }\n}";
+            }
+        }
+    }
+}

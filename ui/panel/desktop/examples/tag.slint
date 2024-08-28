@@ -30,7 +30,7 @@ export component TagExample inherits Flickable {
                     }
                 }
 
-                code: "HorizontalLayout {\n    spacing: Theme.spacing * 2;\n    for color[index] in Theme.tag-colors: Tag {\n        background: color;\n        text-color: self.background.darker(100%);\n        text: \"Tag Example\";\n        is-show-close-btn: Math.mod(index, 2) == 1;\n        close {}\n    }\n}";
+                code: "HorizontalLayout {\n    spacing: Theme.spacing * 2;\n    for color[index] in Theme.tag-colors: Tag {\n        background: color;\n        text-color: self.background.darker(100%);\n        text: \"Tag\";\n        is-show-close-btn: Math.mod(index, 2) == 1;\n        close => {}\n    }\n}";
             }
         }
     }

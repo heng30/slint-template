@@ -2,6 +2,17 @@ import { Theme, Icons } from "../theme.slint";
 import { Label } from "label.slint";
 import { IconBtn } from "icon-btn.slint";
 
+// Example:
+// Banner {
+//     width: 500px;
+//     text: "This is a banner";
+//     text-color: Colors.white;
+
+//     close => {
+//         debug("close");
+//     }
+// }
+
 export component Banner inherits Rectangle {
     in-out property text <=> label.text;
     in-out property font-size <=> label.font-size;
@@ -9,7 +20,7 @@ export component Banner inherits Rectangle {
 
     in-out property <bool> is-show-close: true;
     in-out property <length> icon-size: Theme.icon-size;
-    in-out property <color> icon-colorize: Theme.icon-color;
+    in-out property <color> icon-colorize: root.text-color;
 
     callback close();
 
