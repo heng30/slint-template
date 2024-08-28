@@ -1,0 +1,77 @@
+import { Util, Theme } from "../../def.slint";
+import { ToolTip, Label, ToolTipSetting, ComponentPosition, ExampleComponent } from "../../../base/widgets.slint";
+
+export component ToolTipExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+            padding-top: Theme.padding * 10;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    spacing: 100px;
+
+                    for item in [
+                        {
+                            pos: ComponentPosition.Top,
+                            text: "Top",
+                        },
+                        {
+                            pos: ComponentPosition.Right,
+                            text: "Right",
+                        },
+                        {
+                            pos:ComponentPosition.Bottom,
+                            text: "Bottom",
+                        },
+                        {
+                            pos: ComponentPosition.Left,
+                            text: "Left",
+                        },
+                    ]: Rectangle {
+                        background: red;
+                        width: 200px;
+                        height: 200px;
+                        border-radius: Theme.border-radius;
+
+                        Label {
+                            text: item.text;
+                            color: Colors.white;
+                            font-size: Theme.title1-font-size;
+                        }
+
+                        TouchArea {
+                            mouse-cursor: MouseCursor.pointer;
+                            changed has-hover => {
+                                if (self.has-hover) {
+                                    ToolTipSetting.show(
+                                    self.absolute-position.x,
+                                    self.absolute-position.y,
+                                    parent.width,
+                                    parent.height,
+                                    item.pos,
+                                    "Tip Message");
+                                } else {
+                                    ToolTipSetting.hide();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                code: "export component AppWindow inherits Window {\n    if ToolTipSetting.is-show: ToolTip {\n        window-width: root.width;\n        window-height: root.height;\n    }\n}\n\nHorizontalLayout {\n    spacing: 100px;\n\n    for item in [\n        {\n            pos: ComponentPosition.Top,\n            text: \"Top\",\n        },\n        {\n            pos: ComponentPosition.Right,\n            text: \"Right\",\n        },\n        {\n            pos:ComponentPosition.Bottom,\n            text: \"Bottom\",\n        },\n        {\n            pos: ComponentPosition.Left,\n            text: \"Left\",\n        },\n    ]: Rectangle {\n        background: red;\n        width: 200px;\n        height: 200px;\n        border-radius: Theme.border-radius;\n\n        Label {\n            text: item.text;\n            color: Colors.white;\n            font-size: Theme.title1-font-size;\n        }\n\n        TouchArea {\n            mouse-cursor: MouseCursor.pointer;\n            changed has-hover => {\n                if (self.has-hover) {\n                    ToolTipSetting.show(\n                    self.absolute-position.x,\n                    self.absolute-position.y,\n                    parent.width,\n                    parent.height,\n                    item.pos,\n                    \"Tip Message\");\n                } else {\n                    ToolTipSetting.hide();\n                }\n            }\n        }\n    }\n}";
+            }
+        }
+    }
+}

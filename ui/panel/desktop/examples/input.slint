@@ -1,0 +1,84 @@
+import { Util, Theme,Icons, Logic } from "../../def.slint";
+import { Search, TxtEdit, LineInput, ExampleComponent } from "../../../base/widgets.slint";
+
+export component InputExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                TxtEdit {
+                    height: 400px;
+                }
+
+                code: "TxtEdit {\n    height: 400px;\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                LineInput {
+                    placeholder-text: Logic.tr("keyword");
+                    icon: Icons.paste;
+                    icon-colorize: Theme.icon-color;
+                    is-show-icon: true;
+
+                    // catch special keys, likes: Ctrl + A
+                    key-pressed(event) => {
+                        debug(event.text);
+                    }
+
+                    clicked => {
+                        debug("clicked");
+                    }
+
+                    edited => {
+                    }
+                    accepted => {
+                    }
+                }
+
+                code: "LineInput {\n    placeholder-text: Logic.tr(\"keyword\");\n    icon: Icons.paste;\n    icon-colorize: Theme.icon-color;\n    is-show-icon: true;\n\n    // catch special keys, likes: Ctrl + A\n    key-pressed(event) => {\n        debug(event.text);\n    }\n\n    clicked => {\n        debug(\"clicked\");\n    }\n\n    edited => { }\n    accepted => {}\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Search {
+                    values: ["Hello", "World", "Nice", "Good"];
+                    width: parent.width;
+                    enabled-popup: true;
+                    search(text) => {
+                        debug(text);
+                    }
+                    edited(text) => {
+                        debug(text);
+                    }
+                }
+
+                code: "Search {\n    width: parent.width;\n    values: [\"Hello\", \"World\", \"Nice\", \"Good\"];\n    enabled-popup: true;\n    search(text) => {\n        debug(text);\n    }\n    edited(text) => {\n        debug(text);\n    }\n}";
+            }
+        }
+    }
+}

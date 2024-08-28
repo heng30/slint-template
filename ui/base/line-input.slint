@@ -2,6 +2,28 @@ import { Theme } from "../theme.slint";
 import { Label } from "./label.slint";
 import { IconBtn } from "./icon-btn.slint";
 
+// Example:
+// LineInput {
+//     placeholder-text: Logic.tr("keyword");
+//     icon: Icons.paste;
+//     icon-colorize: Theme.icon-color;
+//     is-show-icon: true;
+
+//     // catch special keys, likes: Ctrl + A
+//     key-pressed(event) => {
+//         debug(event.text);
+//     }
+
+//     clicked => {
+//         debug("clicked");
+//     }
+
+//     edited => {
+//     }
+//     accepted => {
+//     }
+// }
+
 export component LineInput inherits Rectangle {
     in-out property text <=> text-input.text;
     in-out property font-size <=> text-input.font-size;
@@ -20,6 +42,7 @@ export component LineInput inherits Rectangle {
     callback clicked();
     callback accepted();
     callback edited <=> text-input.edited;
+    callback key-pressed(KeyEvent);
 
     preferred-width: 300px;
     preferred-height: hbox.preferred-height;
@@ -52,13 +75,23 @@ export component LineInput inherits Rectangle {
                 x: 0;
                 width: Math.max(parent.width, text-input.preferred-width);
 
-                text-input := TextInput {
-                    single-line: true;
-                    vertical-alignment: TextVerticalAlignment.center;
+                fs := FocusScope {
+                    key-pressed(event) => {
+                        if (event.text == Key.Escape) {
+                            fs.focus();
+                        }
+                        root.key-pressed(event);
+                        accept
+                    }
 
-                    accepted => {
-                        self.clear-focus();
-                        root.accepted();
+                    text-input := TextInput {
+                        single-line: true;
+                        vertical-alignment: TextVerticalAlignment.center;
+
+                        accepted => {
+                            self.clear-focus();
+                            root.accepted();
+                        }
                     }
                 }
 

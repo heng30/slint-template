@@ -55,36 +55,34 @@ export component Search inherits Rectangle {
     background: Theme.base-background;
     border-radius: Theme.border-radius;
     border-color: Theme.focus-color;
+    forward-focus: input;
 
-    fs := FocusScope {
-        key-pressed(event) => {
-            if (event.text == Key.Escape) {
-                fs.focus();
-                root.is-show-popup = false;
-            }
-            accept
+    input := LineInput {
+        is-show-icon: true;
+        icon: Icons.search;
+        placeholder-text: Logic.tr("Search");
+        border-radius: root.border-radius;
+        font-size: root.font-size;
+
+        clicked => {
+            root.search(self.text);
         }
 
-        input := LineInput {
-            is-show-icon: true;
-            icon: Icons.search;
-            placeholder-text: Logic.tr("Search");
-            border-radius: root.border-radius;
-            font-size: root.font-size;
+        accepted => {
+            root.search(self.text);
+        }
 
-            clicked => {
-                root.search(self.text);
+        edited => {
+            if (root.enabled-popup) {
+                root.inner-search(self.text);
             }
+            root.edited(self.text);
+        }
 
-            accepted => {
-                root.search(self.text);
-            }
-
-            edited => {
-                if (root.enabled-popup) {
-                    root.inner-search(self.text);
-                }
-                root.edited(self.text);
+        key-pressed(event) => {
+            if (event.text == Key.Escape) {
+                input.clear-focus();
+                root.is-show-popup = false;
             }
         }
     }
@@ -134,7 +132,7 @@ export component Search inherits Rectangle {
                         root.search(value);
                         root.is-show-popup = false;
 
-                        fs.focus();
+                        input.clear-focus();
                     }
                 }
             }

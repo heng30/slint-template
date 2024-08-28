@@ -26,7 +26,7 @@ component LeftPanel inherits Rectangle {
             SettingEntryV2 {
                 text: Logic.tr("Preference");
                 icon: Icons.ui;
-                background: Store.current-setting-detail-index == SettingDetailIndex.Preference ? Theme.checked-background: root.background;
+                background: Store.current-setting-detail-index == SettingDetailIndex.Preference ? Theme.checked-background : self.has-hover ? Theme.hover-background : root.background;
 
                 clicked => {
                     update-index(SettingDetailIndex.Preference);
@@ -36,7 +36,7 @@ component LeftPanel inherits Rectangle {
             SettingEntryV2 {
                 text: Logic.tr("Proxy");
                 icon: Icons.proxy-light;
-                background: Store.current-setting-detail-index == SettingDetailIndex.Proxy ? Theme.checked-background: root.background;
+                background: Store.current-setting-detail-index == SettingDetailIndex.Proxy ? Theme.checked-background : self.has-hover ? Theme.hover-background : root.background;
 
                 clicked => {
                     update-index(SettingDetailIndex.Proxy);
@@ -46,7 +46,7 @@ component LeftPanel inherits Rectangle {
             SettingEntryV2 {
                 text: Logic.tr("Help");
                 icon: Icons.help-light;
-                background: Store.current-setting-detail-index == SettingDetailIndex.Help ? Theme.checked-background : root.background;
+                background: Store.current-setting-detail-index == SettingDetailIndex.Help ? Theme.checked-background : self.has-hover ? Theme.hover-background : root.background;
 
                 clicked => {
                     update-index(SettingDetailIndex.Help);
@@ -56,7 +56,7 @@ component LeftPanel inherits Rectangle {
             SettingEntryV2 {
                 text: Logic.tr("Donate");
                 icon: Icons.donate;
-                background: Store.current-setting-detail-index == SettingDetailIndex.Donate ? Theme.checked-background : root.background;
+                background: Store.current-setting-detail-index == SettingDetailIndex.Donate ? Theme.checked-background : self.has-hover ? Theme.hover-background : root.background;
 
                 clicked => {
                     update-index(SettingDetailIndex.Donate);
@@ -104,12 +104,10 @@ component Setting inherits Rectangle {
                 Util.show-toast(Logic.tr("Input can not be empty"), ToastStatus.Warning);
                 return false;
             }
-
             if (Store.device-type == DeviceType.Desktop) {
                 Store.setting-preference.win-width = rp.preference-get().win-width;
                 Store.setting-preference.win-height = rp.preference-get().win-height;
             }
-
             Store.setting-preference.font-size = rp.preference-get().font-size;
             Store.setting-preference.font-family = rp.preference-get().font-family;
 

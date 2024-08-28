@@ -1,0 +1,41 @@
+import { Util, Theme } from "../../def.slint";
+import { BreadCrumb, ExampleComponent } from "../../../base/widgets.slint";
+
+export component BreadCrumbExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    BreadCrumb {
+                        separator: "/";
+                        items: ["root", "home", "nixos"];
+                        is-show-start-separator: true;
+                        is-show-end-separator: false;
+                        selected-color: Colors.red;
+
+                        selected(index) => {
+                            debug(index);
+                        }
+                    }
+                }
+
+                code: "BreadCrumb {\n    separator: \"/\";\n    items: [\"root\", \"home\", \"nixos\"];\n    is-show-start-separator: true;\n    is-show-end-separator: false;\n    selected-color: Colors.red;\n\n    selected(index) => {\n        debug(index);\n    }\n}";
+            }
+        }
+    }
+}

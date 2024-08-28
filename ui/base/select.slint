@@ -2,6 +2,18 @@ import { ComponentPosition } from "def.slint";
 import { Theme, Icons } from "../theme.slint";
 import { Label } from "label.slint";
 
+// Example:
+// Select {
+//     width: root.width * 0.5;
+//     values: ["One", "Two", "Three", "Four"];
+//     current-value: "Two";
+//     current-index: 1;
+
+//     selected(index, value) => {
+//         debug(index, value);
+//     }
+// }
+
 export component Select inherits Rectangle {
     in-out property <bool> enabled: true;
     in-out property <int> current-index;
@@ -23,13 +35,7 @@ export component Select inherits Rectangle {
     border-width: fs.has-focus ? 2px : 0;
     border-color: Theme.focus-color;
 
-    public function show() {
-        pop.show();
-    }
-
-    public function hide() {
-        pop.close();
-    }
+    callback selected(int, string);
 
     hbox := HorizontalLayout {
         alignment: LayoutAlignment.space-between;
@@ -121,6 +127,7 @@ export component Select inherits Rectangle {
                         clicked => {
                             root.current-index = index;
                             root.current-value = value;
+                            root.selected(root.current-index, root.current-value);
                         }
                     }
                 }

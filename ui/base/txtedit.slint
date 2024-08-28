@@ -2,22 +2,27 @@ import { TextEdit, Palette } from "std-widgets.slint";
 import { Theme } from "../theme.slint";
 
 export component TxtEdit inherits Rectangle {
-    clip: true;
-    forward-focus: edit;
     border-width: edit.has-focus ? 2px : 1px;
     border-radius: Theme.border-radius;
-    border-color: edit.has-focus ? Palette.accent-background : Palette.border;
+    border-color: edit.has-focus ? Theme.third-brand-color : Theme.base-border-color;
+    forward-focus: edit;
+    clip: true;
 
     in-out property text <=> edit.text;
+    in-out property <length> inner-padding: 0;
+
     callback edited <=> edit.edited;
 
     public function clear() {
         root.text = "";
     }
 
+    public function copy() {
+        edit.copy();
+    }
+
     hbox := HorizontalLayout {
-        padding: Theme.padding * 2;
-        padding-right: 0;
+        padding: root.inner-padding;
 
         edit := TextEdit {
             font-size: Theme.default-font-size;

@@ -19,17 +19,18 @@ export component Pagination inherits Rectangle {
     private property <bool> is-show-more: true;
     private property <int> start-page: 0;
     private property <int> real-show-pages-half: Math.round(show-pages / 2);
-    private property <int> real-current-page: Math.clamp(init-page, 0, total-pages - show-pages - 1);
+    private property <int> real-show-pages: real-show-pages-half * 2;
+    private property <int> real-current-page: Math.clamp(init-page, 0, total-pages - real-show-pages - 1);
 
     callback jump(int);
 
     public function set-current-page(page: int) {
         root.real-current-page = Math.clamp(page, 0, root.total-pages - 1);
-        root.start-page = Math.clamp(root.real-current-page, 0,root.total-pages - root.show-pages);
-        is-show-more = root.start-page < root.total-pages - root.show-pages;
+        root.start-page = Math.clamp(root.real-current-page, 0, root.total-pages - root.real-show-pages);
+        is-show-more = root.start-page < root.total-pages - root.real-show-pages;
     }
 
-    if show-pages >= total-pages: HorizontalLayout {
+    if real-show-pages >= total-pages: HorizontalLayout {
         init => {
             root.preferred-width = self.preferred-width;
             root.preferred-height = self.preferred-height;
@@ -82,7 +83,7 @@ export component Pagination inherits Rectangle {
         }
     }
 
-    if show-pages < total-pages: HorizontalLayout {
+    if real-show-pages < total-pages: HorizontalLayout {
         init => {
             root.preferred-width = self.preferred-width;
             root.preferred-height = self.preferred-height;
@@ -101,7 +102,7 @@ export component Pagination inherits Rectangle {
                 root.real-current-page = Math.max(0, root.real-current-page - 1);
 
                 if (!is-show-more) {
-                    is-show-more = root.real-current-page < root.total-pages - root.show-pages;
+                    is-show-more = root.real-current-page < root.total-pages - root.real-show-pages;
                 }
                 if (root.real-current-page < root.start-page) {
                     root.start-page = Math.max(0, root.real-current-page - root.real-show-pages-half + 1);
@@ -134,9 +135,11 @@ export component Pagination inherits Rectangle {
                     text-color: root.text-color;
 
                     clicked => {
-                        root.real-current-page = Math.min(root.start-page + root.real-show-pages-half, root.total-pages - root.show-pages);
+                        root.real-current-page = Math.min(root.start-page + root.real-show-pages-half, root.total-pages - root.real-show-pages);
                         root.start-page = root.real-current-page;
-                        is-show-more = start-page + show-pages < total-pages;
+                        is-show-more = start-page + real-show-pages < total-pages;
+
+                        debug("xxx", root.real-current-page, root.start-page);
 
                         jump(root.real-current-page);
                     }

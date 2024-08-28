@@ -1,0 +1,32 @@
+import { Util, Theme } from "../../def.slint";
+import { RecordIndicator, ExampleComponent } from "../../../base/widgets.slint";
+
+export component RecordIndicatorExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                RecordIndicator {
+                    is-start: true;
+                    size: Theme.icon-size * 2;
+                    duration: 3s;
+                    living-color: Colors.red;
+                }
+
+                code: "RecordIndicator {\n    is-start: true;\n    size: Theme.icon-size * 2;\n    duration: 3s;\n    living-color: Colors.pink;\n}";
+            }
+        }
+    }
+}

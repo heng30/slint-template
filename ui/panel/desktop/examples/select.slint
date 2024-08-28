@@ -1,0 +1,36 @@
+import { Util, Theme } from "../../def.slint";
+import { Select, ExampleComponent } from "../../../base/widgets.slint";
+
+export component SelectExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Select {
+                    width: parent.width;
+                    values: ["One", "Two", "Three", "Four"];
+                    current-value: "Two";
+                    current-index: 1;
+
+                    selected(index, value) => {
+                        debug(index, value);
+                    }
+                }
+
+                code: "Select {\n    width: parent.width;\n    values: [\"One\", \"Two\", \"Three\", \"Four\"];\n    current-value: \"Two\";\n    current-index: 1;\n    selected(index, value) => {\n        debug(index, value);\n    }\n}";
+            }
+        }
+    }
+}

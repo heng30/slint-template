@@ -1,0 +1,47 @@
+import { Util, Theme } from "../../def.slint";
+import { Collapse, ExampleComponent } from "../../../base/widgets.slint";
+
+export component CollapseExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Collapse {
+                    width: root.width * 0.5;
+                    is-accordion: false;
+
+                    entries: [
+                        {
+                            disabled: true,
+                            title: "Title 1",
+                            description: "You can adjust the number of spaces in the replacement text to control how many spaces each tab is converted to. For example, to replace tabs with four spaces",
+                        },
+                        {
+                            is-open: true,
+                            title: "Title 2",
+                            description: "You can adjust the number of spaces in the replacement text to control how many spaces each tab is converted to. For example, to replace tabs with four spaces",
+                        },
+                        {
+                            title: "Title 3",
+                            description: "You can adjust the number of spaces in the replacement text to control how many spaces each tab is converted to. For example, to replace tabs with four spaces",
+                        }
+                    ];
+                }
+
+                code: "Collapse {\n    width: root.width * 0.5;\n    is-accordion: false;\n\n    entries: [\n        {\n            disabled: true,\n            title: \"Title 1\",\n            description: \"You can adjust the number of spaces in the replacement text to control how many spaces each tab is converted to. For example, to replace tabs with four spaces\",\n        },\n        {\n            is-open: true,\n            title: \"Title 2\",\n            description: \"You can adjust the number of spaces in the replacement text to control how many spaces each tab is converted to. For example, to replace tabs with four spaces\",\n        },\n        {\n            title: \"Title 3\",\n            description: \"You can adjust the number of spaces in the replacement text to control how many spaces each tab is converted to. For example, to replace tabs with four spaces\",\n        }\n    ];\n}";
+            }
+        }
+    }
+}

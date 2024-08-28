@@ -1,0 +1,85 @@
+import { Util, Theme, Store } from "../../def.slint";
+import { Skeleton, SkeletonType, ExampleComponent } from "../../../base/widgets.slint";
+
+export component SkeletonExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            VerticalLayout {
+                spacing: Theme.spacing * 20;
+
+                for item in [
+                    {
+                        width: 400px,
+                        height: 300px,
+                        ty: SkeletonType.Content,
+                        ty-detail: "SkeletonType.Content",
+                    },
+                    {
+                        width: 400px,
+                        height: 100px,
+                        ty: SkeletonType.Picture,
+                        ty-detail: "SkeletonType.Picture",
+                    },
+                    {
+                        width: 400px,
+                        height: 100px,
+                        ty: SkeletonType.Number,
+                        ty-detail: "SkeletonType.Number",
+                    },
+                    {
+                        width: 100px,
+                        height: 100px,
+                        ty: SkeletonType.Avatar,
+                        ty-detail: "SkeletonType.Avatar",
+                    },
+                    {
+                        width: 400px,
+                        height: 100px,
+                        ty: SkeletonType.AvatarWithDetail,
+                        ty-detail: "SkeletonType.AvatarWithDetail",
+                    },
+                    {
+                        width: 600px,
+                        height: 300px,
+                        ty: SkeletonType.Paragraph,
+                        ty-detail: "SkeletonType.Paragraph",
+                    },
+                    {
+                        width: 600px,
+                        height: 300px,
+                        ty: SkeletonType.Table,
+                        ty-detail: "SkeletonType.Table",
+                    },
+                    {
+                        width: 600px,
+                        height: 300px,
+                        ty: SkeletonType.List,
+                        ty-detail: "SkeletonType.List",
+                    },
+                ]: ExampleComponent {
+                    width: Math.max(1000px, root.width * 0.8);
+
+                    Skeleton {
+                        width: item.width;
+                        height: item.height;
+                        type: item.ty;
+                    }
+
+                    detail: Store.is-cn ? "类型：" : "Type: " + item.ty-detail;
+                    code: "Skeleton {\n    width: item.width;\n    height: item.height;\n    type: item.ty;\n}";
+                }
+            }
+        }
+    }
+}

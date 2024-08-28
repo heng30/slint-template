@@ -11,6 +11,16 @@ import { ProgressExample } from "examples/progress.slint";
 import { SliderExample } from "examples/slider.slint";
 import { ButtonExample } from "examples/button.slint";
 import { ToastExample } from "examples/toast.slint";
+import { RateExample } from "examples/rate.slint";
+import { PaginationExample } from "examples/pagination.slint";
+import { RecordIndicatorExample } from "examples/record-indicator.slint";
+import { ToolTipExample } from "examples/tooltip.slint";
+import { BreadCrumbExample } from "examples/bread-crumb.slint";
+import { SkeletonExample } from "examples/skeleton.slint";
+import { PinCodesExample } from "examples/pin-codes.slint";
+import { SelectExample } from "examples/select.slint";
+import { CollapseExample } from "examples/collapse.slint";
+import { InputExample } from "examples/input.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
@@ -34,7 +44,7 @@ component LeftPanel inherits Rectangle {
                 for entry[index] in Store.component-entries: SettingEntryV2 {
                     text: entry.title;
                     font-size: Theme.title3-font-size;
-                    background: Store.current-component-index == entry.component-index ? Theme.checked-background : Colors.transparent;
+                    background: Store.current-component-index == entry.component-index ? Theme.checked-background : self.has-hover ? Theme.hover-background : Colors.transparent;
 
                     init => {
                         self.icon = IconsDialogSetting.icons[current-icon-index];
@@ -68,6 +78,16 @@ component RightPanel inherits Rectangle {
     if Store.current-component-index == ComponentIndex.Slider: SliderExample { }
     if Store.current-component-index == ComponentIndex.Button: ButtonExample { }
     if Store.current-component-index == ComponentIndex.Toast: ToastExample { }
+    if Store.current-component-index == ComponentIndex.Rate: RateExample { }
+    if Store.current-component-index == ComponentIndex.Pagination: PaginationExample { }
+    if Store.current-component-index == ComponentIndex.RecordIndicator: RecordIndicatorExample { }
+    if Store.current-component-index == ComponentIndex.ToolTip: ToolTipExample { }
+    if Store.current-component-index == ComponentIndex.BreadCrumb: BreadCrumbExample { }
+    if Store.current-component-index == ComponentIndex.Skeleton: SkeletonExample { }
+    if Store.current-component-index == ComponentIndex.PinCodes: PinCodesExample { }
+    if Store.current-component-index == ComponentIndex.Select: SelectExample { }
+    if Store.current-component-index == ComponentIndex.Collapse: CollapseExample { }
+    if Store.current-component-index == ComponentIndex.Input: InputExample { }
 }
 
 export component Home inherits VerticalLayout {

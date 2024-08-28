@@ -1,0 +1,62 @@
+import { Util, Theme, Store } from "../../def.slint";
+import { Pagination, ExampleComponent } from "../../../base/widgets.slint";
+
+export component PaginationExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    Pagination {
+                        total-pages: 6;
+                        init-page: 3;
+                        jump(page) => {
+                            debug(page);
+                        }
+                    }
+                }
+
+                detail: Store.is-cn ? "默认显示分页为6" : "Default show page is 6";
+
+                code: "Pagination {\n    total-pages: 6;\n    init-page: 3;\n    jump(page) => {\n        debug(page);\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    Pagination {
+                        show-pages: 5;
+                        jump(page) => {
+                            debug(page);
+                        }
+                    }
+                }
+
+                detail: "show-page = Math.round(show-pages / 2)  * 2";
+                code: "Pagination {\n    show-pages: 5;\n    jump(page) => {\n        debug(page);\n    }\n}";
+            }
+        }
+    }
+}

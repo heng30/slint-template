@@ -36,7 +36,7 @@ component InnerItem inherits Rectangle {
 
 export component Skeleton inherits Rectangle {
     in-out property <SkeletonType> type;
-    in-out property <color> item-color: Theme.is-dark ? Theme.secondary-background.darker(5%) : Theme.secondary-background.brighter(5%);
+    in-out property <color> item-color: Theme.is-dark ? Theme.secondary-background.darker(5%) : Theme.secondary-background.darker(5%);
 
     in-out property <bool> enabled-active: true;
     in-out property <color> active-item-color: self.item-color.brighter(20%);

@@ -46,10 +46,23 @@ export enum ComponentIndex {
     Slider,
     Button,
     Toast,
+    Rate,
+    Pagination,
+    RecordIndicator,
+    ToolTip,
+    BreadCrumb,
+    Skeleton,
+    PinCodes,
+    Select,
+    Collapse,
+    Input,
 
 ////////////
+    Badge,
     TabBtn,
     TabBtns,
+    StatusBar,
+
     Label,
     Tag,
     NoMessageImg,
@@ -78,20 +91,6 @@ export enum ComponentIndex {
     Banner,
     AccountBalance,
 
-    StatusBar,
-    CircleProgress,
-    Rate,
-    ProgressBar,
-    RecordIndicator,
-    ToolTip,
-    Pagination,
-    BreadCrumb,
-    Skeleton,
-    PinCodes,
-    Badge,
-    Select,
-    Collapse,
-    Search,
 
     PopupAction,
     PopupActionEntry,
@@ -115,14 +114,9 @@ export enum ComponentIndex {
     TransactionTileStatus,
     WaitTransactionConfirmed,
 
-
     SignIn,
     Login,
     Password,
-
-
-
-
 
     Setting,
     SettingEntry,
@@ -131,13 +125,6 @@ export enum ComponentIndex {
 
     Loading,
     LandingPage,
-
-
-
-    Input,
-    TextEdit,
-    LineInput,
-
 
 }
 
@@ -158,7 +145,7 @@ export global Store {
     in-out property <SettingPreference> setting-preference: {
         win-width: 1500,
         win-height: 800,
-        font-size: "16",
+        font-size: "24",
         font-family: "Source Han Sans CN",
         language: "en",
         always-on-top: false,
@@ -176,7 +163,7 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
 
-    in-out property <ComponentIndex> current-component-index: ComponentIndex.Button;
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.Input;
     in-out property <[{title: string, component-index: ComponentIndex}]> component-entries: [
         {
             title: is-cn ? "树" : "Tree",
@@ -201,7 +188,47 @@ export global Store {
         {
             title: is-cn ? "弹出信息" : "Toast",
             component-index: ComponentIndex.Toast,
-        }
+        },
+        {
+            title: is-cn ? "打分" : "Rate",
+            component-index: ComponentIndex.Rate,
+        },
+        {
+            title: is-cn ? "分页" : "Pagination",
+            component-index: ComponentIndex.Pagination,
+        },
+        {
+            title: is-cn ? "录制指示器" : "RecordIndicator",
+            component-index: ComponentIndex.RecordIndicator,
+        },
+        {
+            title: is-cn ? "工具提示" : "ToolTip",
+            component-index: ComponentIndex.ToolTip,
+        },
+        {
+            title: is-cn ? "面包屑" : "BreadCrumb",
+            component-index: ComponentIndex.BreadCrumb,
+        },
+        {
+            title: is-cn ? "骨架" : "Skeleton",
+            component-index: ComponentIndex.Skeleton,
+        },
+        {
+            title: is-cn ? "验证码" : "PinCodes",
+            component-index: ComponentIndex.PinCodes,
+        },
+        {
+            title: is-cn ? "选择下拉栏" : "Select",
+            component-index: ComponentIndex.Select,
+        },
+        {
+            title: is-cn ? "折叠" : "Collapse",
+            component-index: ComponentIndex.Collapse,
+        },
+        {
+            title: is-cn ? "输入" : "Input",
+            component-index: ComponentIndex.Input,
+        },
     ];
 
     //////////////////////////////// Logic End  ////////////////////////////////
