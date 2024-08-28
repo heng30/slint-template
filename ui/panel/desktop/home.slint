@@ -21,6 +21,9 @@ import { PinCodesExample } from "examples/pin-codes.slint";
 import { SelectExample } from "examples/select.slint";
 import { CollapseExample } from "examples/collapse.slint";
 import { InputExample } from "examples/input.slint";
+import { BadgeExample } from "examples/badge.slint";
+import { LabelExample } from "examples/label.slint";
+import { TagExample } from "examples/tag.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
@@ -88,6 +91,9 @@ component RightPanel inherits Rectangle {
     if Store.current-component-index == ComponentIndex.Select: SelectExample { }
     if Store.current-component-index == ComponentIndex.Collapse: CollapseExample { }
     if Store.current-component-index == ComponentIndex.Input: InputExample { }
+    if Store.current-component-index == ComponentIndex.Badge: BadgeExample { }
+    if Store.current-component-index == ComponentIndex.Label: LabelExample { }
+    if Store.current-component-index == ComponentIndex.Tag: TagExample { }
 }
 
 export component Home inherits VerticalLayout {

@@ -1,0 +1,38 @@
+import { Util, Theme } from "../../def.slint";
+import { Badge, ExampleComponent } from "../../../base/widgets.slint";
+
+export component BadgeExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Rectangle {
+                    width: 200px;
+                    height: 200px;
+                    background: red;
+                    border-radius: Theme.border-radius;
+
+                    Badge {
+                        text: "99+";
+                        target-component-width: parent.width;
+                        target-component-height: parent.height;
+                    }
+                }
+
+                code: "Rectangle {\n    width: 200px;\n    height: 200px;\n    background: red;\n    border-radius: Theme.border-radius;\n\n    Badge {\n        text: \"99+\";\n        target-component-width: parent.width;\n        target-component-height: parent.height;\n    }\n}";
+            }
+        }
+    }
+}

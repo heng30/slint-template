@@ -56,15 +56,15 @@ export enum ComponentIndex {
     Select,
     Collapse,
     Input,
+    Badge,
+    Label,
+    Tag,
 
 ////////////
-    Badge,
     TabBtn,
     TabBtns,
     StatusBar,
 
-    Label,
-    Tag,
     NoMessageImg,
     NoDataImg,
     Divider,
@@ -91,9 +91,7 @@ export enum ComponentIndex {
     Banner,
     AccountBalance,
 
-
     PopupAction,
-    PopupActionEntry,
 
     TokenTile,
     TokenTileEntry,
@@ -163,7 +161,7 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
 
-    in-out property <ComponentIndex> current-component-index: ComponentIndex.Input;
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.Tag;
     in-out property <[{title: string, component-index: ComponentIndex}]> component-entries: [
         {
             title: is-cn ? "树" : "Tree",
@@ -228,6 +226,18 @@ export global Store {
         {
             title: is-cn ? "输入" : "Input",
             component-index: ComponentIndex.Input,
+        },
+        {
+            title: is-cn ? "徽章" : "Badge",
+            component-index: ComponentIndex.Badge,
+        },
+        {
+            title: is-cn ? "文本" : "Label",
+            component-index: ComponentIndex.Label,
+        },
+        {
+            title: is-cn ? "标签" : "Tag",
+            component-index: ComponentIndex.Tag,
         },
     ];
 
