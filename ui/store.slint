@@ -76,14 +76,14 @@ export enum ComponentIndex {
     SlideCard,
     ListTile,
     Drawer,
-
-////////////
-    Head,
     News,
-    Mnemonic,
-
+    Head,
     About,
     Help,
+
+////////////
+    Mnemonic,
+
     ResetPassword,
     AccountBalance,
 
@@ -149,7 +149,7 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
 
-    in-out property <ComponentIndex> current-component-index: ComponentIndex.Drawer;
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.Help;
     in-out property <[{title: string, component-index: ComponentIndex}]> component-entries: [
         {
             title: is-cn ? "树" : "Tree",
@@ -294,6 +294,22 @@ export global Store {
         {
             title: is-cn ? "抽屉" : "Drawer",
             component-index: ComponentIndex.Drawer,
+        },
+        {
+            title: is-cn ? "新闻" : "News",
+            component-index: ComponentIndex.News,
+        },
+        {
+            title: is-cn ? "头部" : "Head",
+            component-index: ComponentIndex.Head,
+        },
+        {
+            title: is-cn ? "关于" : "About",
+            component-index: ComponentIndex.About,
+        },
+        {
+            title: is-cn ? "帮助" : "Help",
+            component-index: ComponentIndex.Help,
         },
     ];
 

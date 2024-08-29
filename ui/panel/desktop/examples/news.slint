@@ -1,0 +1,34 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { News, ExampleComponent } from "../../../base/widgets.slint";
+
+export component NewsExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                News {
+                    width: parent.width * 0.6;
+                    link-text: "How to learn Slint";
+                    pub-date: "12-15 10:12";
+                    summary: "the character will be either a control character, or it will be mapped to a private unicode character. The mapping of these non-printable, special characters is available in the Key namespace";
+                    author: "Heng30";
+                    is-read: false;
+                }
+
+                code: "News {\n    width: parent.width * 0.6;\n    link-text: \"How to learn Slint\";\n    pub-date: \"12-15 10:12\";\n    summary: \"the character will be either a control character, or it will be mapped to a private unicode character. The mapping of these non-printable, special characters is available in the Key namespace\";\n    author: \"Heng30\";\n    is-read: false;\n}";
+            }
+        }
+    }
+}

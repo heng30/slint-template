@@ -1,0 +1,37 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { About, AboutSetting, ExampleComponent } from "../../../base/widgets.slint";
+
+export component AboutExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                About {
+                    width: 60%;
+                    is-show-header: false;
+
+                    init => {
+                        AboutSetting.app-name = "About Example";
+                        AboutSetting.version = "1.0.0";
+                        AboutSetting.sponsor = "";
+                        AboutSetting.text = "A value between 0 and 1 (or a percentage) that is used to draw the element and its children with transparency. 0 is fully transparent (invisible), and 1 is fully opaque. The opacity is applied to the tree of child elements as if they were first drawn into an intermediate layer, and then the whole layer is rendered with this opacity. (default value: 1)";
+                    }
+                }
+
+                code: "About {\n    width: 60%;\n    is-show-header: false;\n\n    init => {\n        AboutSetting.app-name = \"About Example\";\n        AboutSetting.version = \"1.0.0\";\n        AboutSetting.sponsor = \"\";\n        AboutSetting.text = \"A value between 0 and 1 (or a percentage) that is used to draw the element and its children with transparency. 0 is fully transparent (invisible), and 1 is fully opaque. The opacity is applied to the tree of child elements as if they were first drawn into an intermediate layer, and then the whole layer is rendered with this opacity. (default value: 1)\";\n    }\n}";
+            }
+        }
+    }
+}

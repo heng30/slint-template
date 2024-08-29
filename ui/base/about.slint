@@ -40,7 +40,7 @@ export component About inherits SettingDetail {
             wrap: word-wrap;
         }
 
-        VerticalLayout {
+        if AboutSetting.sponsor != "": VerticalLayout {
             spacing: Theme.spacing * 2;
             HorizontalLayout {
                 alignment: center;

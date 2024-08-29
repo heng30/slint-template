@@ -3,21 +3,28 @@ import { IconBtn } from "./icon-btn.slint";
 import { Divider } from "./divider.slint";
 
 export component Head inherits Rectangle {
-    height: Theme.header-height;
+    height: hbox.preferred-height;
     background: Theme.base-background;
 
     in-out property <bool> is-show-divider;
     in-out property <string> title;
+
     in-out property icon <=> ic.icon;
     in-out property icon-size <=> ic.icon-size;
+    in-out property icon-colorize <=> ic.colorize;
+
     in-out property <LayoutAlignment> hbox-alignment: LayoutAlignment.stretch;
+    in-out property <length> hpadding: Theme.padding;
+    in-out property <length> vpadding: Theme.padding;
 
     callback clicked <=> ic.clicked;
 
     hbox := HorizontalLayout {
         alignment: hbox-alignment;
-        padding-left: Theme.padding;
-        padding-right: Theme.padding;
+        padding-left: root.hpadding;
+        padding-right: root.hpadding;
+        padding-top: root.vpadding;
+        padding-bottom: root.vpadding;
 
         ic := IconBtn {
             icon-size: Theme.icon-size;

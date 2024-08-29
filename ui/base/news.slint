@@ -1,6 +1,16 @@
 import { Theme } from "../theme.slint";
 import { Link } from "./link.slint";
 
+// Example:
+// News {
+//     width: parent.width * 0.6;
+//     link-text: "How to learn Slint";
+//     pub-date: "12-15 10:12";
+//     summary: "the character will be either a control character, or it will be mapped to a private unicode character. The mapping of these non-printable, special characters is available in the Key namespace";
+//     author: "Heng30";
+//     is-read: false;
+// }
+
 export component News inherits Rectangle {
     height: vbox.preferred-height;
 

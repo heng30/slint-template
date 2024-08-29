@@ -1,0 +1,44 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { Head, ExampleComponent } from "../../../base/widgets.slint";
+
+export component HeadExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Head {
+                    width: parent.width * 0.6;
+                    background: Theme.secondary-background;
+                    icon: Icons.home-fill;
+                    title: "Head Example";
+                    hbox-alignment: LayoutAlignment.space-between;
+                    is-show-divider: true;
+                    icon-colorize: blue;
+
+                    Rectangle {
+                        background: red;
+                        width: 20%;
+                    }
+
+                    clicked => {
+                        debug("clicked")
+                    }
+                }
+
+                code: "Head {\n    width: parent.width * 0.6;\n    background: Theme.secondary-background;\n    icon: Icons.home-fill;\n    title: \"Head Example\";\n    hbox-alignment: LayoutAlignment.space-between;\n    is-show-divider: true;\n    icon-colorize: blue;\n\n    Rectangle {\n        background: red;\n        width: 20%;\n    }\n\n    clicked => {\n        debug(\"clicked\")\n    }\n}";
+            }
+        }
+    }
+}

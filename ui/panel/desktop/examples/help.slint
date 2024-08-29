@@ -1,0 +1,40 @@
+import { Util, Store, Theme, Icons } from "../../def.slint";
+import { Help, AboutSetting, ExampleComponent } from "../../../base/widgets.slint";
+
+export component HelpExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Help {
+                    width: 60%;
+                    is-show-header: false;
+                    background: Theme.secondary-background;
+                    border-radius: Theme.border-radius;
+
+                    entries: Store.is-cn ? [
+                        "配置文件保存目录: ~/.config/slint-template",
+                        "数据库保存目录: ~/.local/share/slint-template",
+                    ] : [
+                        "Config directory: ~/.config/slint-template",
+                        "Data directory: ~/.local/share/slint-template",
+                    ];
+                }
+
+                code: "Help {\n    width: 60%;\n    is-show-header: false;\n    background: Theme.secondary-background;\n    border-radius: Theme.border-radius;\n\n    entries: Store.is-cn ? [\n        \"配置文件保存目录: ~/.config/slint-template\",\n        \"数据库保存目录: ~/.local/share/slint-template\",\n    ] : [\n        \"Config directory: ~/.config/slint-template\",\n        \"Data directory: ~/.local/share/slint-template\",\n    ];\n}";
+            }
+        }
+    }
+}
