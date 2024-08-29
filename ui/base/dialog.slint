@@ -3,14 +3,23 @@ import { Store } from "../store.slint";
 import { Logic } from "../logic.slint";
 import { IconBtn } from "./icon-btn.slint";
 import { CenterLayout } from "./center-layout.slint";
-import { CancelBtn, ConfirmBtn } from "./btn.slint";
+import { TextBtn } from "./btn.slint";
 
 export component Dialog inherits Rectangle {
     in-out property <string> title;
     in-out property <color> title-bg: Theme.secondary-brand-color;
-    in-out property <bool> is-hide-btns: false;
-    in-out property <bool> is-hide-close-btns: false;
+    in-out property <bool> is-hide-close-btn: false;
+    in-out property <bool> is-hide-bottom-btns: false;
+    in-out property <bool> is-hide-confirm-btn: false;
+    in-out property <bool> is-hide-cancel-btn: false;
     in-out property <bool> is-prevent-event-forward: false;
+
+    in-out property <color> cancel-text-color: Theme.info-color;
+    in-out property <color> confirm-text-color: Theme.third-brand-color;
+
+    callback close <=> cancel-clicked;
+    callback canceled <=> cancel-clicked;
+    callback confirmed <=> ok-clicked;
 
     callback cancel-clicked();
     callback ok-clicked();
@@ -35,7 +44,7 @@ export component Dialog inherits Rectangle {
                 text: root.title;
             }
 
-            if is-hide-btns && !is-hide-close-btns: HorizontalLayout {
+            if !is-hide-close-btn: HorizontalLayout {
                 alignment: end;
                 padding-right: Theme.padding;
                 CenterLayout {
@@ -56,20 +65,28 @@ export component Dialog inherits Rectangle {
             @children
         }
 
-        if !is-hide-btns: HorizontalLayout {
-            alignment: center;
+        if !is-hide-bottom-btns: HorizontalLayout {
+            alignment: LayoutAlignment.end;
             spacing: Theme.spacing * 8;
-            padding: Theme.padding * 2;
+            padding: Theme.padding * 4;
 
-            cancel-btn := CancelBtn {
+            if !is-hide-cancel-btn: TextBtn {
+                icon: Icons.cancel;
                 text: Logic.tr("Cancel");
+                text-color: root.cancel-text-color;
+                colorize: self.text-color;
+
                 clicked => {
                     root.cancel-clicked();
                 }
             }
 
-            ConfirmBtn {
+            if !is-hide-confirm-btn: TextBtn {
+                icon: Icons.success;
                 text: Logic.tr("Confirm");
+                text-color: root.confirm-text-color;
+                colorize: self.text-color;
+
                 clicked => {
                     root.ok-clicked();
                 }

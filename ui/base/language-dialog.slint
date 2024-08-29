@@ -7,9 +7,16 @@ import { RadioBtn } from "./radio-btn.slint";
 
 export component LanguageDialog inherits Dialog {
     title: Logic.tr("Please select language");
-    is-hide-btns: true;
+    is-hide-bottom-btns: false;
+    is-hide-cancel-btn: true;
 
-    in-out property<string> language: "cn";
+    in-out property <string> language: "cn";
+
+    callback confirmed-language(string);
+
+    confirmed => {
+        confirmed-language(root.language);
+    }
 
     VerticalLayout {
         padding: Theme.padding * 4;
@@ -22,28 +29,18 @@ export component LanguageDialog inherits Dialog {
             cn-radio := RadioBtn {
                 text: "中文";
                 checked: root.language == "cn";
-                check => { root.language = "cn"; }
+                check => {
+                    root.language = "cn";
+                }
             }
 
             en-radio := RadioBtn {
                 text: "English";
                 checked: root.language == "en";
-                check => { root.language = "en"; }
-            }
-        }
-
-        HorizontalLayout {
-            alignment: end;
-
-            ConfirmBtn {
-                text: Logic.tr("Confirm");
-                clicked => {
-                    Store.setting-preference.language = root.language;
-                    Logic.set-setting-preference(Store.setting-preference);
-                    Store.is-first-run = false;
+                check => {
+                    root.language = "en";
                 }
             }
         }
     }
-
 }

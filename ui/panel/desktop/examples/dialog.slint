@@ -1,0 +1,140 @@
+import { Util, Theme, Icons, Logic, Store } from "../../def.slint";
+import { IconBtn, Dialog, ConfirmDialog, ConfirmDialogSetting, IconsDialog, IconsDialogSetting, LanguageDialog, ExampleComponent } from "../../../base/widgets.slint";
+
+export component DialogExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Dialog {
+                    title: "Title";
+                    title-bg: Theme.third-brand-color;
+                    background: Theme.secondary-background;
+
+                    Rectangle {
+                        width: 800px;
+                        height: 500px;
+                        background: Theme.secondary-background;
+                        border-radius: Theme.border-radius;
+                    }
+                }
+
+                code: "Dialog {\n    title: \"Title\";\n    title-bg: Theme.third-brand-color;\n    background: Theme.secondary-background;\n\n    Rectangle {\n        width: 800px;\n        height: 500px;\n        background: Theme.secondary-background;\n        border-radius: Theme.border-radius;\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                VerticalLayout {
+                    spacing: Theme.spacing * 10;
+
+                    IconBtn {
+                        icon: Icons.success;
+                        text: "Show ConfirmDialog";
+                        text-color: Colors.white;
+                        colorize: self.text-color;
+                        background: Theme.success-color;
+                        use-auto-size: true;
+                        auto-size-vpadding: Theme.padding * 2;
+
+                        clicked => {
+                            ConfirmDialogSetting.set(true,  Logic.tr("Warning"), Logic.tr("Delete or not?"), "remove-all-trash", "user-data");
+                        }
+                    }
+                }
+
+                code: "export component AppWindow inherits Window {\n    if ConfirmDialogSetting.show: ConfirmDialog {\n        is-prevent-event-forward: true;\n       width: Math.min(root.width * 0.9, self.vbox-preferred-width * 2);\n       background: Theme.secondary-background;\n    }\n\n    IconBtn {\n        icon: Icons.success;\n        text: \"Show ConfirmDialog\";\n        text-color: Colors.white;\n        colorize: self.text-color;\n        background: Theme.success-color;\n        use-auto-size: true;\n        auto-size-vpadding: Theme.padding * 2;\n\n        clicked => {\n            ConfirmDialogSetting.set(true,  Logic.tr(\"Warning\"), Logic.tr(\"Delete or not?\"), \"remove-all-trash\", \"user-data\");\n        }\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                VerticalLayout {
+                    spacing: Theme.spacing * 10;
+
+                    IconBtn {
+                        icon: Icons.success;
+                        text: "Show IconsDialog";
+                        text-color: Colors.white;
+                        colorize: self.text-color;
+                        background: Theme.success-color;
+                        use-auto-size: true;
+                        auto-size-vpadding: Theme.padding * 2;
+
+                        clicked => {
+                            IconsDialogSetting.set(true, "add-icon-to-list", "user-data");
+                        }
+                    }
+                }
+
+                code: "export component AppWindow inherits Window {\n    if IconsDialogSetting.show: IconsDialog {\n        is-prevent-event-forward: true;\n        column-count: 6;\n        select-index(handle-type, index, user-data) => {\n        }\n    }\n\n    IconBtn {\n        icon: Icons.success;\n        text: \"Show IconsDialog\";\n        text-color: Colors.white;\n        colorize: self.text-color;\n        background: Theme.success-color;\n        use-auto-size: true;\n        auto-size-vpadding: Theme.padding * 2;\n\n        clicked => {\n            IconsDialogSetting.set(true, \"add-icon-to-list\", \"user-data\");\n        }\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                VerticalLayout {
+                    spacing: Theme.spacing * 10;
+
+                    ld := LanguageDialog {
+                        background: Theme.secondary-background;
+                        language: Store.setting-preference.language;
+
+                        close => {
+                            ld.visible = false;
+                        }
+
+                        confirmed-language(lang) => {
+                            Store.setting-preference.language = lang;
+                            Logic.set-setting-preference(Store.setting-preference);
+                            ld.visible = false;
+                        }
+                    }
+
+                    IconBtn {
+                        icon: Icons.success;
+                        text: "Show LanguageDialog";
+                        text-color: Colors.white;
+                        colorize: self.text-color;
+                        background: Theme.success-color;
+                        use-auto-size: true;
+                        auto-size-vpadding: Theme.padding * 2;
+
+                        clicked => {
+                            ld.visible = !ld.visible;
+                        }
+                    }
+                }
+
+                code: "VerticalLayout {\n    spacing: Theme.spacing * 10;\n\n    ld := LanguageDialog {\n        background: Theme.secondary-background;\n        language: Store.setting-preference.language;\n\n        close => {\n            ld.visible = false;\n        }\n\n        confirmed-language(lang) => {\n            Store.setting-preference.language = lang;\n            Logic.set-setting-preference(Store.setting-preference);\n            ld.visible = false;\n        }\n    }\n\n    IconBtn {\n        icon: Icons.success;\n        text: \"Show LanguageDialog\";\n        text-color: Colors.white;\n        colorize: self.text-color;\n        background: Theme.success-color;\n        use-auto-size: true;\n        auto-size-vpadding: Theme.padding * 2;\n\n        clicked => {\n            ld.visible = !ld.visible;\n        }\n    }\n}";
+            }
+        }
+    }
+}

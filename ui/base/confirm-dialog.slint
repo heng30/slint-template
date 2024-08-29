@@ -20,6 +20,10 @@ export global ConfirmDialogSetting {
         self.handle-type = handle-type;
         self.user-data = user-data;
     }
+
+    public function hide() {
+        self.show = false;
+    }
 }
 
 export component ConfirmDialog inherits Rectangle {

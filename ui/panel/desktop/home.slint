@@ -36,6 +36,7 @@ import { BrandExample }  from "examples/brand.slint";
 import { EmptyExample }  from "examples/empty.slint";
 import { LandingPageExample }  from "examples/landing-page.slint";
 import { StatusBarExample }  from "examples/status-bar.slint";
+import { DialogExample }  from "examples/dialog.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
@@ -118,6 +119,7 @@ component RightPanel inherits Rectangle {
     if Store.current-component-index == ComponentIndex.Empty: EmptyExample { }
     if Store.current-component-index == ComponentIndex.LandingPage: LandingPageExample { }
     if Store.current-component-index == ComponentIndex.StatusBar: StatusBarExample { }
+    if Store.current-component-index == ComponentIndex.Dialog: DialogExample { }
 }
 
 export component Home inherits VerticalLayout {

@@ -28,6 +28,8 @@ export component AppWindow inherits Window {
 
     if IconsDialogSetting.show: IconsDialog {
         is-prevent-event-forward: true;
+        column-count: Store.device-type == DeviceType.Desktop ? 6 : 5;
+        icon-size: Store.device-type == DeviceType.Desktop ? Theme.icon-size * 3 : Theme.icon-size;
         select-index(handle-type, index, user-data) => {
         }
     }
