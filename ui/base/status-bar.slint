@@ -11,6 +11,8 @@ export component StatusBar inherits Rectangle {
     in-out property <length> icon-size: Theme.default-font-size;
     in-out property <bool> show-icon-hover-background: false;
 
+    in-out property <bool> is-app-window-bar: true;
+
     in-out property <bool> is-show-icon;
     in-out property <image> icon;
     in-out property <string> title;
@@ -18,12 +20,21 @@ export component StatusBar inherits Rectangle {
     in-out property <bool> is-show-tip: false;
     in-out property <ComponentPosition> tip-position: ComponentPosition.Bottom;
 
+    in-out property <length> container-width;
+    in-out property <length> container-height;
+
     private property <AppPosType> origin-pos;
     private property <length> offset-x;
     private property <length> offset-y;
     private property <bool> enable-move;
 
-    background: Theme.base-background;
+    callback maximal();
+    callback minimal();
+    callback close();
+    callback start-moving();
+    callback stop-moving();
+
+    background: Theme.secondary-background;
     height: Theme.header-height;
 
     TouchArea {
@@ -33,22 +44,31 @@ export component StatusBar inherits Rectangle {
             if (!root.enable-move) {
                 return;
             }
-            root.origin-pos = Util.get-current-pos();
-            root.offset-x = self.pressed-x - self.mouse-x;
-            root.offset-y = self.pressed-y - self.mouse-y;
+            if (root.is-app-window-bar) {
+                root.origin-pos = Util.get-current-pos();
+                root.offset-x = self.pressed-x - self.mouse-x;
+                root.offset-y = self.pressed-y - self.mouse-y;
 
-            Util.set-current-pos({
-                x: root.origin-pos.x - root.offset-x,
-                y: root.origin-pos.y - root.offset-y,
-            });
+                Util.set-current-pos({
+                    x: root.origin-pos.x - root.offset-x,
+                    y: root.origin-pos.y - root.offset-y,
+                });
+            } else {
+                root.offset-x = self.pressed-x - self.mouse-x;
+                root.offset-y = self.pressed-y - self.mouse-y;
+                root.x = Math.clamp(root.x - root.offset-x, 0 - root.width / 2, root.container-width - root.width / 2);
+                root.y = Math.clamp(root.y - root.offset-y, 0 - root.height / 2, root.container-height - root.height / 2);
+            }
         }
 
         pointer-event(event) => {
             if (event.button == PointerEventButton.left) {
                 if (event.kind == PointerEventKind.down) {
                     root.enable-move = true;
+                    root.start-moving();
                 } else {
                     root.enable-move = false;
+                    root.stop-moving();
                 }
             }
         }
@@ -91,14 +111,19 @@ export component StatusBar inherits Rectangle {
                     tip: Logic.tr("maximal");
 
                     clicked => {
-                        if (Util.get-is-max-window()) {
-                            Util.max-window(false);
-                            self.icon = Icons.status-bar-max;
-                            self.tip = Logic.tr("maximal");
+                        if (root.is-app-window-bar) {
+
+                            if (Util.get-is-max-window()) {
+                                Util.max-window(false);
+                                self.icon = Icons.status-bar-max;
+                                self.tip = Logic.tr("maximal");
+                            } else {
+                                Util.max-window(true);
+                                self.icon = Icons.status-bar-normal;
+                                self.tip = Logic.tr("normal");
+                            }
                         } else {
-                            Util.max-window(true);
-                            self.icon = Icons.status-bar-normal;
-                            self.tip = Logic.tr("normal");
+                            root.maximal();
                         }
                     }
                 }
@@ -113,7 +138,11 @@ export component StatusBar inherits Rectangle {
                     tip: Logic.tr("minimal");
 
                     clicked => {
-                        Util.min-window(true);
+                        if (root.is-app-window-bar) {
+                            Util.min-window(true);
+                        } else {
+                            root.minimal();
+                        }
                     }
                 }
 
@@ -127,7 +156,11 @@ export component StatusBar inherits Rectangle {
                     tip: Logic.tr("close");
 
                     clicked => {
-                        ConfirmDialogSetting.set(true, Logic.tr("Warning"), Logic.tr("Quick application or not?"), "close-window", "");
+                        if (root.is-app-window-bar) {
+                            ConfirmDialogSetting.set(true, Logic.tr("Warning"), Logic.tr("Quick application or not?"), "close-window", "");
+                        } else {
+                            root.close();
+                        }
                     }
                 }
             }

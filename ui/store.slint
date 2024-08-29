@@ -70,9 +70,9 @@ export enum ComponentIndex {
     Brand,
     Empty,
     LandingPage,
+    StatusBar,
 
 ////////////
-    StatusBar,
 
     Dialog,
     CenterLayout,
@@ -153,7 +153,7 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
 
-    in-out property <ComponentIndex> current-component-index: ComponentIndex.LandingPage;
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.StatusBar;
     in-out property <[{title: string, component-index: ComponentIndex}]> component-entries: [
         {
             title: is-cn ? "树" : "Tree",
@@ -252,7 +252,7 @@ export global Store {
             component-index: ComponentIndex.Divider,
         },
         {
-            title: is-cn ? "分割线" : "Link",
+            title: is-cn ? "链接" : "Link",
             component-index: ComponentIndex.Link,
         },
         {
@@ -274,6 +274,10 @@ export global Store {
         {
             title: is-cn ? "欢迎页面" : "LandingPage",
             component-index: ComponentIndex.LandingPage,
+        },
+        {
+            title: is-cn ? "顶部状态栏" : "StatusBar",
+            component-index: ComponentIndex.StatusBar,
         },
     ];
 

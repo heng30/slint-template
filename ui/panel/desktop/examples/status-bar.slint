@@ -1,0 +1,90 @@
+import { Util, Theme, Icons, Store } from "../../def.slint";
+import { StatusBar, ExampleComponent } from "../../../base/widgets.slint";
+
+export component StatusBarExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            VerticalLayout {
+
+                spacing: Theme.spacing * 20;
+                ExampleComponent {
+                    width: Math.max(1000px, root.width * 0.8);
+
+                    Rectangle {
+                        height: 600px;
+                        background: Theme.thirdly-background;
+                        border-radius: Theme.border-radius;
+
+                        StatusBar {
+                            width: 600px;
+                            background: Theme.secondary-background;
+                            icon: Icons.brand;
+                            title: "Example";
+                            is-show-icon: true;
+                            is-show-tip: true;
+                            is-app-window-bar: false;
+                            container-width: parent.width;
+                            container-height: parent.height;
+
+                            maximal => {
+                                debug("maximal");
+                            }
+
+                            minimal => {
+                                debug("minimal");
+                            }
+
+                            close => {
+                                debug("close");
+                            }
+
+                            start-moving => {
+                              root.interactive = false;
+                            }
+
+                            stop-moving => {
+                                root.interactive = false;
+                            }
+                        }
+                    }
+
+                    code: "Rectangle {\n    height: 600px;\n    background: red;\n    border-radius: Theme.border-radius;\n\n    StatusBar {\n        width: 600px;\n        background: Theme.secondary-background;\n        icon: Icons.brand;\n        title: \"Example\";\n        is-show-icon: true;\n        is-show-tip: true;\n        is-app-window-bar: false;\n\n        maximal => {\n            debug(\"maximal\");\n        }\n\n        minimal => {\n            debug(\"minimal\");\n        }\n\n        close => {\n            debug(\"close\");\n        }\n    }\n}";
+                }
+
+                ExampleComponent {
+                    width: Math.max(1000px, root.width * 0.8);
+
+                    Rectangle {
+                        height: 600px;
+                        background: Theme.thirdly-background;
+                        border-radius: Theme.border-radius;
+
+                        StatusBar {
+                            width: 600px;
+                            background: Theme.secondary-background;
+                            icon: Icons.brand;
+                            title: "App Window Example";
+                            is-show-icon: true;
+                            is-show-tip: true;
+                        }
+                    }
+
+                    detail: Store.is-cn ? "默认为程序外框的状态栏" : "Default is App window frame";
+
+                    code: "Rectangle {\n    height: 600px;\n    background: red;\n    border-radius: Theme.border-radius;\n\n    StatusBar {\n        width: 600px;\n        background: Theme.secondary-background;\n        icon: Icons.brand;\n        title: \"App Window Example\";\n        is-show-icon: true;\n        is-show-tip: true;\n    }\n}";
+                }
+            }
+        }
+    }
+}
