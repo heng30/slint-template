@@ -37,6 +37,10 @@ import { EmptyExample }  from "examples/empty.slint";
 import { LandingPageExample }  from "examples/landing-page.slint";
 import { StatusBarExample }  from "examples/status-bar.slint";
 import { DialogExample }  from "examples/dialog.slint";
+import { CenterLayoutExample }  from "examples/center-layout.slint";
+import { SlideCardExample }  from "examples/slide-card.slint";
+import { ListTileExample }  from "examples/list-tile.slint";
+import { DrawerExample }  from "examples/drawer.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
@@ -120,6 +124,10 @@ component RightPanel inherits Rectangle {
     if Store.current-component-index == ComponentIndex.LandingPage: LandingPageExample { }
     if Store.current-component-index == ComponentIndex.StatusBar: StatusBarExample { }
     if Store.current-component-index == ComponentIndex.Dialog: DialogExample { }
+    if Store.current-component-index == ComponentIndex.CenterLayout: CenterLayoutExample { }
+    if Store.current-component-index == ComponentIndex.SlideCard: SlideCardExample { }
+    if Store.current-component-index == ComponentIndex.ListTile: ListTileExample { }
+    if Store.current-component-index == ComponentIndex.Drawer: DrawerExample { }
 }
 
 export component Home inherits VerticalLayout {

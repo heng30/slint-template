@@ -58,6 +58,7 @@ export component Slider inherits Rectangle {
     }
 
     ta := TouchArea {
+        mouse-cursor: root.indicator-size > 0 ? MouseCursor.default : MouseCursor.pointer;
         clicked => {
             fs.focus();
 
@@ -96,6 +97,8 @@ export component Slider inherits Rectangle {
 
         indicator-ta := TouchArea {
             enabled: root.enabled;
+            mouse-cursor: MouseCursor.pointer;
+
             moved => {
                 if (root.orientation == Orientation.horizontal) {
                     parent.x = Math.clamp(parent.x + self.mouse-x - self.pressed-x, -parent.width / 2, root.width - parent.width / 2);

@@ -72,15 +72,14 @@ export enum ComponentIndex {
     LandingPage,
     StatusBar,
     Dialog,
+    CenterLayout,
+    SlideCard,
+    ListTile,
+    Drawer,
 
 ////////////
-
-    CenterLayout,
     Head,
-    ListTile,
     News,
-    SlideCard,
-    Drawer,
     Mnemonic,
 
     About,
@@ -150,7 +149,7 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
 
-    in-out property <ComponentIndex> current-component-index: ComponentIndex.Dialog;
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.Drawer;
     in-out property <[{title: string, component-index: ComponentIndex}]> component-entries: [
         {
             title: is-cn ? "树" : "Tree",
@@ -279,6 +278,22 @@ export global Store {
         {
             title: is-cn ? "弹框" : "Dialog",
             component-index: ComponentIndex.Dialog,
+        },
+        {
+            title: is-cn ? "中间布局" : "CenterLayout",
+            component-index: ComponentIndex.CenterLayout,
+        },
+        {
+            title: is-cn ? "滑动卡片" : "SlideCard",
+            component-index: ComponentIndex.SlideCard,
+        },
+        {
+            title: is-cn ? "列表条目" : "ListTile",
+            component-index: ComponentIndex.ListTile,
+        },
+        {
+            title: is-cn ? "抽屉" : "Drawer",
+            component-index: ComponentIndex.Drawer,
         },
     ];
 

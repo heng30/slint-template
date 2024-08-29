@@ -1,0 +1,181 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { Drawer, TextBtn, DrawerPosition, ExampleComponent } from "../../../base/widgets.slint";
+
+export component DrawerExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Rectangle {
+                    clip: true;
+                    background: Theme.secondary-background;
+                    width: 800px;
+                    height: 500px;
+                    border-radius: Theme.border-radius;
+
+                    drawer-top := Drawer {
+                        width: 800px;
+                        height: 500px;
+                        drawer-size: 300px;
+                        position: DrawerPosition.Top;
+                        blanket-background: Colors.white;
+                        Rectangle {
+                            background: blue;
+                        }
+                    }
+
+                    drawer-bottom := Drawer {
+                        is-show: false;
+                        drawer-size: 300px;
+                        position: DrawerPosition.Bottom;
+                        blanket-background: Colors.white;
+                        Rectangle {
+                            background: red;
+                        }
+                    }
+
+                    drawer-left := Drawer {
+                        is-show: false;
+                        drawer-size: 300px;
+                        position: DrawerPosition.Left;
+                        blanket-background: Colors.white;
+                        Rectangle {
+                            background: yellow;
+                        }
+                    }
+
+                    drawer-right := Drawer {
+                        is-show: false;
+                        drawer-size: 300px;
+                        position: DrawerPosition.Right;
+                        blanket-background: Colors.white;
+                        Rectangle {
+                            background: steelblue;
+                        }
+                    }
+
+                    HorizontalLayout {
+                        y: 0;
+                        height: 50px;
+                        spacing: 30px;
+                        TextBtn {
+                            text: "Show";
+                            background: pink;
+                            clicked => {
+                                drawer-top.position = DrawerPosition.Top;
+                                drawer-top.show();
+                            }
+                        }
+
+                        TextBtn {
+                            text: "Hide";
+                            background: pink;
+                            clicked => {
+                                drawer-top.hide();
+                            }
+                        }
+                    }
+
+                    VerticalLayout {
+                        alignment: LayoutAlignment.end;
+                        HorizontalLayout {
+                            height: 50px;
+                            spacing: 30px;
+                            TextBtn {
+                                text: "Show";
+                                background: pink;
+                                clicked => {
+                                    drawer-bottom.position = DrawerPosition.Bottom;
+                                    drawer-bottom.show();
+                                }
+                            }
+
+                            TextBtn {
+                                text: "Hide";
+                                background: pink;
+                                clicked => {
+                                    drawer-bottom.hide();
+                                }
+                            }
+                        }
+                    }
+
+                    HorizontalLayout {
+                        alignment: start;
+                        VerticalLayout {
+                            width: 200px;
+                            height: 500px;
+                            padding-top: Theme.padding * 10;
+                            padding-bottom: Theme.padding * 10;
+                            alignment: LayoutAlignment.space-between;
+
+                            TextBtn {
+                                text: "Show";
+                                text-color: white;
+                                background: blue;
+                                clicked => {
+                                    drawer-left.position = DrawerPosition.Left;
+                                    drawer-left.show();
+                                }
+                            }
+
+                            TextBtn {
+                                text: "Hide";
+                                text-color: white;
+                                background: blue;
+                                clicked => {
+                                    drawer-left.hide();
+                                }
+                            }
+                        }
+                    }
+
+                    HorizontalLayout {
+                        alignment: end;
+
+                        VerticalLayout {
+                            width: 200px;
+                            height: 500px;
+                            padding-top: Theme.padding * 10;
+                            padding-bottom: Theme.padding * 10;
+                            alignment: LayoutAlignment.space-between;
+
+                            TextBtn {
+                                text: "Show";
+                                text-color: white;
+                                background: blue;
+                                clicked => {
+                                    drawer-right.position = DrawerPosition.Right;
+                                    drawer-right.show();
+                                }
+                            }
+
+                            TextBtn {
+                                text: "Hide";
+                                text-color: white;
+                                background: blue;
+                                clicked => {
+                                    drawer-right.hide();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                code: "Rectangle {\n    clip: true;\n    background: Theme.secondary-background;\n    width: 800px;\n    height: 500px;\n    border-radius: Theme.border-radius;\n\n    drawer-top := Drawer {\n        width: 800px;\n        height: 500px;\n        drawer-size: 300px;\n        position: DrawerPosition.Top;\n        blanket-background: Colors.white;\n        Rectangle {\n            background: blue;\n        }\n    }\n\n    drawer-bottom := Drawer {\n        is-show: false;\n        drawer-size: 300px;\n        position: DrawerPosition.Bottom;\n        blanket-background: Colors.white;\n        Rectangle {\n            background: red;\n        }\n    }\n\n    drawer-left := Drawer {\n        is-show: false;\n        drawer-size: 300px;\n        position: DrawerPosition.Left;\n        blanket-background: Colors.white;\n        Rectangle {\n            background: yellow;\n        }\n    }\n\n    drawer-right := Drawer {\n        is-show: false;\n        drawer-size: 300px;\n        position: DrawerPosition.Right;\n        blanket-background: Colors.white;\n        Rectangle {\n            background: steelblue;\n        }\n    }\n\n    HorizontalLayout {\n        y: 0;\n        height: 50px;\n        spacing: 30px;\n        TextBtn {\n            text: \"Show\";\n            background: pink;\n            clicked => {\n                drawer-top.position = DrawerPosition.Top;\n                drawer-top.show();\n            }\n        }\n\n        TextBtn {\n            text: \"Hide\";\n            background: pink;\n            clicked => {\n                drawer-top.hide();\n            }\n        }\n    }\n\n    VerticalLayout {\n        alignment: LayoutAlignment.end;\n        HorizontalLayout {\n            height: 50px;\n            spacing: 30px;\n            TextBtn {\n                text: \"Show\";\n                background: pink;\n                clicked => {\n                    drawer-bottom.position = DrawerPosition.Bottom;\n                    drawer-bottom.show();\n                }\n            }\n\n            TextBtn {\n                text: \"Hide\";\n                background: pink;\n                clicked => {\n                    drawer-bottom.hide();\n                }\n            }\n        }\n    }\n\n    HorizontalLayout {\n        alignment: start;\n        VerticalLayout {\n            width: 200px;\n            height: 500px;\n            padding-top: Theme.padding * 10;\n            padding-bottom: Theme.padding * 10;\n            alignment: LayoutAlignment.space-between;\n\n            TextBtn {\n                text: \"Show\";\n                text-color: white;\n                background: blue;\n                clicked => {\n                    drawer-left.position = DrawerPosition.Left;\n                    drawer-left.show();\n                }\n            }\n\n            TextBtn {\n                text: \"Hide\";\n                text-color: white;\n                background: blue;\n                clicked => {\n                    drawer-left.hide();\n                }\n            }\n        }\n    }\n\n    HorizontalLayout {\n        alignment: end;\n\n        VerticalLayout {\n            width: 200px;\n            height: 500px;\n            padding-top: Theme.padding * 10;\n            padding-bottom: Theme.padding * 10;\n            alignment: LayoutAlignment.space-between;\n\n            TextBtn {\n                text: \"Show\";\n                text-color: white;\n                background: blue;\n                clicked => {\n                    drawer-right.position = DrawerPosition.Right;\n                    drawer-right.show();\n                }\n            }\n\n            TextBtn {\n                text: \"Hide\";\n                text-color: white;\n                background: blue;\n                clicked => {\n                    drawer-right.hide();\n                }\n            }\n        }\n    }\n}";
+            }
+        }
+    }
+}

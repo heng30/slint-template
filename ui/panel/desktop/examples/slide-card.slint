@@ -1,0 +1,57 @@
+import { Util, Theme, Store, Icons } from "../../def.slint";
+import { SlideCard, Label, ExampleComponent } from "../../../base/widgets.slint";
+
+export component SlideCardExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Rectangle {
+                    width: parent.width * 0.5;
+                    height: 80px;
+                    border-radius: Theme.border-radius;
+                    clip: true;
+
+                    SlideCard {
+                        icons-background: Theme.secondary-background;
+                        icons: [
+                            {
+                                icon: Icons.delete,
+                                text: "Delete",
+                                colorize: Colors.red,
+                            },
+                            {
+                                icon: Icons.edit,
+                                text: "Edit",
+                                colorize: Colors.blue,
+                            },
+                        ];
+
+                        Rectangle {
+                            height: 80px;
+                            background: pink;
+
+                            Label {
+                                text: Store.is-cn ? "向左侧滑动" : "Slide left to show icons";
+                            }
+                        }
+                    }
+                }
+
+                code: "Rectangle {\n    width: parent.width * 0.5;\n    height: 80px;\n    border-radius: Theme.border-radius;\n    clip: true;\n\n    SlideCard {\n        icons-background: Theme.secondary-background;\n        icons: [\n            {\n                icon: Icons.delete,\n                text: \"Delete\",\n                colorize: Colors.red,\n            },\n            {\n                icon: Icons.edit,\n                text: \"Edit\",\n                colorize: Colors.blue,\n            },\n        ];\n\n        Rectangle {\n            height: 80px;\n            background: pink;\n\n            Label {\n                text: Store.is-cn ? \"向左侧滑动\" : \"Slide left to show icons\";\n            }\n        }\n    }\n}";
+            }
+        }
+    }
+}

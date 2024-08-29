@@ -4,24 +4,35 @@ import { Label } from "./label.slint";
 
 
 // Example:
-// SlideCard {
-//     background: blue;
-//     icons-background: white;
-//     icons: [
-//         {
-//             icon: Icons.delete,
-//             text: "Delete",
-//             colorize: Colors.red,
-//         },
-//         {
-//             icon: Icons.edit,
-//             text: "Edit",
-//             colorize: Colors.red,
-//         },
-//     ];
-//     Rectangle {
-//         height: 80px;
-//         background: pink;
+// Rectangle {
+//     width: parent.width * 0.5;
+//     height: 80px;
+//     border-radius: Theme.border-radius;
+//     clip: true;
+
+//     SlideCard {
+//         icons-background: Theme.secondary-background;
+//         icons: [
+//             {
+//                 icon: Icons.delete,
+//                 text: "Delete",
+//                 colorize: Colors.red,
+//             },
+//             {
+//                 icon: Icons.edit,
+//                 text: "Edit",
+//                 colorize: Colors.blue,
+//             },
+//         ];
+
+//         Rectangle {
+//             height: 80px;
+//             background: pink;
+
+//             Label {
+//                 text: Store.is-cn ? "向左侧滑动" : "Slide left to show icons";
+//             }
+//         }
 //     }
 // }
 

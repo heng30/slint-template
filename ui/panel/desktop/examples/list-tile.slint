@@ -1,0 +1,42 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { ListTile, ExampleComponent } from "../../../base/widgets.slint";
+
+export component ListTileExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                ListTile {
+                    width: parent.width * 0.5;
+                    background: Theme.secondary-background;
+                    border-radius: Theme.border-radius;
+                    is-show-left-icon: true;
+                    left-icon-size: 100px;
+                    left-icon-background: Colors.transparent;
+                    left-icon: Icons.account;
+
+                    title-text: "IPhone Price";
+                    subtitle-text: "$100";
+                    middle-mouse-cursor: MouseCursor.pointer;
+
+                    is-show-right-icon: true;
+                    right-icon: Icons.delete;
+                }
+
+                code: "ListTile {\n    width: parent.width * 0.5;\n    background: Theme.secondary-background;\n    border-radius: Theme.border-radius;\n    is-show-left-icon: true;\n    left-icon-size: 100px;\n    left-icon-background: Colors.transparent;\n    left-icon: Icons.account;\n\n    title-text: \"IPhone Price\";\n    subtitle-text: \"$100\";\n    middle-mouse-cursor: MouseCursor.pointer;\n\n    is-show-right-icon: true;\n    right-icon: Icons.delete;\n}";
+            }
+        }
+    }
+}
