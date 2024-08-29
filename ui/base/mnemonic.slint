@@ -1,4 +1,3 @@
-import { LineEdit } from "std-widgets.slint";
 import { Theme, Icons } from "../theme.slint";
 import { Store } from "../store.slint";
 import { Logic } from "../logic.slint";
@@ -7,6 +6,7 @@ import { IconBtn } from "icon-btn.slint";
 import { CancelBtn, ConfirmBtn, TextBtn } from "btn.slint";
 import { Label } from "label.slint";
 import { Head } from "head.slint";
+import { LineInput } from "line-input.slint";
 
 export component Mnemonic inherits Rectangle {
     in-out property <[string]> mnemonics;
@@ -18,7 +18,7 @@ export component Mnemonic inherits Rectangle {
     in property <string> header-title;
 
     private property <int> cell-pre-row: 2;
-    private property <length> label-width: 20px;
+    private property <length> label-width: Theme.default-font-size * 2;
     private property <int> max-blocks: mnemonics.length == 24 ? 2 : (mnemonics.length == 12 ? 1 : 0);
 
     out property <bool> is-mnemonic-counts-12: max-blocks != 2;
@@ -28,8 +28,8 @@ export component Mnemonic inherits Rectangle {
     callback copy([string]);
     callback paste();
     callback refresh(int);
-    callback cancel();
-    callback confirm();
+    callback canceled();
+    callback confirmed();
     callback switch-mnemonic-counts(int);
 
     public function reset-mnemonics(counts: int) {
@@ -140,7 +140,7 @@ export component Mnemonic inherits Rectangle {
                             private property <int> cell-start-index: index * cell-pre-row + block-start-index;
 
                             HorizontalLayout {
-                                spacing: Theme.spacing;
+                                spacing: Theme.spacing * 2;
                                 horizontal-stretch: 1;
 
                                 Label {
@@ -149,7 +149,7 @@ export component Mnemonic inherits Rectangle {
                                     horizontal-alignment: TextHorizontalAlignment.right;
                                 }
 
-                                LineEdit {
+                                LineInput {
                                     horizontal-stretch: 1;
                                     read-only: is-read-only;
                                     text: mnemonics[cell-start-index];
@@ -162,7 +162,7 @@ export component Mnemonic inherits Rectangle {
 
                             HorizontalLayout {
                                 horizontal-stretch: 1;
-                                spacing: Theme.spacing;
+                                spacing: Theme.spacing * 2;
 
                                 Label {
                                     width: label-width;
@@ -170,7 +170,7 @@ export component Mnemonic inherits Rectangle {
                                     horizontal-alignment: TextHorizontalAlignment.right;
                                 }
 
-                                LineEdit {
+                                LineInput {
                                     horizontal-stretch: 1;
                                     read-only: is-read-only;
                                     text: mnemonics[cell-start-index + 1];
@@ -197,20 +197,21 @@ export component Mnemonic inherits Rectangle {
                 }
 
                 if is-show-btns: HorizontalLayout {
+                    alignment: LayoutAlignment.end;
                     padding: Theme.padding * 5;
-                    spacing: Theme.spacing * 10;
+                    spacing: Theme.spacing * 8;
 
                     CancelBtn {
                         text: Logic.tr("Cancel");
                         clicked => {
-                            root.cancel();
+                            root.canceled();
                         }
                     }
 
                     ConfirmBtn {
                         text: Logic.tr("Confirm");
                         clicked => {
-                            root.confirm();
+                            root.confirmed();
                         }
                     }
                 }

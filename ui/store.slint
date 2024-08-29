@@ -80,13 +80,15 @@ export enum ComponentIndex {
     Head,
     About,
     Help,
+    AddressBook,
+    Mnemonic,
+    AccountBalance,
+    LogIn,
+    SignIn,
+    Password,
+    ResetPassword,
 
 ////////////
-    Mnemonic,
-
-    ResetPassword,
-    AccountBalance,
-
     TokenTile,
     TokenTileEntry,
     TokenTileWithSwitchEntry,
@@ -95,19 +97,11 @@ export enum ComponentIndex {
     TokenSender,
     TokenRecipient,
 
-    AddressBook,
-    AddressBookEntry,
-    AddressBookDetail,
-
     TransactionFee,
     TransactionTile,
     TransactionTileEntry,
     TransactionTileStatus,
     WaitTransactionConfirmed,
-
-    SignIn,
-    Login,
-    Password,
 
     SettingEntry,
     SettingEntryV2,
@@ -149,7 +143,7 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
 
-    in-out property <ComponentIndex> current-component-index: ComponentIndex.Help;
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.ResetPassword;
     in-out property <[{title: string, component-index: ComponentIndex}]> component-entries: [
         {
             title: is-cn ? "树" : "Tree",
@@ -310,6 +304,30 @@ export global Store {
         {
             title: is-cn ? "帮助" : "Help",
             component-index: ComponentIndex.Help,
+        },
+        {
+            title: is-cn ? "组记词" : "Mnemonic",
+            component-index: ComponentIndex.Mnemonic,
+        },
+        {
+            title: is-cn ? "账户余额" : "AccountBalance",
+            component-index: ComponentIndex.AccountBalance,
+        },
+        {
+            title: is-cn ? "注册" : "SignIn",
+            component-index: ComponentIndex.SignIn,
+        },
+        {
+            title: is-cn ? "登陆" : "LogIn",
+            component-index: ComponentIndex.LogIn,
+        },
+        {
+            title: is-cn ? "密码" : "Password",
+            component-index: ComponentIndex.Password,
+        },
+        {
+            title: is-cn ? "重置密码" : "ResetPassword",
+            component-index: ComponentIndex.ResetPassword,
         },
     ];
 

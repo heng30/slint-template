@@ -59,7 +59,7 @@ export component Pagination inherits Rectangle {
 
                 text: start-page + index + 1;
                 font-size: root.font-size;
-                text-color: root.real-current-page == index ? Colors.white : root.text-color;
+                text-color: root.real-current-page == index ? Theme.light-text-color : root.text-color;
 
                 clicked => {
                     root.real-current-page = index;
@@ -121,7 +121,7 @@ export component Pagination inherits Rectangle {
 
                     text: start-page + index + 1;
                     font-size: root.font-size;
-                    text-color: root.real-current-page == start-page + index ? Colors.white : root.text-color;
+                    text-color: root.real-current-page == start-page + index ? Theme.light-text-color : root.text-color;
 
                     clicked => {
                         root.real-current-page = start-page + index;
@@ -155,7 +155,7 @@ export component Pagination inherits Rectangle {
                         text: inner-real-current-page + 1;
                         font-size: root.font-size;
                         background: root.real-current-page == inner-real-current-page ? Theme.third-brand-color : Colors.transparent;
-                        text-color: root.real-current-page == inner-real-current-page ? Colors.white : root.text-color;
+                        text-color: root.real-current-page == inner-real-current-page ? Theme.light-text-color : root.text-color;
 
                         clicked => {
                             root.real-current-page = inner-real-current-page;

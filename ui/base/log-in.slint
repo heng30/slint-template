@@ -6,19 +6,18 @@ import { IconBtn } from "./icon-btn.slint";
 import { Label } from "./label.slint";
 import { Head } from "./head.slint";
 import { LineInput } from "./line-input.slint";
-import { CancelBtn, ConfirmBtn } from "./btn.slint";
+import { TextBtnWithoutIcon } from "./btn.slint";
 import { SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel } from "./setting-detail.slint";
 
-export component Login inherits Rectangle {
+export component LogIn inherits Rectangle {
     in property <bool> is-show-header: true;
 
     private property <string> error-message;
 
     callback back();
-    callback cancel();
 
     // (username, password) -> string
-    callback confirm(string, string) -> string;
+    callback confirmed(string, string) -> string;
 
     public function reset() {
         error-message = "";
@@ -41,6 +40,17 @@ export component Login inherits Rectangle {
             vbox-alignment: LayoutAlignment.center;
 
             SettingDetailInnerVbox {
+                HorizontalLayout {
+                    alignment: LayoutAlignment.center;
+                    Label {
+                        text: Logic.tr("Log in");
+                        font-size: Theme.title1-font-size;
+                        font-weight: Theme.bold-font-weight;
+                    }
+                }
+            }
+
+            SettingDetailInnerVbox {
                 username-txt := SettingDetailLabel {
                     text: Logic.tr("Please enter username");
                 }
@@ -52,6 +62,7 @@ export component Login inherits Rectangle {
                         icon: Icons.paste;
                         width: root.width - Theme.padding * 4;
                         placeholder-text: Logic.tr("Username");
+                        is-show-icon: true;
 
                         edited => {
                             root.error-message = "";
@@ -77,6 +88,7 @@ export component Login inherits Rectangle {
                     width: root.width - Theme.padding * 4;
                     placeholder-text: Logic.tr("At least 8 chars");
                     input-type: is-show-password ? InputType.text : InputType.password;
+                    is-show-icon: true;
 
                     edited => {
                         root.error-message = "";
@@ -99,24 +111,16 @@ export component Login inherits Rectangle {
                 }
             }
 
-            HorizontalLayout {
-                spacing: Theme.spacing * 10;
-                padding: Theme.padding * 5;
+            confirm-btn := TextBtnWithoutIcon {
+                width: password-lineedit.width;
+                height: self.text-height + Theme.padding * 2;
+                text: Logic.tr("Log in");
+                font-size: Theme.title3-font-size;
+                bg-color: Theme.third-brand-color;
+                text-color: Theme.light-text-color;
 
-                CancelBtn {
-                    text: Logic.tr("Cancel");
-                    clicked => {
-                        root.reset();
-                        root.cancel();
-                    }
-                }
-
-                confirm-btn := ConfirmBtn {
-                    text: Logic.tr("Confirm");
-
-                    clicked => {
-                        root.error-message = root.confirm(username-lineedit.text, password-lineedit.text);
-                    }
+                clicked => {
+                    root.error-message = root.confirmed(username-lineedit.text, password-lineedit.text);
                 }
             }
         }

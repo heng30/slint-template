@@ -7,7 +7,7 @@ export component CancelBtn inherits IconBtn {
     use-auto-size: true;
     icon: Icons.cancel;
     icon-size: Theme.icon-size;
-    border-radius: self.height / 2;
+    border-radius: Theme.border-radius;
     bg-color: Theme.info-color.brighter(50%);
     bg-pressed-color: self.bg-color.darker(30%);
     colorize: self.bg-pressed-color.darker(100%);
@@ -17,10 +17,10 @@ export component CancelBtn inherits IconBtn {
 export component ConfirmBtn inherits IconBtn {
     use-auto-size: true;
     icon: Icons.success;
-    border-radius: self.height / 2;
-    bg-color: Theme.success-color.darker(20%);
+    border-radius: Theme.border-radius;
+    bg-color: Theme.third-brand-color.darker(20%);
     bg-pressed-color: self.bg-color.darker(30%);
-    colorize: Theme.base-color;
+    colorize: Theme.light-text-color;
     text: Logic.tr("Confirm");
 }
 

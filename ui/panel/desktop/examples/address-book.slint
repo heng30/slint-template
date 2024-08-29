@@ -1,0 +1,93 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { AddressBook, AddressBookSetting, AddressBookDetail, ExampleComponent } from "../../../base/widgets.slint";
+
+export component AddressBookExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                AddressBook {
+                    width: 60%;
+                    is-show-add-btn: true;
+
+                    init => {
+                        AddressBookSetting.entries = [
+                            {
+                                uuid: "uuid-1",
+                                name: "Address-1",
+                                address: "0xf1199999751b1a3A74590adBf95401D19AB30014"
+                            },
+                            {
+                                uuid: "uuid-2",
+                                name: "Address-2",
+                                address: "0xf1199999751b1a3A74590adBf95401D19AB30014"
+                            },
+                            {
+                                uuid: "uuid-3",
+                                name: "Address-3",
+                                address: "0xf1199999751b1a3A74590adBf95401D19AB30014"
+                            }
+                        ];
+                    }
+
+                    tap(entry) => {
+                        debug(entry.name);
+                    }
+
+                    add => {
+                        debug("add");
+                    }
+
+                    back() => {
+                        debug("back");
+                    }
+                }
+
+                code: "AddressBook {\n    width: 60%;\n    is-show-add-btn: true;\n\n    init => {\n        AddressBookSetting.entries = [\n            {\n                uuid: \"uuid-1\",\n                name: \"Address-1\",\n                address: \"0xf1199999751b1a3A74590adBf95401D19AB30014\"\n            },\n            {\n                uuid: \"uuid-2\",\n                name: \"Address-2\",\n                address: \"0xf1199999751b1a3A74590adBf95401D19AB30014\"\n            },\n            {\n                uuid: \"uuid-3\",\n                name: \"Address-3\",\n                address: \"0xf1199999751b1a3A74590adBf95401D19AB30014\"\n            }\n        ];\n    }\n\n    tap(entry) => {\n        debug(entry.name);\n    }\n\n    add => {\n        debug(\"add\");\n    }\n\n    back() => {\n        debug(\"back\");\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                AddressBookDetail {
+                    width: 60%;
+
+                    init => {
+                        AddressBookSetting.enabled-input = true;
+                    }
+
+                    back() => {
+                        debug("back");
+                    }
+
+                    update-name(uuid, name) => {
+                        debug(name);
+                    }
+
+                    update-address(uuid, address) => {
+                        debug(address);
+                    }
+                }
+
+                code: "ExampleComponent {\n    width: Math.max(1000px, root.width * 0.8);\n\n    AddressBookDetail {\n        width: 60%;\n\n        init => {\n            AddressBookSetting.enabled-input = true;\n        }\n\n        back() => {\n            debug(\"back\");\n        }\n\n        update-name(uuid, name) => {\n            debug(name);\n        }\n\n        update-address(uuid, address) => {\n            debug(address);\n        }\n    }\n}";
+            }
+        }
+    }
+}

@@ -29,7 +29,7 @@ export component SwitchBtn inherits Rectangle {
         width: root.indicator-size;
         height: self.width;
         border-radius: self.width / 2;
-        background: root.enabled ? Colors.white : Theme.disabled-color;
+        background: root.enabled ? Theme.light-text-color : Theme.disabled-color;
     }
 
     fs := FocusScope { }

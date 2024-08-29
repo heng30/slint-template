@@ -295,6 +295,8 @@ pub fn tr(text: &str) -> String {
         ("Jump to", "跳转到"),
         ("Example", "例子"),
         ("Detail", "说明"),
+        ("Log in", "登陆"),
+        ("Sign in", "注册"),
     ]);
 
     if let Some(txt) = items.get(text) {

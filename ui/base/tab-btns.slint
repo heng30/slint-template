@@ -79,7 +79,7 @@ export component TabBtns inherits Rectangle {
             text: item.text;
             font-size: root.font-size;
             icon-size: self.font-size;
-            colorize: Theme.invert-base-color;
+            colorize: Theme.is-dark ? Theme.light-text-color : Theme.primary-text-color;
 
             clicked => {
                 root.clicked(index);

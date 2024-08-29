@@ -45,6 +45,13 @@ import { NewsExample }  from "examples/news.slint";
 import { HeadExample }  from "examples/head.slint";
 import { AboutExample }  from "examples/about.slint";
 import { HelpExample }  from "examples/help.slint";
+import { AddressBookExample }  from "examples/address-book.slint";
+import { MnemonicExample }  from "examples/mnemonic.slint";
+import { AccountBalanceExample }  from "examples/account-balance.slint";
+import { SignInExample }  from "examples/sign-in.slint";
+import { LogInExample }  from "examples/log-in.slint";
+import { PasswordExample }  from "examples/password.slint";
+import { ResetPasswordExample }  from "examples/reset-password.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
@@ -136,6 +143,13 @@ component RightPanel inherits Rectangle {
     if Store.current-component-index == ComponentIndex.Head: HeadExample { }
     if Store.current-component-index == ComponentIndex.About: AboutExample { }
     if Store.current-component-index == ComponentIndex.Help: HelpExample { }
+    if Store.current-component-index == ComponentIndex.AddressBook: AddressBookExample { }
+    if Store.current-component-index == ComponentIndex.Mnemonic: MnemonicExample { }
+    if Store.current-component-index == ComponentIndex.AccountBalance: AccountBalanceExample { }
+    if Store.current-component-index == ComponentIndex.SignIn: SignInExample { }
+    if Store.current-component-index == ComponentIndex.LogIn: LogInExample { }
+    if Store.current-component-index == ComponentIndex.Password: PasswordExample { }
+    if Store.current-component-index == ComponentIndex.ResetPassword: ResetPasswordExample { }
 }
 
 export component Home inherits VerticalLayout {

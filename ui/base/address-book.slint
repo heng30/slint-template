@@ -99,6 +99,7 @@ export component AddressBookDetail inherits SettingDetail {
     private property <AddressBookEntry> entry: AddressBookSetting.current-entry;
     in property <image> qr-code: Icons.no-data;
     in-out property address <=> address-input.text;
+    in-out property name <=> name-input.text;
 
     // (uuid, name) -> void
     callback update-name(string, string);
@@ -132,10 +133,11 @@ export component AddressBookDetail inherits SettingDetail {
                 text: Logic.tr("Address name");
             }
 
-            LineInput {
+            name-input := LineInput {
                 enabled: AddressBookSetting.enabled-input;
                 width: root.width - Theme.padding * 4;
                 text: entry.name;
+                is-show-icon: true;
                 icon: self.enabled ? Icons.checked-box : Icons.edit;
                 clicked => {
                     self.enabled = !self.enabled;
@@ -166,6 +168,7 @@ export component AddressBookDetail inherits SettingDetail {
                 text: entry.address;
 
                 icon: self.enabled ? Icons.checked-box : Icons.edit;
+                is-show-icon: true;
                 clicked => {
                     self.enabled = !self.enabled;
 

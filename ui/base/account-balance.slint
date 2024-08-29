@@ -8,7 +8,7 @@ export component AccountBalance inherits Rectangle {
     in-out property account-name <=> account.text;
     in-out property balance <=> balance-label.text;
 
-    callback account-clicked <=> account.clicked;
+    callback name-clicked <=> account.clicked;
     callback copy <=> copy-btn.clicked;
 
     VerticalLayout {

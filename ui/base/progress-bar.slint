@@ -25,7 +25,7 @@ export component ProgressBar inherits Rectangle {
 
     in-out property <string> finished-text: Logic.tr("Finished");
     in-out property <string> unfinished-text: calc-percent(progress) + "%";
-    in-out property <color> finished-text-color: Colors.white;
+    in-out property <color> finished-text-color: Theme.light-text-color;
     in-out property <color> unfinished-text-color: Theme.is-dark ? Theme.invert-base-color : Theme.regular-text-color;
     in-out property <color> finished-text-background: Theme.success-color;
     in-out property <length> font-size: Theme.default-font-size;

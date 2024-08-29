@@ -1,0 +1,46 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { Mnemonic, AboutSetting, ExampleComponent } from "../../../base/widgets.slint";
+
+export component MnemonicExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                Mnemonic {
+                    is-show-refresh-btn: true;
+                    is-show-btns: true;
+                    is-show-switch-mnemonic-counts-btn: true;
+
+                    back => {
+                    }
+                    copy(mnemonics) => {
+                    }
+                    paste => {
+                    }
+                    refresh(mnemonic-counts) => {
+                    }
+                    canceled() => {
+                    }
+                    confirmed() => {
+                    }
+                    switch-mnemonic-counts(mnemonic-counts) => {
+                    }
+                }
+
+                code: "Mnemonic {\n    is-show-refresh-btn: true;\n    is-show-btns: true;\n    is-show-switch-mnemonic-counts-btn: true;\n\n    back => {\n    }\n    copy(mnemonics) => {\n    }\n    paste => {\n    }\n    refresh(mnemonic-counts) => {\n    }\n    canceled() => {\n    }\n    confirmed() => {\n    }\n    switch-mnemonic-counts(mnemonic-counts) => {\n    }\n}";
+            }
+        }
+    }
+}

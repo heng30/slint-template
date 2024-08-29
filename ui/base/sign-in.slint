@@ -4,7 +4,7 @@ import { Store } from "../store.slint";
 import { IconBtn } from "./icon-btn.slint";
 import { Label } from "./label.slint";
 import { Head } from "./head.slint";
-import { CancelBtn, ConfirmBtn } from "./btn.slint";
+import { TextBtnWithoutIcon } from "./btn.slint";
 import { LineInput } from "line-input.slint";
 import { SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel } from "./setting-detail.slint";
 
@@ -13,11 +13,10 @@ export component SignIn inherits Rectangle {
 
     private property <string> error-message;
 
-    callback cancel();
     callback back();
 
     //(username, password-frist, password-second) -> error-message
-    callback confirm(string, string, string) -> string;
+    callback confirmed(string, string, string) -> string;
 
     public function reset() {
         error-message = "";
@@ -41,6 +40,17 @@ export component SignIn inherits Rectangle {
             vbox-alignment: LayoutAlignment.center;
 
             SettingDetailInnerVbox {
+                HorizontalLayout {
+                    alignment: LayoutAlignment.center;
+                    Label {
+                        text: Logic.tr("Sign in");
+                        font-size: Theme.title1-font-size;
+                        font-weight: Theme.bold-font-weight;
+                    }
+                }
+            }
+
+            SettingDetailInnerVbox {
                 username-txt := SettingDetailLabel {
                     text: Logic.tr("Please enter username");
                 }
@@ -52,6 +62,7 @@ export component SignIn inherits Rectangle {
                         icon: Icons.paste;
                         width: root.width - Theme.padding * 4;
                         placeholder-text: Logic.tr("Username");
+                        is-show-icon: true;
 
                         edited => {
                             root.error-message = "";
@@ -67,7 +78,7 @@ export component SignIn inherits Rectangle {
 
             SettingDetailInnerVbox {
                 password-first-txt := SettingDetailLabel {
-                    text: Logic.tr("Please input password");
+                    text: Logic.tr("Please enter password");
                 }
 
                 HorizontalLayout {
@@ -80,6 +91,7 @@ export component SignIn inherits Rectangle {
                         placeholder-text: Logic.tr("At least 8 chars");
                         icon: parent.is-show-password ? Icons.eye : Icons.close-eye;
                         input-type: parent.is-show-password ? InputType.text : InputType.password;
+                        is-show-icon: true;
 
                         edited => {
                             root.error-message = "";
@@ -107,6 +119,7 @@ export component SignIn inherits Rectangle {
                         placeholder-text: Logic.tr("At least 8 chars");
                         icon: parent.is-show-password ? Icons.eye : Icons.close-eye;
                         input-type: is-show-password ? InputType.text : InputType.password;
+                        is-show-icon: true;
 
                         edited => {
                             root.error-message = "";
@@ -126,24 +139,16 @@ export component SignIn inherits Rectangle {
                 }
             }
 
-            HorizontalLayout {
-                spacing: Theme.spacing * 10;
-                padding: Theme.padding * 5;
+            TextBtnWithoutIcon {
+                width: password-first-lineedit.width;
+                height: self.text-height + Theme.padding * 2;
+                text: Logic.tr("Sign in");
+                font-size: Theme.title3-font-size;
+                bg-color: Theme.third-brand-color;
+                text-color: Theme.light-text-color;
 
-                CancelBtn {
-                    text: Logic.tr("Cancel");
-                    clicked => {
-                        root.reset();
-                        root.cancel();
-                    }
-                }
-
-                ConfirmBtn {
-                    text: Logic.tr("Login");
-
-                    clicked => {
-                        root.error-message = root.confirm(username-lineedit.text, password-first-lineedit.text, password-second-lineedit.text);
-                    }
+                clicked => {
+                    root.error-message = root.confirmed(username-lineedit.text, password-first-lineedit.text, password-second-lineedit.text);
                 }
             }
         }

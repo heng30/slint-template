@@ -28,6 +28,7 @@ export component LineInput inherits Rectangle {
     in-out property text <=> text-input.text;
     in-out property font-size <=> text-input.font-size;
     in property input-type <=> text-input.input-type;
+    in property read-only <=> text-input.read-only;
     in property <bool> enabled <=> text-input.enabled;
     in property <string> placeholder-text;
 
@@ -87,6 +88,7 @@ export component LineInput inherits Rectangle {
                     text-input := TextInput {
                         single-line: true;
                         vertical-alignment: TextVerticalAlignment.center;
+                        color: Theme.primary-text-color;
 
                         accepted => {
                             self.clear-focus();
