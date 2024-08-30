@@ -1,10 +1,11 @@
 import { Theme, Icons } from "../../theme.slint";
 import { Util } from "../../util.slint";
 import { Logic } from "../../logic.slint";
-import { Store, ComponentIndex } from "../../store.slint";
+import { Store } from "../../store.slint";
 import { SettingIconsBar }  from "../setting/desktop.slint";
 
-import { SettingEntryV2, CenterLayout, IconsDialogSetting } from "../../base/widgets.slint";
+import { ComponentEntry, ComponentIndex } from "../../store.slint";
+import { SettingEntryV2, CenterLayout, IconsDialogSetting, Search } from "../../base/widgets.slint";
 import { TreeExample } from "examples/tree.slint";
 import { StepExample } from "examples/step.slint";
 import { ProgressExample } from "examples/progress.slint";
@@ -69,42 +70,70 @@ component LeftPanel inherits Rectangle {
         Store.current-component-index = index;
     }
 
-    VerticalLayout {
-        alignment: LayoutAlignment.space-between;
-        Flickable {
-            width: root.width;
-            viewport-height: vbox.preferred-height;
+    hbox := HorizontalLayout {
+        x: 0;
+        y: 0;
+        z: 10;
+        padding: Theme.padding;
+        height: search.height;
 
-            vbox := VerticalLayout {
-                alignment: LayoutAlignment.start;
-                private property <int> current-icon-index: 0;
+        search := Search {
+            private property <ComponentEntry> selected-component-entry;
 
-                for entry[index] in Store.component-entries: SettingEntryV2 {
-                    text: entry.title;
-                    font-size: Theme.title3-font-size;
-                    background: Store.current-component-index == entry.component-index ? Theme.checked-background : self.has-hover ? Theme.hover-background : Colors.transparent;
+            border-radius: Theme.border-radius * 2;
+            enabled-popup: true;
+            values: Logic.generate-search-values(Store.component-entries);
 
-                    init => {
-                        self.icon = IconsDialogSetting.icons[current-icon-index];
-                        current-icon-index = Math.mod(current-icon-index + 1, IconsDialogSetting.icons.length);
-                    }
+            search(value) => {
+                self.selected-component-entry = Logic.get-component-index-from-search-values(Store.component-entries, value);
 
-                    clicked => {
-                        update-index(entry.component-index);
-                    }
+                if (self.selected-component-entry.component-index == ComponentIndex.None) {
+                    return;
+                }
+                Store.current-component-index = self.selected-component-entry.component-index;
+            }
+        }
+    }
+
+    fl := Flickable {
+        x: 0;
+        y: hbox.height + Theme.padding * 2;
+        width: root.width;
+        height: root.height - hbox.height - btns-hbox.height;
+        viewport-height: vbox.preferred-height;
+
+        vbox := VerticalLayout {
+            alignment: LayoutAlignment.start;
+            private property <int> current-icon-index: 0;
+
+            for entry[index] in Store.component-entries: SettingEntryV2 {
+                text: entry.title;
+                font-size: Theme.title3-font-size;
+                background: Store.current-component-index == entry.component-index ? Theme.checked-background : self.has-hover ? Theme.hover-background : Colors.transparent;
+
+                init => {
+                    self.icon = IconsDialogSetting.icons[current-icon-index];
+                    current-icon-index = Math.mod(current-icon-index + 1, IconsDialogSetting.icons.length);
+                }
+
+                clicked => {
+                    update-index(entry.component-index);
                 }
             }
         }
+    }
 
-        HorizontalLayout {
-            alignment: LayoutAlignment.center;
-            padding: Theme.padding * 4;
+    btns-hbox := HorizontalLayout {
+        x: 0;
+        y: fl.y + fl.height;
+        alignment: LayoutAlignment.center;
+        padding: Theme.padding * 4;
+        height: sb.height + self.padding * 2;
 
-            SettingIconsBar {
-                icon-size: Theme.icon-size * 1.6;
-                h-padding: Theme.spacing * 2;
-                h-spacing: Theme.padding * 8;
-            }
+        sb := SettingIconsBar {
+            icon-size: Theme.icon-size * 1.33;
+            h-padding: Theme.spacing * 2;
+            h-spacing: Theme.padding * 8;
         }
     }
 }

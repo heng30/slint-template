@@ -69,6 +69,7 @@ export component Search inherits Rectangle {
         }
 
         accepted => {
+            root.is-show-popup = false;
             root.search(self.text);
         }
 

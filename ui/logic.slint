@@ -1,5 +1,7 @@
 import { Store,  SettingPreference, SettingProxy, TabIndex, SettingDetailIndex } from "store.slint";
 
+import { ComponentEntry } from "store.slint";
+
 export global Logic {
     callback update-cache-size();
     callback remove-all-cache();
@@ -35,4 +37,14 @@ export global Logic {
         }
         Store.current-tab-index = index;
     }
+
+    //////////////////////////////// Logic Start  ////////////////////////////////
+
+    pure callback generate-search-values([ComponentEntry]) -> [string];
+
+    // (entries, search-value) -> entry
+    pure callback get-component-index-from-search-values([ComponentEntry], string) -> ComponentEntry;
+
+    //////////////////////////////// Logic End  ////////////////////////////////
+
 }

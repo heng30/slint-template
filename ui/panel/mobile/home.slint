@@ -3,7 +3,7 @@ import { Store, SettingDetailIndex } from "../../store.slint";
 import { Logic } from "../../logic.slint";
 import { Label, Head } from "../../base/widgets.slint";
 
-import { CircleProgress, ProcessStep } from "../../base/widgets.slint";
+import { CircleProgress } from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 component TopHead inherits Head {
@@ -23,14 +23,6 @@ component Body inherits Rectangle {
             CircleProgress {
                 ring-width: 15px;
                 progress: Util.progress-value(5s);
-            }
-        }
-
-        HorizontalLayout {
-            alignment: center;
-
-            ProcessStep {
-                current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
             }
         }
     }

@@ -22,6 +22,8 @@ export component TokenSender inherits SettingDetail {
 
     in property <string> recipient-address-error-message;
     in property <string> prioritization-fee-error-message;
+    in property <string> prioritization-fee-placeholder-text;
+
     in-out property <string> memo;
     in-out property <string> prioritization-fee;
     in-out property <bool> is-show-advance-setting;
@@ -215,7 +217,7 @@ export component TokenSender inherits SettingDetail {
                 width: root.width - Theme.spacing * 4;
                 icon: Icons.cancel;
                 input-type: InputType.number;
-                placeholder-text: "micro lamports";
+                placeholder-text: root.prioritization-fee-placeholder-text;
                 text: root.prioritization-fee;
                 is-show-icon: true;
 
@@ -235,9 +237,9 @@ export component TokenSender inherits SettingDetail {
 
                 TabBtns {
                     items: [
-                        { icon: Icons.turtle, text: "Slow" },
-                        { icon: Icons.rabbit, text: "Normal" },
-                        { icon: Icons.horse, text: "Fast" }
+                        { icon: Icons.turtle, text: Logic.tr("Slow") },
+                        { icon: Icons.rabbit, text: Logic.tr("Normal") },
+                        { icon: Icons.horse, text: Logic.tr("Fast") }
                     ];
 
                     clicked(index) => {

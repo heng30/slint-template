@@ -43,7 +43,7 @@ export component TransactionFeeExample inherits Flickable {
                     }
                 }
 
-                code: "";
+                code: "TransactionFee {\n    network: \"Test Net\";\n    send-token: \"BTC\";\n    send-address: \"Sender Address\";\n    recipient-address: \"Recipient Address\";\n    send-amount: \"100\";\n    send-amount-usdt: \"$1000000\";\n    fee: \"1000Sats\";\n    fee-usdt: \"$10\";\n    create-token-account-fee: \"100Sats\";\n    create-token-account-fee-usdt: \"$2\";\n    memo: \"Hello\";\n    prioritization-fee: \"100Sats\";\n    loading-status: LoadingStatus.Loading;\n\n    back => {\n    }\n\n    cancel => {\n    }\n\n    confirm => {\n    }\n}";
             }
         }
     }

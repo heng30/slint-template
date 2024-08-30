@@ -40,6 +40,7 @@ export struct SettingProxy {
 
 //////////////////////////////// Logic Struct Start ////////////////////////////////
 export enum ComponentIndex {
+    None,
     Tree,
     Step,
     Progress,
@@ -96,6 +97,11 @@ export enum ComponentIndex {
     TransactionTile,
 }
 
+export struct ComponentEntry{
+    title: string,
+    component-index: ComponentIndex,
+}
+
 //////////////////////////////// Logic Struct End  ////////////////////////////////
 
 export global Store {
@@ -131,8 +137,8 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
 
-    in-out property <ComponentIndex> current-component-index: ComponentIndex.TransactionTile;
-    in-out property <[{title: string, component-index: ComponentIndex}]> component-entries: [
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.Tree;
+    in-out property <[ComponentEntry]> component-entries: [
         {
             title: is-cn ? "树" : "Tree",
             component-index: ComponentIndex.Tree,

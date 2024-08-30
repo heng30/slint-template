@@ -9,6 +9,8 @@ mod toast;
 mod tr;
 mod util;
 
+mod examples;
+
 pub fn init(ui: &AppWindow) {
     util::init(ui);
     clipboard::init(ui);
@@ -17,4 +19,6 @@ pub fn init(ui: &AppWindow) {
     popup_action::init(ui);
     about::init(ui);
     setting::init(ui);
+
+    examples::init(ui);
 }
