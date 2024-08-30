@@ -111,16 +111,21 @@ export component LogIn inherits Rectangle {
                 }
             }
 
-            confirm-btn := TextBtnWithoutIcon {
-                width: password-lineedit.width;
-                height: self.text-height + Theme.padding * 2;
-                text: Logic.tr("Log in");
-                font-size: Theme.title3-font-size;
-                bg-color: Theme.third-brand-color;
-                text-color: Theme.light-text-color;
+            HorizontalLayout {
+                padding-top: Theme.padding * 5;
+                padding-bottom: Theme.padding * 5;
 
-                clicked => {
-                    root.error-message = root.confirmed(username-lineedit.text, password-lineedit.text);
+                confirm-btn := TextBtnWithoutIcon {
+                    width: password-lineedit.width;
+                    height: self.text-height + Theme.padding * 2;
+                    text: Logic.tr("Log in");
+                    font-size: Theme.title3-font-size;
+                    bg-color: Theme.third-brand-color;
+                    text-color: Theme.light-text-color;
+
+                    clicked => {
+                        root.error-message = root.confirmed(username-lineedit.text, password-lineedit.text);
+                    }
                 }
             }
         }
