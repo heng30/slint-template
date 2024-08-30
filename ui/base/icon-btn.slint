@@ -26,6 +26,9 @@ export component IconBtn inherits Rectangle {
     in-out property <length> auto-size-vpadding: Theme.padding;
     in-out property <length> auto-size-hpadding: Theme.padding * 4;
 
+    in-out property <length> spacing: Theme.spacing;
+    in-out property <LayoutAlignment> icon-valignment: LayoutAlignment.center;
+
     in-out property <string> text;
     in-out property <length> font-size: Theme.title4-font-size;
     in-out property <color> text-color: root.colorize;
@@ -61,7 +64,7 @@ export component IconBtn inherits Rectangle {
 
     hbox := HorizontalLayout {
         alignment: center;
-        spacing: Theme.spacing * 2;
+        spacing: root.spacing;
 
         padding: root.use-auto-size ? root.auto-size-vpadding : 0;
         padding-left: root.use-auto-size ? root.auto-size-hpadding : 0;
@@ -73,16 +76,20 @@ export component IconBtn inherits Rectangle {
             text: root.text;
         }
 
-        img := Image {
-            vertical-alignment: center;
-            width: Theme.icon-size;
-            colorize: Theme.icon-color;
-            rotation-angle: 0;
+        VerticalLayout {
+            alignment: root.icon-valignment;
 
-            animate rotation-angle {
-                duration: Theme.default-animate-duration;
-                easing: ease-in-out;
-                iteration-count: root.rotation-type == RotationType.Auto ? -1 : root.icon-rotation-iteration-count;
+            img := Image {
+                vertical-alignment: center;
+                width: Theme.icon-size;
+                colorize: Theme.icon-color;
+                rotation-angle: 0;
+
+                animate rotation-angle {
+                    duration: Theme.default-animate-duration;
+                    easing: ease-in-out;
+                    iteration-count: root.rotation-type == RotationType.Auto ? -1 : root.icon-rotation-iteration-count;
+                }
             }
         }
 

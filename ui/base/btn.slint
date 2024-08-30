@@ -11,6 +11,7 @@ export component CancelBtn inherits IconBtn {
     bg-color: Theme.info-color.brighter(50%);
     bg-pressed-color: self.bg-color.darker(30%);
     colorize: self.bg-pressed-color.darker(100%);
+    icon-valignment: LayoutAlignment.end;
     text: Logic.tr("Cancel");
 }
 
@@ -21,6 +22,7 @@ export component ConfirmBtn inherits IconBtn {
     bg-color: Theme.third-brand-color.darker(20%);
     bg-pressed-color: self.bg-color.darker(30%);
     colorize: Theme.light-text-color;
+    icon-valignment: LayoutAlignment.end;
     text: Logic.tr("Confirm");
 }
 
@@ -45,10 +47,13 @@ export component TextBtnWithoutIcon inherits Rectangle {
     in-out property <color> bg-color: Colors.transparent;
     in-out property <color> bg-pressed-color: self.bg-color;
 
+    in-out property <length> hpadding: Theme.padding;
+    in-out property <length> vpadding: Theme.padding / 2;
+
     callback clicked;
 
-    width: is-circle ? Math.max(label.preferred-width, label.preferred-height) + Theme.padding : label.preferred-width + Theme.padding * 2;
-    height: is-circle ? self.width : label.preferred-height + Theme.padding;
+    width: (is-circle ? Math.max(label.preferred-width, label.preferred-height) : label.preferred-width) + root.hpadding * 2;
+    height: is-circle ? self.width : label.preferred-height + root.vpadding * 2;
     border-radius: is-circle ? self.width / 2 : Theme.border-radius;
     background: ta.pressed ? bg-pressed-color : (ta.has-hover ? bg-color.darker(10%) : bg-color);
 

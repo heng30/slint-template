@@ -23,43 +23,46 @@ export component TreeExample inherits Flickable {
                     border-color: Theme.base-border-color;
                     border-radius: Theme.border-radius;
 
-                    level-one-entries: [{
-                        is-open: true,
-                        current-node: "亚洲",
-                    }, {
-                        current-node: "北美洲",
-                    }];
+                    level-one-entries: [
+                        {
+                            is-open: true,
+                            current-node: Store.is-cn ? "亚洲" : "Asia",
+                        },
+                        {
+                            current-node: Store.is-cn ? "北美洲" : "North America",
+                        }
+                    ];
 
                     level-two-entries: [
                         {
                             is-open: true,
-                            parent-node: "亚洲",
-                            current-node: "中国",
+                            parent-node: Store.is-cn ? "亚洲" : "Asia",
+                            current-node: Store.is-cn ? "中国" : "China",
                         },
                         {
-                            parent-node: "北美洲",
-                            current-node: "美国",
+                            parent-node: Store.is-cn ? "北美洲" : "North America",
+                            current-node: Store.is-cn ? "美国" : "America",
                         }
                     ];
 
                     level-three-entries: [
                         {
-                            parent-node: "中国",
-                            current-node: "珠海",
+                            parent-node: Store.is-cn ? "中国" : "China",
+                            current-node:  Store.is-cn ? "珠海" : "ZhuHai",
                             key: "zhuhai",
                         },
                         {
-                            parent-node: "中国",
-                            current-node: "广州",
+                            parent-node: Store.is-cn ? "中国" : "china",
+                            current-node: Store.is-cn ? "广州" : "GuangZhou",
                             key: "guangzhou",
                         },
                         {
-                            parent-node: "美国",
-                            current-node: "纽约",
+                            parent-node: Store.is-cn ? "美国" : "America",
+                            current-node: Store.is-cn ? "纽约" : "NewYork",
                         },
                         {
-                            parent-node: "美国",
-                            current-node: "加州",
+                            parent-node: Store.is-cn ? "美国" : "America",
+                            current-node: Store.is-cn ? "加州" : "California",
                         }
                     ];
 

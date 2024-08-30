@@ -41,6 +41,15 @@ export struct SettingProxy {
 //////////////////////////////// Logic Struct Start ////////////////////////////////
 export enum ComponentIndex {
     None,
+
+    BaseCategory,
+    InputCategory,
+    DisplayCategory,
+    NavigationCategory,
+    CryptoCategory,
+    OtherCategory,
+
+    Introduction,
     Tree,
     Step,
     Progress,
@@ -137,11 +146,122 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
 
-    in-out property <ComponentIndex> current-component-index: ComponentIndex.Tree;
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.Introduction;
     in-out property <[ComponentEntry]> component-entries: [
+        {
+            title: is-cn ? "介绍" : "Introduction",
+            component-index: ComponentIndex.Introduction,
+        },
+        // Base
+        {
+            title: is-cn ? "基础类" : "BaseCategory",
+            component-index: ComponentIndex.BaseCategory,
+        },
+        {
+            title: is-cn ? "按钮" : "Button",
+            component-index: ComponentIndex.Button,
+        },
+        {
+            title: is-cn ? "文本" : "Label",
+            component-index: ComponentIndex.Label,
+        },
+        {
+            title: is-cn ? "分割线" : "Divider",
+            component-index: ComponentIndex.Divider,
+        },
+        {
+            title: is-cn ? "遮罩" : "Blanket",
+            component-index: ComponentIndex.Blanket,
+        },
+        {
+            title: is-cn ? "中间布局" : "CenterLayout",
+            component-index: ComponentIndex.CenterLayout,
+        },
+        {
+            title: is-cn ? "滑动卡片" : "SlideCard",
+            component-index: ComponentIndex.SlideCard,
+        },
+        {
+            title: is-cn ? "抽屉" : "Drawer",
+            component-index: ComponentIndex.Drawer,
+        },
+
+        // Input
+        {
+            title: is-cn ? "输入类" : "InputCategory",
+            component-index: ComponentIndex.InputCategory,
+        },
+        {
+            title: is-cn ? "滑动条" : "Slider",
+            component-index: ComponentIndex.Slider,
+        },
+        {
+            title: is-cn ? "打分" : "Rate",
+            component-index: ComponentIndex.Rate,
+        },
+        {
+            title: is-cn ? "验证码" : "PinCodes",
+            component-index: ComponentIndex.PinCodes,
+        },
+        {
+            title: is-cn ? "选择下拉栏" : "Select",
+            component-index: ComponentIndex.Select,
+        },
+        {
+            title: is-cn ? "输入" : "Input",
+            component-index: ComponentIndex.Input,
+        },
+        {
+            title: is-cn ? "注册" : "SignIn",
+            component-index: ComponentIndex.SignIn,
+        },
+        {
+            title: is-cn ? "登陆" : "LogIn",
+            component-index: ComponentIndex.LogIn,
+        },
+        {
+            title: is-cn ? "密码" : "Password",
+            component-index: ComponentIndex.Password,
+        },
+        {
+            title: is-cn ? "重置密码" : "ResetPassword",
+            component-index: ComponentIndex.ResetPassword,
+        },
+
+        // Navigation
+        {
+            title: is-cn ? "导航类" : "NavigationCategory",
+            component-index: ComponentIndex.NavigationCategory,
+        },
         {
             title: is-cn ? "树" : "Tree",
             component-index: ComponentIndex.Tree,
+        },
+        {
+            title: is-cn ? "分页" : "Pagination",
+            component-index: ComponentIndex.Pagination,
+        },
+        {
+            title: is-cn ? "标签页" : "TabBtn",
+            component-index: ComponentIndex.TabBtn,
+        },
+        {
+            title: is-cn ? "顶部状态栏" : "StatusBar",
+            component-index: ComponentIndex.StatusBar,
+        },
+        {
+            title: is-cn ? "头部" : "Head",
+            component-index: ComponentIndex.Head,
+        },
+
+        // Display
+        {
+            title: is-cn ? "展示类" : "DisplayCategory",
+            component-index: ComponentIndex.DisplayCategory,
+        },
+        {
+            title: is-cn ? "徽章" : "Badge",
+            component-index: ComponentIndex.Badge,
         },
         {
             title: is-cn ? "步骤" : "Step",
@@ -152,24 +272,8 @@ export global Store {
             component-index: ComponentIndex.Progress,
         },
         {
-            title: is-cn ? "滑动条" : "Slider",
-            component-index: ComponentIndex.Slider,
-        },
-        {
-            title: is-cn ? "按钮" : "Button",
-            component-index: ComponentIndex.Button,
-        },
-        {
             title: is-cn ? "弹出信息" : "Toast",
             component-index: ComponentIndex.Toast,
-        },
-        {
-            title: is-cn ? "打分" : "Rate",
-            component-index: ComponentIndex.Rate,
-        },
-        {
-            title: is-cn ? "分页" : "Pagination",
-            component-index: ComponentIndex.Pagination,
         },
         {
             title: is-cn ? "录制指示器" : "RecordIndicator",
@@ -188,28 +292,8 @@ export global Store {
             component-index: ComponentIndex.Skeleton,
         },
         {
-            title: is-cn ? "验证码" : "PinCodes",
-            component-index: ComponentIndex.PinCodes,
-        },
-        {
-            title: is-cn ? "选择下拉栏" : "Select",
-            component-index: ComponentIndex.Select,
-        },
-        {
             title: is-cn ? "折叠" : "Collapse",
             component-index: ComponentIndex.Collapse,
-        },
-        {
-            title: is-cn ? "输入" : "Input",
-            component-index: ComponentIndex.Input,
-        },
-        {
-            title: is-cn ? "徽章" : "Badge",
-            component-index: ComponentIndex.Badge,
-        },
-        {
-            title: is-cn ? "文本" : "Label",
-            component-index: ComponentIndex.Label,
         },
         {
             title: is-cn ? "标签" : "Tag",
@@ -220,10 +304,6 @@ export global Store {
             component-index: ComponentIndex.Loading,
         },
         {
-            title: is-cn ? "标签页" : "TabBtn",
-            component-index: ComponentIndex.TabBtn,
-        },
-        {
             title: is-cn ? "弹出动作列表" : "PopupAction",
             component-index: ComponentIndex.PopupAction,
         },
@@ -232,100 +312,43 @@ export global Store {
             component-index: ComponentIndex.Banner,
         },
         {
-            title: is-cn ? "分割线" : "Divider",
-            component-index: ComponentIndex.Divider,
-        },
-        {
             title: is-cn ? "链接" : "Link",
             component-index: ComponentIndex.Link,
-        },
-        {
-            title: is-cn ? "遮罩" : "Blanket",
-            component-index: ComponentIndex.Blanket,
         },
         {
             title: is-cn ? "头像" : "Avatar",
             component-index: ComponentIndex.Avatar,
         },
         {
-            title: is-cn ? "品牌" : "Brand",
-            component-index: ComponentIndex.Brand,
-        },
-        {
             title: is-cn ? "空页面" : "Empty",
             component-index: ComponentIndex.Empty,
         },
-        {
-            title: is-cn ? "欢迎页面" : "LandingPage",
-            component-index: ComponentIndex.LandingPage,
-        },
-        {
-            title: is-cn ? "顶部状态栏" : "StatusBar",
-            component-index: ComponentIndex.StatusBar,
-        },
-        {
-            title: is-cn ? "弹框" : "Dialog",
-            component-index: ComponentIndex.Dialog,
-        },
-        {
-            title: is-cn ? "中间布局" : "CenterLayout",
-            component-index: ComponentIndex.CenterLayout,
-        },
-        {
-            title: is-cn ? "滑动卡片" : "SlideCard",
-            component-index: ComponentIndex.SlideCard,
-        },
+
         {
             title: is-cn ? "列表条目" : "ListTile",
             component-index: ComponentIndex.ListTile,
         },
         {
-            title: is-cn ? "抽屉" : "Drawer",
-            component-index: ComponentIndex.Drawer,
-        },
-        {
             title: is-cn ? "新闻" : "News",
             component-index: ComponentIndex.News,
         },
+
+        // Crypto
         {
-            title: is-cn ? "头部" : "Head",
-            component-index: ComponentIndex.Head,
-        },
-        {
-            title: is-cn ? "关于" : "About",
-            component-index: ComponentIndex.About,
-        },
-        {
-            title: is-cn ? "帮助" : "Help",
-            component-index: ComponentIndex.Help,
+            title: is-cn ? "加密类" : "CryptoCategory",
+            component-index: ComponentIndex.CryptoCategory,
         },
         {
             title: is-cn ? "组记词" : "Mnemonic",
             component-index: ComponentIndex.Mnemonic,
         },
         {
+            title: is-cn ? "地址簿" : "AddressBook",
+            component-index: ComponentIndex.AddressBook,
+        },
+        {
             title: is-cn ? "账户余额" : "AccountBalance",
             component-index: ComponentIndex.AccountBalance,
-        },
-        {
-            title: is-cn ? "注册" : "SignIn",
-            component-index: ComponentIndex.SignIn,
-        },
-        {
-            title: is-cn ? "登陆" : "LogIn",
-            component-index: ComponentIndex.LogIn,
-        },
-        {
-            title: is-cn ? "密码" : "Password",
-            component-index: ComponentIndex.Password,
-        },
-        {
-            title: is-cn ? "重置密码" : "ResetPassword",
-            component-index: ComponentIndex.ResetPassword,
-        },
-        {
-            title: is-cn ? "设置" : "Setting",
-            component-index: ComponentIndex.Setting,
         },
         {
             title: is-cn ? "代币列表" : "TokenList",
@@ -350,6 +373,36 @@ export global Store {
         {
             title: is-cn ? "交易历史" : "TransactionTile",
             component-index: ComponentIndex.TransactionTile,
+        },
+
+        // Other
+        {
+            title: is-cn ? "其他类" : "OtherCategory",
+            component-index: ComponentIndex.OtherCategory,
+        },
+        {
+            title: is-cn ? "设置" : "Setting",
+            component-index: ComponentIndex.Setting,
+        },
+        {
+            title: is-cn ? "关于" : "About",
+            component-index: ComponentIndex.About,
+        },
+        {
+            title: is-cn ? "弹框" : "Dialog",
+            component-index: ComponentIndex.Dialog,
+        },
+        {
+            title: is-cn ? "欢迎页面" : "LandingPage",
+            component-index: ComponentIndex.LandingPage,
+        },
+        {
+            title: is-cn ? "品牌" : "Brand",
+            component-index: ComponentIndex.Brand,
+        },
+        {
+            title: is-cn ? "帮助" : "Help",
+            component-index: ComponentIndex.Help,
         },
     ];
 

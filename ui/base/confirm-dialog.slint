@@ -4,7 +4,7 @@ import { Util } from "../util.slint";
 import { Logic } from "../logic.slint";
 import { Theme, Icons } from "../theme.slint";
 import { Label } from "./label.slint";
-import { CancelBtn, TextBtn } from "./btn.slint";
+import { CancelBtn, ConfirmBtn } from "./btn.slint";
 
 export global ConfirmDialogSetting {
     in-out property <bool> show;
@@ -59,7 +59,7 @@ export component ConfirmDialog inherits Rectangle {
             alignment: end;
             spacing: Theme.spacing * 4;
 
-            TextBtn {
+            CancelBtn {
                 text: Logic.tr("Cancel");
                 icon: Icons.cancel;
 
@@ -68,7 +68,7 @@ export component ConfirmDialog inherits Rectangle {
                 }
             }
 
-            TextBtn {
+            ConfirmBtn {
                 icon: Icons.success;
                 text: Logic.tr("Confirm");
 

@@ -5,7 +5,8 @@ import { Store } from "../../store.slint";
 import { SettingIconsBar }  from "../setting/desktop.slint";
 
 import { ComponentEntry, ComponentIndex } from "../../store.slint";
-import { SettingEntryV2, CenterLayout, IconsDialogSetting, Search } from "../../base/widgets.slint";
+import { SettingEntryV2, CenterLayout, IconsDialogSetting, Search, Label } from "../../base/widgets.slint";
+import { Introduction }  from "examples/introducion.slint";
 import { TreeExample } from "examples/tree.slint";
 import { StepExample } from "examples/step.slint";
 import { ProgressExample } from "examples/progress.slint";
@@ -70,6 +71,10 @@ component LeftPanel inherits Rectangle {
         Store.current-component-index = index;
     }
 
+    pure function is-category(category: ComponentIndex) -> bool {
+        return ComponentIndex.BaseCategory == category || ComponentIndex.InputCategory == category || ComponentIndex.DisplayCategory == category || ComponentIndex.NavigationCategory == category || ComponentIndex.CryptoCategory == category || ComponentIndex.OtherCategory == category;
+    }
+
     hbox := HorizontalLayout {
         x: 0;
         y: 0;
@@ -106,18 +111,40 @@ component LeftPanel inherits Rectangle {
             alignment: LayoutAlignment.start;
             private property <int> current-icon-index: 0;
 
-            for entry[index] in Store.component-entries: SettingEntryV2 {
-                text: entry.title;
-                font-size: Theme.title3-font-size;
-                background: Store.current-component-index == entry.component-index ? Theme.checked-background : self.has-hover ? Theme.hover-background : Colors.transparent;
+            for entry[index] in Store.component-entries: HorizontalLayout {
+                if root.is-category(entry.component-index): HorizontalLayout {
+                    padding-left: Theme.padding;
+                    padding-right: Theme.padding;
 
-                init => {
-                    self.icon = IconsDialogSetting.icons[current-icon-index];
-                    current-icon-index = Math.mod(current-icon-index + 1, IconsDialogSetting.icons.length);
+                    Rectangle {
+                        background: Theme.thirdly-background;
+                        border-radius: Theme.border-radius;
+
+                        HorizontalLayout {
+                            alignment: LayoutAlignment.center;
+                            padding: Theme.padding * 2;
+
+                            Label {
+                                text: entry.title;
+                                font-weight: Theme.bold-font-weight;
+                            }
+                        }
+                    }
                 }
 
-                clicked => {
-                    update-index(entry.component-index);
+                if !root.is-category(entry.component-index): SettingEntryV2 {
+                    text: entry.title;
+                    font-size: Theme.title3-font-size;
+                    background: Store.current-component-index == entry.component-index ? Theme.checked-background : self.has-hover ? Theme.hover-background : Colors.transparent;
+
+                    init => {
+                        self.icon = IconsDialogSetting.icons[current-icon-index];
+                        current-icon-index = Math.mod(current-icon-index + 1, IconsDialogSetting.icons.length);
+                    }
+
+                    clicked => {
+                        update-index(entry.component-index);
+                    }
                 }
             }
         }
@@ -139,60 +166,73 @@ component LeftPanel inherits Rectangle {
 }
 
 component RightPanel inherits Rectangle {
-    if Store.current-component-index == ComponentIndex.Tree: TreeExample { }
-    if Store.current-component-index == ComponentIndex.Step: StepExample { }
-    if Store.current-component-index == ComponentIndex.Progress: ProgressExample { }
-    if Store.current-component-index == ComponentIndex.Slider: SliderExample { }
+    if Store.current-component-index == ComponentIndex.Introduction: Introduction { }
+
+    // Base
     if Store.current-component-index == ComponentIndex.Button: ButtonExample { }
-    if Store.current-component-index == ComponentIndex.Toast: ToastExample { }
-    if Store.current-component-index == ComponentIndex.Rate: RateExample { }
-    if Store.current-component-index == ComponentIndex.Pagination: PaginationExample { }
-    if Store.current-component-index == ComponentIndex.RecordIndicator: RecordIndicatorExample { }
-    if Store.current-component-index == ComponentIndex.ToolTip: ToolTipExample { }
-    if Store.current-component-index == ComponentIndex.BreadCrumb: BreadCrumbExample { }
-    if Store.current-component-index == ComponentIndex.Skeleton: SkeletonExample { }
-    if Store.current-component-index == ComponentIndex.PinCodes: PinCodesExample { }
-    if Store.current-component-index == ComponentIndex.Select: SelectExample { }
-    if Store.current-component-index == ComponentIndex.Collapse: CollapseExample { }
-    if Store.current-component-index == ComponentIndex.Input: InputExample { }
-    if Store.current-component-index == ComponentIndex.Badge: BadgeExample { }
     if Store.current-component-index == ComponentIndex.Label: LabelExample { }
-    if Store.current-component-index == ComponentIndex.Tag: TagExample { }
-    if Store.current-component-index == ComponentIndex.Loading: LoadingExample { }
-    if Store.current-component-index == ComponentIndex.TabBtn: TabBtnExample { }
-    if Store.current-component-index == ComponentIndex.PopupAction: PopupActionExample { }
-    if Store.current-component-index == ComponentIndex.Banner: BannerExample { }
     if Store.current-component-index == ComponentIndex.Divider: DividerExample { }
-    if Store.current-component-index == ComponentIndex.Link: LinkExample { }
     if Store.current-component-index == ComponentIndex.Blanket: BlanketExample { }
-    if Store.current-component-index == ComponentIndex.Avatar: AvatarExample { }
-    if Store.current-component-index == ComponentIndex.Brand: BrandExample { }
-    if Store.current-component-index == ComponentIndex.Empty: EmptyExample { }
-    if Store.current-component-index == ComponentIndex.LandingPage: LandingPageExample { }
-    if Store.current-component-index == ComponentIndex.StatusBar: StatusBarExample { }
-    if Store.current-component-index == ComponentIndex.Dialog: DialogExample { }
     if Store.current-component-index == ComponentIndex.CenterLayout: CenterLayoutExample { }
     if Store.current-component-index == ComponentIndex.SlideCard: SlideCardExample { }
-    if Store.current-component-index == ComponentIndex.ListTile: ListTileExample { }
     if Store.current-component-index == ComponentIndex.Drawer: DrawerExample { }
-    if Store.current-component-index == ComponentIndex.News: NewsExample { }
-    if Store.current-component-index == ComponentIndex.Head: HeadExample { }
-    if Store.current-component-index == ComponentIndex.About: AboutExample { }
-    if Store.current-component-index == ComponentIndex.Help: HelpExample { }
-    if Store.current-component-index == ComponentIndex.AddressBook: AddressBookExample { }
-    if Store.current-component-index == ComponentIndex.Mnemonic: MnemonicExample { }
-    if Store.current-component-index == ComponentIndex.AccountBalance: AccountBalanceExample { }
+
+    // Input
+    if Store.current-component-index == ComponentIndex.Slider: SliderExample { }
+    if Store.current-component-index == ComponentIndex.Rate: RateExample { }
+    if Store.current-component-index == ComponentIndex.PinCodes: PinCodesExample { }
+    if Store.current-component-index == ComponentIndex.Select: SelectExample { }
+    if Store.current-component-index == ComponentIndex.Input: InputExample { }
     if Store.current-component-index == ComponentIndex.SignIn: SignInExample { }
     if Store.current-component-index == ComponentIndex.LogIn: LogInExample { }
     if Store.current-component-index == ComponentIndex.Password: PasswordExample { }
     if Store.current-component-index == ComponentIndex.ResetPassword: ResetPasswordExample { }
-    if Store.current-component-index == ComponentIndex.Setting: SettingExample { }
+
+    // Navigation
+    if Store.current-component-index == ComponentIndex.Tree: TreeExample { }
+    if Store.current-component-index == ComponentIndex.Pagination: PaginationExample { }
+    if Store.current-component-index == ComponentIndex.TabBtn: TabBtnExample { }
+    if Store.current-component-index == ComponentIndex.StatusBar: StatusBarExample { }
+    if Store.current-component-index == ComponentIndex.Head: HeadExample { }
+
+    // Display
+    if Store.current-component-index == ComponentIndex.Badge: BadgeExample { }
+    if Store.current-component-index == ComponentIndex.Step: StepExample { }
+    if Store.current-component-index == ComponentIndex.Progress: ProgressExample { }
+    if Store.current-component-index == ComponentIndex.Toast: ToastExample { }
+    if Store.current-component-index == ComponentIndex.RecordIndicator: RecordIndicatorExample { }
+    if Store.current-component-index == ComponentIndex.ToolTip: ToolTipExample { }
+    if Store.current-component-index == ComponentIndex.BreadCrumb: BreadCrumbExample { }
+    if Store.current-component-index == ComponentIndex.Skeleton: SkeletonExample { }
+    if Store.current-component-index == ComponentIndex.Collapse: CollapseExample { }
+    if Store.current-component-index == ComponentIndex.Tag: TagExample { }
+    if Store.current-component-index == ComponentIndex.Loading: LoadingExample { }
+    if Store.current-component-index == ComponentIndex.PopupAction: PopupActionExample { }
+    if Store.current-component-index == ComponentIndex.Banner: BannerExample { }
+    if Store.current-component-index == ComponentIndex.Link: LinkExample { }
+    if Store.current-component-index == ComponentIndex.Avatar: AvatarExample { }
+    if Store.current-component-index == ComponentIndex.Empty: EmptyExample { }
+    if Store.current-component-index == ComponentIndex.News: NewsExample { }
+    if Store.current-component-index == ComponentIndex.ListTile: ListTileExample { }
+
+    // Crypto
+    if Store.current-component-index == ComponentIndex.Mnemonic: MnemonicExample { }
+    if Store.current-component-index == ComponentIndex.AddressBook: AddressBookExample { }
+    if Store.current-component-index == ComponentIndex.AccountBalance: AccountBalanceExample { }
     if Store.current-component-index == ComponentIndex.TokenList: TokenListExample { }
     if Store.current-component-index == ComponentIndex.TokenSender: TokenSenderExample { }
     if Store.current-component-index == ComponentIndex.TokenRecipient: TokenRecipientExample { }
     if Store.current-component-index == ComponentIndex.TransactionFee: TransactionFeeExample { }
     if Store.current-component-index == ComponentIndex.WaitTransactionConfirmed: WaitTransactionConfirmedExample { }
     if Store.current-component-index == ComponentIndex.TransactionTile: TransactionTileExample { }
+
+    // Other
+    if Store.current-component-index == ComponentIndex.Setting: SettingExample { }
+    if Store.current-component-index == ComponentIndex.About: AboutExample { }
+    if Store.current-component-index == ComponentIndex.Dialog: DialogExample { }
+    if Store.current-component-index == ComponentIndex.LandingPage: LandingPageExample { }
+    if Store.current-component-index == ComponentIndex.Brand: BrandExample { }
+    if Store.current-component-index == ComponentIndex.Help: HelpExample { }
 }
 
 export component Home inherits VerticalLayout {

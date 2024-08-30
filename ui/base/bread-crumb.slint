@@ -11,7 +11,7 @@ export component BreadCrumb inherits Rectangle {
     in-out property <color> selected-color: Theme.primary-text-color;
     in-out property <bool> is-show-start-separator;
     in-out property <bool> is-show-end-separator;
-    in-out property <length> items-spacing: Theme.spacing;
+    in-out property <length> items-spacing: 2px;
 
     callback selected(int);
 
@@ -27,9 +27,12 @@ export component BreadCrumb inherits Rectangle {
             }
 
             TextBtnWithoutIcon {
+                hpadding: 0;
+                vpadding: 0;
                 text: item;
                 font-size: root.font-size;
                 text-color: index == root.items.length - 1 ? root.selected-color : root.unselected-color;
+
                 clicked => {
                     Util.remove-str-items-after(root.items, index);
                     selected(index);

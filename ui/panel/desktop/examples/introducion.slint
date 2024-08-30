@@ -1,0 +1,21 @@
+import { Util, Theme,Icons, Logic } from "../../def.slint";
+
+export component Introduction inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width - parent.padding * 2;
+
+            Rectangle {
+                height: 600px;
+                background: red;
+            }
+        }
+    }
+}

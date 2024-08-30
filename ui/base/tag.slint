@@ -1,4 +1,4 @@
-import { Theme } from "../theme.slint";
+import { Theme, Icons } from "../theme.slint";
 import { IconBtn } from "./icon-btn.slint";
 
 export component Tag inherits Rectangle {
@@ -33,9 +33,10 @@ export component Tag inherits Rectangle {
 
             close-btn := IconBtn {
                 visible: root.is-show-close-btn;
-                icon: @image-url("../images/close.svg");
+                icon: Icons.close;
                 icon-size: tag.preferred-height * 0.6;
                 show-icon-hover-background: false;
+                colorize: Theme.dark-text-color;
             }
         }
     }
