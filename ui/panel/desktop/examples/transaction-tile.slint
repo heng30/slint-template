@@ -1,0 +1,90 @@
+import { Util, Theme, Icons, Logic } from "../../def.slint";
+import { SlideCard, TransactionTile, TransactionTileStatus, ExampleComponent } from "../../../base/widgets.slint";
+
+export component TransactionTileExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ex := ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                VerticalLayout {
+                    spacing: Theme.spacing * 2;
+
+                    for entry in [
+                        {
+                            uuid: "uuid-1",
+                            hash: "hash-1",
+                            balance: "$100.12",
+                            time: "2024-12-04 12:06:09",
+                            status: TransactionTileStatus.Success,
+                        },
+                        {
+                            uuid: "uuid-2",
+                            hash: "hash-1",
+                            balance: "$100.12",
+                            time: "2024-12-04 12:06:09",
+                            status: TransactionTileStatus.Pending,
+                        },
+                        {
+                            uuid: "uuid-3",
+                            hash: "hash-1",
+                            hash: "hash-1",
+                            balance: "$100.12",
+                            time: "2024-12-04 12:06:09",
+                            status: TransactionTileStatus.Error,
+                        },
+                        {
+                            uuid: "uuid-4",
+                            hash: "hash-1",
+                            hash: "hash-1",
+                            balance: "$100.12",
+                            time: "2024-12-04 12:06:09",
+                            status: TransactionTileStatus.Loading,
+                        }
+                    ]: Rectangle {
+                        clip: true;
+                        height: sc.preferred-height + Theme.padding * 2;
+
+                        sc := SlideCard {
+                            gap: Theme.padding * 2;
+                            inner-hpadding: Theme.padding;
+
+                            icons: [
+                                {
+                                    icon: Icons.delete,
+                                    text: Logic.tr("Delete"),
+                                    colorize: Colors.red,
+                                },
+                            ];
+
+                            tt := TransactionTile {
+                                entry: entry;
+                                hash-clicked => {
+                                }
+
+                                icon-clicked => {
+                                }
+                            }
+
+                            icon-clicked => {
+                            }
+                        }
+                    }
+                }
+
+                code: "";
+            }
+        }
+    }
+}

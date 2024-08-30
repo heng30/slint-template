@@ -1,0 +1,61 @@
+import { Util, Theme, Icons, Logic } from "../../def.slint";
+import { SettingEntry, SettingEntryV2, SettingDetail, SettingDetailLabel, SettingDetailInnerVbox, SettingDetailInner, LineInput, ExampleComponent } from "../../../base/widgets.slint";
+
+export component SettingExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                SettingDetail {
+                    title: Logic.tr("Preference");
+
+                    SettingDetailInner {
+                        SettingDetailInnerVbox {
+                            win-size-txt := SettingDetailLabel {
+                                text: Logic.tr("Window width");
+                            }
+
+                            LineInput {
+                                horizontal-stretch: 1;
+                                input-type: number;
+                                placeholder-text: Logic.tr("width");
+
+                                edited => {
+                                }
+                            }
+                        }
+
+                        SettingDetailInnerVbox {
+                            SettingDetailLabel {
+                                text: Logic.tr("Window height");
+                            }
+
+                            LineInput {
+                                horizontal-stretch: 1;
+                                input-type: number;
+                                placeholder-text: Logic.tr("height");
+
+                                edited => {
+                                }
+                            }
+                        }
+                    }
+                }
+
+                code: "SettingDetail {\n    title: Logic.tr(\"Preference\");\n\n    SettingDetailInner {\n        SettingDetailInnerVbox {\n            win-size-txt := SettingDetailLabel {\n                text: Logic.tr(\"Window width\");\n            }\n\n            LineInput {\n                horizontal-stretch: 1;\n                input-type: number;\n                placeholder-text: Logic.tr(\"width\");\n\n                edited => { }\n            }\n        }\n\n        SettingDetailInnerVbox {\n            SettingDetailLabel {\n                text: Logic.tr(\"Window height\");\n            }\n\n            LineInput {\n                horizontal-stretch: 1;\n                input-type: number;\n                placeholder-text: Logic.tr(\"height\");\n\n                edited => { }\n            }\n        }\n    }\n}";
+            }
+        }
+    }
+}

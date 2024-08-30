@@ -1,9 +1,9 @@
-import { Switch } from "std-widgets.slint";
 import { Theme, Icons } from "../theme.slint";
 import { ListTile } from "list-tile.slint";
 import { Label } from "label.slint";
 import { IconBtn } from "icon-btn.slint";
 import { Util } from "../util.slint";
+import { SwitchBtn } from "switch-btn.slint";
 
 export struct TokenTileEntry {
     uuid: string,
@@ -114,5 +114,8 @@ export component TokenTileWithSwitch inherits Tile {
 
     callback toggled <=> sw.toggled;
 
-    sw := Switch { }
+    VerticalLayout {
+        alignment: LayoutAlignment.center;
+        sw := SwitchBtn { }
+    }
 }

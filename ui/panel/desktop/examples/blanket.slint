@@ -1,5 +1,5 @@
 import { Util, Theme } from "../../def.slint";
-import { Blanket, ExampleComponent } from "../../../base/widgets.slint";
+import { Label, Blanket, ExampleComponent } from "../../../base/widgets.slint";
 
 export component BlanketExample inherits Flickable {
     viewport-height: vbox.preferred-height;
@@ -22,6 +22,10 @@ export component BlanketExample inherits Flickable {
                     width: 400px;
                     height: 400px;
                     background: red;
+
+                    Label {
+                        text: "Click Me";
+                    }
 
                     bl := Blanket { }
 

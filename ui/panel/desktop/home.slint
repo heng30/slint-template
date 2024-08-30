@@ -52,6 +52,13 @@ import { SignInExample }  from "examples/sign-in.slint";
 import { LogInExample }  from "examples/log-in.slint";
 import { PasswordExample }  from "examples/password.slint";
 import { ResetPasswordExample }  from "examples/reset-password.slint";
+import { SettingExample }  from "examples/setting.slint";
+import { TokenListExample }  from "examples/token-list.slint";
+import { TokenSenderExample }  from "examples/token-sender.slint";
+import { TokenRecipientExample }  from "examples/token-recipient.slint";
+import { TransactionFeeExample }  from "examples/transaction-fee.slint";
+import { WaitTransactionConfirmedExample }  from "examples/wait-transaction-confirmed.slint";
+import { TransactionTileExample }  from "examples/transaction-tile.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
@@ -150,6 +157,13 @@ component RightPanel inherits Rectangle {
     if Store.current-component-index == ComponentIndex.LogIn: LogInExample { }
     if Store.current-component-index == ComponentIndex.Password: PasswordExample { }
     if Store.current-component-index == ComponentIndex.ResetPassword: ResetPasswordExample { }
+    if Store.current-component-index == ComponentIndex.Setting: SettingExample { }
+    if Store.current-component-index == ComponentIndex.TokenList: TokenListExample { }
+    if Store.current-component-index == ComponentIndex.TokenSender: TokenSenderExample { }
+    if Store.current-component-index == ComponentIndex.TokenRecipient: TokenRecipientExample { }
+    if Store.current-component-index == ComponentIndex.TransactionFee: TransactionFeeExample { }
+    if Store.current-component-index == ComponentIndex.WaitTransactionConfirmed: WaitTransactionConfirmedExample { }
+    if Store.current-component-index == ComponentIndex.TransactionTile: TransactionTileExample { }
 }
 
 export component Home inherits VerticalLayout {

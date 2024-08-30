@@ -87,25 +87,13 @@ export enum ComponentIndex {
     SignIn,
     Password,
     ResetPassword,
-
-////////////
-    TokenTile,
-    TokenTileEntry,
-    TokenTileWithSwitchEntry,
+    Setting,
     TokenList,
-    TokenListWithSwitch,
     TokenSender,
     TokenRecipient,
-
     TransactionFee,
-    TransactionTile,
-    TransactionTileEntry,
-    TransactionTileStatus,
     WaitTransactionConfirmed,
-
-    SettingEntry,
-    SettingEntryV2,
-    SettingDetail,
+    TransactionTile,
 }
 
 //////////////////////////////// Logic Struct End  ////////////////////////////////
@@ -143,7 +131,7 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
 
-    in-out property <ComponentIndex> current-component-index: ComponentIndex.ResetPassword;
+    in-out property <ComponentIndex> current-component-index: ComponentIndex.TransactionTile;
     in-out property <[{title: string, component-index: ComponentIndex}]> component-entries: [
         {
             title: is-cn ? "树" : "Tree",
@@ -328,6 +316,34 @@ export global Store {
         {
             title: is-cn ? "重置密码" : "ResetPassword",
             component-index: ComponentIndex.ResetPassword,
+        },
+        {
+            title: is-cn ? "设置" : "Setting",
+            component-index: ComponentIndex.Setting,
+        },
+        {
+            title: is-cn ? "代币列表" : "TokenList",
+            component-index: ComponentIndex.TokenList,
+        },
+        {
+            title: is-cn ? "代币发送" : "TokenSender",
+            component-index: ComponentIndex.TokenSender,
+        },
+        {
+            title: is-cn ? "代币发送" : "TokenRecipient",
+            component-index: ComponentIndex.TokenRecipient,
+        },
+        {
+            title: is-cn ? "交易费用" : "TransactionFee",
+            component-index: ComponentIndex.TransactionFee,
+        },
+        {
+            title: is-cn ? "等待交易确认" : "WaitTransactionConfirmed",
+            component-index: ComponentIndex.WaitTransactionConfirmed,
+        },
+        {
+            title: is-cn ? "交易历史条目" : "TransactionTile",
+            component-index: ComponentIndex.TransactionTile,
         },
     ];
 

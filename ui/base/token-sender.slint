@@ -3,6 +3,7 @@ import { Logic } from "../logic.slint";
 import { Store } from "../store.slint";
 import { Label } from "label.slint";
 import { Avatar } from "avatar.slint";
+import { TabBtns } from "tab-btns.slint";
 import { LineInput } from "line-input.slint";
 import { CancelBtn, ConfirmBtn, TextBtn } from "btn.slint";
 import { SettingDetail, SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel } from "setting-detail.slint";
@@ -61,7 +62,7 @@ export component TokenSender inherits SettingDetail {
             name-label := Label {
                 text: "Account1";
                 font-size: Theme.title2-font-size;
-                color: Theme.brand-color;
+                color: Theme.regular-text-color;
             }
         }
 
@@ -75,6 +76,7 @@ export component TokenSender inherits SettingDetail {
                 text: "test";
                 icon: Icons.browser-access;
                 enabled: false;
+                is-show-icon: true;
             }
         }
 
@@ -88,6 +90,7 @@ export component TokenSender inherits SettingDetail {
                 text: "ETH";
                 icon: is-token-edit ? Icons.checked-box : Icons.edit;
                 enabled: is-token-edit;
+                is-show-icon: true;
 
                 clicked => {
                     is-token-edit = !is-token-edit;
@@ -112,6 +115,7 @@ export component TokenSender inherits SettingDetail {
                 text: "0xf1199999751b1a3A74590adBf95401D19AB30014";
                 icon: Icons.copy;
                 enabled: false;
+                is-show-icon: true;
             }
         }
 
@@ -124,6 +128,7 @@ export component TokenSender inherits SettingDetail {
                 width: root.width - Theme.spacing * 4;
                 text: "GEScvfEF1Xt2oyrnJij5V5DYSmPjuUt45DfUs3VFrsED";
                 icon: Icons.address-book;
+                is-show-icon: true;
 
                 edited => {
                     root.recipient-address-edited(self.text);
@@ -146,6 +151,7 @@ export component TokenSender inherits SettingDetail {
                 text: "0";
                 icon: Icons.max;
                 input-type: InputType.decimal;
+                is-show-icon: true;
 
                 clicked => {
                     self.text = root.total-balance;
@@ -188,6 +194,7 @@ export component TokenSender inherits SettingDetail {
                 width: root.width - Theme.spacing * 4;
                 icon: Icons.cancel;
                 text: root.memo;
+                is-show-icon: true;
 
                 clicked => {
                     self.text = "";
@@ -210,6 +217,7 @@ export component TokenSender inherits SettingDetail {
                 input-type: InputType.number;
                 placeholder-text: "micro lamports";
                 text: root.prioritization-fee;
+                is-show-icon: true;
 
                 clicked => {
                     self.text = "";
@@ -223,39 +231,26 @@ export component TokenSender inherits SettingDetail {
 
             HorizontalLayout {
                 alignment: LayoutAlignment.start;
-                spacing: Theme.spacing * 2;
+                spacing: Theme.spacing * 4;
 
-                TextBtn {
-                    text: Logic.tr("Slow");
-                    bg-color: Theme.info-color;
-                    use-auto-size: true;
-                    icon: Icons.turtle;
+                TabBtns {
+                    items: [
+                        { icon: Icons.turtle, text: "Slow" },
+                        { icon: Icons.rabbit, text: "Normal" },
+                        { icon: Icons.horse, text: "Fast" }
+                    ];
 
-                    clicked => {
-                        prioritization-fee-input.text = root.get-prioritization-fee(PrioritizationFeeStatus.Slow);
-                        root.prioritization-fee = prioritization-fee-input.text;
-                    }
-                }
-
-                TextBtn {
-                    text: Logic.tr("Normal");
-                    use-auto-size: true;
-                    icon: Icons.rabbit;
-
-                    clicked => {
-                        prioritization-fee-input.text = root.get-prioritization-fee(PrioritizationFeeStatus.Normal);
-                        root.prioritization-fee = prioritization-fee-input.text;
-                    }
-                }
-
-                TextBtn {
-                    text: Logic.tr("Fast");
-                    use-auto-size: true;
-                    icon: Icons.horse;
-
-                    clicked => {
-                        prioritization-fee-input.text = root.get-prioritization-fee(PrioritizationFeeStatus.Fast);
-                        root.prioritization-fee = prioritization-fee-input.text;
+                    clicked(index) => {
+                        if (index == 0) {
+                            prioritization-fee-input.text = root.get-prioritization-fee(PrioritizationFeeStatus.Slow);
+                            root.prioritization-fee = prioritization-fee-input.text;
+                        } else if (index == 1) {
+                            prioritization-fee-input.text = root.get-prioritization-fee(PrioritizationFeeStatus.Normal);
+                            root.prioritization-fee = prioritization-fee-input.text;
+                        } else {
+                            prioritization-fee-input.text = root.get-prioritization-fee(PrioritizationFeeStatus.Fast);
+                            root.prioritization-fee = prioritization-fee-input.text;
+                        }
                     }
                 }
             }
@@ -267,10 +262,9 @@ export component TokenSender inherits SettingDetail {
         }
 
         HorizontalLayout {
-            alignment: LayoutAlignment.center;
             padding-top: Theme.padding * 5;
             padding-bottom: Theme.padding * 5;
-            spacing: Theme.spacing * 10;
+            spacing: Theme.spacing * 8;
 
             cancel-btn := CancelBtn {
                 text: Logic.tr("Cancel");

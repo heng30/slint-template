@@ -1,0 +1,38 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { TokenRecipient, ExampleComponent } from "../../../base/widgets.slint";
+
+export component TokenRecipientExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                TokenRecipient {
+                    is-show-header: false;
+                    account-name: "Account 1";
+                    qrcode: Icons.no-data;
+                    address: "Account Address";
+
+                    clicked-address => {
+                    }
+
+                    copy-address => {
+                    }
+                }
+
+                code: "TokenRecipient {\n    is-show-header: false;\n    account-name: \"Account 1\";\n    qrcode: Icons.no-data;\n    address: \"Account Address\";\n\n    clicked-address => {\n    }\n\n    copy-address => {\n    }\n}";
+            }
+        }
+    }
+}

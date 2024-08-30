@@ -5,7 +5,7 @@ export component SwitchBtn inherits Rectangle {
     in-out property enabled <=> ta.enabled;
     in-out property <bool> checked;
 
-    in-out property <color> unchecked-background: Theme.is-dark ? Theme.secondary-background.darker(50%) : Theme.secondary-background.darker(10%);
+    in-out property <color> unchecked-background: Theme.is-dark ? Theme.secondary-background.brighter(50%) : Theme.secondary-background.darker(10%);
     in-out property <length> indicator-size: Theme.icon-size;
     in-out property <length> hpadding: Theme.padding;
     in-out property <length> vpadding: Theme.padding;

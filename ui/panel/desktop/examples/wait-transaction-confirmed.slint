@@ -1,0 +1,40 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { LoadingStatus, WaitTransactionConfirmed, ExampleComponent } from "../../../base/widgets.slint";
+
+export component WaitTransactionConfirmedExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                WaitTransactionConfirmed {
+                    network: "Test Net";
+                    send-token: "BTC";
+                    send-amount: 1000;
+                    signature: "Blockchain signature";
+
+                    loading-status: LoadingStatus.Loading;
+
+                    back => {
+                    }
+
+                    open-signature => {
+                    }
+                }
+
+                code: "WaitTransactionConfirmed {\n    network: \"Test Net\";\n    send-token: \"BTC\";\n    send-amount: 1000;\n    signature: \"Blockchain signature\";\n\n    loading-status: LoadingStatus.Loading;\n\n    back => {\n    }\n\n    open-signature => {\n    }\n}";
+            }
+        }
+    }
+}

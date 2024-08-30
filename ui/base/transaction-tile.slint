@@ -26,6 +26,12 @@ export component TransactionTile inherits Rectangle {
     in property <color> icon-colorize: status-icon-colorize(entry.status);
     in property <length> icon-size: Theme.icon-size;
 
+    in-out property <color> hash-color: Theme.primary-text-color;
+    in-out property <length> hash-font-size: Theme.title3-font-size;
+
+    in-out property <color> balance-color: Theme.regular-text-color;
+    in-out property <length> balance-font-size: Theme.default-font-size;
+
     in-out property <TransactionTileEntry> entry;
 
     pure public function status-icon(status: TransactionTileStatus) -> image {
@@ -67,11 +73,13 @@ export component TransactionTile inherits Rectangle {
             horizontal-stretch: 1;
 
             Label {
-                font-size: Theme.title4-font-size;
+                width: self.preferred-width;
+                font-size: root.hash-font-size;
+                color: root.hash-color;
                 text: entry.hash;
                 wrap: TextWrap.no-wrap;
                 overflow: TextOverflow.elide;
-                font-weight: 0.5;
+                font-weight: Theme.bold-font-weight;
 
                 hash-ta := TouchArea {
                     mouse-cursor: MouseCursor.pointer;
@@ -86,7 +94,8 @@ export component TransactionTile inherits Rectangle {
                     text: entry.balance;
                     wrap: TextWrap.no-wrap;
                     overflow: TextOverflow.elide;
-                    color: Theme.have-read-text-color;
+                    color: root.balance-color;
+                    font-size: root.balance-font-size;
                 }
 
                 Label {

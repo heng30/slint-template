@@ -1,0 +1,106 @@
+import { Util, Theme, Icons, Logic } from "../../def.slint";
+import { TokenTile, TokenTileEntry, TokenTileWithSwitchEntry, TokenList, TokenListWithSwitch, ExampleComponent } from "../../../base/widgets.slint";
+
+export component TokenListExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                TokenList {
+                    entries: [
+                        {
+                            uuid: "uuid-1",
+                            symbol: "SOL",
+                            balance: "100.34",
+                            balance-usdt: "$1221.34",
+                        },
+                        {
+                            uuid: "uuid-2",
+                            symbol: "USDT",
+                            balance: "100.34",
+                            balance-usdt: "$100.34",
+                        },
+                        {
+                            uuid: "uuid-3",
+                            symbol: "DOG",
+                            balance: "120.34",
+                            balance-usdt: "$300.4",
+                        },
+                        {
+                            uuid: "uuid-3",
+                            symbol: "BTC",
+                            balance: "120.34",
+                            balance-usdt: "$5380.4",
+                        },
+                        {
+                            uuid: "uuid-3",
+                            symbol: "ETH",
+                            balance: "120.34",
+                            balance-usdt: "$6360.4",
+                        },
+                    ];
+                }
+
+                code: "TokenList {\n    entries: [\n        {\n            uuid: \"uuid-1\",\n            symbol: \"SOL\",\n            balance: \"100.34\",\n            balance-usdt: \"$1221.34\",\n        },\n        {\n            uuid: \"uuid-2\",\n            symbol: \"USDT\",\n            balance: \"100.34\",\n            balance-usdt: \"$100.34\",\n        },\n        {\n            uuid: \"uuid-3\",\n            symbol: \"DOG\",\n            balance: \"120.34\",\n            balance-usdt: \"$300.4\",\n        },\n        {\n            uuid: \"uuid-3\",\n            symbol: \"BTC\",\n            balance: \"120.34\",\n            balance-usdt: \"$5380.4\",\n        },\n        {\n            uuid: \"uuid-3\",\n            symbol: \"ETH\",\n            balance: \"120.34\",\n            balance-usdt: \"$6360.4\",\n        },\n    ];\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                TokenListWithSwitch {
+                    title: Logic.tr("TokenListWithSwitch");
+                    is-loading: false;
+
+                    entries: [
+                        {
+                            entry: {
+                                uuid: "uuid-1",
+                                symbol: "SOL",
+                                balance: "100.34",
+                                balance-usdt: "$1221.34",
+                            },
+                            checked: true,
+                        },
+                        {
+                            entry: {
+                                uuid: "uuid-1",
+                                symbol: "USDT",
+                                balance: "10.34",
+                                balance-usdt: "$12.34",
+                            },
+                            checked: true,
+                        }
+                    ];
+
+                    clicked(entry) => {
+                    }
+
+                    toggled(checked, entry) => {
+                    }
+
+                    back => {
+                    }
+                }
+
+                code: "TokenListWithSwitch {\n    title: Logic.tr(\"TokenListWithSwitch\");\n    is-loading: false;\n\n    entries: [\n        {\n            entry: {\n                uuid: \"uuid-1\",\n                symbol: \"SOL\",\n                balance: \"100.34\",\n                balance-usdt: \"$1221.34\",\n            },\n            checked: true,\n        },\n        {\n            entry: {\n                uuid: \"uuid-1\",\n                symbol: \"USDT\",\n                balance: \"10.34\",\n                balance-usdt: \"$12.34\",\n            },\n            checked: true,\n        }\n    ];\n\n    clicked(entry) => {\n    }\n\n    toggled(checked, entry) => {\n    }\n\n    back => {\n    }\n}";
+            }
+        }
+    }
+}

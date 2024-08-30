@@ -1,0 +1,50 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { LoadingStatus, TransactionFee, ExampleComponent } from "../../../base/widgets.slint";
+
+export component TransactionFeeExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                TransactionFee {
+                    network: "Test Net";
+                    send-token: "BTC";
+                    send-address: "Sender Address";
+                    recipient-address: "Recipient Address";
+                    send-amount: "100";
+                    send-amount-usdt: "$1000000";
+                    fee: "1000Sats";
+                    fee-usdt: "$10";
+                    create-token-account-fee: "100Sats";
+                    create-token-account-fee-usdt: "$2";
+                    memo: "Hello";
+                    prioritization-fee: "100Sats";
+                    loading-status: LoadingStatus.Loading;
+
+                    back => {
+                    }
+
+                    cancel => {
+                    }
+
+                    confirm => {
+                    }
+                }
+
+                code: "";
+            }
+        }
+    }
+}

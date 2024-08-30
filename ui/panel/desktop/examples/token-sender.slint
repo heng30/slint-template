@@ -1,0 +1,69 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { TokenSender, ExampleComponent } from "../../../base/widgets.slint";
+
+export component TokenSenderExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                TokenSender {
+                    height: root.height;
+                    avatar: Icons.account;
+                    name: "Account 1";
+                    network: "Test Net";
+                    send-token: "BTC";
+                    send-address: "BTC Sender Address";
+                    recipient-address: "BTC Recipient Address";
+                    total-balance: "1000";
+                    total-balance-usdt: "10000000";
+                    is-show-advance-setting: true;
+
+                    back => {
+                    }
+
+                    update-send-token-name => {
+                    }
+
+                    copy-send-address => {
+                    }
+
+                    open-address-book => {
+                    }
+
+                    open-network => {
+                    }
+
+                    recipient-address-edited(text) => {
+                    }
+
+                    prioritization-fee-edited(text) => {
+                    }
+
+                    get-prioritization-fee(ty) => {
+                        return 10;
+                    }
+
+                    cancel => {
+                    }
+
+                    confirm => {
+                    }
+                }
+
+                code: "";
+            }
+        }
+    }
+}

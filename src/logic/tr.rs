@@ -208,9 +208,9 @@ pub fn tr(text: &str) -> String {
         ("Security & Privacy ", "安全与隐私"),
         ("Reset account", "重置账户"),
         ("Reset account or not?", "是否重置账户？"),
-        ("Please input old password", "请输入旧密码"),
-        ("Please input new password", "请输入新密码"),
-        ("Please input new password again", "请再次输入新密码"),
+        ("Please enter old password", "请输入旧密码"),
+        ("Please enter new password", "请输入新密码"),
+        ("Please enter new password again", "请再次输入新密码"),
         ("Test model", "测试模式"),
         ("Main Network", "主网络"),
         ("Test Network", "测试网络"),
@@ -297,6 +297,8 @@ pub fn tr(text: &str) -> String {
         ("Detail", "说明"),
         ("Log in", "登陆"),
         ("Sign in", "注册"),
+        ("Password", "密码"),
+        ("Reset password", "重置密码"),
     ]);
 
     if let Some(txt) = items.get(text) {
