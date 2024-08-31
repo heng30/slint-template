@@ -1,9 +1,10 @@
 import { Store, DeviceType } from "../store.slint";
 import { DesktopPanel } from "desktop/panel.slint";
 import { MobilePanel  } from "mobile/panel.slint";
+import { WebPanel  } from "web/panel.slint";
 
 export component Panel inherits Rectangle {
     if Store.device-type == DeviceType.Desktop: DesktopPanel {}
-
     if Store.device-type == DeviceType.Mobile: MobilePanel {}
+    if Store.device-type == DeviceType.Web: WebPanel {}
 }

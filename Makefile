@@ -35,6 +35,15 @@ desktop-build-release-nixos:
 desktop-debug:
 	$(desktop-build-env) $(run-env) cargo run --features=desktop
 
+web-build-debug:
+	wasm-pack build --target web --out-dir target/pkg --features=web
+
+web-build-release:
+	wasm-pack build --release --target web --out-dir target/pkg --features=web
+
+web-debug:
+	python3 -m http.server
+
 test:
 	$(build-env) $(run-env) cargo test -- --nocapture
 

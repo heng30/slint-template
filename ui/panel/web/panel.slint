@@ -1,0 +1,16 @@
+import { Theme } from "../../theme.slint";
+import { Store, TabIndex, SettingDetailIndex } from "../../store.slint";
+import { Home } from "./home.slint";
+
+export component Bodyer inherits Rectangle {
+    if TabIndex.Home == Store.current-tab-index: Home { }
+}
+
+export component WebPanel inherits VerticalLayout {
+    padding-left: Theme.padding;
+    padding-right: Theme.padding;
+
+    Bodyer {
+    }
+
+}

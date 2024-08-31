@@ -21,6 +21,7 @@ export component Introduction inherits Flickable {
                 "3. 如果是Windows平台，需要修改`windows/version.h`文件，设置程序名称和描述信息等",
                 "4. 替换`ui/images/brand.png`和`windows/icon.ico`为你的程序图标",
                 "5. 使用`make desktop-build-release`构建桌面平台应用程序, `make android-build-release`构建安卓平台应用程序。更多命令可参考Makefile文件",
+                "6. 如果是Android平台，需要替换`android/res/*/android12splash.png` 和 `android/res/*/splash.png`为你的启动屏, 大小最好为432x432。替换`android/res/*/ic_launcher.png`为你的程序图标, 大小最好为655x655",
             ],
         },
         {

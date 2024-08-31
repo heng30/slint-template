@@ -30,6 +30,7 @@
 ### Reference
 - [Slint Language Documentation](https://slint-ui.com/releases/1.0.0/docs/slint/)
 - [slint::android](https://snapshots.slint.dev/master/docs/rust/slint/android/#building-and-deploying)
+- [Running In A Browser Using WebAssembly](https://releases.slint.dev/1.7.0/docs/slint/src/quickstart/running_in_a_browser)
 - [github/slint-ui](https://github.com/slint-ui/slint)
 - [Viewer for Slint](https://github.com/slint-ui/slint/tree/master/tools/viewer)
 - [LSP (Language Server Protocol) Server for Slint](https://github.com/slint-ui/slint/tree/master/tools/lsp)

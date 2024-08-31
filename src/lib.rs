@@ -107,3 +107,10 @@ pub async fn desktop_main() {
 
     log::debug!("exit...");
 }
+
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen::prelude::wasm_bindgen(start))]
+pub fn main() {
+    let ui = AppWindow::new().unwrap();
+    ui.global::<Store>().set_device_type(DeviceType::Web);
+    ui.run().unwrap();
+}

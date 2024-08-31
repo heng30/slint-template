@@ -1,6 +1,7 @@
 export enum DeviceType {
     Desktop,
     Mobile,
+    Web,
 }
 
 export enum TabIndex {
@@ -44,7 +45,7 @@ import { SideBarEntry } from "./base/def.slint";
 //////////////////////////////// Logic Struct End  ////////////////////////////////
 
 export global Store {
-    in-out property <DeviceType> device-type: DeviceType.Desktop;
+    in-out property <DeviceType> device-type: DeviceType.Web;
     in-out property <bool> is-first-run;
     in-out property <bool> is-show-landing-page;
 
