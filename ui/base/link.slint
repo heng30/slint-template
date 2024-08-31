@@ -3,8 +3,10 @@ import { Theme } from "../theme.slint";
 export component Link inherits Text {
     in-out property <bool> is-read;
 
-    callback clicked <=> touch.clicked;
     out property has-hover <=> touch.has-hover;
+    in-out property enabled <=> touch.enabled;
+
+    callback clicked <=> touch.clicked;
 
     wrap: word-wrap;
     font-size: Theme.title5-font-size;

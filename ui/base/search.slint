@@ -65,6 +65,7 @@ export component Search inherits Rectangle {
         font-size: root.font-size;
 
         clicked => {
+            root.is-show-popup = false;
             root.search(self.text);
         }
 

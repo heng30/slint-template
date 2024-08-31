@@ -4,8 +4,7 @@ import { Logic } from "../../logic.slint";
 import { Store } from "../../store.slint";
 import { SettingIconsBar }  from "../setting/desktop.slint";
 
-import { ComponentEntry, ComponentIndex } from "../../store.slint";
-import { SettingEntryV2, CenterLayout, IconsDialogSetting, Search, Label } from "../../base/widgets.slint";
+import { SettingEntryV2, CenterLayout, IconsDialogSetting, Search, Label, SideBar, SideBarEntry, SideBarChildEntry } from "../../base/widgets.slint";
 import { Introduction }  from "examples/introducion.slint";
 import { TreeExample } from "examples/tree.slint";
 import { StepExample } from "examples/step.slint";
@@ -61,178 +60,120 @@ import { TokenRecipientExample }  from "examples/token-recipient.slint";
 import { TransactionFeeExample }  from "examples/transaction-fee.slint";
 import { WaitTransactionConfirmedExample }  from "examples/wait-transaction-confirmed.slint";
 import { TransactionTileExample }  from "examples/transaction-tile.slint";
+import { SideBarExample }  from "examples/sidebar.slint";
+import { ParagraphExample }  from "examples/paragraph.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
     border-radius: Theme.border-radius * 2;
     clip: true;
 
-    function update-index(index: ComponentIndex) {
-        Store.current-component-index = index;
-    }
+    VerticalLayout {
+        SideBar {
+            private property <string> selected-key;
 
-    pure function is-category(category: ComponentIndex) -> bool {
-        return ComponentIndex.BaseCategory == category || ComponentIndex.InputCategory == category || ComponentIndex.DisplayCategory == category || ComponentIndex.NavigationCategory == category || ComponentIndex.CryptoCategory == category || ComponentIndex.OtherCategory == category;
-    }
-
-    hbox := HorizontalLayout {
-        x: 0;
-        y: 0;
-        z: 10;
-        padding: Theme.padding;
-        height: search.height;
-
-        search := Search {
-            private property <ComponentEntry> selected-component-entry;
-
-            border-radius: Theme.border-radius * 2;
-            enabled-popup: true;
-            values: Logic.generate-search-values(Store.component-entries);
+            entries: Store.sidebar-entries;
+            is-show-search: true;
+            is-use-random-icon: true;
+            search-values: Logic.generate-search-values(Store.sidebar-entries);
 
             search(value) => {
-                self.selected-component-entry = Logic.get-component-index-from-search-values(Store.component-entries, value);
+                self.selected-key = Logic.get-sidebar-key-from-search-values(Store.sidebar-entries, value);
 
-                if (self.selected-component-entry.component-index == ComponentIndex.None) {
+                if (self.selected-key == "None" || self.selected-key == "") {
                     return;
                 }
-                Store.current-component-index = self.selected-component-entry.component-index;
+                Store.current-sidebar-key = self.selected-key;
+            }
+
+            clicked(category, title, key) => {
+                Store.current-sidebar-key = key;
             }
         }
-    }
 
-    fl := Flickable {
-        x: 0;
-        y: hbox.height + Theme.padding * 2;
-        width: root.width;
-        height: root.height - hbox.height - btns-hbox.height;
-        viewport-height: vbox.preferred-height;
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+            padding: Theme.padding * 4;
 
-        vbox := VerticalLayout {
-            alignment: LayoutAlignment.start;
-            private property <int> current-icon-index: 0;
-
-            for entry[index] in Store.component-entries: HorizontalLayout {
-                if root.is-category(entry.component-index): HorizontalLayout {
-                    padding-left: Theme.padding;
-                    padding-right: Theme.padding;
-
-                    Rectangle {
-                        background: Theme.thirdly-background;
-                        border-radius: Theme.border-radius;
-
-                        HorizontalLayout {
-                            alignment: LayoutAlignment.center;
-                            padding: Theme.padding * 2;
-
-                            Label {
-                                text: entry.title;
-                                font-weight: Theme.bold-font-weight;
-                            }
-                        }
-                    }
-                }
-
-                if !root.is-category(entry.component-index): SettingEntryV2 {
-                    text: entry.title;
-                    font-size: Theme.title3-font-size;
-                    background: Store.current-component-index == entry.component-index ? Theme.checked-background : self.has-hover ? Theme.hover-background : Colors.transparent;
-
-                    init => {
-                        self.icon = IconsDialogSetting.icons[current-icon-index];
-                        current-icon-index = Math.mod(current-icon-index + 1, IconsDialogSetting.icons.length);
-                    }
-
-                    clicked => {
-                        update-index(entry.component-index);
-                    }
-                }
+            SettingIconsBar {
+                icon-size: Theme.icon-size * 1.33;
+                h-padding: Theme.spacing * 2;
+                h-spacing: Theme.padding * 8;
             }
-        }
-    }
-
-    btns-hbox := HorizontalLayout {
-        x: 0;
-        y: fl.y + fl.height;
-        alignment: LayoutAlignment.center;
-        padding: Theme.padding * 4;
-        height: sb.height + self.padding * 2;
-
-        sb := SettingIconsBar {
-            icon-size: Theme.icon-size * 1.33;
-            h-padding: Theme.spacing * 2;
-            h-spacing: Theme.padding * 8;
         }
     }
 }
 
 component RightPanel inherits Rectangle {
-    if Store.current-component-index == ComponentIndex.Introduction: Introduction { }
+    if Store.current-sidebar-key == "Introduction": Introduction { }
 
     // Base
-    if Store.current-component-index == ComponentIndex.Button: ButtonExample { }
-    if Store.current-component-index == ComponentIndex.Label: LabelExample { }
-    if Store.current-component-index == ComponentIndex.Divider: DividerExample { }
-    if Store.current-component-index == ComponentIndex.Blanket: BlanketExample { }
-    if Store.current-component-index == ComponentIndex.CenterLayout: CenterLayoutExample { }
-    if Store.current-component-index == ComponentIndex.SlideCard: SlideCardExample { }
-    if Store.current-component-index == ComponentIndex.Drawer: DrawerExample { }
+    if Store.current-sidebar-key == "Button": ButtonExample { }
+    if Store.current-sidebar-key == "Label": LabelExample { }
+    if Store.current-sidebar-key == "Divider": DividerExample { }
+    if Store.current-sidebar-key == "Blanket": BlanketExample { }
+    if Store.current-sidebar-key == "CenterLayout": CenterLayoutExample { }
+    if Store.current-sidebar-key == "SlideCard": SlideCardExample { }
+    if Store.current-sidebar-key == "Drawer": DrawerExample { }
 
     // Input
-    if Store.current-component-index == ComponentIndex.Slider: SliderExample { }
-    if Store.current-component-index == ComponentIndex.Rate: RateExample { }
-    if Store.current-component-index == ComponentIndex.PinCodes: PinCodesExample { }
-    if Store.current-component-index == ComponentIndex.Select: SelectExample { }
-    if Store.current-component-index == ComponentIndex.Input: InputExample { }
-    if Store.current-component-index == ComponentIndex.SignIn: SignInExample { }
-    if Store.current-component-index == ComponentIndex.LogIn: LogInExample { }
-    if Store.current-component-index == ComponentIndex.Password: PasswordExample { }
-    if Store.current-component-index == ComponentIndex.ResetPassword: ResetPasswordExample { }
+    if Store.current-sidebar-key == "Slider": SliderExample { }
+    if Store.current-sidebar-key == "Rate": RateExample { }
+    if Store.current-sidebar-key == "PinCodes": PinCodesExample { }
+    if Store.current-sidebar-key == "Select": SelectExample { }
+    if Store.current-sidebar-key == "Input": InputExample { }
+    if Store.current-sidebar-key == "SignIn": SignInExample { }
+    if Store.current-sidebar-key == "LogIn": LogInExample { }
+    if Store.current-sidebar-key == "Password": PasswordExample { }
+    if Store.current-sidebar-key == "ResetPassword": ResetPasswordExample { }
 
     // Navigation
-    if Store.current-component-index == ComponentIndex.Tree: TreeExample { }
-    if Store.current-component-index == ComponentIndex.Pagination: PaginationExample { }
-    if Store.current-component-index == ComponentIndex.TabBtn: TabBtnExample { }
-    if Store.current-component-index == ComponentIndex.StatusBar: StatusBarExample { }
-    if Store.current-component-index == ComponentIndex.Head: HeadExample { }
+    if Store.current-sidebar-key == "Tree": TreeExample { }
+    if Store.current-sidebar-key == "Pagination": PaginationExample { }
+    if Store.current-sidebar-key == "TabBtn": TabBtnExample { }
+    if Store.current-sidebar-key == "StatusBar": StatusBarExample { }
+    if Store.current-sidebar-key == "Head": HeadExample { }
+    if Store.current-sidebar-key == "SideBar": SideBarExample { }
 
     // Display
-    if Store.current-component-index == ComponentIndex.Badge: BadgeExample { }
-    if Store.current-component-index == ComponentIndex.Step: StepExample { }
-    if Store.current-component-index == ComponentIndex.Progress: ProgressExample { }
-    if Store.current-component-index == ComponentIndex.Toast: ToastExample { }
-    if Store.current-component-index == ComponentIndex.RecordIndicator: RecordIndicatorExample { }
-    if Store.current-component-index == ComponentIndex.ToolTip: ToolTipExample { }
-    if Store.current-component-index == ComponentIndex.BreadCrumb: BreadCrumbExample { }
-    if Store.current-component-index == ComponentIndex.Skeleton: SkeletonExample { }
-    if Store.current-component-index == ComponentIndex.Collapse: CollapseExample { }
-    if Store.current-component-index == ComponentIndex.Tag: TagExample { }
-    if Store.current-component-index == ComponentIndex.Loading: LoadingExample { }
-    if Store.current-component-index == ComponentIndex.PopupAction: PopupActionExample { }
-    if Store.current-component-index == ComponentIndex.Banner: BannerExample { }
-    if Store.current-component-index == ComponentIndex.Link: LinkExample { }
-    if Store.current-component-index == ComponentIndex.Avatar: AvatarExample { }
-    if Store.current-component-index == ComponentIndex.Empty: EmptyExample { }
-    if Store.current-component-index == ComponentIndex.News: NewsExample { }
-    if Store.current-component-index == ComponentIndex.ListTile: ListTileExample { }
+    if Store.current-sidebar-key == "Badge": BadgeExample { }
+    if Store.current-sidebar-key == "Step": StepExample { }
+    if Store.current-sidebar-key == "Progress": ProgressExample { }
+    if Store.current-sidebar-key == "Toast": ToastExample { }
+    if Store.current-sidebar-key == "RecordIndicator": RecordIndicatorExample { }
+    if Store.current-sidebar-key == "ToolTip": ToolTipExample { }
+    if Store.current-sidebar-key == "BreadCrumb": BreadCrumbExample { }
+    if Store.current-sidebar-key == "Skeleton": SkeletonExample { }
+    if Store.current-sidebar-key == "Collapse": CollapseExample { }
+    if Store.current-sidebar-key == "Tag": TagExample { }
+    if Store.current-sidebar-key == "Loading": LoadingExample { }
+    if Store.current-sidebar-key == "PopupAction": PopupActionExample { }
+    if Store.current-sidebar-key == "Banner": BannerExample { }
+    if Store.current-sidebar-key == "Link": LinkExample { }
+    if Store.current-sidebar-key == "Avatar": AvatarExample { }
+    if Store.current-sidebar-key == "Empty": EmptyExample { }
+    if Store.current-sidebar-key == "News": NewsExample { }
+    if Store.current-sidebar-key == "ListTile": ListTileExample { }
+    if Store.current-sidebar-key == "Paragraph": ParagraphExample { }
 
     // Crypto
-    if Store.current-component-index == ComponentIndex.Mnemonic: MnemonicExample { }
-    if Store.current-component-index == ComponentIndex.AddressBook: AddressBookExample { }
-    if Store.current-component-index == ComponentIndex.AccountBalance: AccountBalanceExample { }
-    if Store.current-component-index == ComponentIndex.TokenList: TokenListExample { }
-    if Store.current-component-index == ComponentIndex.TokenSender: TokenSenderExample { }
-    if Store.current-component-index == ComponentIndex.TokenRecipient: TokenRecipientExample { }
-    if Store.current-component-index == ComponentIndex.TransactionFee: TransactionFeeExample { }
-    if Store.current-component-index == ComponentIndex.WaitTransactionConfirmed: WaitTransactionConfirmedExample { }
-    if Store.current-component-index == ComponentIndex.TransactionTile: TransactionTileExample { }
+    if Store.current-sidebar-key == "Mnemonic": MnemonicExample { }
+    if Store.current-sidebar-key == "AddressBook": AddressBookExample { }
+    if Store.current-sidebar-key == "AccountBalance": AccountBalanceExample { }
+    if Store.current-sidebar-key == "TokenList": TokenListExample { }
+    if Store.current-sidebar-key == "TokenSender": TokenSenderExample { }
+    if Store.current-sidebar-key == "TokenRecipient": TokenRecipientExample { }
+    if Store.current-sidebar-key == "TransactionFee": TransactionFeeExample { }
+    if Store.current-sidebar-key == "WaitTransactionConfirmed": WaitTransactionConfirmedExample { }
+    if Store.current-sidebar-key == "TransactionTile": TransactionTileExample { }
 
     // Other
-    if Store.current-component-index == ComponentIndex.Setting: SettingExample { }
-    if Store.current-component-index == ComponentIndex.About: AboutExample { }
-    if Store.current-component-index == ComponentIndex.Dialog: DialogExample { }
-    if Store.current-component-index == ComponentIndex.LandingPage: LandingPageExample { }
-    if Store.current-component-index == ComponentIndex.Brand: BrandExample { }
-    if Store.current-component-index == ComponentIndex.Help: HelpExample { }
+    if Store.current-sidebar-key == "Setting": SettingExample { }
+    if Store.current-sidebar-key == "About": AboutExample { }
+    if Store.current-sidebar-key == "Dialog": DialogExample { }
+    if Store.current-sidebar-key == "LandingPage": LandingPageExample { }
+    if Store.current-sidebar-key == "Brand": BrandExample { }
+    if Store.current-sidebar-key == "Help": HelpExample { }
 }
 
 export component Home inherits VerticalLayout {

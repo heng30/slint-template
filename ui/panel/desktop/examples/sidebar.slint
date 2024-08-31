@@ -1,0 +1,87 @@
+import { Util, Theme, Icons, Logic, Store } from "../../def.slint";
+import { SideBar, ExampleComponent, SideBarEntry, SideBarChildEntry } from "../../../base/widgets.slint";
+
+export component SideBarExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    in-out property <[SideBarEntry]> entries: [
+        {
+            category: Store.is-cn ? "介绍" : "Introduction",
+            icon: Icons.delete,
+        },
+        // Base
+        {
+            is-open: true,
+            category: Store.is-cn ? "基础类" : "BaseCategory",
+            icon: Icons.address,
+            children: [
+                {
+                    title: Store.is-cn ? "按钮" : "Button",
+                    icon: Icons.add-light,
+                    key: "Button",
+                },
+                {
+                    title: Store.is-cn ? "文本" : "Label",
+                    icon: Icons.add-fill,
+                },
+                {
+                    title: Store.is-cn ? "分割线" : "Divider",
+                    icon: Icons.logout,
+                },
+            ]
+        },
+        // Input
+        {
+            category: Store.is-cn ? "输入类" : "InputCategory",
+            icon: Icons.add-fill,
+            children: [
+                {
+                    title: Store.is-cn ? "滑动条" : "Slider",
+                    icon: Icons.feedback,
+                    key: "Slider",
+                },
+                {
+                    title: Store.is-cn ? "打分" : "Rate",
+                    icons: Icons.copy,
+                },
+                {
+                    title: Store.is-cn ? "验证码" : "PinCodes",
+                    icons: Icons.paste,
+                },
+            ]
+        },
+    ];
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.center;
+                    spacing: Theme.spacing * 2;
+
+                    SideBar {
+                        width: 500px;
+                        height: 500px;
+                        border-width: 1px;
+                        border-color: Theme.base-border-color;
+                        entries: root.entries;
+                        is-show-search: true;
+                    }
+                }
+
+                code: "in-out property <[SideBarEntry]> entries: [\n    {\n        category: Store.is-cn ? \"介绍\" : \"Introduction\",\n        icon: Icons.delete,\n    },\n    // Base\n    {\n        is-open: true,\n        category: Store.is-cn ? \"基础类\" : \"BaseCategory\",\n        icon: Icons.address,\n        children: [\n            {\n                title: Store.is-cn ? \"按钮\" : \"Button\",\n                icon: Icons.add-light,\n                key: \"Button\",\n            },\n            {\n                title: Store.is-cn ? \"文本\" : \"Label\",\n                icon: Icons.add-fill,\n            },\n            {\n                title: Store.is-cn ? \"分割线\" : \"Divider\",\n                icon: Icons.logout,\n            },\n        ]\n    },\n    // Input\n    {\n        category: Store.is-cn ? \"输入类\" : \"InputCategory\",\n        icon: Icons.add-fill,\n        children: [\n            {\n                title: Store.is-cn ? \"滑动条\" : \"Slider\",\n                icon: Icons.feedback,\n                key: \"Slider\",\n            },\n            {\n                title: Store.is-cn ? \"打分\" : \"Rate\",\n                icons: Icons.copy,\n            },\n            {\n                title: Store.is-cn ? \"验证码\" : \"PinCodes\",\n                icons: Icons.paste,\n            },\n        ]\n    },\n];\n\nSideBar {\n    width: 500px;\n    height: 500px;\n    border-width: 1px;\n    border-color: Theme.base-border-color;\n    entries: root.entries;\n    is-show-search: true;\n}";
+            }
+        }
+    }
+}

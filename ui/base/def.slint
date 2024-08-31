@@ -35,5 +35,20 @@ export struct TreeEntry {
     key: string,
     parent-node: string,
     current-node: string,
+    icon: image,
+}
+
+export struct SideBarChildEntry {
+    key: string,
+    title: string,
+    icon: image,
+}
+
+export struct SideBarEntry {
+    key: string,
+    is-open: bool,
+    category: string,
+    icon: image,
+    children: [SideBarChildEntry],
 }
 

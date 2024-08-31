@@ -1,4 +1,4 @@
-import { Theme, Store } from "../../def.slint";
+import { Theme, Store, Icons } from "../../def.slint";
 import { Tree, ExampleComponent } from "../../../base/widgets.slint";
 
 export component TreeExample inherits Flickable {
@@ -27,6 +27,7 @@ export component TreeExample inherits Flickable {
                         {
                             is-open: true,
                             current-node: Store.is-cn ? "亚洲" : "Asia",
+                            icon: Icons.address,
                         },
                         {
                             current-node: Store.is-cn ? "北美洲" : "North America",
@@ -38,6 +39,7 @@ export component TreeExample inherits Flickable {
                             is-open: true,
                             parent-node: Store.is-cn ? "亚洲" : "Asia",
                             current-node: Store.is-cn ? "中国" : "China",
+                            icon: Icons.airdrop,
                         },
                         {
                             parent-node: Store.is-cn ? "北美洲" : "North America",
@@ -49,6 +51,7 @@ export component TreeExample inherits Flickable {
                         {
                             parent-node: Store.is-cn ? "中国" : "China",
                             current-node:  Store.is-cn ? "珠海" : "ZhuHai",
+                            icon: Icons.delete,
                             key: "zhuhai",
                         },
                         {

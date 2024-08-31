@@ -55,7 +55,7 @@ export component Pagination inherits Rectangle {
             spacing: Theme.spacing * 4;
             for index in total-pages: TextBtnWithoutIcon {
                 is-circle: true;
-                background: root.real-current-page == index ? Theme.third-brand-color : Colors.transparent;
+                background: root.real-current-page == index ? Theme.thirdly-brand-color : Colors.transparent;
 
                 text: start-page + index + 1;
                 font-size: root.font-size;
@@ -117,7 +117,7 @@ export component Pagination inherits Rectangle {
                 spacing: Theme.spacing * 4;
                 for index in real-show-pages-half: TextBtnWithoutIcon {
                     is-circle: true;
-                    background: root.real-current-page == start-page + index ? Theme.third-brand-color : Colors.transparent;
+                    background: root.real-current-page == start-page + index ? Theme.thirdly-brand-color : Colors.transparent;
 
                     text: start-page + index + 1;
                     font-size: root.font-size;
@@ -154,8 +154,7 @@ export component Pagination inherits Rectangle {
                         is-circle: true;
                         text: inner-real-current-page + 1;
                         font-size: root.font-size;
-                        background: root.real-current-page == inner-real-current-page ? Theme.third-brand-color : Colors.transparent;
-                        text-color: root.real-current-page == inner-real-current-page ? Theme.light-text-color : root.text-color;
+                        background: root.real-current-page == inner-real-current-page ? Theme.thirdly-brand-color : Colors.transparent; text-color: root.real-current-page == inner-real-current-page ? Theme.light-text-color : root.text-color;
 
                         clicked => {
                             root.real-current-page = inner-real-current-page;

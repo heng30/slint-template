@@ -1,0 +1,54 @@
+import { Util, Theme, Store, Icons } from "../../def.slint";
+import { Paragraph, ParagraphEntry, ExampleComponent } from "../../../base/widgets.slint";
+
+export component ParagraphExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.max(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    VerticalLayout {
+                        spacing: Theme.spacing * 10;
+
+                        Paragraph {
+                            width: 100%;
+                            is-show-divider: true;
+                            entry: {
+                                title:"How to accelerate rust-analyzer efficient?",
+                                text: "For single-threaded improvements, one area to focus on is Rowan, the library rust-analyzer uses for syntax   tree construction. Benchmarks indicate that Rowan's tree construction can be slower than other libraries like syntree. Using a syntax tree library structure with a more contiguous representation could lead to faster initial workspace loading and indexing.",
+                            };
+                        }
+
+                        Paragraph {
+                            width: 100%;
+                            picture-size: 500px;
+
+                            entry: {
+                                title:"Rust analyzer: any tips to increase its performance?",
+                                title-link: "https://users.rust-lang.org/t/rust-analyzer-any-tips-to-increase-its-performance/112150",
+                                text: "For single-threaded improvements, one area to focus on is Rowan, the library rust-analyzer uses for syntax   tree construction. Benchmarks indicate that Rowan's tree construction can be slower than other libraries like syntree. Using a syntax tree library structure with a more contiguous representation could lead to faster initial workspace loading and indexing.",
+                                picture: Icons.landing-account,
+                            };
+                        }
+                    }
+                }
+
+                code: "";
+            }
+        }
+    }
+}

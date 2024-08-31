@@ -11,7 +11,7 @@ export component CancelBtn inherits IconBtn {
     bg-color: Theme.info-color.brighter(50%);
     bg-pressed-color: self.bg-color.darker(30%);
     colorize: self.bg-pressed-color.darker(100%);
-    icon-valignment: LayoutAlignment.end;
+    icon-valignment: ImageVerticalAlignment.bottom;
     text: Logic.tr("Cancel");
 }
 
@@ -19,10 +19,10 @@ export component ConfirmBtn inherits IconBtn {
     use-auto-size: true;
     icon: Icons.success;
     border-radius: Theme.border-radius;
-    bg-color: Theme.third-brand-color.darker(20%);
+    bg-color: Theme.thirdly-brand-color.darker(20%);
     bg-pressed-color: self.bg-color.darker(30%);
     colorize: Theme.light-text-color;
-    icon-valignment: LayoutAlignment.end;
+    icon-valignment: ImageVerticalAlignment.bottom;
     text: Logic.tr("Confirm");
 }
 

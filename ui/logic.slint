@@ -1,6 +1,6 @@
 import { Store,  SettingPreference, SettingProxy, TabIndex, SettingDetailIndex } from "store.slint";
 
-import { ComponentEntry } from "store.slint";
+import { SideBarEntry } from "base/def.slint";
 
 export global Logic {
     callback update-cache-size();
@@ -40,10 +40,10 @@ export global Logic {
 
     //////////////////////////////// Logic Start  ////////////////////////////////
 
-    pure callback generate-search-values([ComponentEntry]) -> [string];
+    pure callback generate-search-values([SideBarEntry]) -> [string];
 
     // (entries, search-value) -> entry
-    pure callback get-component-index-from-search-values([ComponentEntry], string) -> ComponentEntry;
+    pure callback get-sidebar-key-from-search-values([SideBarEntry], string) -> string;
 
     //////////////////////////////// Logic End  ////////////////////////////////
 

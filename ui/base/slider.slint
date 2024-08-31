@@ -26,7 +26,7 @@ export component Slider inherits Rectangle {
     in-out property enabled <=> ta.enabled;
     out property has-focus <=> fs.has-focus;
 
-    in-out property <color> finished-progress-color: Theme.third-brand-color;
+    in-out property <color> finished-progress-color: Theme.thirdly-brand-color;
     in-out property <color> unfinished-progress-color: Theme.secondary-background;
 
     private property <float> progress: (Math.clamp(value, minimum, maximum) - minimum) / (maximum - minimum);

@@ -4,15 +4,51 @@ use slint::{ComponentHandle, Model, ModelRc, VecModel};
 pub fn init(ui: &AppWindow) {
     ui.global::<Logic>()
         .on_generate_search_values(move |entries| {
-            let values = entries.iter().map(|entry| entry.title).collect::<Vec<_>>();
+            let values = entries
+                .iter()
+                .map(|entry| {
+                    if entry.children.row_count() > 0 {
+                        entry
+                            .children
+                            .iter()
+                            .map(|item| item.title)
+                            .collect::<Vec<_>>()
+                    } else {
+                        vec![entry.category]
+                    }
+                })
+                .flatten()
+                .collect::<Vec<_>>();
             ModelRc::new(VecModel::from_slice(&values[..]))
         });
 
     ui.global::<Logic>()
-        .on_get_component_index_from_search_values(move |entries, text| {
+        .on_get_sidebar_key_from_search_values(move |entries, text| {
+            if text.is_empty() {
+                return Default::default();
+            }
+
             let entries = entries
                 .iter()
-                .filter(|item| item.title.to_lowercase().contains(text.to_lowercase().as_str()))
+                .map(|entry| {
+                    if entry.children.row_count() > 0 {
+                        entry
+                            .children
+                            .iter()
+                            .map(|item| (item.title, item.key))
+                            .collect::<Vec<_>>()
+                    } else {
+                        vec![(entry.category, entry.key)]
+                    }
+                })
+                .flatten()
+                .filter_map(|item| {
+                    if item.0.to_lowercase().contains(text.to_lowercase().as_str()) {
+                        Some(item.1)
+                    } else {
+                        None
+                    }
+                })
                 .collect::<Vec<_>>();
 
             if entries.is_empty() {

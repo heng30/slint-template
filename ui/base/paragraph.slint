@@ -1,0 +1,65 @@
+import { Theme } from "../theme.slint";
+import { Util } from "../util.slint";
+import { Label } from "label.slint";
+import { Link } from "link.slint";
+import { Divider } from "divider.slint";
+
+export struct ParagraphEntry {
+    title: string,
+    title-link: string,
+    text: string,
+    picture: image,
+}
+
+export component Paragraph inherits Rectangle {
+    in-out property <ParagraphEntry> entry;
+
+    in-out property <length> title-font-size: Theme.title1-font-size;
+    in-out property title-color <=> lb-title.color;
+
+    in-out property <length> text-font-size: Theme.default-font-size;
+    in-out property text-color <=> lb-text.color;
+
+    in-out property <length> picture-size: 300px;
+    in-out property <bool> is-show-divider;
+
+    preferred-height: vbox.preferred-height;
+
+    vbox := VerticalLayout {
+        HorizontalLayout {
+            padding-bottom: Theme.padding * 4;
+
+            lb-title := Link {
+                enabled: entry.title-link != "";
+                text: entry.title;
+                font-size: root.title-font-size;
+                font-weight: Theme.bold-font-weight;
+                color: entry.title-link != "" ? Theme.link-text-color : Theme.primary-text-color;
+
+                clicked => {
+                    Util.open-url("Default", entry.title-link);
+                }
+            }
+        }
+
+        lb-text := Label {
+            text: entry.text;
+            font-size: root.text-font-size;
+            wrap: word-wrap;
+        }
+
+        if entry.picture.width > 0: HorizontalLayout {
+            alignment: LayoutAlignment.center;
+
+            Image {
+                width: root.picture-size;
+                source: entry.picture;
+            }
+        }
+
+        if root.is-show-divider: HorizontalLayout {
+            padding-top: Theme.padding * 4;
+            Divider { }
+        }
+    }
+}

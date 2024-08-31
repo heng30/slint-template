@@ -47,26 +47,30 @@ export component SettingEntry inherits Rectangle {
 export component SettingEntryV2 inherits Rectangle {
     in-out property text <=> label.text;
     in-out property font-size <=> label.font-size;
+    in-out property text-color <=> label.color;
+    in-out property font-weight <=> label.font-weight;
+
     in-out property icon <=> img.source;
     in-out property icon-colorize <=> img.colorize;
     in-out property icon-size <=> img.width;
     out property has-hover <=> ta.has-hover;
 
     in-out property <bool> is-show-indicator;
-    in-out property <length> h-padding: Theme.padding * 2;
-    in-out property <length> v-padding: Theme.padding * 2;
+    in-out property <length> hpadding: Theme.padding * 2;
+    in-out property <length> vpadding: Theme.padding * 2;
 
     in-out property <bool> is-show-right-icon;
     in-out property <image> right-icon: Icons.star;
-    in-out property <color> right-icon-colorize;
+    in-out property <color> right-icon-colorize: label.color;
+    in-out property <length> right-icon-size;
 
     callback clicked();
 
     hbox := HorizontalLayout {
-        padding-left: h-padding;
-        padding-right: h-padding;
-        padding-top: v-padding;
-        padding-bottom: v-padding;
+        padding-left: hpadding;
+        padding-right: hpadding;
+        padding-top: vpadding;
+        padding-bottom: vpadding;
 
         alignment: LayoutAlignment.space-between;
 
@@ -101,7 +105,7 @@ export component SettingEntryV2 inherits Rectangle {
 
         if is-show-right-icon: Image {
             vertical-alignment: center;
-            width: root.icon-size;
+            width: root.right-icon-size;
             colorize: root.right-icon-colorize;
             source: root.right-icon;
         }

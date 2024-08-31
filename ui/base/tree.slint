@@ -10,6 +10,7 @@ import { TreeEntry } from "def.slint";
 //         {
 //             is-open: true,
 //             current-node: "亚洲",
+//             icon: Icons.address,
 //         },
 //         {
 //             current-node: "北美洲",
@@ -20,6 +21,7 @@ import { TreeEntry } from "def.slint";
 //             is-open: true,
 //             parent-node: "亚洲",
 //             current-node: "中国",
+//             icon: Icons.address,
 //         },
 //         {
 //             parent-node: "北美洲",
@@ -30,6 +32,7 @@ import { TreeEntry } from "def.slint";
 //         {
 //             parent-node: "中国",
 //             current-node: "珠海",
+//             icon: Icons.address,
 //             key: "zhuhai",
 //         },
 //         {
@@ -58,12 +61,14 @@ export component Tree inherits Rectangle {
     in-out property <length> vpadding: Theme.padding * 2;
     in-out property <length> vspacing: Theme.padding * 2;
     in-out property <length> indent: Theme.icon-size;
+    in-out property <length> indicator-icon-size: Theme.icon-size;
+    in-out property <color> indicator-icon-colorize: Theme.icon-color;
     in-out property <length> icon-size: Theme.icon-size;
     in-out property <color> icon-colorize: Theme.icon-color;
     in-out property <color> checked-background: Theme.checked-background;
 
-    in-out property <image> open-icon: Icons.arrow-down-fill;
-    in-out property <image> close-icon: Icons.arrow-right-fill;
+    in-out property <image> open-indicator: Icons.arrow-down-fill;
+    in-out property <image> close-indicator: Icons.arrow-right-fill;
 
     in-out property <[TreeEntry]> level-one-entries;
     in-out property <[TreeEntry]> level-two-entries;
@@ -116,12 +121,22 @@ export component Tree inherits Rectangle {
 
                             lone-icon := IconBtn {
                                 visible: children-nodes.length > 0;
-                                icon-size: root.icon-size;
-                                icon: lone.is-open ? root.open-icon : root.close-icon;
-                                colorize: root.icon-colorize;
+                                icon-size: root.indicator-icon-size;
+                                icon: lone.is-open ? root.open-indicator : root.close-indicator;
+                                colorize: root.indicator-icon-colorize;
                                 clicked => {
                                     lone.is-open = !lone.is-open;
                                 }
+                            }
+                        }
+
+                        if lone.icon.width > 0: VerticalLayout {
+                            alignment: LayoutAlignment.center;
+
+                            Image {
+                                width: root.icon-size;
+                                source: lone.icon;
+                                colorize: root.icon-colorize;
                             }
                         }
 
@@ -167,13 +182,23 @@ export component Tree inherits Rectangle {
 
                                 ltwo-icon := IconBtn {
                                     visible: children-nodes.length > 0;
-                                    icon-size: root.icon-size;
-                                    icon: ltwo.is-open ? root.open-icon : root.close-icon;
-                                    colorize: root.icon-colorize;
+                                    icon-size: root.indicator-icon-size;
+                                    icon: ltwo.is-open ? root.open-indicator : root.close-indicator;
+                                    colorize: root.indicator-icon-colorize;
 
                                     clicked => {
                                         ltwo.is-open = !ltwo.is-open;
                                     }
+                                }
+                            }
+
+                            if ltwo.icon.width > 0: VerticalLayout {
+                                alignment: LayoutAlignment.center;
+
+                                Image {
+                                    width: root.icon-size;
+                                    source: ltwo.icon;
+                                    colorize: root.icon-colorize;
                                 }
                             }
 
@@ -211,6 +236,16 @@ export component Tree inherits Rectangle {
                                 padding-right: root.hpadding;
                                 spacing: Theme.spacing * 2;
                                 alignment: start;
+
+                                if lthree.icon.width > 0: VerticalLayout {
+                                    alignment: LayoutAlignment.center;
+
+                                    Image {
+                                        width: root.icon-size;
+                                        source: lthree.icon;
+                                        colorize: root.icon-colorize;
+                                    }
+                                }
 
                                 Label {
                                     text: lthree.current-node;
