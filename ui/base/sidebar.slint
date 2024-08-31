@@ -9,8 +9,7 @@ export component SideBar inherits Rectangle {
     in-out property <bool> is-show-search;
     in-out property search-values <=> search.values;
 
-    in-out property <int> top-current-index;
-    in-out property <int> current-index;
+    in-out property <string> selected-key;
 
     in-out property <length> category-font-size: Theme.title3-font-size;
     in-out property <int> category-font-weight: Theme.normal-font-weight;
@@ -34,6 +33,8 @@ export component SideBar inherits Rectangle {
         current-icon-index += 1;
         return IconsDialogSetting.icons[current-icon-index];
     }
+
+    clip: true;
 
     hbox := HorizontalLayout {
         visible: root.is-show-search;
@@ -63,7 +64,7 @@ export component SideBar inherits Rectangle {
 
             for entry[top-index] in root.entries: VerticalLayout {
                 SettingEntryV2 {
-                    private property <bool> is-checked: root.top-current-index == top-index && entry.children.length == 0;
+                    private property <bool> is-checked: root.selected-key != "" && root.selected-key == entry.key;
 
                     text: entry.category;
                     font-size: root.category-font-size;
@@ -83,7 +84,7 @@ export component SideBar inherits Rectangle {
                         if entry.children.length > 0 {
                             entry.is-open = !entry.is-open;
                         } else {
-                            root.top-current-index = top-index;
+                            root.selected-key = entry.key;
                             root.clicked(entry.category, "", entry.key);
                         }
                     }
@@ -100,7 +101,7 @@ export component SideBar inherits Rectangle {
 
                     child-vbox := VerticalLayout {
                         for item[index] in entry.children: SettingEntryV2 {
-                            private property <bool> is-checked: root.top-current-index == top-index && root.current-index == index;
+                            private property <bool> is-checked: root.selected-key != "" && root.selected-key == item.key;
                             text: item.title;
                             font-size: root.child-font-size;
                             background: self.is-checked ? Theme.checked-background : self.has-hover ? Theme.hover-background : Colors.transparent;
@@ -112,8 +113,7 @@ export component SideBar inherits Rectangle {
                             }
 
                             clicked => {
-                                root.top-current-index = top-index;
-                                root.current-index = index;
+                                root.selected-key = item.key;
                                 root.clicked(entry.category, item.title, item.key);
                             }
                         }

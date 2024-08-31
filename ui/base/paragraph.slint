@@ -7,7 +7,7 @@ import { Divider } from "divider.slint";
 export struct ParagraphEntry {
     title: string,
     title-link: string,
-    text: string,
+    contents: [string],
     picture: image,
 }
 
@@ -17,10 +17,11 @@ export component Paragraph inherits Rectangle {
     in-out property <length> title-font-size: Theme.title1-font-size;
     in-out property title-color <=> lb-title.color;
 
-    in-out property <length> text-font-size: Theme.default-font-size;
-    in-out property text-color <=> lb-text.color;
+    in-out property <length> content-font-size: Theme.default-font-size;
+    in-out property <color> content-color: Theme.regular-text-color;
 
     in-out property <length> picture-size: 300px;
+    in-out property <bool> is-picture-before-contents;
     in-out property <bool> is-show-divider;
 
     preferred-height: vbox.preferred-height;
@@ -34,7 +35,8 @@ export component Paragraph inherits Rectangle {
                 text: entry.title;
                 font-size: root.title-font-size;
                 font-weight: Theme.bold-font-weight;
-                color: entry.title-link != "" ? Theme.link-text-color : Theme.primary-text-color;
+                color: Theme.primary-text-color;
+                is-show-icon: entry.title-link != "";
 
                 clicked => {
                     Util.open-url("Default", entry.title-link);
@@ -42,13 +44,30 @@ export component Paragraph inherits Rectangle {
             }
         }
 
-        lb-text := Label {
-            text: entry.text;
-            font-size: root.text-font-size;
-            wrap: word-wrap;
+        if entry.picture.width > 0 && root.is-picture-before-contents: HorizontalLayout {
+            alignment: LayoutAlignment.center;
+
+            Image {
+                width: root.picture-size;
+                source: entry.picture;
+            }
         }
 
-        if entry.picture.width > 0: HorizontalLayout {
+        for item[index] in entry.contents: VerticalLayout {
+            padding-bottom: index == entry.contents.length - 1 ? 0 : Theme.padding * 4;
+
+            TextInput {
+                text: item;
+                font-size: root.content-font-size;
+                color: root.content-color;
+                wrap: word-wrap;
+                read-only: true;
+                single-line: false;
+                vertical-alignment: TextVerticalAlignment.center;
+            }
+        }
+
+        if entry.picture.width > 0 && !root.is-picture-before-contents: HorizontalLayout {
             alignment: LayoutAlignment.center;
 
             Image {

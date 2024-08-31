@@ -70,20 +70,22 @@ component LeftPanel inherits Rectangle {
 
     VerticalLayout {
         SideBar {
-            private property <string> selected-key;
+            private property <string> cache-selected-key;
 
+            selected-key: Store.current-sidebar-key;
             entries: Store.sidebar-entries;
             is-show-search: true;
             is-use-random-icon: true;
             search-values: Logic.generate-search-values(Store.sidebar-entries);
 
             search(value) => {
-                self.selected-key = Logic.get-sidebar-key-from-search-values(Store.sidebar-entries, value);
+                self.cache-selected-key = Logic.get-sidebar-key-from-search-values(Store.sidebar-entries, value);
 
-                if (self.selected-key == "None" || self.selected-key == "") {
+                if (self.cache-selected-key == "None" || self.cache-selected-key == "") {
                     return;
                 }
-                Store.current-sidebar-key = self.selected-key;
+                self.selected-key = Store.current-sidebar-key;
+                Store.current-sidebar-key = self.cache-selected-key;
             }
 
             clicked(category, title, key) => {

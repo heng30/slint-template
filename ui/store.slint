@@ -60,7 +60,7 @@ export global Store {
         win-height: 800,
         font-size: "24",
         font-family: "Source Han Sans CN",
-        language: "en",
+        language: "cn",
         always-on-top: false,
         no-frame: true,
         is-dark: false,
@@ -75,7 +75,7 @@ export global Store {
     ];
 
     //////////////////////////////// Logic Start ////////////////////////////////
-    in-out property <string> current-sidebar-key: "Paragraph";
+    in-out property <string> current-sidebar-key: "Introduction";
     in-out property <[SideBarEntry]> sidebar-entries: [
         {
             category: is-cn ? "介绍" : "Introduction",
@@ -295,7 +295,7 @@ export global Store {
                     key: "TokenSender",
                 },
                 {
-                    title: is-cn ? "代币发送" : "TokenRecipient",
+                    title: is-cn ? "代币接收" : "TokenRecipient",
                     key: "TokenRecipient",
                 },
                 {

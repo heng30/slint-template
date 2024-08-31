@@ -25,29 +25,34 @@ export component ParagraphExample inherits Flickable {
                         spacing: Theme.spacing * 10;
 
                         Paragraph {
-                            width: 100%;
                             is-show-divider: true;
+                            is-picture-before-contents: true;
                             entry: {
                                 title:"How to accelerate rust-analyzer efficient?",
-                                text: "For single-threaded improvements, one area to focus on is Rowan, the library rust-analyzer uses for syntax   tree construction. Benchmarks indicate that Rowan's tree construction can be slower than other libraries like syntree. Using a syntax tree library structure with a more contiguous representation could lead to faster initial workspace loading and indexing.",
+                                picture: Icons.landing-account,
+                                contents: [
+                                    "For single-threaded improvements, one area to focus on is Rowan, the library rust-analyzer uses for syntax   tree construction.",
+                                    "Benchmarks indicate that Rowan's tree construction can be slower than other libraries like syntree. Using a syntax tree library structure with a more contiguous representation could lead to faster initial workspace loading and indexing.",
+                                ]
                             };
                         }
 
                         Paragraph {
-                            width: 100%;
                             picture-size: 500px;
 
                             entry: {
                                 title:"Rust analyzer: any tips to increase its performance?",
                                 title-link: "https://users.rust-lang.org/t/rust-analyzer-any-tips-to-increase-its-performance/112150",
-                                text: "For single-threaded improvements, one area to focus on is Rowan, the library rust-analyzer uses for syntax   tree construction. Benchmarks indicate that Rowan's tree construction can be slower than other libraries like syntree. Using a syntax tree library structure with a more contiguous representation could lead to faster initial workspace loading and indexing.",
                                 picture: Icons.landing-account,
+                                contents: [
+                                    "For single-threaded improvements, one area to focus on is Rowan, the library rust-analyzer uses for syntax   tree construction. Benchmarks indicate that Rowan's tree construction can be slower than other libraries like syntree. Using a syntax tree library structure with a more contiguous representation could lead to faster initial workspace loading and indexing."
+                                ],
                             };
                         }
                     }
                 }
 
-                code: "";
+                code: "VerticalLayout {\n    spacing: Theme.spacing * 10;\n\n    Paragraph {\n        width: 100%;\n        is-show-divider: true;\n        entry: {\n            title:\"How to accelerate rust-analyzer efficient?\",\n            text: \"For single-threaded improvements, one area to focus on is Rowan, the library rust-analyzer uses for syntax   tree construction. Benchmarks indicate that Rowan's tree construction can be slower than other libraries like syntree. Using a syntax tree library structure with a more contiguous representation could lead to faster initial workspace loading and indexing.\",\n        };\n    }\n\n    Paragraph {\n        width: 100%;\n        picture-size: 500px;\n\n        entry: {\n            title:\"Rust analyzer: any tips to increase its performance?\",\n            title-link: \"https://users.rust-lang.org/t/rust-analyzer-any-tips-to-increase-its-performance/112150\",\n            text: \"For single-threaded improvements, one area to focus on is Rowan, the library rust-analyzer uses for syntax   tree construction. Benchmarks indicate that Rowan's tree construction can be slower than other libraries like syntree. Using a syntax tree library structure with a more contiguous representation could lead to faster initial workspace loading and indexing.\",\n            picture: Icons.landing-account,\n        };\n    }\n}";
             }
         }
     }

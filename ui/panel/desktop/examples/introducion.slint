@@ -1,21 +1,61 @@
-import { Util, Theme,Icons, Logic } from "../../def.slint";
+import { Util, Theme,Icons, Store } from "../../def.slint";
+import { Paragraph, ParagraphEntry } from "../../../base/widgets.slint";
 
 export component Introduction inherits Flickable {
     viewport-height: vbox.preferred-height;
     viewport-width: vbox.preferred-width;
 
+    private property <[ParagraphEntry]> entries-cn:
+    [
+        {
+            title: "简介",
+            contents: [
+                "这是一个基于Rust和Slint GUI框架的模板项目。包含一些常用的组件，设置面板，配置文件，简单的数据库功能和其他小功能。这个项目的主要目的是给新手开发者提供一个简单快速的Slint GUI开发环境。该项目能够编译到桌面平台（Windows, Linux, Macos）和Android移动平台。"
+            ],
+        },
+        {
+            title: "如何使用项目？",
+            contents: [
+                "1. 打开Cargo.toml文件，将所有的`slint-template` 和`slint_template`字符串替换为`你的项目名`",
+                "2. 打开Makefile文件，将`app-name=slint-template` 修改为`app-name=你的项目名`",
+                "3. 如果是Windows平台，需要修改`windows/version.h`文件，设置程序名称和描述信息等",
+                "4. 替换`ui/images/brand.png`和`windows/icon.ico`为你的程序图标",
+                "5. 使用`make desktop-build-release`构建桌面平台应用程序, `make android-build-release`构建安卓平台应用程序。更多命令可参考Makefile文件",
+            ],
+        },
+        {
+            title: "如何设置Android构建环境？",
+            title-link: "https://snapshots.slint.dev/master/docs/rust/slint/android/#building-and-deploying",
+            contents: [
+                "1. 安装编译目标：`rustup target add aarch64-linux-android`",
+                "2. 安装编译工具：`cargo install cargo-apk`",
+                "3. 设置安卓平台环境变量：`ANDROID_HOME`, `ANDROID_NDK`, `ANDROID_NDK_ROOT` 和 `JAVA_HOME`",
+                "4. 例子：\n    export JAVA_HOME=$LIBRARY_PATH/openjdk\n    export ANDROID_HOME=$HOME/Android/Sdk\n    export ANDROID_NDK=$HOME/Android/Sdk/ndk/27.0.12077973\n    export ANDROID_NDK_ROOT=$HOME/Android/Sdk/ndk/27.0.12077973",
+            ],
+        },
+    ];
+
+    private property <[ParagraphEntry]> entries-en: [{ title: "Brief" }];
+
+    private property <[ParagraphEntry]> entries: Store.is-cn ? entries-cn : entries-en;
+
     vbox := VerticalLayout {
-        spacing: Theme.spacing * 20;
+        spacing: Theme.spacing * 8;
         padding: Theme.padding * 5;
-        alignment: LayoutAlignment.center;
+        padding-left: root.width * 10%;
+        padding-right: root.width * 10%;
 
         HorizontalLayout {
-            width: root.width - parent.padding * 2;
-
-            Rectangle {
-                height: 600px;
-                background: red;
+            alignment: LayoutAlignment.center;
+            Image {
+                width: Math.min(root.width * 0.5, 300px);
+                source: Icons.brand;
             }
+        }
+
+        for entry in root.entries: Paragraph {
+            width: root.width * 80%;
+            entry: entry;
         }
     }
 }
