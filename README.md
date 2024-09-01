@@ -3,6 +3,9 @@
     <img src="./screenshot/2-en.png" width="100"/>
     <img src="./screenshot/3-en.png" width="100"/>
     <img src="./screenshot/4-en.png" width="100"/>
+    <img src="./screenshot/5-en.png" width="100"/>
+    <img src="./screenshot/6-en.png" width="100"/>
+    <img src="./screenshot/7-en.png" width="100"/>
 </div>
 
 [中文文档](./README.zh-CN.md)
