@@ -38,8 +38,8 @@ jobs:
 
       - run: echo "start install ndk..."
       - uses: nttld/setup-ndk@v1
-        # with:
-        #   ndk-version: r26d
+        with:
+          ndk-version: r27d
       - run: echo "end install ndk..."
 
       - run: echo "start build..."
