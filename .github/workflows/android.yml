@@ -13,6 +13,7 @@ jobs:
       - run: echo "The ${{ github.workspace }} is now ready to test your code on the runner."
       - run: ls ${{ github.workspace }}
       - run: sudo apt update
+      - run: sudo apt install llvm
 
       - run: echo "start install Rust..."
       - name: Install Rust
@@ -37,8 +38,8 @@ jobs:
 
       - run: echo "start install ndk..."
       - uses: nttld/setup-ndk@v1
-        with:
-          ndk-version: r26d
+        # with:
+        #   ndk-version: r26d
       - run: echo "end install ndk..."
 
       - run: echo "start build..."
