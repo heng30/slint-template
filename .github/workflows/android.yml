@@ -19,6 +19,8 @@ jobs:
         uses: actions-rs/toolchain@v1
       - run: echo "end install Rust..."
 
+      - run: cargo install cargo-apk
+
       - run: echo "start install jdk..."
       - name: Set up our JDK environment
         uses: actions/setup-java@v3
