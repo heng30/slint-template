@@ -19,9 +19,17 @@ jobs:
         uses: actions-rs/toolchain@v1
       - run: echo "end install Rust..."
 
+      - run: echo "start install jdk..."
+      - name: Set up our JDK environment
+        uses: actions/setup-java@v3
+        with:
+            java-version: '17'
+            distribution: 'temurin'
+      - run: echo "start install jdk..."
+
       - run: echo "start install sdk..."
       - name: Setup Android SDK
-          uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v3
       - run: echo "end install sdk..."
 
       - run: echo "start install ndk..."
@@ -29,15 +37,6 @@ jobs:
         with:
           ndk-version: r26d
       - run: echo "end install ndk..."
-
-      - run: echo "start install jdk..."
-      - name: Set up our JDK environment
-        uses: actions/setup-java@v2
-        with:
-          java-version: "17"
-          distribution: "adopt"
-          cache: "gradle"
-      - run: echo "start install jdk..."
 
       - run: echo "start build..."
       - run: make android-build-release
