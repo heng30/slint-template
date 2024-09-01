@@ -22,6 +22,7 @@ export component SideBar inherits Rectangle {
 
     in-out property <bool> is-use-random-icon;
     private property <int> current-icon-index: 0;
+    private property <image> cache-icon;
 
     callback search <=> search.search;
 
@@ -30,8 +31,9 @@ export component SideBar inherits Rectangle {
 
     function random-icon() -> image {
         current-icon-index = Math.mod(current-icon-index, IconsDialogSetting.icons.length);
-        current-icon-index += 1;
-        return IconsDialogSetting.icons[current-icon-index];
+        root.cache-icon = IconsDialogSetting.icons[current-icon-index];
+        root.current-icon-index += 1;
+        return root.cache-icon;
     }
 
     clip: true;
