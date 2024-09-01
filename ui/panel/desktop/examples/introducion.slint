@@ -10,7 +10,7 @@ export component Introduction inherits Flickable {
         {
             title: "简介",
             contents: [
-                "这是一个基于Rust和Slint GUI框架的模板项目。包含一些常用的组件，设置面板，配置文件，简单的数据库功能和其他小功能。这个项目的主要目的是给新手开发者提供一个简单快速的Slint GUI开发环境。该项目能够编译到桌面平台（Windows, Linux, Macos）和Android移动平台。"
+                "这是一个基于Rust和Slint GUI框架的模板项目。包含一些常用的组件，设置面板，配置文件，简单的数据库功能和其他小功能。这个项目的主要目的是给新手开发者提供一个简单快速的Slint GUI开发环境。该项目能够编译到桌面平台（Windows, Linux, Macos），Android移动平台和Web平台。"
             ],
         },
         {
@@ -18,14 +18,23 @@ export component Introduction inherits Flickable {
             contents: [
                 "1. 打开Cargo.toml文件，将所有的`slint-template` 和`slint_template`字符串替换为`你的项目名`",
                 "2. 打开Makefile文件，将`app-name=slint-template` 修改为`app-name=你的项目名`",
-                "3. 如果是Windows平台，需要修改`windows/version.h`文件，设置程序名称和描述信息等",
-                "4. 替换`ui/images/brand.png`和`windows/icon.ico`为你的程序图标",
-                "5. 使用`make desktop-build-release`构建桌面平台应用程序, `make android-build-release`构建安卓平台应用程序。更多命令可参考Makefile文件",
-                "6. 如果是Android平台，需要替换`android/res/*/android12splash.png` 和 `android/res/*/splash.png`为你的启动屏, 大小最好为432x432。替换`android/res/*/ic_launcher.png`为你的程序图标, 大小最好为655x655",
+                "3. 替换`ui/images/brand.png`为你的程序图标",
+                "4. 如果是Windows平台，需要修改`windows/version.h`文件，设置程序名称和描述信息等。替换`windows/icon.ico`为你的程序图标",
+                "5. 如果是Android平台，需要替换`android/res/*/android12splash.png` 和 `android/res/*/splash.png`为你的启动屏, 大小最好为432x432。替换`android/res/*/ic_launcher.png`为你的程序图标, 大小最好为655x655",
+                "6. 如果是Web平台，需要替换`web/index.html`文件相关信息。"
             ],
         },
         {
-            title: "如何设置Android构建环境？",
+            title: "如何编译项目？",
+            contents: [
+                "1. 桌面平台：`make desktop-build-release`",
+                "2. Android平台：`make android-build-release`",
+                "3. Web平台：make web-buid-dist",
+                "4. 更多命令可参考Makefile文件",
+            ]
+        },
+        {
+            title: "如何设置Android编译环境？",
             title-link: "https://snapshots.slint.dev/master/docs/rust/slint/android/#building-and-deploying",
             contents: [
                 "1. 安装编译目标：`rustup target add aarch64-linux-android`",
@@ -34,9 +43,62 @@ export component Introduction inherits Flickable {
                 "4. 例子：\n    export JAVA_HOME=$LIBRARY_PATH/openjdk\n    export ANDROID_HOME=$HOME/Android/Sdk\n    export ANDROID_NDK=$HOME/Android/Sdk/ndk/27.0.12077973\n    export ANDROID_NDK_ROOT=$HOME/Android/Sdk/ndk/27.0.12077973",
             ],
         },
+        {
+            title: "如何设置Web编译环境？",
+            title-link: "https://releases.slint.dev/1.7.0/docs/slint/src/quickstart/running_in_a_browser",
+            contents: [
+                "1. 安装编译工具：`cargo install wasm-pack`",
+                "2. 安装`python3`作为http服务器",
+            ],
+        },
     ];
 
-    private property <[ParagraphEntry]> entries-en: [{ title: "Brief" }];
+    private property <[ParagraphEntry]> entries-en: [
+        {
+            title: "Introduction",
+            contents: [
+                "It's a Rust template project for Slint GUI. It cantains frequently-used components, setting panel, configure, simple database feature and other somall feature. This project can be compiled to Desktop (Windows, Linix, Macos), Android and Web platform.",
+            ]
+        },
+        {
+            title: "How to use this project？",
+            contents: [
+                "1. Open the Cargo.toml file, replace all the `slint-template` and `slint_template` string to your project name",
+                "2. Open the Makefile file, replace `app-name=slint-template` to `app-name=Your-project-name`",
+                "3. Replace `ui/images/brand.png` to your brand picture",
+                "4. If using Windows platform，open the `windows/version.h` file，replace informations to your project and replace `windows/icon.ico`",
+                "5. If using Android platform，replace `android/res/*/android12splash.png` and `android/res/*/splash.png` to your splash picture, the preferred size is 432x432。replace `android/res/*/ic_launcher.png` to your app icon, the preferred size is 655x655",
+                "6. If using Web platform，replace `web/index.html` informations about the project"
+            ],
+        },
+        {
+            title: "How to compile the project？",
+            contents: [
+                "1. Desktop platform：`make desktop-build-release`",
+                "2. Android platform：`make android-build-release`",
+                "3. Web platform：make web-buid-dist",
+                "4. Refer the Makefile for more information",
+            ]
+        },
+        {
+            title: "How to setup Android compiled environment？",
+            title-link: "https://snapshots.slint.dev/master/docs/rust/slint/android/#building-and-deploying",
+            contents: [
+                "1. Install rust target：`rustup target add aarch64-linux-android`",
+                "2. Install compiled tool：`cargo install cargo-apk`",
+                "3. Setup Android environment variables：`ANDROID_HOME`, `ANDROID_NDK`, `ANDROID_NDK_ROOT` 和 `JAVA_HOME`",
+                "4. Example：\n    export JAVA_HOME=$LIBRARY_PATH/openjdk\n    export ANDROID_HOME=$HOME/Android/Sdk\n    export ANDROID_NDK=$HOME/Android/Sdk/ndk/27.0.12077973\n    export ANDROID_NDK_ROOT=$HOME/Android/Sdk/ndk/27.0.12077973",
+            ],
+        },
+        {
+            title: "How to setup Web compiled environment？",
+            title-link: "https://releases.slint.dev/1.7.0/docs/slint/src/quickstart/running_in_a_browser",
+            contents: [
+                "1. Install compiled tool：`cargo install wasm-pack`",
+                "2. Install `python3` as a http server",
+            ],
+        },
+    ];
 
     private property <[ParagraphEntry]> entries: Store.is-cn ? entries-cn : entries-en;
 

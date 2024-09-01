@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="It's a Rust Slint GUI template project for quick start"
+    />
+    <meta name="keyword" content="Programming, Rust, Slint" />
+    <meta property="og:site_name" content="Slint Template" />
+    <meta property="og:type" content="website" />
+    <link rel="dev icon" href="./ui/images/brand.png" />
+    <link rel="shortcut icon" href="./pkg/favicon.png" />
+    <title>Slint Template</title>
+  </head>
+
+  <body
+    style="width: 100vw; height: 100wh; overflow: hidden; padding: 0; margin: 0"
+  >
+    <!-- canvas required by the Slint runtime, Don't change the id -->
+    <canvas
+      id="canvas"
+      style="width: 100vw; height: 100vh; border: none; outline: none"
+    ></canvas>
+    <script type="module">
+      // import the generated file. You should repace your project file
+      import init from './pkg/slint_template.js';
+      init();
+    </script>
+  </body>
+</html>

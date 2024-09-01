@@ -40,13 +40,22 @@ desktop-debug:
 	$(desktop-build-env) $(run-env) cargo run --features=desktop
 
 web-build-debug:
-	wasm-pack build --target web --out-dir target/pkg --features=web --no-default-features
+	wasm-pack build --target web --out-dir ./web/pkg --features=web
 
 web-build-release:
-	wasm-pack build --release --target web --out-dir target/pkg --features=web --no-default-features
+	wasm-pack build --release --target web --out-dir ./web/pkg --features=web
 
-web-debug:
-	python3 -m http.server
+web-build-dist:
+	- rm -rf ./web/dist/*
+	wasm-pack build --release --target web --out-dir ./web/dist/pkg --features=web
+	cp -f ./web/index.html ./web/dist
+	cp -f ./ui/images/brand.png ./web/dist/pkg/favicon.png
+
+web-server:
+	python3 -m http.server -d web 8000
+
+web-server-dist:
+	python3 -m http.server -d web/dist 8800
 
 slint-view-android:
 	$(android-build-env) slint-viewer --auto-reload -I ui ./ui/android-window.slint
