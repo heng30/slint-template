@@ -102,6 +102,7 @@ clean:
 	cargo clean
 
 app-name:
+	- mkdir -p target
 	echo "$(app-name)" > target/app-name
 
 get-font-name:
