@@ -19,6 +19,8 @@ jobs:
       - run: echo "end install Rust..."
 
       - run: echo "start build..."
-      - run: SLINT_ENABLE_EXPERIMENTAL_FEATURES=1 cargo build --release --features=desktop
+      - run: |
+          setx SLINT_ENABLE_EXPERIMENTAL_FEATURES "1"
+          cargo build --release --features=desktop
       - run: echo "end build..."
       - run: echo "🍏 This job's status is ${{ job.status }}."
