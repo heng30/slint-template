@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 pwd=${shell pwd}
 
@@ -40,14 +40,14 @@ desktop-debug:
 	$(desktop-build-env) $(run-env) cargo run --features=desktop
 
 web-build-debug:
-	wasm-pack build --target web --out-dir ./web/pkg --features=web
+	$(web-build-env) wasm-pack build --target web --out-dir ./web/pkg --features=web
 
 web-build-release:
-	wasm-pack build --release --target web --out-dir ./web/pkg --features=web
+	$(web-build-env) wasm-pack build --release --target web --out-dir ./web/pkg --features=web
 
 web-build-dist:
 	- rm -rf ./web/dist/*
-	wasm-pack build --release --target web --out-dir ./web/dist/pkg --features=web
+	$(web-build-env) wasm-pack build --release --target web --out-dir ./web/dist/pkg --features=web
 	cp -f ./web/index.html ./web/dist
 	cp -f ./ui/images/brand.png ./web/dist/pkg/favicon.png
 
