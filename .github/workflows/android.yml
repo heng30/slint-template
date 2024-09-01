@@ -19,6 +19,7 @@ jobs:
         uses: actions-rs/toolchain@v1
       - run: echo "end install Rust..."
 
+      - run: rustup target add aarch64-linux-android
       - run: cargo install cargo-apk
 
       - run: echo "start install jdk..."
@@ -27,7 +28,7 @@ jobs:
         with:
             java-version: '17'
             distribution: 'temurin'
-      - run: echo "start install jdk..."
+      - run: echo "end install jdk..."
 
       - run: echo "start install sdk..."
       - name: Setup Android SDK
