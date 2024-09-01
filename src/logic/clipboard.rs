@@ -6,7 +6,7 @@ use crate::{
 use anyhow::{bail, Result};
 use slint::ComponentHandle;
 
-#[cfg(not(target_os = "android"))]
+#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 fn copy_to_clipboard(msg: &str) -> Result<()> {
     use clipboard::{ClipboardContext, ClipboardProvider};
     let ctx: Result<ClipboardContext, _> = ClipboardProvider::new();
@@ -20,7 +20,7 @@ fn copy_to_clipboard(msg: &str) -> Result<()> {
     }
 }
 
-#[cfg(not(target_os = "android"))]
+#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 fn copy_from_clipboard() -> Result<String> {
     use clipboard::{ClipboardContext, ClipboardProvider};
     let ctx: Result<ClipboardContext, _> = ClipboardProvider::new();

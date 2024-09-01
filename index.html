@@ -1,11 +1,11 @@
 <html>
-    <body>
-        <!-- canvas required by the Slint runtime -->
-        <canvas id="canvas"></canvas>
-        <script type="module">
-            // import the generated file.
-            import init from "./target/pkg/slint_template.js";
-            init();
-        </script>
-    </body>
+  <body style="width: 100vw; height: 100wh; overflow: hidden; padding: 0; margin: 0;">
+    <!-- canvas required by the Slint runtime -->
+    <canvas id="canvas" style="width: 100vw; height: 100vh"></canvas>
+    <script type="module">
+      // import the generated file.
+      import init from './target/pkg/slint_template.js';
+      init();
+    </script>
+  </body>
 </html>

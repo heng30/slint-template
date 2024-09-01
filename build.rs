@@ -1,14 +1,18 @@
 use cmd_lib::run_fun;
+use std::fs::File;
+use std::io::Write;
 
 fn main() {
-    slint_build::compile("ui/appwindow.slint").unwrap();
-
     #[cfg(target_os = "windows")]
-    {
-        set_windows_info();
-    }
+    set_windows_info();
 
     let _ = write_app_version();
+}
+
+#[allow(unused)]
+fn build_log(msg: &str) {
+    let mut file = File::create("build.log").unwrap();
+    _ = file.write(msg.as_bytes());
 }
 
 fn write_app_version() -> Result<(), Box<dyn std::error::Error>> {

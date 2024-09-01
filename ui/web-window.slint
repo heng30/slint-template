@@ -1,0 +1,51 @@
+import { Util } from "./util.slint";
+import { Logic } from "./logic.slint";
+import { Theme, Icons } from "./theme.slint";
+import { Store, SettingDetailIndex, DeviceType, SettingProxy } from "./store.slint";
+
+import { WebPanel } from "panel/web/panel.slint";
+import { SettingIconsBar } from "./panel/setting/desktop.slint";
+import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus, AppPosType, PopupActionSetting } from "./base/widgets.slint";
+
+export component AppWindow inherits Window {
+    default-font-size: Theme.default-font-size;
+    default-font-family: Theme.default-font-family;
+    background: Theme.base-background;
+    icon: Icons.brand;
+    title: AboutSetting.app-name;
+
+    WebPanel { }
+
+    if IconsDialogSetting.show || ConfirmDialogSetting.show: Blanket {
+        clicked => {
+            IconsDialogSetting.show = false;
+            ConfirmDialogSetting.show = false;
+        }
+    }
+
+    if IconsDialogSetting.show: IconsDialog {
+        is-prevent-event-forward: true;
+        column-count: Store.device-type == DeviceType.Desktop ? 6 : 5;
+        icon-size: Store.device-type == DeviceType.Desktop ? Theme.icon-size * 3 : Theme.icon-size;
+        select-index(handle-type, index, user-data) => {
+        }
+    }
+
+    if ConfirmDialogSetting.show: ConfirmDialog {
+        is-prevent-event-forward: true;
+        width: Math.min(root.width * 0.9, self.vbox-preferred-width * 2);
+    }
+
+    if ToastSetting.text != "" && ToastSetting.status != ToastStatus.None: Toast {
+        x: root.width / 2 - self.width / 2;
+        y: 50px;
+        inner-max-width: root.width * 80%;
+        clicked => {
+            Logic.copy-to-clipboard(ToastSetting.text);
+        }
+    }
+}
+
+export {
+    AppPosType, Util, Logic, Store, Theme, Icons, IconsDialogSetting, LoadingStatus, SettingDetailIndex, AboutSetting, ToastSetting, ToastStatus, DeviceType , SettingProxy, PopupActionSetting
+    }

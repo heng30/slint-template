@@ -4,15 +4,18 @@ version = "0.1.0"
 edition = "2021"
 license = "MIT"
 readme = "README.md"
-keywords = ["rust"]
+keywords = ["Rust"]
 authors = ["Heng30 <rongheng30@gmail.com>"]
 homepage = "https://github.com/Heng30/slint-template"
 repository = "https://github.com/Heng30/slint-template"
+description = "It's a Rust Slint GUI framework project for quick start."
 
 [dependencies]
+slint = "1.7"
+
+[target.'cfg(any(target_os = "windows", target_os = "linux", target_os = "macos", target_os = "android"))'.dependencies]
 log = "0.4"
 toml = "0.8"
-slint = "1.7"
 anyhow = "1.0"
 cfg-if = "1.0.0"
 once_cell = "1.19"
@@ -20,21 +23,15 @@ webbrowser = "1.0"
 derivative = "2.2"
 serde_with = "3.8"
 serde_json = "1.0"
-
 uuid = { version = "1.9", features = ["v4"] }
+tokio = { version = "1.38", features = ["full"] }
 serde = { version = "1.0", features = ["serde_derive"] }
-
-tokio = { version = "1.38", features = ["full"], optional = true }
-sqldb = { version = "0.1", path = "./libs/sqldb", optional = true }
-cutil = { version = "0.1", path = "./libs/cutil", features = [
-  "default",
-  "time",
-] }
-
 image = { version = "0.24", optional = true }
 qrcode = { version = "0.13", optional = true }
+sqldb = { version = "0.1", path = "./libs/sqldb", optional = true }
+cutil = { version = "0.1", path = "./libs/cutil", features = [ "default", "time" ] }
 
-[target.'cfg(not(target_os = "android"))'.dependencies]
+[target.'cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))'.dependencies]
 clipboard = "0.5"
 env_logger = "0.10"
 platform-dirs = "0.3"
@@ -43,6 +40,10 @@ platform-dirs = "0.3"
 android_logger = "0.13"
 terminal-clipboard = "0.4"
 
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = { version = "0.2" }
+getrandom = { version = "0.2", features = ["js"] }
+
 [build-dependencies]
 cmd_lib = "1.9"
 slint-build = "1.7"
@@ -50,15 +51,11 @@ slint-build = "1.7"
 [target.'cfg(target_os = "windows")'.build-dependencies]
 embed-resource = "2.4"
 
-[target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-bindgen = { version = "0.2" }
-getrandom = { version = "0.2", features = ["js"] }
-
 [features]
 default = []
 web = []
-desktop = [ "dep:tokio" ]
-android = [ "dep:tokio", "cutil/native-tls-vendored", "slint/backend-android-activity-06" ]
+desktop = [ ]
+android = ["cutil/native-tls-vendored", "slint/backend-android-activity-06" ]
 qrcode = [ "dep:image", "dep:qrcode" ]
 database = [ "dep:sqldb" ]
 

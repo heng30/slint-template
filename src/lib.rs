@@ -1,18 +1,57 @@
 #![windows_subsystem = "windows"]
 
-slint::include_modules!();
+#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
+slint::slint! {
+    export * from "ui/desktop-window.slint";
+}
 
+#[cfg(target_os = "android")]
+slint::slint! {
+    export * from "ui/android-window.slint";
+}
+
+#[cfg(target_arch = "wasm32")]
+slint::slint! {
+    export * from "ui/web-window.slint";
+}
+
+#[cfg(any(
+    target_os = "windows",
+    target_os = "linux",
+    target_os = "macos",
+    target_os = "android"
+))]
 #[macro_use]
 extern crate derivative;
 
+#[cfg(any(
+    target_os = "windows",
+    target_os = "linux",
+    target_os = "macos",
+    target_os = "android"
+))]
 mod config;
+
+#[cfg(any(
+    target_os = "windows",
+    target_os = "linux",
+    target_os = "macos",
+    target_os = "android"
+))]
 mod logic;
+
+#[cfg(any(
+    target_os = "windows",
+    target_os = "linux",
+    target_os = "macos",
+    target_os = "android"
+))]
 mod version;
 
 #[cfg(feature = "database")]
 mod db;
 
-#[cfg(not(target_os = "android"))]
+#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 pub fn init_logger() {
     use cutil::chrono::Local;
     use env_logger::fmt::Color;
@@ -60,6 +99,12 @@ fn init_logger() {
     );
 }
 
+#[cfg(any(
+    target_os = "windows",
+    target_os = "linux",
+    target_os = "macos",
+    target_os = "android"
+))]
 async fn ui_before() {
     init_logger();
     config::init();
@@ -71,6 +116,12 @@ async fn ui_before() {
     }
 }
 
+#[cfg(any(
+    target_os = "windows",
+    target_os = "linux",
+    target_os = "macos",
+    target_os = "android"
+))]
 fn ui_after(ui: &AppWindow) {
     logic::init(ui);
 }
@@ -93,7 +144,7 @@ async fn android_main(app: slint::android::AndroidApp) {
     log::debug!("exit...");
 }
 
-#[cfg(not(target_os = "android"))]
+#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 pub async fn desktop_main() {
     log::debug!("start...");
 

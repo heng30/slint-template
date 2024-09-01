@@ -2,22 +2,17 @@ import { Util } from "./util.slint";
 import { Logic } from "./logic.slint";
 import { Theme, Icons } from "./theme.slint";
 import { Store, SettingDetailIndex, DeviceType, SettingProxy } from "./store.slint";
-import { Panel } from "./panel/panel.slint";
+
+import { MobilePanel } from "panel/mobile/panel.slint";
 import { SettingIconsBar } from "./panel/setting/desktop.slint";
 import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus, AppPosType, PopupActionSetting } from "./base/widgets.slint";
 
 export component AppWindow inherits Window {
-    preferred-width: Theme.default-width;
-    preferred-height: Theme.default-height;
     default-font-size: Theme.default-font-size;
     default-font-family: Theme.default-font-family;
     background: Theme.base-background;
-    icon: Icons.brand;
-    title: AboutSetting.app-name;
-    no-frame: Store.setting-preference.no-frame;
-    always-on-top: Store.setting-preference.always-on-top;
 
-    Panel { }
+    MobilePanel { }
 
     if IconsDialogSetting.show || ConfirmDialogSetting.show: Blanket {
         clicked => {

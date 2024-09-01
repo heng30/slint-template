@@ -7,7 +7,7 @@ use std::{fs, path::PathBuf, sync::Mutex};
 const CARGO_TOML: &str = include_str!("../../Cargo.toml");
 static CONFIG: Lazy<Mutex<Config>> = Lazy::new(|| Mutex::new(Config::default()));
 
-#[cfg(not(target_os = "android"))]
+#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 use platform_dirs::AppDirs;
 
 #[cfg(target_os = "android")]
@@ -104,7 +104,11 @@ impl Config {
             .trim_matches('"')
             .to_string();
 
-        let pkg_name = if cfg!(not(target_os = "android")) {
+        let pkg_name = if cfg!(any(
+            target_os = "windows",
+            target_os = "linux",
+            target_os = "macos"
+        )) {
             self.app_name.clone()
         } else {
             metadata

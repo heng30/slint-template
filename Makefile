@@ -1,12 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 pwd=${shell pwd}
-build-env=SLINT_ENABLE_EXPERIMENTAL_FEATURES=1
-desktop-build-env=SLINT_STYLE=fluent $(build-env)
-android-build-env=SLINT_STYLE=material $(build-env)
-run-env=RUST_LOG=debug,sqlx=off,reqwest=off
-version=`git describe --tags --abbrev=0`
+
 app-name=slint-template
+version=`git describe --tags --abbrev=0`
+
+build-env=SLINT_ENABLE_EXPERIMENTAL_FEATURES=1
+android-build-env=SLINT_STYLE=material $(build-env)
+desktop-build-env=SLINT_STYLE=fluent $(build-env)
+web-build-env=SLINT_STYLE=fluent $(build-env)
+
+run-env=RUST_LOG=debug,sqlx=off,reqwest=off
 
 all: desktop-build-release
 
@@ -36,13 +40,22 @@ desktop-debug:
 	$(desktop-build-env) $(run-env) cargo run --features=desktop
 
 web-build-debug:
-	wasm-pack build --target web --out-dir target/pkg --features=web
+	wasm-pack build --target web --out-dir target/pkg --features=web --no-default-features
 
 web-build-release:
-	wasm-pack build --release --target web --out-dir target/pkg --features=web
+	wasm-pack build --release --target web --out-dir target/pkg --features=web --no-default-features
 
 web-debug:
 	python3 -m http.server
+
+slint-view-android:
+	$(android-build-env) slint-viewer --auto-reload -I ui ./ui/android-window.slint
+
+slint-view-desktop:
+	$(desktop-build-env) slint-viewer --auto-reload -I ui ./ui/desktop-window.slint
+
+slint-view-web:
+	$(web-build-env) slint-viewer --auto-reload -I ui ./ui/web-window.slint
 
 test:
 	$(build-env) $(run-env) cargo test -- --nocapture
@@ -59,12 +72,6 @@ clean-unused-dependences:
 
 clean:
 	cargo clean
-
-slint-view-android:
-	$(android-build-env) slint-viewer --auto-reload -I ui ./ui/appwindow.slint
-
-slint-view-desktop:
-	$(desktop-build-env) slint-viewer --auto-reload -I ui ./ui/appwindow.slint
 
 get-font-name:
 	fc-scan ./ui/fonts/SourceHanSerifCN.ttf | grep fullname
