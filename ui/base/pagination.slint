@@ -20,7 +20,7 @@ export component Pagination inherits Rectangle {
     private property <int> start-page: 0;
     private property <int> real-show-pages-half: Math.round(show-pages / 2);
     private property <int> real-show-pages: real-show-pages-half * 2;
-    private property <int> real-current-page: Math.clamp(init-page, 0, total-pages - real-show-pages - 1);
+    private property <int> real-current-page: Math.clamp(init-page, 0, total-pages - 1);
 
     callback jump(int);
 

@@ -45,8 +45,7 @@ export component DesktopPanel inherits Rectangle {
         }
     }
 
-    SettingDialog {
-        visible: is-show-setting-dialog;
+    if is-show-setting-dialog: SettingDialog {
         width: Math.min(1300px, root.width * 0.8);
     }
 
