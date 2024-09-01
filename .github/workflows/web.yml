@@ -14,26 +14,32 @@ jobs:
       - run: ls ${{ github.workspace }}
       - run: sudo apt update
 
-      - run: echo "start install Rust..."
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-      - run: echo "end install Rust..."
+      # - run: echo "start install Rust..."
+      # - name: Install Rust
+      #   uses: actions-rs/toolchain@v1
+      # - run: echo "end install Rust..."
 
-      - run: echo "start install wasm-pack..."
-      - run: cargo install wasm-pack
-      - run: echo "start install wasm-pack..."
+      # - run: echo "start install wasm-pack..."
+      # - run: cargo install wasm-pack
+      # - run: echo "start install wasm-pack..."
 
-      - run: echo "start build..."
-      - run: make web-build-dist
-      - run: echo "end build..."
+      # - run: echo "start build..."
+      # - run: make web-build-dist
+      # - run: echo "end build..."
+
+      - name: Get the release version from the tag
+        shell: bash
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - run: echo "start packing..."
+      - run: make app-name
       - name: Export package
         shell: bash
         run: |
-          binary_name="<BINARY_NAME>"
+          binary_name=`cat target/app-name`
           output="$binary_name-${{ env.VERSION }}-web.tar.gz"
-          tar -zcf $output web/dist
+          # tar -zcf $output web/dist
+          tar -zcf $output web
           echo "ASSET=$output" >> $GITHUB_ENV
       - run: echo "end packing..."
 

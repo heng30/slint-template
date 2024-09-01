@@ -76,7 +76,6 @@ packing-web:
 	tar -zcf target/$(app-name)-$(version)-web.tar.gz web/dist
 	echo "$(app-name)-$(version)-web.tar.gz" > target/output.name
 
-
 slint-view-android:
 	$(android-build-env) slint-viewer --auto-reload -I ui ./ui/android-window.slint
 
@@ -101,6 +100,9 @@ clean-unused-dependences:
 
 clean:
 	cargo clean
+
+app-name:
+	echo "$(app-name)" > target/app-name
 
 get-font-name:
 	fc-scan ./ui/fonts/SourceHanSerifCN.ttf | grep fullname
