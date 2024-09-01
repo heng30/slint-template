@@ -1,8 +1,16 @@
-name: windows
-on: [push]
+name: macos
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+  contents: write
+
 jobs:
   action-run:
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
@@ -21,4 +29,27 @@ jobs:
       - run: echo "start build..."
       - run: make desktop-build-release
       - run: echo "end build..."
+
+      - name: Get the release version from the tag
+        shell: bash
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - run: echo "start packing..."
+      - run: make app-name
+      - name: Export package
+        shell: bash
+        run: |
+          binary_name=`cat target/app-name`
+          output="$binary_name-${{ env.VERSION }}-x86_64-darwin.tar.gz"
+          tar -zcf $output target/release/$binary_name
+          echo "ASSET=$output" >> $GITHUB_ENV
+      - run: echo "end packing..."
+
+      - name: Upload the package
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            ${{ env.ASSET }}
+
       - run: echo "🍏 This job's status is ${{ job.status }}."
