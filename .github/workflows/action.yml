@@ -22,8 +22,6 @@ jobs:
       - run: echo "end install Rust..."
 
       - run: echo "start build..."
-      - name: Install Cargo
-        uses: actions-rs/cargo@v1
       - run: make desktop-build-release
       - run: echo "end build..."
       - run: echo "🍏 This job's status is ${{ job.status }}."
