@@ -1,5 +1,8 @@
 name: web
 on: [push]
+  tags:
+    # Regex for a version number such as 0.2.1
+    - "[0-9]+.[0-9]+.[0-9]+"
 jobs:
   action-run:
     runs-on: ubuntu-latest
