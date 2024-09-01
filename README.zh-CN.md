@@ -43,3 +43,4 @@
 - [LSP (Language Server Protocol) Server for Slint](https://github.com/slint-ui/slint/tree/master/tools/lsp)
 - [developer.android.com](https://developer.android.com/guide)
 - [color4bg](https://www.color4bg.com/zh-hans/)
+- [How to Deploy Rust Binaries with GitHub Actions](https://dzfrias.dev/blog/deploy-rust-cross-platform-github-actions/)

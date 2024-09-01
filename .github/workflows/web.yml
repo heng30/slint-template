@@ -1,4 +1,4 @@
-name: linux
+name: web
 on: [push]
 jobs:
   action-run:
@@ -26,4 +26,19 @@ jobs:
       - run: echo "start build..."
       - run: make web-build-dist
       - run: echo "end build..."
+
+      - run: echo "start packing..."
+      - run: make packing-web
+      - name: Export package
+        shell: bash
+        run: |
+          echo "ASSET=`cat target/output.name`" >> $GITHUB_ENV
+      - run: echo "end packing..."
+
+      - name: Upload the package
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{ env.ASSET }}
+
       - run: echo "🍏 This job's status is ${{ job.status }}."
