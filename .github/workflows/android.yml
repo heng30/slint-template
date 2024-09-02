@@ -1,11 +1,5 @@
 name: android
-
 on: [push]
-
-# on:
-#   push:
-#     tags:
-#       - "v[0-9]+.[0-9]+.[0-9]+"
 
 permissions:
   contents: write
@@ -68,7 +62,7 @@ jobs:
         run: |
           binary_name=`cat target/app-name`
           output="$binary_name-${{ env.VERSION }}-aarch64-linux-android.apk"
-          cp -f target/release/apk/$binary_name.apk $output
+          cp -rf target/release/apk/$binary_name.apk $output
           echo "ASSET=$output" >> $GITHUB_ENV
       - run: echo "end packing..."
 

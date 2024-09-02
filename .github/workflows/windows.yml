@@ -1,9 +1,5 @@
 name: windows
-
-on:
-  push:
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
+on: [push]
 
 permissions:
   contents: write
@@ -30,14 +26,20 @@ jobs:
       - run: make desktop-build-release
       - run: echo "end build..."
 
+      - name: Get the release version from the tag
+        shell: bash
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
       - run: echo "start packing..."
       - run: make app-name
       - name: Export package
         shell: bash
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
           binary_name=`cat target/app-name`
-          output="$binary_name-${{ env.VERSION }}-x86_64-linux.tar.gz"
-          tar -zcf $output target/release/$binary_name.exe
+          output="$binary_name-${{ env.VERSION }}-x86_64-windows.tar.gz"
+          cp -rf target/release/$binary_name.exe $binary_name.exe
+          tar -zcf $output $binary_name.exe
           echo "ASSET=$output" >> $GITHUB_ENV
       - run: echo "end packing..."
 

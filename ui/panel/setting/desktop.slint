@@ -120,7 +120,8 @@ component Setting inherits Rectangle {
 
     lp := LeftPanel {
         x: 0;
-        width: Math.max(root.width * 0.3, 160px);
+        width: Math.max(root.width * 0.3, Theme.title3-font-size * 10);
+
         switch(previous-index, current-index) => {
             if (!root.save(previous-index)) {
                 return false;
