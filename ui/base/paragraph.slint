@@ -46,6 +46,7 @@ export component Paragraph inherits Rectangle {
 
         if entry.picture.width > 0 && root.is-picture-before-contents: HorizontalLayout {
             alignment: LayoutAlignment.center;
+            padding: Theme.padding * 4;
 
             Image {
                 width: root.picture-size;
@@ -69,6 +70,7 @@ export component Paragraph inherits Rectangle {
 
         if entry.picture.width > 0 && !root.is-picture-before-contents: HorizontalLayout {
             alignment: LayoutAlignment.center;
+            padding: Theme.padding * 4;
 
             Image {
                 width: root.picture-size;

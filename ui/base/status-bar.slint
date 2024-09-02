@@ -157,7 +157,7 @@ export component StatusBar inherits Rectangle {
 
                     clicked => {
                         if (root.is-app-window-bar) {
-                            ConfirmDialogSetting.set(true, Logic.tr("Warning"), Logic.tr("Quick application or not?"), "close-window", "");
+                            ConfirmDialogSetting.set(true, Logic.tr("Warning"), Logic.tr("Quit application or not?"), "close-window", "");
                         } else {
                             root.close();
                         }

@@ -13,11 +13,7 @@
 ### Introduction
 It's a Rust template project for Slint GUI. It cantains frequently-used components, setting panel, configure, simple database feature and other somall feature. This project can be compiled to Desktop (Windows, Linix, Macos), Android and Web platform.
 
-### Android platform build information
-- `min-sdk-version = 23`
-- `target-sdk-version = 32`
-
-#### How to build?
+### How to build?
 - Install `Rust`, `Cargo`, `cargo-apk` and `wasm-pack`
 - Install Android `sdk`, `ndk`, `jdk17`, and set environment variables.
 - Example:
@@ -34,6 +30,10 @@ It's a Rust template project for Slint GUI. It cantains frequently-used componen
 - Run `make web-build-dist` to build a release version website. And the output directory is `web/dist`
 - Run `make web-server-dist` to run a website server
 - Refer to [Makefile](./Makefile) for more information
+
+### Android platform build information
+- `min-sdk-version = 23`
+- `target-sdk-version = 32`
 
 ### Reference
 - [Slint Language Documentation](https://slint-ui.com/releases/1.0.0/docs/slint/)

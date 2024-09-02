@@ -51,6 +51,16 @@ export component Introduction inherits Flickable {
                 "2. 安装`python3`作为http服务器",
             ],
         },
+        {
+            title: "如何使用Github Action？",
+            title-link: "https://dzfrias.dev/blog/deploy-rust-cross-platform-github-actions/",
+            picture: Icons.github-action-release,
+            contents: [
+                "1. Github Action 配置目录：`.github/workflows`。 包含的配置文件：android.yml, linux.yml, macos.yml, web.yml, windows.yml",
+                "2. 默认每次push都会编译项目。如果不想构建某个平台，移除配置文件即可",
+                "3. 默认每次更新tag都会编译项目并发布二进制文件包。例如：`git tag v0.1.0 && git push origin v0.1.0`"
+            ],
+        },
     ];
 
     private property <[ParagraphEntry]> entries-en: [
@@ -98,6 +108,16 @@ export component Introduction inherits Flickable {
                 "2. Install `python3` as a http server",
             ],
         },
+        {
+            title: "How to use Github Action？",
+            title-link: "https://dzfrias.dev/blog/deploy-rust-cross-platform-github-actions/",
+            picture: Icons.github-action-release,
+            contents: [
+                "1. Github Action configure directory：`.github/workflows`. Include：android.yml, linux.yml, macos.yml, web.yml, windows.yml",
+                "2. It will compile the project after runing `git push`. If you don't want to compile for a specific platform, removing the configure",
+                "3. It will publish the binary package to the project release page after runing `git push origin project-version` 。Example：`git tag v0.1.0 && git push origin v0.1.0`"
+            ],
+        },
     ];
 
     private property <[ParagraphEntry]> entries: Store.is-cn ? entries-cn : entries-en;
@@ -119,6 +139,8 @@ export component Introduction inherits Flickable {
         for entry in root.entries: Paragraph {
             width: root.width * 80%;
             entry: entry;
+            picture-size: root.width * 0.5;
+            is-picture-before-contents: true;
         }
     }
 }

@@ -58,23 +58,23 @@ web-server-dist:
 
 packing-android:
 	cp -f target/release/apk/${app-name}.apk target/${app-name}-${version}-aarch64-linux-android.apk
-	echo "${app-name}-${version}-aarch64-linux-android.apk" > target/output.name
+	echo "${app-name}-${version}-aarch64-linux-android.apk" > target/output-name
 
 packing-linux:
 	cp -f target/release/${app-name} target/${app-name}-${version}-x86_64-linux
-	echo "${app-name}-${version}-x86_64-linux" > target/output.name
+	echo "${app-name}-${version}-x86_64-linux" > target/output-name
 
 packing-windows:
 	cp -f target/release/${app-name}.exe target/${app-name}-${version}-x86_64-windows.exe
-	echo "${app-name}-${version}-x86_64-windows.exe" > target/output.name
+	echo "${app-name}-${version}-x86_64-windows.exe" > target/output-name
 
 packing-darwin:
 	cp -f target/release/${app-name} target/${app-name}-${version}-x86_64-darwin
-	echo "${app-name}-${version}-x86_64-darwin" > target/output.name
+	echo "${app-name}-${version}-x86_64-darwin" > target/output-name
 
 packing-web:
 	tar -zcf target/$(app-name)-$(version)-web.tar.gz web/dist
-	echo "$(app-name)-$(version)-web.tar.gz" > target/output.name
+	echo "$(app-name)-$(version)-web.tar.gz" > target/output-name
 
 slint-view-android:
 	$(android-build-env) slint-viewer --auto-reload -I ui ./ui/android-window.slint

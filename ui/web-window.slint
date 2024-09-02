@@ -1,14 +1,12 @@
-import { Util } from "./util.slint";
-import { Logic } from "./logic.slint";
-import { Theme, Icons } from "./theme.slint";
-import { Store,  DeviceType  } from "./store.slint";
+import { Util } from "util.slint";
+import { Logic } from "logic.slint";
+import { Theme, Icons } from "theme.slint";
+import { Store,  DeviceType  } from "store.slint";
 
 import { WebPanel } from "panel/web/panel.slint";
-import { LoadingStatus, Toast, ConfirmDialog, ConfirmDialogSetting, Blanket, ToastSetting, ToastStatus, PopupActionSetting } from "./base/widgets.slint";
+import { LoadingStatus, Toast, ConfirmDialog, ConfirmDialogSetting, Blanket, ToastSetting, ToastStatus, PopupActionSetting } from "base/widgets.slint";
 
 export component AppWindow inherits Window {
-    default-font-size: Theme.default-font-size;
-    default-font-family: Theme.default-font-family;
     background: Theme.base-background;
 
     WebPanel { }

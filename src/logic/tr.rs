@@ -282,7 +282,7 @@ pub fn tr(text: &str) -> String {
         ),
         ("Frameless window", "无边框窗口"),
         ("Window always on top", "窗口总是在最上层"),
-        ("Quick application or not?", "是否退出程序？"),
+        ("Quit application or not?", "是否退出程序？"),
         ("Window size", "窗口大小"),
         ("width", "宽"),
         ("height", "高"),

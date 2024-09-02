@@ -45,9 +45,9 @@ import { SideBarEntry } from "./base/def.slint";
 //////////////////////////////// Logic Struct End  ////////////////////////////////
 
 export global Store {
-    in-out property <DeviceType> device-type: DeviceType.Web;
+    in-out property <DeviceType> device-type: DeviceType.Desktop;
     in-out property <bool> is-first-run;
-    in-out property <bool> is-show-landing-page;
+    in-out property <bool> is-show-landing-page: false;
 
     in-out property <TabIndex> current-tab-index: TabIndex.Home;
 

@@ -1,14 +1,18 @@
-import { Util } from "./util.slint";
-import { Logic } from "./logic.slint";
-import { Theme, Icons } from "./theme.slint";
-import { Store, SettingDetailIndex, DeviceType, SettingProxy } from "./store.slint";
+import "fonts/SourceHanSerifCN.ttf";
+import "fonts/SourceHanSansCN.otf";
+
+import { Util } from "util.slint";
+import { Logic } from "logic.slint";
+import { Theme, Icons } from "theme.slint";
+import { Store, SettingDetailIndex, DeviceType, SettingProxy } from "store.slint";
 
 import { MobilePanel } from "panel/mobile/panel.slint";
-import { SettingIconsBar } from "./panel/setting/desktop.slint";
-import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus, AppPosType, PopupActionSetting } from "./base/widgets.slint";
+import { SettingIconsBar } from "panel/setting/desktop.slint";
+import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus, AppPosType, PopupActionSetting } from "base/widgets.slint";
 
 export component AppWindow inherits Window {
     default-font-size: Theme.default-font-size;
+    default-font-weight: Theme.normal-font-weight;
     default-font-family: Theme.default-font-family;
     background: Theme.base-background;
 
@@ -47,15 +51,15 @@ export component AppWindow inherits Window {
         details: [
             {
                 picture: Icons.landing-account,
-                description: "",
+                description: Store.is-cn ? "这是一个Rust Slint 模板项目，提供一些基础的组件和其他基础功能，为新手提供一个快速开始一个新项目" : "This is a Rsut Slint template project. It provide some basic components and other features. It can help us start a new project quickly",
             },
             {
                 picture: Icons.landing-send,
-                description: "",
+                description: Store.is-cn ? "这个项目集成了Github Action，每次push都会重新编译项目，每次更新tag都会重新发布二进制文件" : "It integrates Github Action, which will compile the project after pushing the project and publish the binary package to the release page after updating tag",
             },
             {
                 picture: Icons.landing-welcome,
-                description: "",
+                description: Store.is-cn ? "欢迎使用" : "Welcome to use",
             }
         ];
         skipped => {
