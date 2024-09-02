@@ -17,7 +17,7 @@ jobs:
       - run: echo "The ${{ github.workspace }} is now ready to test your code on the runner."
       - run: ls ${{ github.workspace }}
       - run: sudo apt update
-      - run: sudo apt install libxcb-composite0-dev
+      - run: sudo apt install libxcb-composite0-dev upx
 
       - run: echo "start install Rust..."
       - name: Install Rust
@@ -26,6 +26,7 @@ jobs:
 
       - run: echo "start build..."
       - run: make desktop-build-release
+      - run: make reduce-linux-binary-size
       - run: echo "end build..."
 
       - name: Get the release version from the tag

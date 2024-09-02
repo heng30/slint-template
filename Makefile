@@ -76,6 +76,9 @@ packing-web:
 	tar -zcf target/$(app-name)-$(version)-web.tar.gz web/dist
 	echo "$(app-name)-$(version)-web.tar.gz" > target/output-name
 
+reduce-linux-binary-size:
+	upx -9 target/release/$(app-name)
+
 slint-view-android:
 	$(android-build-env) slint-viewer --auto-reload -I ui ./ui/android-window.slint
 
