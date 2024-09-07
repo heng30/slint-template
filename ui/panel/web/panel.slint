@@ -1,13 +1,22 @@
-import { Theme } from "../../theme.slint";
-import { Store, TabIndex, SettingDetailIndex } from "../../store.slint";
+import { Blanket, ToolTip, ToolTipSetting, PopupAction, PopupActionSetting } from "../../base/widgets.slint";
+
 import { Home } from "./home.slint";
 
-export component Bodyer inherits Rectangle {
-    if TabIndex.Home == Store.current-tab-index: Home { }
-}
+export component WebPanel inherits Rectangle {
+    Home { }
 
-export component WebPanel inherits VerticalLayout {
-    Bodyer {
+    if false: Blanket {
+        clicked => {
+        }
     }
 
+    if PopupActionSetting.is-show: PopupAction {
+        window-width: root.width;
+        window-height: root.height;
+    }
+
+    if ToolTipSetting.is-show: ToolTip {
+        window-width: root.width;
+        window-height: root.height;
+    }
 }

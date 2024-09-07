@@ -38,18 +38,12 @@ mod config;
     target_os = "macos",
     target_os = "android"
 ))]
-mod logic;
-
-#[cfg(any(
-    target_os = "windows",
-    target_os = "linux",
-    target_os = "macos",
-    target_os = "android"
-))]
 mod version;
 
 #[cfg(feature = "database")]
 mod db;
+
+mod logic;
 
 #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 pub fn init_logger() {
@@ -99,6 +93,12 @@ fn init_logger() {
     );
 }
 
+#[cfg(target_arch = "wasm32")]
+fn init_logger() {
+    use log::Level;
+    console_log::init_with_level(Level::Trace).expect("error initializing log");
+}
+
 #[cfg(any(
     target_os = "windows",
     target_os = "linux",
@@ -116,12 +116,11 @@ async fn ui_before() {
     }
 }
 
-#[cfg(any(
-    target_os = "windows",
-    target_os = "linux",
-    target_os = "macos",
-    target_os = "android"
-))]
+#[cfg(target_arch = "wasm32")]
+fn ui_before() {
+    init_logger();
+}
+
 fn ui_after(ui: &AppWindow) {
     logic::init(ui);
 }
@@ -159,9 +158,17 @@ pub async fn desktop_main() {
     log::debug!("exit...");
 }
 
+#[cfg(target_arch = "wasm32")]
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen::prelude::wasm_bindgen(start))]
 pub fn main() {
+    log::debug!("start...");
+
+    ui_before();
     let ui = AppWindow::new().unwrap();
     ui.global::<Store>().set_device_type(DeviceType::Web);
+    ui_after(&ui);
+
     ui.run().unwrap();
+
+    log::debug!("exit...");
 }

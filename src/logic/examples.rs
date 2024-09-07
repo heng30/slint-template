@@ -1,6 +1,14 @@
 use crate::slint_generatedAppWindow::{AppWindow, Logic};
 use slint::{ComponentHandle, Model, ModelRc, VecModel};
 
+#[cfg(target_arch = "wasm32")]
+pub fn init(ui: &AppWindow) {
+    ui.global::<Logic>().on_web_debug(move |text| {
+        log::debug!(text);
+    });
+}
+
+#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 pub fn init(ui: &AppWindow) {
     ui.global::<Logic>()
         .on_generate_search_values(move |entries| {

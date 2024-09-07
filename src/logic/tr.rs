@@ -1,9 +1,25 @@
+#[cfg(any(
+    target_os = "windows",
+    target_os = "linux",
+    target_os = "macos",
+    target_os = "android"
+))]
 use crate::config;
+
 use std::collections::HashMap;
 
 pub fn tr(text: &str) -> String {
-    if config::preference().language == "en" {
-        return text.to_string();
+    cfg_if::cfg_if! {
+        if #[cfg(any(
+            target_os = "windows",
+            target_os = "linux",
+            target_os = "macos",
+            target_os = "android"
+            ))] {
+            if config::preference().language == "en" {
+                return text.to_string();
+            }
+        }
     }
 
     let items: HashMap<&str, &str> = HashMap::from([

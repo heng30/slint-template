@@ -60,7 +60,7 @@ export component Collapse inherits Rectangle {
                         Image {
                             width: Theme.icon-size;
                             height: self.width;
-                            colorize: Theme.icon-color;
+                            colorize: entry.disabled ? Theme.disabled-color :Theme.icon-color;
                             source: entry.is-open ? root.close-icon : root.open-icon;
                         }
                     }
