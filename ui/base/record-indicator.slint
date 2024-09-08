@@ -12,12 +12,10 @@ export component RecordIndicator inherits Rectangle {
 
     if is-start: Rectangle {
         private property <float> progress: Util.progress-value(root.duration);
+        width: Math.clamp(progress < 0.5 ? root.size * (0.5 + progress) : root.size * (1 - progress + 0.5), root.size * 0.5, root.size *0.9);
 
-        width: progress < 0.5 ? root.size * progress * 2 : root.size * (1 - progress) * 2;
         height: self.width;
         border-radius: self.width / 2;
-        background: root.living-color;
-        drop-shadow-color: root.living-color.brighter(20%);
-        drop-shadow-blur: Math.round(self.width / 1px * 0.5) * 1px;
+        background: @radial-gradient(circle, root.living-color 0%, root.living-color.brighter(100%) 40%, root.background 80%);
     }
 }
