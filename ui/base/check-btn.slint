@@ -7,6 +7,8 @@ export component CheckBtn inherits Rectangle {
     in-out property <bool> checked;
     in-out property <color> text-color: Theme.primary-text-color;
 
+    in-out property h-spacing <=> hbox.spacing;
+
     width: hbox.preferred-width;
     height: hbox.preferred-height;
 
@@ -21,7 +23,7 @@ export component CheckBtn inherits Rectangle {
     }
 
     hbox := HorizontalLayout {
-        spacing: Theme.spacing * 4;
+        spacing: Theme.spacing * 2;
         alignment: start;
 
         VerticalLayout {
@@ -32,11 +34,12 @@ export component CheckBtn inherits Rectangle {
                 border-width: 2px;
                 border-radius: Theme.border-radius;
                 border-color: root.enabled ? (root.checked ? Theme.thirdly-brand-color : Theme.secondary-text-color) : Theme.disabled-color;
+                background: root.checked ? (root.enabled ? Theme.thirdly-brand-color : Colors.transparent) : Colors.transparent;
 
                 if root.checked: Image {
                     width: 60%;
                     height: self.width;
-                    colorize: parent.border-color;
+                    colorize: root.enabled ? Theme.light-text-color : parent.border-color;
                     source: Icons.checked;
                 }
             }

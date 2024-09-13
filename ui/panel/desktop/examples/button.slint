@@ -58,6 +58,12 @@ export component ButtonExample inherits Flickable {
                         text: Logic.tr("Disable");
                         enabled: false;
                     }
+
+                    CheckBtn {
+                        text: Logic.tr("Disable");
+                        checked: true;
+                        enabled: false;
+                    }
                 }
 
                 code: "HorizontalLayout {\n    spacing: Theme.spacing * 20;\n\n    CheckBtn {\n        text: Logic.tr(self.checked ? \"Checked\" : \"Unchecked\");\n\n        toggled => {\n            debug(self.checked);\n        }\n    }\n\n    CheckBtn {\n        text: Logic.tr(\"Disable\");\n        enabled: false;\n    }\n}";
@@ -94,6 +100,12 @@ export component ButtonExample inherits Flickable {
 
                     RadioBtn {
                         text: Logic.tr("Disable");
+                        enabled: false;
+                    }
+
+                    RadioBtn {
+                        text: Logic.tr("Disable");
+                        checked: true;
                         enabled: false;
                     }
                 }

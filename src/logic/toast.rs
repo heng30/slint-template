@@ -78,14 +78,14 @@ pub fn init(ui: &AppWindow) {
             2
         };
 
+        ui.global::<ToastSetting>().set_is_timeout(false);
         ui.global::<ToastSetting>().invoke_set(msg, status);
 
         timer.start(
             TimerMode::SingleShot,
             std::time::Duration::from_secs(interval),
             move || {
-                ui.global::<ToastSetting>()
-                    .invoke_set("".into(), ToastStatus::None);
+                ui.global::<ToastSetting>().set_is_timeout(true);
             },
         );
     });

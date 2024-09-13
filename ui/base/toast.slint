@@ -7,6 +7,8 @@ import { ToastStatus } from "def.slint";
 export global ToastSetting {
     in-out property <string> text;
     in-out property <ToastStatus> status;
+    in-out property <bool> is-hover;
+    in-out property <bool> is-timeout: true;
 
     public function set(text: string, status: ToastStatus) {
         self.text = text;
@@ -15,7 +17,7 @@ export global ToastSetting {
 }
 
 export component Toast inherits Rectangle {
-    in-out property<length> inner-max-width: 300px;
+    in-out property <length> inner-max-width: 300px;
 
     callback clicked <=> touch.clicked;
 
@@ -48,5 +50,14 @@ export component Toast inherits Rectangle {
         }
     }
 
-    touch := TouchArea { }
+    touch := TouchArea {
+        mouse-cursor: self.has-hover ? MouseCursor.pointer : MouseCursor.default;
+        changed has-hover => {
+            if (self.has-hover) {
+                ToastSetting.is-hover = true;
+            } else {
+                ToastSetting.is-hover = false;
+            }
+        }
+    }
 }

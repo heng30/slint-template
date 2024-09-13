@@ -80,8 +80,9 @@ export global Util {
             return Theme.warning-color.darker(10%);
         } else if (status == ToastStatus.Danger) {
             return Theme.danger-color;
+        } else {
+            return Theme.info-color;
         }
-        return Theme.info-color;
     }
 
     public pure function icon-source(status: ToastStatus) -> image {

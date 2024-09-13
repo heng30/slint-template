@@ -7,6 +7,8 @@ export component RadioBtn inherits Rectangle {
     in-out property <bool> checked;
     in-out property <color> text-color: Theme.primary-text-color;
 
+    in-out property h-spacing <=> hbox.spacing;
+
     width: hbox.preferred-width;
     height: hbox.preferred-height;
 
@@ -17,11 +19,11 @@ export component RadioBtn inherits Rectangle {
         width: inner.width + Theme.spacing * 4;
         height: self.width;
         border-radius: self.width / 2;
-        background: ta.has-hover ? Theme.hover-background : Colors.transparent;
+        background: (ta.has-hover && !root.checked) ? Theme.hover-background : Colors.transparent;
     }
 
     hbox := HorizontalLayout {
-        spacing: Theme.spacing * 4;
+        spacing: Theme.spacing * 2;
         alignment: start;
 
         VerticalLayout {
@@ -53,7 +55,7 @@ export component RadioBtn inherits Rectangle {
     fs := FocusScope { }
 
     ta := TouchArea {
-        mouse-cursor: MouseCursor.pointer;
+        mouse-cursor: root.checked ? MouseCursor.default : MouseCursor.pointer;
         clicked => {
             fs.focus();
 
