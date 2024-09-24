@@ -12,7 +12,7 @@ description = "It's a Rust Slint GUI framework project for quick start."
 
 [dependencies]
 log = "0.4"
-slint = "1.7"
+slint = "1.8"
 cfg-if = "1.0"
 
 [target.'cfg(any(target_os = "windows", target_os = "linux", target_os = "macos", target_os = "android"))'.dependencies]
@@ -47,10 +47,17 @@ getrandom = { version = "0.2", features = ["js"] }
 
 [build-dependencies]
 cmd_lib = "1.9"
-slint-build = "1.7"
+slint-build = "1.8"
 
 [target.'cfg(target_os = "windows")'.build-dependencies]
 embed-resource = "2.4"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
 
 [features]
 default = []
@@ -59,6 +66,7 @@ desktop = [ ]
 android = ["cutil/native-tls-vendored", "slint/backend-android-activity-06" ]
 qrcode = [ "dep:image", "dep:qrcode" ]
 database = [ "dep:sqldb" ]
+full = ["desktop", "qrcode", "database", "cutil/full"]
 
 [lib]
 path = "src/lib.rs"

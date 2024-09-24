@@ -5,7 +5,7 @@ pwd=${shell pwd}
 app-name=slint-template
 version=`git describe --tags --abbrev=0`
 
-build-env=SLINT_ENABLE_EXPERIMENTAL_FEATURES=1
+build-env=
 android-build-env=SLINT_STYLE=material $(build-env)
 desktop-build-env=SLINT_STYLE=fluent $(build-env)
 web-build-env=SLINT_STYLE=fluent $(build-env)
@@ -79,13 +79,13 @@ packing-web:
 reduce-linux-binary-size:
 	upx -9 target/release/$(app-name)
 
-slint-view-android:
+slint-viewer-android:
 	$(android-build-env) slint-viewer --auto-reload -I ui ./ui/android-window.slint
 
-slint-view-desktop:
+slint-viewer-desktop:
 	$(desktop-build-env) slint-viewer --auto-reload -I ui ./ui/desktop-window.slint
 
-slint-view-web:
+slint-viewer-web:
 	$(web-build-env) slint-viewer --auto-reload -I ui ./ui/web-window.slint
 
 test:
@@ -110,3 +110,6 @@ app-name:
 
 get-font-name:
 	fc-scan ./ui/fonts/SourceHanSerifCN.ttf | grep fullname
+
+outdated:
+	cargo outdated
