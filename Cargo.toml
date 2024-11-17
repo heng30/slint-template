@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 license = "MIT"
 readme = "README.md"
+build = "build.rs"
 keywords = ["Rust"]
 authors = ["Heng30 <rongheng30@gmail.com>"]
 homepage = "https://github.com/Heng30/slint-template"
