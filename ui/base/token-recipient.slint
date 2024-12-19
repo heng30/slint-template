@@ -6,7 +6,7 @@ import { SettingDetailInner, SettingDetail } from "setting-detail.slint";
 
 export component TokenRecipient inherits SettingDetail {
     in property account-name <=> account-name-label.text;
-    in property address <=> address-link.text;
+    in-out property address <=> address-link.text;
     in property qrcode <=> img.source;
 
     callback clicked-address <=> address-link.clicked;

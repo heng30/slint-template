@@ -9,11 +9,11 @@ import { Loading } from "loading.slint";
 import { LoadingStatus } from "def.slint";
 
 export component TransactionFee inherits SettingDetail {
-    in property network <=> network-input.text;
-    in property send-token <=> send-token-input.text;
-    in property send-address <=> send-address-input.text;
-    in property recipient-address <=> recipient-address-input.text;
-    in property send-amount <=> amount-input.text;
+    in-out property network <=> network-input.text;
+    in-out property send-token <=> send-token-input.text;
+    in-out property send-address <=> send-address-input.text;
+    in-out property recipient-address <=> recipient-address-input.text;
+    in-out property send-amount <=> amount-input.text;
     in property <string> send-amount-usdt;
     in property <string> fee;
     in property <string> fee-usdt;

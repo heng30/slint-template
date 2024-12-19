@@ -40,7 +40,6 @@ export global AddressBookSetting {
 }
 
 export component AddressBook inherits Rectangle {
-    in-out property <length> item-height: 80px;
     in property <bool> is-show-add-btn;
 
     callback back <=> sd.back;
@@ -58,7 +57,6 @@ export component AddressBook inherits Rectangle {
         SettingDetailInner {
             vbox-spacing: Theme.spacing * 2;
             for item[index] in AddressBookSetting.entries: ListTile {
-                height: item-height;
                 background: self.has-hover ? Theme.base-background.darker(3%) : Theme.base-background;
                 border-radius: Theme.border-radius;
                 drop-shadow-blur: Theme.padding * 2;

@@ -10,17 +10,17 @@ import { SettingDetail, SettingDetailInner, SettingDetailInnerVbox, SettingDetai
 import { PrioritizationFeeStatus } from "def.slint";
 
 export component TokenSender inherits SettingDetail {
-    in property avatar <=> ava.icon;
+    in-out property avatar <=> ava.icon;
     in property name <=> name-label.text;
-    in property network <=> network-input.text;
-    in property send-token <=> send-token-input.text;
-    in property send-address <=> send-address-input.text;
-    in property recipient-address <=> recipient-address-input.text;
+    in-out property network <=> network-input.text;
+    in-out property send-token <=> send-token-input.text;
+    in-out property send-address <=> send-address-input.text;
+    in-out property recipient-address <=> recipient-address-input.text;
     in-out property send-amount <=> amount-input.text;
     in property total-balance <=> total-balance-label.text;
     in property total-balance-usdt <=> total-balance-usdt-label.text;
 
-    in property <string> recipient-address-error-message;
+    in-out property <string> recipient-address-error-message;
     in property <string> prioritization-fee-error-message;
     in property <string> prioritization-fee-placeholder-text;
 

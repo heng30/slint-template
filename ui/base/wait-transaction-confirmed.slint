@@ -9,11 +9,11 @@ import { Loading } from "loading.slint";
 import { LoadingStatus } from "def.slint";
 
 export component WaitTransactionConfirmed inherits SettingDetail {
-    in property network <=> network-input.text;
-    in property send-token <=> send-token-input.text;
-    in property send-amount <=> amount-input.text;
+    in-out property network <=> network-input.text;
+    in-out property send-token <=> send-token-input.text;
+    in-out property send-amount <=> amount-input.text;
     in property <string> send-amount-usdt;
-    in property signature <=> signature-input.text;
+    in-out property signature <=> signature-input.text;
     in property <LoadingStatus> loading-status;
 
     callback open-signature <=> signature-input.clicked;
