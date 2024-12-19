@@ -60,7 +60,7 @@ export component Collapse inherits Rectangle {
                         Image {
                             width: Theme.icon-size;
                             height: self.width;
-                            colorize: entry.disabled ? Theme.disabled-color :Theme.icon-color;
+                            colorize: entry.disabled ? Theme.disabled-color : Theme.icon-color;
                             source: entry.is-open ? root.close-icon : root.open-icon;
                         }
                     }
@@ -80,19 +80,20 @@ export component Collapse inherits Rectangle {
                 }
             }
 
-            desc-hbox := HorizontalLayout {
+            Rectangle {
+                height: entry.is-open ? desc-lb.preferred-height + root.vpadding * 2 : 0;
+                width: root.width - root.hpadding * 2;
+                clip: true;
+
                 animate height {
                     duration: Theme.default-animate-duration;
                     easing: ease-in-out;
                 }
 
-                height: entry.is-open ? desc-lb.preferred-height + root.hpadding * 2 : 0;
-                padding-left: root.hpadding;
-                padding-right: root.hpadding;
-                padding-top: root.vpadding;
-                padding-bottom: root.vpadding;
-
                 desc-lb := Label {
+                    x: root.hpadding;
+                    y: root.vpadding;
+                    width: 100%;
                     text: entry.description;
                     font-size: root.description-font-size;
                     color: entry.disabled ? Theme.disabled-color : root.description-color;
