@@ -39,6 +39,7 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
       - run: sdkmanager tools platform-tools
+      - run: sdkmanager "platforms;android-32"
       - run: echo "end install sdk..."
 
       - run: echo "start install ndk..."
