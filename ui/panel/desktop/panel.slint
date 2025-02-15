@@ -7,6 +7,8 @@ export component DesktopPanel inherits Rectangle {
     private property <bool> is-show-setting-dialog: !(Store.current-setting-detail-index == SettingDetailIndex.None || Store.current-setting-detail-index == SettingDetailIndex.About);
     private property <bool> is-show-about-dialog: Store.current-setting-detail-index == SettingDetailIndex.About;
 
+    private property <length> home-height: self.height;
+
     VerticalLayout {
         if Store.setting-preference.no-frame: sb := StatusBar {
             background: Theme.secondary-background;
@@ -14,6 +16,10 @@ export component DesktopPanel inherits Rectangle {
             icon: Icons.brand;
             title: AboutSetting.app-name;
             is-show-tip: true;
+
+            init => {
+                root.home-height = root.height - self.preferred-height;
+            }
 
             HorizontalLayout {
                 padding-right: Theme.padding * 2;
@@ -36,7 +42,10 @@ export component DesktopPanel inherits Rectangle {
             }
         }
 
-        Home { }
+        Home {
+            // uncomment it to set real height
+            // height: root.home-height;
+        }
     }
 
     if is-show-setting-dialog || is-show-about-dialog: Blanket {
