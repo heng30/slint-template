@@ -66,6 +66,7 @@ export component SideBar inherits Rectangle {
 
             for entry[top-index] in root.entries: VerticalLayout {
                 SettingEntryV2 {
+                    width: fl.width;
                     private property <bool> is-checked: root.selected-key != "" && root.selected-key == entry.key;
 
                     text: entry.category;
