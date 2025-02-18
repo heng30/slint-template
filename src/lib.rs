@@ -1,5 +1,3 @@
-#![windows_subsystem = "windows"]
-
 #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 slint::slint! {
     export * from "ui/desktop-window.slint";
