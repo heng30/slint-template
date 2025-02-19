@@ -19,7 +19,7 @@ export component StatusBarExample inherits Flickable {
 
                 spacing: Theme.spacing * 20;
                 ExampleComponent {
-                    width: Math.max(1000px, root.width * 0.8);
+                    width: Math.min(1000px, root.width * 0.8);
 
                     Rectangle {
                         height: 600px;
@@ -63,7 +63,7 @@ export component StatusBarExample inherits Flickable {
                 }
 
                 ExampleComponent {
-                    width: Math.max(1000px, root.width * 0.8);
+                    width: Math.min(1000px, root.width * 0.8);
 
                     Rectangle {
                         height: 600px;

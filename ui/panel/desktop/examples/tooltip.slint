@@ -17,7 +17,7 @@ export component ToolTipExample inherits Flickable {
             padding-top: Theme.padding * 10;
 
             ExampleComponent {
-                width: Math.max(1000px, root.width * 0.8);
+                width: Math.min(1000px, root.width * 0.8);
 
                 HorizontalLayout {
                     spacing: 100px;

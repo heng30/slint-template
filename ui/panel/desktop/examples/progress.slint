@@ -16,7 +16,7 @@ export component ProgressExample inherits Flickable {
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: Math.max(1000px, root.width * 0.8);
+                width: Math.min(1000px, root.width * 0.8);
 
                 CircleProgress {
                     ring-width: 20px;
@@ -33,7 +33,7 @@ export component ProgressExample inherits Flickable {
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: Math.max(1000px, root.width * 0.8);
+                width: Math.min(1000px, root.width * 0.8);
 
                 ProgressBar {
                     width: 300px;
@@ -51,7 +51,7 @@ export component ProgressExample inherits Flickable {
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: Math.max(1000px, root.width * 0.8);
+                width: Math.min(1000px, root.width * 0.8);
 
                 ProgressBar {
                     orientation: Orientation.vertical;

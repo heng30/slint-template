@@ -30,7 +30,7 @@ pub struct Config {
 #[derive(Serialize, Deserialize, Debug, Clone, Derivative)]
 #[derivative(Default)]
 pub struct Preference {
-    #[derivative(Default(value = "1500"))]
+    #[derivative(Default(value = "1000"))]
     pub win_width: u32,
 
     #[derivative(Default(value = "800"))]
@@ -39,7 +39,7 @@ pub struct Preference {
     #[derivative(Default(value = "16"))]
     pub font_size: u32,
 
-    #[derivative(Default(value = "\"Default\".to_string()"))]
+    #[derivative(Default(value = "\"Source Han Sans CN\".to_string()"))]
     pub font_family: String,
 
     #[derivative(Default(value = "\"cn\".to_string()"))]

@@ -16,7 +16,7 @@ export component StepExample inherits Flickable {
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: Math.max(1000px, root.width * 0.8);
+                width: Math.min(1000px, root.width * 0.8);
 
                 ProcessStep {
                     steps: ["First Step", "Second Step", "Third Step", "Finished"];
@@ -32,7 +32,7 @@ export component StepExample inherits Flickable {
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: Math.max(1000px, root.width * 0.8);
+                width: Math.min(1000px, root.width * 0.8);
 
                 ProcessStep {
                     orientation: Orientation.vertical;

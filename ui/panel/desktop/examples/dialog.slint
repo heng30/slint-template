@@ -16,7 +16,7 @@ export component DialogExample inherits Flickable {
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: Math.max(1000px, root.width * 0.8);
+                width: Math.min(1000px, root.width * 0.8);
 
                 Dialog {
                     title: "Title";
@@ -40,7 +40,7 @@ export component DialogExample inherits Flickable {
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: Math.max(1000px, root.width * 0.8);
+                width: Math.min(1000px, root.width * 0.8);
 
                 VerticalLayout {
                     spacing: Theme.spacing * 10;
@@ -69,7 +69,7 @@ export component DialogExample inherits Flickable {
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: Math.max(1000px, root.width * 0.8);
+                width: Math.min(1000px, root.width * 0.8);
 
                 VerticalLayout {
                     spacing: Theme.spacing * 10;
@@ -98,7 +98,7 @@ export component DialogExample inherits Flickable {
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: Math.max(1000px, root.width * 0.8);
+                width: Math.min(1000px, root.width * 0.8);
 
                 VerticalLayout {
                     spacing: Theme.spacing * 10;

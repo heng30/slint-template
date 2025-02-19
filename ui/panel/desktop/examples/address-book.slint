@@ -16,7 +16,7 @@ export component AddressBookExample inherits Flickable {
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: Math.max(1000px, root.width * 0.8);
+                width: Math.min(1000px, root.width * 0.8);
 
                 AddressBook {
                     width: 60%;
@@ -64,7 +64,7 @@ export component AddressBookExample inherits Flickable {
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: Math.max(1000px, root.width * 0.8);
+                width: Math.min(1000px, root.width * 0.8);
 
                 AddressBookDetail {
                     width: 60%;
@@ -86,7 +86,7 @@ export component AddressBookExample inherits Flickable {
                     }
                 }
 
-                code: "ExampleComponent {\n    width: Math.max(1000px, root.width * 0.8);\n\n    AddressBookDetail {\n        width: 60%;\n\n        init => {\n            AddressBookSetting.enabled-input = true;\n        }\n\n        back() => {\n            debug(\"back\");\n        }\n\n        update-name(uuid, name) => {\n            debug(name);\n        }\n\n        update-address(uuid, address) => {\n            debug(address);\n        }\n    }\n}";
+                code: "ExampleComponent {\n    width: Math.min(1000px, root.width * 0.8);\n\n    AddressBookDetail {\n        width: 60%;\n\n        init => {\n            AddressBookSetting.enabled-input = true;\n        }\n\n        back() => {\n            debug(\"back\");\n        }\n\n        update-name(uuid, name) => {\n            debug(name);\n        }\n\n        update-address(uuid, address) => {\n            debug(address);\n        }\n    }\n}";
             }
         }
     }

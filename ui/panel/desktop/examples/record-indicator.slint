@@ -16,7 +16,7 @@ export component RecordIndicatorExample inherits Flickable {
             alignment: LayoutAlignment.center;
 
             ExampleComponent {
-                width: Math.max(1000px, root.width * 0.8);
+                width: Math.min(1000px, root.width * 0.8);
 
                 RecordIndicator {
                     is-start: true;

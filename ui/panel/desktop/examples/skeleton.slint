@@ -68,7 +68,7 @@ export component SkeletonExample inherits Flickable {
                         ty-detail: "SkeletonType.List",
                     },
                 ]: ExampleComponent {
-                    width: Math.max(1000px, root.width * 0.8);
+                    width: Math.min(1000px, root.width * 0.8);
 
                     Skeleton {
                         width: item.width;

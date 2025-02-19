@@ -44,10 +44,8 @@ pub fn init(ui: &AppWindow) {
             all.preference.is_dark = setting.is_dark;
             _ = config::save(all);
 
-            if cfg!(feature = "desktop") {
+            if cfg!(feature = "desktop") && !ui.window().is_maximized() {
                 ui.global::<crate::Util>().invoke_update_window_size();
-            } else {
-                _ = ui;
             }
         });
 
