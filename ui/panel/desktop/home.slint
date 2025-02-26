@@ -21,6 +21,7 @@ import { SkeletonExample } from "examples/skeleton.slint";
 import { PinCodesExample } from "examples/pin-codes.slint";
 import { SelectExample } from "examples/select.slint";
 import { CollapseExample } from "examples/collapse.slint";
+import { StretchExample } from "examples/stretch.slint";
 import { InputExample } from "examples/input.slint";
 import { BadgeExample } from "examples/badge.slint";
 import { LabelExample } from "examples/label.slint";
@@ -147,6 +148,7 @@ component RightPanel inherits Rectangle {
     if Store.current-sidebar-key == "BreadCrumb": BreadCrumbExample { }
     if Store.current-sidebar-key == "Skeleton": SkeletonExample { }
     if Store.current-sidebar-key == "Collapse": CollapseExample { }
+    if Store.current-sidebar-key == "Stretch": StretchExample { }
     if Store.current-sidebar-key == "Tag": TagExample { }
     if Store.current-sidebar-key == "Loading": LoadingExample { }
     if Store.current-sidebar-key == "PopupAction": PopupActionExample { }
