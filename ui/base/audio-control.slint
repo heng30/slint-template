@@ -1,17 +1,18 @@
 import { Theme, Icons } from "../theme.slint";
+import { Util } from "../util.slint";
 import { Logic } from "../logic.slint";
 import { Slider } from "slider.slint";
 import { IconBtn } from "icon-btn.slint";
 import { Label } from "label.slint";
 import { TextBtnWithoutIcon } from "btn.slint";
-import { AudioControlStatus } from "def.slint";
+import { MediaControlStatus } from "def.slint";
 
 export component AudioControl inherits Rectangle {
     in-out property <bool> is-playing;
     in-out property <length> btn-vpadding: Theme.padding * 2;
     in-out property <float> current-speed: 1.0;
     in-out property <float> current-sound: 50;
-    in-out property <AudioControlStatus> status: AudioControlStatus.Loop;
+    in-out property <MediaControlStatus> status: MediaControlStatus.Loop;
 
     in-out property <length> btn-drop-shadow-blur: Theme.padding * 2;
     in-out property <color> btn-drop-shadow-color: Theme.base-background-drop-shadow;
@@ -29,7 +30,7 @@ export component AudioControl inherits Rectangle {
     callback stop();
     callback sound-changed(sound: int);
     callback speed-changed(speed: float);
-    callback status-changed(status: AudioControlStatus);
+    callback media-control-status-changed(status: MediaControlStatus);
     callback progress-changed <=> slider.changed;
 
     padding: Theme.padding * 4;
@@ -50,19 +51,12 @@ export component AudioControl inherits Rectangle {
 
             IconBtn {
                 use-auto-size: true;
-                icon: root.status == AudioControlStatus.Loop ? Icons.oblong-loop : (root.status == AudioControlStatus.LoopOne ? Icons.oblong-loop-one : Icons.shuffle);
                 show-icon-hover-background: false;
+                icon: Util.image-from-media-control-status(root.status);
 
                 clicked => {
-                    if (root.status == AudioControlStatus.Loop) {
-                        root.status = AudioControlStatus.LoopOne;
-                    } else if (root.status == AudioControlStatus.LoopOne) {
-                        root.status = AudioControlStatus.Shuffle;
-                    } else {
-                        root.status = AudioControlStatus.Loop;
-                    }
-
-                    root.status-changed(root.status);
+                    root.status = Util.next-media-control-status(root.status);
+                    root.media-control-status-changed(root.status);
                 }
             }
 
@@ -162,8 +156,8 @@ export component AudioControl inherits Rectangle {
     }
 
     sound-pop := PopupWindow {
-        y: -svbox.preferred-height + Theme.padding * 2;
         x: sound-btn.x + sound-btn.preferred-width / 2 + root.padding - self.width / 2;
+        y: -svbox.preferred-height + Theme.padding * 2;
         width: Theme.default-font-size * 4;
         opacity: 0;
 

@@ -101,6 +101,25 @@ export component StatusBar inherits Rectangle {
 
             HorizontalLayout {
                 spacing: Theme.spacing * 2;
+
+                IconBtn {
+                    icon: Icons.status-bar-min;
+                    icon-size: root.icon-size;
+                    colorize: Theme.secondary-brand-color;
+                    show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("minimal");
+
+                    clicked => {
+                        if (root.is-app-window-bar) {
+                            Util.min-window(true);
+                        } else {
+                            root.minimal();
+                        }
+                    }
+                }
+
                 IconBtn {
                     icon: Icons.status-bar-max;
                     icon-size: root.icon-size;
@@ -124,24 +143,6 @@ export component StatusBar inherits Rectangle {
                             }
                         } else {
                             root.maximal();
-                        }
-                    }
-                }
-
-                IconBtn {
-                    icon: Icons.status-bar-min;
-                    icon-size: root.icon-size;
-                    colorize: Theme.secondary-brand-color;
-                    show-icon-hover-background: root.show-icon-hover-background;
-                    is-show-tip: root.is-show-tip;
-                    tip-position: root.tip-position;
-                    tip: Logic.tr("minimal");
-
-                    clicked => {
-                        if (root.is-app-window-bar) {
-                            Util.min-window(true);
-                        } else {
-                            root.minimal();
                         }
                     }
                 }

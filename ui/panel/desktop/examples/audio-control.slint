@@ -15,7 +15,7 @@ export component AudioControlExample inherits Flickable {
             width: root.width;
             alignment: LayoutAlignment.center;
 
-            ExampleComponent {
+            ec := ExampleComponent {
                 width: Math.min(1000px, root.width * 0.8);
 
                 HorizontalLayout {
@@ -23,7 +23,7 @@ export component AudioControlExample inherits Flickable {
                     padding-top: 200px;
 
                     AudioControl {
-                        width: root.width * 40%;
+                        width: ec.width * 80%;
                         background: Theme.thirdly-background.darker(20%);
                         border-radius: Theme.border-radius;
                         btn-drop-shadow-color: Theme.invert-base-color;
@@ -33,7 +33,7 @@ export component AudioControlExample inherits Flickable {
                     }
                 }
 
-                detail: "    callback prev();\n    callback next();\n    callback play();\n    callback stop();\n    callback sound-changed(sound: int);\n    callback speed-changed(speed: float);\n    callback status-changed(status: AudioControlStatus);\n    callback progress-changed(value: float); ";
+                detail: "    callback prev();\n    callback next();\n    callback play();\n    callback stop();\n    callback sound-changed(sound: int);\n    callback speed-changed(speed: float);\n    callback media-control-status-changed(status: AudioControlStatus);\n    callback progress-changed(value: float); ";
 
                 code: "AudioControl {\n                        width: root.width * 40%;\n                        background: Theme.thirdly-background.darker(20%);\n                        border-radius: Theme.border-radius;\n                        btn-drop-shadow-color: Theme.invert-base-color;\n                        progress: 50;\n                        start-time: \"0:00\";\n                        end-time: \"4:00\";\n}";
             }

@@ -1,5 +1,5 @@
 import { Theme, Icons } from "theme.slint";
-import { ToastStatus, AppPosType, TreeEntry } from "./base/def.slint";
+import { ToastStatus, AppPosType, TreeEntry, MediaControlStatus } from "./base/def.slint";
 
 export global Util {
     callback hide-window();
@@ -126,5 +126,29 @@ export global Util {
 
     pure public function rand-animation-tick(min-v: int, max-v: int) -> int {
         return Math.mod(animation-tick() / 1ms, max-v - min-v + 1) + min-v;
+    }
+
+    pure public function image-from-media-control-status(status: MediaControlStatus) -> image {
+        if (status == MediaControlStatus.Once) {
+            return Icons.play-once;
+        } else if (status == MediaControlStatus.Loop) {
+            return Icons.oblong-loop;
+        } else if (status == MediaControlStatus.LoopOne) {
+            return Icons.oblong-loop-one;
+        } else {
+            return Icons.shuffle;
+        }
+    }
+
+    pure public function next-media-control-status(status: MediaControlStatus) -> MediaControlStatus {
+        if (status == MediaControlStatus.Once) {
+            return MediaControlStatus.Loop;
+        } else if (status == MediaControlStatus.Loop) {
+            return MediaControlStatus.LoopOne;
+        } else if (status == MediaControlStatus.LoopOne) {
+            return MediaControlStatus.Shuffle;
+        } else {
+            return MediaControlStatus.Once;
+        }
     }
 }

@@ -1,5 +1,5 @@
 import { Util, Theme, Icons } from "../../def.slint";
-import { VideoControl, ExampleComponent } from "../../../base/widgets.slint";
+import { VideoControl, ExampleComponent, Label } from "../../../base/widgets.slint";
 
 export component VideoControlExample inherits Flickable {
     viewport-height: vbox.preferred-height;
@@ -15,12 +15,37 @@ export component VideoControlExample inherits Flickable {
             width: root.width;
             alignment: LayoutAlignment.center;
 
-            ExampleComponent {
+            ec := ExampleComponent {
                 width: Math.min(1000px, root.width * 0.8);
 
-                VideoControl { }
+                HorizontalLayout {
+                    alignment: LayoutAlignment.center;
+                    padding-top: 200px;
 
-                code: "";
+                    VideoControl {
+                        width: ec.width * 100%;
+                        background: Theme.thirdly-background.darker(20%);
+                        border-radius: Theme.border-radius;
+                        progress: 50;
+                        current-time: "0:00";
+                        end-time: "4:00";
+                        children-spacing: Theme.spacing * 4;
+
+                        Label {
+                            text: "This is a text message!";
+                        }
+
+                        Rectangle {
+                            width: 50px;
+                            height: parent.children-preferred-height * 0.6;
+                            background: Colors.red;
+                        }
+                    }
+                }
+
+                detail: "callback prev();\ncallback next();\ncallback play();\ncallback stop();\ncallback full-screen();\ncallback exit-full-screen();\ncallback sound-changed(sound: int);\ncallback speed-changed(speed: float);\ncallback progress-changed(value: float);\ncallback media-control-status-changed(status: VideoControlStatus);";
+
+                code: "VideoControl {\n    width: ec.width * 100%;\n    background: Theme.thirdly-background.darker(20%);\n    border-radius: Theme.border-radius;\n    progress: 50;\n    current-time: \"0:00\";\n    end-time: \"4:00\";\n    children-spacing: Theme.spacing * 4;\n\n    Label {\n        text: \"This is a text message!\";\n    }\n\n    Rectangle {\n        width: 50px;\n        height: parent.children-preferred-height * 0.6;\n        background: Colors.red;\n    }\n}";
             }
         }
     }
