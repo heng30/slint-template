@@ -63,6 +63,8 @@ import { WaitTransactionConfirmedExample }  from "examples/wait-transaction-conf
 import { TransactionTileExample }  from "examples/transaction-tile.slint";
 import { SideBarExample }  from "examples/sidebar.slint";
 import { ParagraphExample }  from "examples/paragraph.slint";
+import { AudioControlExample }  from "examples/audio-control.slint";
+import { VideoControlExample }  from "examples/video-control.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
@@ -170,6 +172,10 @@ component RightPanel inherits Rectangle {
     if Store.current-sidebar-key == "TransactionFee": TransactionFeeExample { }
     if Store.current-sidebar-key == "WaitTransactionConfirmed": WaitTransactionConfirmedExample { }
     if Store.current-sidebar-key == "TransactionTile": TransactionTileExample { }
+
+    // MultiMedia
+    if Store.current-sidebar-key == "AudioControl": AudioControlExample { }
+    if Store.current-sidebar-key == "VideoControl": VideoControlExample { }
 
     // Other
     if Store.current-sidebar-key == "Setting": SettingExample { }

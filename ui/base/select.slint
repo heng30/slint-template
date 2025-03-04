@@ -28,6 +28,8 @@ export component Select inherits Rectangle {
     in-out property <length> vpadding: Theme.padding * 3;
     in-out property <length> spacing: Theme.spacing * 2;
 
+    private property <bool> is-indicator-down;
+
     preferred-width: 200px;
     height: hbox.preferred-height;
     background: Theme.secondary-background;
@@ -36,6 +38,10 @@ export component Select inherits Rectangle {
     border-color: Theme.focus-color;
 
     callback selected(int, string);
+
+    init => {
+        is-indicator-down = true;
+    }
 
     hbox := HorizontalLayout {
         alignment: LayoutAlignment.space-between;
@@ -54,7 +60,7 @@ export component Select inherits Rectangle {
         Image {
             height: lb.preferred-height;
             width: self.height;
-            source: Icons.arrow-down;
+            source: is-indicator-down ? Icons.arrow-down : (fs.has-focus ? Icons.arrow-down : Icons.arrow-up);
             colorize: lb.color;
         }
     }
@@ -64,6 +70,7 @@ export component Select inherits Rectangle {
     ta := TouchArea {
         mouse-cursor: MouseCursor.pointer;
         clicked => {
+            is-indicator-down = false;
             fs.focus();
             pop.show();
         }

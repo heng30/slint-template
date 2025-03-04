@@ -76,8 +76,8 @@ export global Store {
     ];
 
     //////////////////////////////// Logic Start ////////////////////////////////
-    in-out property <string> current-sidebar-key: "Introduction";
-    // in-out property <string> current-sidebar-key: "Stretch";
+    // in-out property <string> current-sidebar-key: "Introduction";
+    in-out property <string> current-sidebar-key: "AudioControl";
     in-out property <[SideBarEntry]> sidebar-entries: [
         {
             category: is-cn ? "介绍" : "Introduction",
@@ -315,6 +315,21 @@ export global Store {
                 {
                     title: is-cn ? "交易历史" : "TransactionTile",
                     key: "TransactionTile",
+                },
+            ]
+        },
+        // MultiMedia
+        {
+            category: is-cn ? "多媒体" : "MultiMedia",
+            is-open: true,
+            children: [
+                {
+                    title: is-cn ? "音乐控制" : "AudioControl",
+                    key: "AudioControl",
+                },
+                {
+                    title: is-cn ? "视频控制" : "VideoControl",
+                    key: "VideoControl",
                 },
             ]
         },

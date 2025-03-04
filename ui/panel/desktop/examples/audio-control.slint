@@ -1,0 +1,42 @@
+import { Util, Theme, Icons } from "../../def.slint";
+import { AudioControl, ExampleComponent } from "../../../base/widgets.slint";
+
+export component AudioControlExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.min(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.center;
+                    padding-top: 200px;
+
+                    AudioControl {
+                        width: root.width * 40%;
+                        background: Theme.thirdly-background.darker(20%);
+                        border-radius: Theme.border-radius;
+                        btn-drop-shadow-color: Theme.invert-base-color;
+                        progress: 50;
+                        start-time: "0:00";
+                        end-time: "4:00";
+                    }
+                }
+
+                detail: "    callback prev();\n    callback next();\n    callback play();\n    callback stop();\n    callback sound-changed(sound: int);\n    callback speed-changed(speed: float);\n    callback status-changed(status: AudioControlStatus);\n    callback progress-changed(value: float); ";
+
+                code: "AudioControl {\n                        width: root.width * 40%;\n                        background: Theme.thirdly-background.darker(20%);\n                        border-radius: Theme.border-radius;\n                        btn-drop-shadow-color: Theme.invert-base-color;\n                        progress: 50;\n                        start-time: \"0:00\";\n                        end-time: \"4:00\";\n}";
+            }
+        }
+    }
+}
