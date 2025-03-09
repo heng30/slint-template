@@ -215,9 +215,9 @@ export component VideoControl inherits Rectangle {
         y: -rec.preferred-height;
         x: speed-btn.absolute-position.x - root.absolute-position.x + speed-btn.width / 2 - self.width / 2;
 
-        private property <[float]> values: [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
-
         width: rec.preferred-width + Theme.padding * 4;
+
+        private property <[float]> values: [2.0, 1.75, 1.5, 1.25, 1.0, 0.75, 0.5];
 
         rec := Rectangle {
             background: Theme.base-background;
