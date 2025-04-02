@@ -4,8 +4,8 @@ import { Blanket, StatusBar, Divider, AboutSetting, ToolTip, ToolTipSetting, Pop
 import { Home } from "home.slint";
 
 export component DesktopPanel inherits Rectangle {
-    private property <bool> is-show-setting-dialog: !(Store.current-setting-detail-index == SettingDetailIndex.None || Store.current-setting-detail-index == SettingDetailIndex.About);
-    private property <bool> is-show-about-dialog: Store.current-setting-detail-index == SettingDetailIndex.About;
+    private property <bool> is-show-setting-dialog: Store.current-tab-index == TabIndex.Setting;
+    private property <bool> is-show-about-dialog: Store.current-tab-index == TabIndex.About;
 
     private property <length> home-height: self.height;
 
@@ -50,7 +50,7 @@ export component DesktopPanel inherits Rectangle {
 
     if is-show-setting-dialog || is-show-about-dialog: Blanket {
         clicked => {
-            Logic.switch-setting-detail(SettingDetailIndex.None);
+            Logic.switch-tab(TabIndex.Home);
         }
     }
 

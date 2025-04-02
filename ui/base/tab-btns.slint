@@ -66,6 +66,10 @@ export component TabBtns inherits Rectangle {
         }
 
         init => {
+            if (index == 0) {
+                next-pos-x = 0;
+            }
+
             self.x = next-pos-x;
             next-pos-x = self.x + btn.preferred-width + Theme.padding;
 

@@ -1,0 +1,111 @@
+import { ListView } from "std-widgets.slint";
+import { Theme, Icons} from "../theme.slint";
+import { Util } from "../util.slint";
+import { Label } from "label.slint";
+import { Divider } from "divider.slint";
+
+export struct TodoEntry {
+    uuid: string,
+    title: string,
+    detail: string,
+    is-open: bool,
+}
+
+export component TodoList inherits ListView {
+    vertical-scrollbar-policy: always-off;
+    in-out property <[TodoEntry]> entries;
+    in-out property <TodoEntry> selected-entry;
+
+    callback clicked();
+    callback double-clicked();
+
+    for entry[index] in entries: VerticalLayout {
+        padding-bottom: Theme.padding * 2;
+
+        Rectangle {
+            border-radius: Theme.border-radius;
+            border-color: selected-entry.uuid == entry.uuid ? Theme.secondary-brand-color : Theme.base-border-color;
+            border-width: 1px;
+
+            drop-shadow-blur: Theme.padding * 2;
+            drop-shadow-color: Theme.base-background-drop-shadow;
+
+            background: ta.has-hover || outer-ta.has-hover ? Theme.secondary-background : Theme.base-background;
+
+            outer-ta := TouchArea {
+                clicked => {
+                    selected-entry = entry;
+                }
+            }
+
+            VerticalLayout {
+                private property <bool> is-show-detail: entry.is-open && entry.detail != "";
+
+                alignment: LayoutAlignment.start;
+                padding: Theme.padding * 2;
+
+                title-rect := Rectangle {
+                    HorizontalLayout {
+                        alignment: LayoutAlignment.space-between;
+                        spacing: Theme.spacing * 2;
+                        padding: Theme.spacing;
+
+                        lb := Label {
+                            overflow: elide;
+                            text: entry.title;
+                            font-size: Theme.title4-font-size;
+                            color: Theme.primary-text-color;
+                            font-weight: Theme.bold-font-weight;
+                        }
+
+                        if entry.detail != "": VerticalLayout {
+                            alignment: LayoutAlignment.center;
+                            Image {
+                                width: Theme.icon-size;
+                                height: self.width;
+                                colorize: Theme.icon-color;
+                                source: entry.is-open ? Icons.arrow-up : Icons.arrow-down;
+                            }
+                        }
+                    }
+
+                    ta := TouchArea {
+                        clicked => {
+                            selected-entry = entry;
+                            root.clicked();
+                        }
+
+                        double-clicked => {
+                            entry.is-open = !entry.is-open;
+                            selected-entry = entry;
+                            root.double-clicked();
+                        }
+                    }
+                }
+
+                if is-show-detail: Divider { }
+
+                Rectangle {
+                    height: parent.is-show-detail ? note-lb.preferred-height + Theme.padding * 2 : 0;
+
+                    clip: true;
+
+                    animate height {
+                        duration: Theme.default-animate-duration;
+                        easing: ease-in-out;
+                    }
+
+                    note-lb := Label {
+                        x: Theme.padding;
+                        y: Theme.padding;
+                        width: parent.width - Theme.padding * 2;
+                        text: entry.detail;
+                        font-size: Theme.default-font-size;
+                        color: Theme.regular-text-color;
+                        wrap: word-wrap;
+                    }
+                }
+            }
+        }
+    }
+}

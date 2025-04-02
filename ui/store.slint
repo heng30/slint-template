@@ -7,14 +7,13 @@ export enum DeviceType {
 export enum TabIndex {
     Home,
     Setting,
+    About,
     None,
 }
 
 export enum SettingDetailIndex {
-    Home,
     Preference,
     Proxy,
-    About,
     Help,
     Donate,
     None,
@@ -50,10 +49,7 @@ export global Store {
     in-out property <bool> is-show-landing-page: false;
 
     in-out property <TabIndex> current-tab-index: TabIndex.Home;
-
-    in-out property <SettingDetailIndex> previous-setting-detail-index: SettingDetailIndex.Preference;
-    in-out property <SettingDetailIndex> current-setting-detail-index: SettingDetailIndex.None;
-    // in-out property <SettingDetailIndex> current-setting-detail-index: SettingDetailIndex.Preference;
+    in-out property <SettingDetailIndex> current-setting-detail-index: SettingDetailIndex.Preference;
 
     in-out property <bool> is-cn: setting-preference.language == "cn";
     in-out property <SettingPreference> setting-preference: {
@@ -274,6 +270,10 @@ export global Store {
                 {
                     title: is-cn ? "段落" : "Paragraph",
                     key: "Paragraph",
+                },
+                {
+                    title: is-cn ? "代办列表" : "TodoList",
+                    key: "TodoList",
                 },
             ]
         },

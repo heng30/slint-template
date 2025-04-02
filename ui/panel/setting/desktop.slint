@@ -1,4 +1,4 @@
-import { Logic, Theme, Store, Util, Icons, SettingPreference, SettingProxy, SettingDetailIndex, DeviceType } from "../def.slint";
+import { Logic, Theme, Store, Util, Icons, SettingPreference, SettingProxy, SettingDetailIndex, DeviceType, TabIndex } from "../def.slint";
 import { IconBtn, SettingEntryV2, Head, SettingDetail, ToastStatus, About, Help, Dialog, ComponentPosition } from "../../base/widgets.slint";
 import { Preference } from "components/preference.slint";
 import { Donate } from "components/donate.slint";
@@ -6,15 +6,6 @@ import { Proxy } from "components/proxy.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
-
-    // (previous-index, current-index) -> void
-    callback switch(SettingDetailIndex, SettingDetailIndex) -> bool;
-
-    function update-index(index: SettingDetailIndex) {
-        if (root.switch(Store.previous-setting-detail-index, index)) {
-            Store.previous-setting-detail-index = index;
-        }
-    }
 
     Flickable {
         width: root.width;
@@ -29,7 +20,7 @@ component LeftPanel inherits Rectangle {
                 background: Store.current-setting-detail-index == SettingDetailIndex.Preference ? Theme.checked-background : self.has-hover ? Theme.hover-background : root.background;
 
                 clicked => {
-                    update-index(SettingDetailIndex.Preference);
+                    Logic.switch-setting-detail(SettingDetailIndex.Preference);
                 }
             }
 
@@ -39,7 +30,7 @@ component LeftPanel inherits Rectangle {
                 background: Store.current-setting-detail-index == SettingDetailIndex.Proxy ? Theme.checked-background : self.has-hover ? Theme.hover-background : root.background;
 
                 clicked => {
-                    update-index(SettingDetailIndex.Proxy);
+                    Logic.switch-setting-detail(SettingDetailIndex.Proxy);
                 }
             }
 
@@ -49,17 +40,17 @@ component LeftPanel inherits Rectangle {
                 background: Store.current-setting-detail-index == SettingDetailIndex.Help ? Theme.checked-background : self.has-hover ? Theme.hover-background : root.background;
 
                 clicked => {
-                    update-index(SettingDetailIndex.Help);
+                    Logic.switch-setting-detail(SettingDetailIndex.Help);
                 }
             }
 
             SettingEntryV2 {
                 text: Logic.tr("Donate");
-                icon: Icons.donate;
+                icon: Icons.donate-light;
                 background: Store.current-setting-detail-index == SettingDetailIndex.Donate ? Theme.checked-background : self.has-hover ? Theme.hover-background : root.background;
 
                 clicked => {
-                    update-index(SettingDetailIndex.Donate);
+                    Logic.switch-setting-detail(SettingDetailIndex.Donate);
                 }
             }
         }
@@ -69,22 +60,37 @@ component LeftPanel inherits Rectangle {
 component RightPanel inherits Rectangle {
     background: Theme.base-background;
 
-    public function preference-get() -> SettingPreference {
-        return preference.get();
-    }
-
-    public function proxy-get() -> SettingProxy {
-        return proxy.get();
+    init => {
+        Logic.switch-setting-detail(SettingDetailIndex.Preference);
     }
 
     preference := Preference {
         visible: Store.current-setting-detail-index == SettingDetailIndex.Preference;
         is-show-header: false;
+
+        confirmed => {
+            if (self.get().font-size == "" || self.get().win-width == "" || self.get().win-height == "") {
+                Util.show-toast(Logic.tr("Input can not be empty"), ToastStatus.Warning);
+                return;
+            }
+            if (Store.device-type == DeviceType.Desktop) {
+                Store.setting-preference.win-width = self.get().win-width;
+                Store.setting-preference.win-height = self.get().win-height;
+            }
+            Store.setting-preference.font-size = self.get().font-size;
+            Store.setting-preference.font-family = self.get().font-family;
+
+            Logic.set-setting-preference(self.get());
+        }
     }
 
     proxy := Proxy {
         visible: Store.current-setting-detail-index == SettingDetailIndex.Proxy;
         is-show-header: false;
+
+        confirmed => {
+            Logic.set-setting-proxy(self.get());
+        }
     }
 
     if Store.current-setting-detail-index == SettingDetailIndex.Help: Help {
@@ -98,37 +104,9 @@ component RightPanel inherits Rectangle {
 }
 
 component Setting inherits Rectangle {
-    public function save(index: SettingDetailIndex) -> bool {
-        if (index == SettingDetailIndex.Preference) {
-            if (rp.preference-get().font-size == "" || rp.preference-get().win-width == "" || rp.preference-get().win-height == "") {
-                Util.show-toast(Logic.tr("Input can not be empty"), ToastStatus.Warning);
-                return false;
-            }
-            if (Store.device-type == DeviceType.Desktop) {
-                Store.setting-preference.win-width = rp.preference-get().win-width;
-                Store.setting-preference.win-height = rp.preference-get().win-height;
-            }
-            Store.setting-preference.font-size = rp.preference-get().font-size;
-            Store.setting-preference.font-family = rp.preference-get().font-family;
-
-            Logic.set-setting-preference(rp.preference-get());
-        } else if (index == SettingDetailIndex.Proxy) {
-            Logic.set-setting-proxy(rp.proxy-get());
-        }
-        return true;
-    }
-
     lp := LeftPanel {
         x: 0;
         width: Math.max(root.width * 0.3, Theme.title3-font-size * 10);
-
-        switch(previous-index, current-index) => {
-            if (!root.save(previous-index)) {
-                return false;
-            }
-            Logic.switch-setting-detail(current-index);
-            return true;
-        }
     }
 
     mp := Rectangle {
@@ -161,8 +139,7 @@ export component SettingDialog inherits Dialog {
     }
 
     cancel-clicked => {
-        setting.save(Store.current-setting-detail-index);
-        Logic.switch-setting-detail(SettingDetailIndex.None);
+        Logic.switch-tab(TabIndex.Home);
     }
 }
 
@@ -179,7 +156,7 @@ export component AboutDialog inherits Dialog {
     }
 
     cancel-clicked => {
-        Logic.switch-setting-detail(SettingDetailIndex.None);
+        Logic.switch-tab(TabIndex.Home);
     }
 }
 
@@ -208,7 +185,7 @@ export component SettingIconsBar inherits Rectangle {
             tip: Logic.tr("setting");
 
             clicked => {
-                Logic.switch-setting-detail(SettingDetailIndex.Preference);
+                Logic.switch-tab(TabIndex.Setting);
             }
         }
 
@@ -221,7 +198,7 @@ export component SettingIconsBar inherits Rectangle {
             tip: Logic.tr("about");
 
             clicked => {
-                Logic.switch-setting-detail(SettingDetailIndex.About);
+                Logic.switch-tab(TabIndex.About);
             }
         }
 

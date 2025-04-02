@@ -1,5 +1,5 @@
 import { Theme, Logic, Store, Icons, SettingPreference, DeviceType } from "../../def.slint";
-import { SettingDetailInner, SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn, SettingDetailSwitch, ConfirmDialogSetting, Label, LineInput, Select } from "../../../base/widgets.slint";
+import { SettingDetailInner, SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn, ConfirmBtn, SettingDetailSwitch, ConfirmDialogSetting, Label, LineInput, Select } from "../../../base/widgets.slint";
 
 export component Preference inherits SettingDetail {
     title: Logic.tr("Preference");
@@ -8,6 +8,8 @@ export component Preference inherits SettingDetail {
     private property <string> win-height;
     private property <bool> always-on-top;
     private property <bool> no-frame;
+
+    callback confirmed();
 
     public function get() -> SettingPreference {
         return {
@@ -169,6 +171,23 @@ export component Preference inherits SettingDetail {
                     check => {
                         Theme.toggle();
                     }
+                }
+            }
+        }
+    }
+
+    if Store.device-type == DeviceType.Desktop: VerticalLayout {
+        padding: Theme.padding * 8;
+        padding-top: 0;
+        alignment: LayoutAlignment.end;
+        height: confirm-btn.preferred-height * 2;
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.end;
+
+            confirm-btn := ConfirmBtn {
+                clicked => {
+                    root.confirmed();
                 }
             }
         }

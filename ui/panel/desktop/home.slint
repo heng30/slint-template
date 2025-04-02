@@ -65,6 +65,7 @@ import { SideBarExample }  from "examples/sidebar.slint";
 import { ParagraphExample }  from "examples/paragraph.slint";
 import { AudioControlExample }  from "examples/audio-control.slint";
 import { VideoControlExample }  from "examples/video-control.slint";
+import { TodoListExample } from "examples/todo-list.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
@@ -161,6 +162,7 @@ component RightPanel inherits Rectangle {
     if Store.current-sidebar-key == "News": NewsExample { }
     if Store.current-sidebar-key == "ListTile": ListTileExample { }
     if Store.current-sidebar-key == "Paragraph": ParagraphExample { }
+    if Store.current-sidebar-key == "TodoList": TodoListExample { }
 
     // Crypto
     if Store.current-sidebar-key == "Mnemonic": MnemonicExample { }
