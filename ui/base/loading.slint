@@ -3,7 +3,7 @@ import { Label } from "./label.slint";
 import { Logic } from "../logic.slint";
 
 export component Loading inherits Rectangle {
-    in property <string> loading-text: "Loading...";
+    in property <string> loading-text: Logic.tr("Loading...");
     in property <duration> duration: 0.5s;
     in property <image> loading-icon: Icons.loading;
     in property <length> icon-size: Theme.icon-size;

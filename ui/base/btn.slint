@@ -26,19 +26,6 @@ export component ConfirmBtn inherits IconBtn {
     text: Logic.tr("Confirm");
 }
 
-export component CanConBtn inherits HorizontalLayout {
-    spacing: Theme.spacing * 4;
-    padding-top: Theme.padding * 4;
-    padding-right: Theme.padding * 4;
-    alignment: LayoutAlignment.end;
-
-    callback canceled <=> can.clicked;
-    callback confirmed <=> con.clicked;
-
-    can := CancelBtn { }
-    con := ConfirmBtn { }
-}
-
 export component TextBtn inherits IconBtn {
     use-auto-size: true;
     background: Colors.transparent;

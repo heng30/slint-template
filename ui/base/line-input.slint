@@ -31,6 +31,7 @@ export component LineInput inherits Rectangle {
     in property read-only <=> text-input.read-only;
     in property <bool> enabled <=> text-input.enabled;
     in property <string> placeholder-text;
+    in-out property <bool> gain-focus-when-clicked: true;
 
     in property <bool> is-show-icon;
     in property <image> icon;
@@ -125,6 +126,7 @@ export component LineInput inherits Rectangle {
                 icon: root.icon;
                 icon-size: root.icon-size;
                 colorize: root.icon-colorize;
+                gain-focus-when-clicked: gain-focus-when-clicked;
 
                 clicked => {
                     root.clicked();

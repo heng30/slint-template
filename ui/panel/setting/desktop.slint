@@ -94,7 +94,6 @@ component RightPanel inherits Rectangle {
 
     if Store.current-setting-detail-index == SettingDetailIndex.Help: Help {
         is-show-header: false;
-        entries: Store.helps;
     }
 
     if Store.current-setting-detail-index == SettingDetailIndex.Donate: Donate {

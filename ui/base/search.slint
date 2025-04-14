@@ -31,6 +31,8 @@ export component Search inherits Rectangle {
     in-out property <length> vpadding: Theme.padding * 3;
     in-out property <length> spacing: Theme.spacing * 2;
 
+    in-out property gain-focus-when-clicked <=> input.gain-focus-when-clicked;
+
     private property <[string]> matched-values;
     private property <bool> is-show-popup;
 

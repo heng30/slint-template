@@ -11,10 +11,8 @@ export component StatusBar inherits Rectangle {
     in-out property <length> icon-size: Theme.default-font-size;
     in-out property <bool> show-icon-hover-background: false;
 
-    in-out property <bool> disable-maximal;
+    in-out property <bool> disable-maximal: false;
     in-out property <bool> is-app-window-bar: true;
-    in-out property <bool> is-show-min-icon: true;
-    in-out property <bool> is-show-max-icon: true;
 
     in-out property <bool> is-show-icon;
     in-out property <image> icon;
@@ -105,7 +103,7 @@ export component StatusBar inherits Rectangle {
             HorizontalLayout {
                 spacing: Theme.spacing * 2;
 
-                if is-show-min-icon: IconBtn {
+                IconBtn {
                     icon: Icons.status-bar-min;
                     icon-size: root.icon-size;
                     colorize: Theme.warning-color;
@@ -123,7 +121,7 @@ export component StatusBar inherits Rectangle {
                     }
                 }
 
-                if is-show-max-icon: IconBtn {
+                IconBtn {
                     enabled-toucharea: !root.disable-maximal;
                     icon: Icons.status-bar-max;
                     icon-size: root.icon-size;

@@ -6,26 +6,8 @@ import { Label } from "label.slint";
 
 export component Help inherits SettingDetail {
     title: Logic.tr("Help");
-    in-out property <[string]> entries;
 
     SettingDetailInner {
-        for item in entries: HorizontalLayout {
-            spacing: Theme.spacing * 4;
-
-            VerticalLayout {
-                alignment: LayoutAlignment.center;
-                Rectangle {
-                    width: 10px;
-                    height: self.width;
-                    background: Theme.regular-text-color.brighter(50%);
-                    border-radius: self.width / 2;
-                }
-            }
-
-            Label {
-                wrap: word-wrap;
-                text: item;
-            }
-        }
+        @children
     }
 }

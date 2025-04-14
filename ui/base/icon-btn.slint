@@ -21,6 +21,7 @@ export component IconBtn inherits Rectangle {
 
     in-out property <bool> show-icon-hover-background: true;
     in-out property <bool> is-ltr: true;
+    in-out property <bool> gain-focus-when-clicked: true;
     in-out property <RotationType> rotation-type: RotationType.None;
 
     in-out property <bool> use-auto-size: false;
@@ -109,7 +110,11 @@ export component IconBtn inherits Rectangle {
                     icon-rotation-angle = 0deg;
                 }
             }
-            fs.focus();
+
+            if (gain-focus-when-clicked) {
+                fs.focus();
+            }
+
             root.clicked();
         }
 

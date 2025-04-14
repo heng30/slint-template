@@ -20,20 +20,20 @@ export component HelpExample inherits Flickable {
 
                 Help {
                     width: 60%;
-                    is-show-header: false;
                     background: Theme.secondary-background;
                     border-radius: Theme.border-radius;
 
-                    entries: Store.is-cn ? [
-                        "配置文件保存目录: ~/.config/slint-template",
-                        "数据库保存目录: ~/.local/share/slint-template",
-                    ] : [
-                        "Config directory: ~/.config/slint-template",
-                        "Data directory: ~/.local/share/slint-template",
-                    ];
+                    HorizontalLayout {
+                        alignment: LayoutAlignment.center;
+                        Rectangle {
+                            width: 200px;
+                            height: 200px;
+                            background: red;
+                        }
+                    }
                 }
 
-                code: "Help {\n    width: 60%;\n    is-show-header: false;\n    background: Theme.secondary-background;\n    border-radius: Theme.border-radius;\n\n    entries: Store.is-cn ? [\n        \"配置文件保存目录: ~/.config/slint-template\",\n        \"数据库保存目录: ~/.local/share/slint-template\",\n    ] : [\n        \"Config directory: ~/.config/slint-template\",\n        \"Data directory: ~/.local/share/slint-template\",\n    ];\n}";
+                code: "Help {\n    width: 60%;\n    is-show-header: false;\n    background: Theme.secondary-background;\n    border-radius: Theme.border-radius;\n\n}";
             }
         }
     }

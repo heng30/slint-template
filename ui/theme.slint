@@ -15,6 +15,7 @@ export global Theme {
 
     in-out property <string> default-font-family: Store.setting-preference.font-family;
     in-out property <length> default-font-size: Store.setting-preference.font-size.to-float() * 1px;
+    in-out property <length> title6-font-size: default-font-size + 0px;
     in-out property <length> title5-font-size: default-font-size + 1px;
     in-out property <length> title4-font-size: default-font-size + 2px;
     in-out property <length> title3-font-size: default-font-size + 4px;
@@ -27,6 +28,8 @@ export global Theme {
     out property <length> icon-size: Math.max(24px, default-font-size + 8px);
     out property <length> avatar-size: icon-size + Theme.padding * 2;
     out property <duration> default-animate-duration: 200ms;
+    out property <length> default-border-width: 2px;
+    out property <length> default-text-cursor-width: 2px;
 
     out property <color> brand-color: is-dark ? #3F51B5 : #0000B8;
     out property <color> secondary-brand-color: is-dark ? #324090 : #3F51B5;
@@ -75,6 +78,22 @@ export global Theme {
         Store.setting-preference.is-dark = !Store.setting-preference.is-dark;
         Palette.color-scheme = is-dark ? ColorScheme.dark : ColorScheme.light;
     }
+
+    public pure function title-font-size(level: int) -> length {
+        if(level == 1) {
+            return title1-font-size;
+        } else if(level == 2) {
+            return title2-font-size;
+        } else if(level == 3) {
+            return title3-font-size;
+        } else if(level == 4) {
+            return title4-font-size;
+        } else if(level == 5) {
+            return title5-font-size;
+        } else {
+            return title6-font-size;
+        }
+    }
 }
 
 export global Icons {
@@ -98,16 +117,19 @@ export global Icons {
     out property <image> no-message: @image-url("./images/no-message.svg");
     out property <image> no-data: @image-url("./images/no-data.svg");
     out property <image> delete: @image-url("./images/delete-light.svg");
+    out property <image> delete-fill: @image-url("./images/delete-fill.svg");
     out property <image> refresh: @image-url("./images/refresh.svg");
     out property <image> cancel-fill: @image-url("./images/cancel-fill.svg");
     out property <image> cancel: @image-url("./images/cancel-light.svg");
     out property <image> success-fill: @image-url("./images/success-fill.svg");
     out property <image> success: @image-url("./images/success.svg");
     out property <image> close: @image-url("./images/close.svg");
+    out property <image> close-light: @image-url("./images/close-light.svg");
     out property <image> favorite-fill: @image-url("./images/favorite-fill.svg");
     out property <image> find-light: @image-url("./images/find.svg");
     out property <image> edit: @image-url("./images/edit.svg");
     out property <image> copy: @image-url("./images/copy.svg");
+    out property <image> copy-fill: @image-url("./images/copy-fill.svg");
     out property <image> paste: @image-url("./images/paste.svg");
     out property <image> recover: @image-url("./images/recover.svg");
     out property <image> backup-recover: @image-url("./images/backup-recover.svg");
@@ -122,12 +144,14 @@ export global Icons {
     out property <image> cache-light: @image-url("./images/clear-light.svg");
     out property <image> about-light: @image-url("./images/about-light.svg");
     out property <image> about-fill: @image-url("./images/about-fill.svg");
+    out property <image> help: @image-url("./images/help.svg");
     out property <image> help-light: @image-url("./images/help-light.svg");
     out property <image> reading: @image-url("./images/reading.svg");
     out property <image> feedback: @image-url("./images/feedback.svg");
     out property <image> donate: @image-url("./images/donate.svg");
     out property <image> donate-light: @image-url("./images/donate-light.svg");
     out property <image> send: @image-url("./images/send.svg");
+    out property <image> send2: @image-url("./images/send2.svg");
     out property <image> search: @image-url("./images/search.svg");
     out property <image> version: @image-url("./images/version.svg");
     out property <image> download: @image-url("./images/download.svg");
@@ -135,7 +159,8 @@ export global Icons {
     out property <image> loading: @image-url("./images/loading.svg");
     out property <image> crypto: @image-url("./images/crypto.svg");
     out property <image> recipient: @image-url("./images/recipient.svg");
-    out property <image> history: @image-url("./images/history.svg");
+    out property <image> notify: @image-url("./images/notify.svg");
+    out property <image> notify-light: @image-url("./images/notify-light.svg");
     out property <image> address: @image-url("./images/address.svg");
     out property <image> address-book: @image-url("./images/address-book.svg");
     out property <image> eye: @image-url("./images/eye.svg");
@@ -228,6 +253,16 @@ export global Icons {
     out property <image> shuffle: @image-url("./images/shuffle.svg");
     out property <image> full-screen: @image-url("./images/full-screen.svg");
     out property <image> exit-full-screen: @image-url("./images/exit-full-screen.svg");
+    out property <image> prompt: @image-url("./images/prompt.svg");
+    out property <image> prompt-light: @image-url("./images/prompt-light.svg");
     out property <image> model: @image-url("./images/model.svg");
     out property <image> model-light: @image-url("./images/model-light.svg");
+    out property <image> chat: @image-url("./images/chat.svg");
+    out property <image> stop: @image-url("./images/stop.svg");
+    out property <image> retry: @image-url("./images/retry.svg");
+    out property <image> new-chat: @image-url("./images/new-chat.svg");
+    out property <image> new: @image-url("./images/new.svg");
+    out property <image> wifi: @image-url("./images/test-network.svg");
+    out property <image> proxy: @image-url("./images/proxy.svg");
+    out property <image> network: @image-url("./images/network.svg");
 }
