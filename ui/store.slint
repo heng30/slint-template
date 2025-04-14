@@ -8,7 +8,7 @@ export enum TabIndex {
     Home,
     Setting,
     About,
-    None,
+    Back,
 }
 
 export enum SettingDetailIndex {
@@ -16,7 +16,6 @@ export enum SettingDetailIndex {
     Proxy,
     Help,
     Donate,
-    None,
 
     // Mobile
     Home,
@@ -52,6 +51,7 @@ export global Store {
     in-out property <bool> is-first-run;
     in-out property <bool> is-show-landing-page: false;
 
+    in-out property <TabIndex> previous-tab-index: TabIndex.Home;
     in-out property <TabIndex> current-tab-index: TabIndex.Home;
     in-out property <SettingDetailIndex> current-setting-detail-index: SettingDetailIndex.Preference;
 

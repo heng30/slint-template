@@ -7,7 +7,7 @@ export global Logic {
     callback remove-all-cache();
 
     callback copy-to-clipboard(string);
-    callback copy-from-clipboard() -> string;
+    callback paste-from-clipboard() -> string;
 
     callback get-setting-preference() -> SettingPreference;
     callback set-setting-preference(SettingPreference);
@@ -35,7 +35,13 @@ export global Logic {
         if (Store.current-tab-index == index) {
             return;
         }
-        Store.current-tab-index = index;
+
+        if (index == TabIndex.Back) {
+            Store.current-tab-index = Store.previous-tab-index;
+        } else {
+            Store.previous-tab-index = Store.current-tab-index;
+            Store.current-tab-index = index;
+        }
     }
 
     //////////////////////////////// Logic Start  ////////////////////////////////

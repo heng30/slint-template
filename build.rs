@@ -3,10 +3,6 @@ use std::fs::File;
 use std::io::Write;
 
 fn main() {
-    // #[cfg(target_os = "windows")] would not work in cross-compiling on a non-windows OS
-    // otherwise, using `CARGO_CFG_TARGET_OS`
-    // if std::env::var("CARGO_CFG_TARGET_OS").unwrap() == "windows" {}
-
     #[cfg(target_os = "windows")]
     set_windows_info();
 

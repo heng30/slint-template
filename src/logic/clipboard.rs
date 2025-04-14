@@ -3,11 +3,21 @@ use crate::{
     slint_generatedAppWindow::{AppWindow, Logic},
     toast_success, toast_warn,
 };
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use slint::ComponentHandle;
 
 #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 fn copy_to_clipboard(msg: &str) -> Result<()> {
+    cfg_if::cfg_if! {
+        if #[cfg(target_os = "linux")] {
+            if is_wayland() {
+                if let Ok(_) = copy_to_wayland_clipboard(msg) {
+                    return Ok(());
+                }
+            }
+        }
+    }
+
     use clipboard::{ClipboardContext, ClipboardProvider};
     let ctx: Result<ClipboardContext, _> = ClipboardProvider::new();
 
@@ -21,7 +31,17 @@ fn copy_to_clipboard(msg: &str) -> Result<()> {
 }
 
 #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
-fn copy_from_clipboard() -> Result<String> {
+fn paste_from_clipboard() -> Result<String> {
+    cfg_if::cfg_if! {
+        if #[cfg(target_os = "linux")] {
+            if is_wayland() {
+                if let Ok(text) = paste_from_wayland_clipboard() {
+                    return Ok(text);
+                }
+            }
+        }
+    }
+
     use clipboard::{ClipboardContext, ClipboardProvider};
     let ctx: Result<ClipboardContext, _> = ClipboardProvider::new();
 
@@ -43,11 +63,31 @@ fn copy_to_clipboard(msg: &str) -> Result<()> {
 }
 
 #[cfg(target_os = "android")]
-fn copy_from_clipboard() -> Result<String> {
+fn paste_from_clipboard() -> Result<String> {
     match terminal_clipboard::get_string() {
         Err(e) => bail!("{e:?}"),
         Ok(msg) => Ok(msg),
     }
+}
+
+#[cfg(target_os = "linux")]
+fn is_wayland() -> bool {
+    std::env::var("WAYLAND_DISPLAY").is_ok()
+        || std::env::var("XDG_SESSION_TYPE")
+            .map(|t| t == "wayland")
+            .unwrap_or(false)
+}
+
+#[cfg(target_os = "linux")]
+fn copy_to_wayland_clipboard(text: &str) -> Result<()> {
+    duct::cmd!("wl-copy", text).run()?;
+
+    Ok(())
+}
+
+#[cfg(target_os = "linux")]
+fn paste_from_wayland_clipboard() -> Result<String> {
+    Ok(duct::cmd!("wl-paste").read()?)
 }
 
 pub fn init(ui: &AppWindow) {
@@ -64,9 +104,9 @@ pub fn init(ui: &AppWindow) {
     });
 
     let ui_handle = ui.as_weak();
-    ui.global::<Logic>().on_copy_from_clipboard(move || {
+    ui.global::<Logic>().on_paste_from_clipboard(move || {
         let ui = ui_handle.unwrap();
-        match copy_from_clipboard() {
+        match paste_from_clipboard() {
             Err(e) => {
                 toast_warn!(
                     ui,
@@ -86,7 +126,7 @@ mod tests {
     fn test_clipboard() -> Result<()> {
         let msg = "hello world";
         copy_to_clipboard(msg)?;
-        let res = copy_from_clipboard()?;
+        let res = paste_from_clipboard()?;
 
         assert_eq!(msg, res);
         Ok(())

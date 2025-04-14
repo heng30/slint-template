@@ -103,6 +103,8 @@ export component Proxy inherits SettingDetail {
             alignment: LayoutAlignment.end;
 
             confirm-btn := ConfirmBtn {
+                text: Logic.tr("Apply");
+
                 clicked => {
                     root.confirmed();
                 }

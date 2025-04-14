@@ -36,6 +36,7 @@ export component Search inherits Rectangle {
 
     callback search(string);
     callback edited(string);
+    callback key-pressed(KeyEvent);
 
     function inner-search(text: string) {
         if (text == "") {
@@ -86,6 +87,8 @@ export component Search inherits Rectangle {
                 input.clear-focus();
                 root.is-show-popup = false;
             }
+
+            root.key-pressed(event);
         }
     }
 

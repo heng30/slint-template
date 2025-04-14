@@ -30,19 +30,25 @@ serde = { version = "1.0", features = ["serde_derive"] }
 image = { version = "0.24", optional = true }
 qrcode = { version = "0.13", optional = true }
 sqldb = { version = "0.1", path = "./libs/sqldb", optional = true }
-cutil = { version = "0.1", path = "./libs/cutil", features = [ "default", "time" ] }
+cutil = { version = "0.1", path = "./libs/cutil", features = [
+  "default",
+  "time",
+] }
 
 [target.'cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))'.dependencies]
 clipboard = "0.5"
 env_logger = "0.10"
 platform-dirs = "0.3"
 
+[target.'cfg(target_os = "linux")'.dependencies]
+duct = "0.13"
+
 [target.'cfg(target_os = "android")'.dependencies]
 android_logger = "0.13"
 terminal-clipboard = "0.4"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-console_log =  { version = "1.0", features = ["color"] }
+console_log = { version = "1.0", features = ["color"] }
 wasm-bindgen = { version = "0.2" }
 getrandom = { version = "0.2", features = ["js"] }
 
@@ -63,11 +69,10 @@ strip = true
 [features]
 default = []
 web = []
-desktop = [ ]
-android = ["cutil/native-tls-vendored", "slint/backend-android-activity-06" ]
-qrcode = [ "dep:image", "dep:qrcode" ]
-database = [ "dep:sqldb" ]
-full = ["desktop", "qrcode", "database", "cutil/full"]
+desktop = []
+android = ["cutil/native-tls-vendored", "slint/backend-android-activity-06"]
+qrcode = ["dep:image", "dep:qrcode"]
+database = ["dep:sqldb"]
 
 [lib]
 path = "src/lib.rs"

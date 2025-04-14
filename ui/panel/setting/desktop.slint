@@ -73,10 +73,9 @@ component RightPanel inherits Rectangle {
                 Util.show-toast(Logic.tr("Input can not be empty"), ToastStatus.Warning);
                 return;
             }
-            if (Store.device-type == DeviceType.Desktop) {
-                Store.setting-preference.win-width = self.get().win-width;
-                Store.setting-preference.win-height = self.get().win-height;
-            }
+
+            Store.setting-preference.win-width = self.get().win-width;
+            Store.setting-preference.win-height = self.get().win-height;
             Store.setting-preference.font-size = self.get().font-size;
             Store.setting-preference.font-family = self.get().font-family;
 
@@ -139,7 +138,7 @@ export component SettingDialog inherits Dialog {
     }
 
     cancel-clicked => {
-        Logic.switch-tab(TabIndex.Home);
+        Logic.switch-tab(TabIndex.Back);
     }
 }
 
@@ -156,7 +155,7 @@ export component AboutDialog inherits Dialog {
     }
 
     cancel-clicked => {
-        Logic.switch-tab(TabIndex.Home);
+        Logic.switch-tab(TabIndex.Back);
     }
 }
 
