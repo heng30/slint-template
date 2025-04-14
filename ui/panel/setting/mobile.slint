@@ -56,7 +56,7 @@ component Body inherits VerticalLayout {
 
             SettingEntry {
                 text: Logic.tr("Donate");
-                icon: Icons.donate;
+                icon: Icons.donate-light;
                 clicked => {
                     Logic.switch-setting-detail(SettingDetailIndex.Donate);
                 }
@@ -109,7 +109,6 @@ export component Setting inherits Rectangle {
         }
 
         if Store.current-setting-detail-index == SettingDetailIndex.Help: Help {
-            entries: Store.helps;
             back => {
                 Logic.switch-setting-detail(SettingDetailIndex.Home);
             }
