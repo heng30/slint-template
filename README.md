@@ -35,6 +35,9 @@ It's a Rust template project for Slint GUI. It cantains frequently-used componen
 - `min-sdk-version = 23`
 - `target-sdk-version = 32`
 
+### Troubleshooting
+- Using the `Qt backend` can resolve the issue of fuzzy fonts on the Windows platform. It is also recommended to prioritize the `Qt backend` to maintain a consistent build environment with the developers.
+
 ### Reference
 - [Slint Language Documentation](https://slint-ui.com/releases/1.0.0/docs/slint/)
 - [slint::android](https://snapshots.slint.dev/master/docs/rust/slint/android/#building-and-deploying)
