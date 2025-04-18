@@ -8,6 +8,6 @@ fi
 
 target_dir="$1"
 
-cp -rf ../ui/base $target_dir/ui/
-cp -rf ../ui/images $target_dir/ui/
-cp -rf ../ui/theme.slint $target_dir/ui/
+rsync -a --exclude='about.slint' ../ui/base $target_dir/ui/
+rsync -a --exclude='brand.png' ../ui/images $target_dir/ui/
+rsync -a ../ui/theme.slint $target_dir/ui/
