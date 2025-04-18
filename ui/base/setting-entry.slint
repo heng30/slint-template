@@ -64,6 +64,8 @@ export component SettingEntryV2 inherits Rectangle {
     in-out property <color> right-icon-colorize: label.color;
     in-out property <length> right-icon-size;
 
+    in-out property <bool> gain-focus-when-clicked;
+
     callback clicked();
 
     hbox := HorizontalLayout {
@@ -117,7 +119,10 @@ export component SettingEntryV2 inherits Rectangle {
         mouse-cursor: MouseCursor.pointer;
 
         clicked => {
-            fs.focus();
+            if (gain-focus-when-clicked) {
+                fs.focus();
+            }
+
             root.clicked();
         }
     }

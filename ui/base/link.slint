@@ -18,11 +18,11 @@ export component Link inherits HorizontalLayout {
 
     callback clicked <=> touch.clicked;
 
-    spacing: Theme.spacing;
+    spacing: Theme.spacing * 2;
     alignment: LayoutAlignment.start;
 
     tx := Text {
-        wrap: word-wrap;
+        wrap: TextWrap.no-wrap;
         font-size: Theme.title5-font-size;
         color: root.is-read ? Theme.have-read-text-color : Theme.link-text-color;
 

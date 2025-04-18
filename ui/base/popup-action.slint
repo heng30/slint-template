@@ -59,6 +59,8 @@ export component PopupAction inherits Rectangle {
     in-out property <length> icon-size: Theme.icon-size;
     in-out property <length> font-size: Theme.title3-font-size;
 
+    in-out property <bool> gain-focus-when-clicked;
+
     pure function calc-x() -> length {
         return Math.clamp(PopupActionSetting.pressed-absolute-x + Theme.padding * 2, 0px, root.window-width - rect.width);
     }
@@ -71,7 +73,10 @@ export component PopupAction inherits Rectangle {
 
     TouchArea {
         clicked => {
-            fs.focus();
+            if (gain-focus-when-clicked) {
+                fs.focus();
+            }
+
             PopupActionSetting.hide();
         }
     }
@@ -101,6 +106,7 @@ export component PopupAction inherits Rectangle {
                     icon-colorize: root.icon-colorize;
                     icon-size: root.icon-size;
                     background: self.has-hover ? Theme.secondary-background : Colors.transparent;
+                    gain-focus-when-clicked: gain-focus-when-clicked;
 
                     clicked => {
                         PopupActionSetting.hide();

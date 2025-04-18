@@ -20,68 +20,85 @@ export component Dialog inherits Rectangle {
 
     callback cancel-clicked();
     callback ok-clicked();
+    callback escape();
 
     width: 800px;
     height: vbox.preferred-height;
     background: Theme.base-background;
     border-radius: Theme.border-radius;
     clip: true;
+    forward-focus: fc;
+
+    init => {
+        fc.focus();
+    }
 
     if is-prevent-event-forward: TouchArea { }
 
-    vbox := VerticalLayout {
-        alignment: space-between;
-
-        if root.title != "": Rectangle {
-            height: txt.preferred-height * 1.33;
-            background: root.title-bg;
-            txt := Text {
-                color: Theme.light-text-color;
-                font-size: Theme.title3-font-size;
-                text: root.title;
+    fc := FocusScope {
+        key-pressed(event) => {
+            if (event.text == Key.Escape) {
+                root.escape();
+                return EventResult.accept;
+            } else {
+                return EventResult.reject;
             }
+        }
 
-            if !is-hide-close-btn: HorizontalLayout {
-                alignment: end;
-                padding-right: Theme.padding;
-                CenterLayout {
-                    IconBtn {
-                        width: Theme.icon-size;
-                        icon: Icons.close;
-                        colorize: txt.color;
-                        show-icon-hover-background: false;
-                        clicked => {
-                            root.cancel-clicked();
+        vbox := VerticalLayout {
+            alignment: space-between;
+
+            if root.title != "": Rectangle {
+                height: txt.preferred-height * 1.33;
+                background: root.title-bg;
+                txt := Text {
+                    color: Theme.light-text-color;
+                    font-size: Theme.title3-font-size;
+                    text: root.title;
+                }
+
+                if !is-hide-close-btn: HorizontalLayout {
+                    alignment: end;
+                    padding-right: Theme.padding;
+                    CenterLayout {
+                        IconBtn {
+                            width: Theme.icon-size;
+                            icon: Icons.close;
+                            colorize: txt.color;
+                            show-icon-hover-background: false;
+                            clicked => {
+                                root.cancel-clicked();
+                            }
                         }
                     }
                 }
             }
-        }
 
-        VerticalLayout {
-            @children
-        }
-
-        if !is-hide-bottom-btns: HorizontalLayout {
-            alignment: LayoutAlignment.end;
-            spacing: Theme.spacing * 4;
-            padding: Theme.padding * 4;
-
-            if !is-hide-cancel-btn: CancelBtn {
-                icon: Icons.cancel;
-                text: Logic.tr("Cancel");
-
-                clicked => {
-                    root.cancel-clicked();
-                }
+            VerticalLayout {
+                @children
             }
 
-            if !is-hide-confirm-btn: ConfirmBtn {
-                icon: Icons.success;
-                text: Logic.tr("Confirm");
+            if !is-hide-bottom-btns: HorizontalLayout {
+                alignment: LayoutAlignment.end;
+                spacing: Theme.spacing * 4;
+                padding: Theme.padding * 4;
 
-                clicked => {
-                    root.ok-clicked();
+                if !is-hide-cancel-btn: CancelBtn {
+                    icon: Icons.cancel;
+                    text: Logic.tr("Cancel");
+
+                    clicked => {
+                        root.cancel-clicked();
+                    }
+                }
+
+                if !is-hide-confirm-btn: ConfirmBtn {
+                    icon: Icons.success;
+                    text: Logic.tr("Confirm");
+
+                    clicked => {
+                        root.ok-clicked();
+                    }
                 }
             }
         }
