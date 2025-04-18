@@ -1,4 +1,4 @@
-use super::tr::tr;
+use super::{tr::tr, util::is_wayland};
 use crate::{
     slint_generatedAppWindow::{AppWindow, Logic},
     toast_success, toast_warn,
@@ -68,14 +68,6 @@ fn paste_from_clipboard() -> Result<String> {
         Err(e) => bail!("{e:?}"),
         Ok(msg) => Ok(msg),
     }
-}
-
-#[cfg(target_os = "linux")]
-fn is_wayland() -> bool {
-    std::env::var("WAYLAND_DISPLAY").is_ok()
-        || std::env::var("XDG_SESSION_TYPE")
-            .map(|t| t == "wayland")
-            .unwrap_or(false)
 }
 
 #[cfg(target_os = "linux")]

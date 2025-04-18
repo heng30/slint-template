@@ -13,6 +13,7 @@ export component StatusBar inherits Rectangle {
 
     in-out property <bool> disable-maximal: false;
     in-out property <bool> is-app-window-bar: true;
+    in-out property <bool> disable-window-ctrl-btns;
 
     in-out property <bool> is-show-icon;
     in-out property <image> icon;
@@ -38,7 +39,7 @@ export component StatusBar inherits Rectangle {
     background: Theme.secondary-background;
     height: Theme.header-height;
 
-    TouchArea {
+    if !disable-window-ctrl-btns: TouchArea {
         mouse-cursor: MouseCursor.grabbing;
 
         moved => {
@@ -100,7 +101,7 @@ export component StatusBar inherits Rectangle {
 
             @children
 
-            HorizontalLayout {
+            if !disable-window-ctrl-btns: HorizontalLayout {
                 spacing: Theme.spacing * 2;
 
                 IconBtn {

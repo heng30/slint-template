@@ -159,6 +159,12 @@ impl Config {
                 }
                 Err(_) => {
                     self.is_first_run = true;
+
+                    if let Some(bak_file) = &self.config_path.as_os_str().to_str() {
+                        let bak_file = format!("{}.bak", bak_file);
+                        _ = fs::copy(&self.config_path, &bak_file);
+                    }
+
                     match toml::to_string_pretty(self) {
                         Ok(text) => Ok(fs::write(&self.config_path, text)?),
                         Err(e) => Err(e.into()),
@@ -167,6 +173,12 @@ impl Config {
             },
             Err(_) => {
                 self.is_first_run = true;
+
+                if let Some(bak_file) = &self.config_path.as_os_str().to_str() {
+                    let bak_file = format!("{}.bak", bak_file);
+                    _ = fs::copy(&self.config_path, &bak_file);
+                }
+
                 match toml::to_string_pretty(self) {
                     Ok(text) => Ok(fs::write(&self.config_path, text)?),
                     Err(e) => Err(e.into()),

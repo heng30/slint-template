@@ -35,7 +35,7 @@ pub fn init(ui: &AppWindow) {
             all.preference.win_width =
                 u32::max(500, setting.win_width.to_string().parse().unwrap_or(500));
             all.preference.win_height =
-                u32::max(500, setting.win_height.to_string().parse().unwrap_or(500));
+                u32::max(800, setting.win_height.to_string().parse().unwrap_or(800));
             all.preference.font_size = font_size;
             all.preference.font_family = setting.font_family.into();
             all.preference.language = setting.language.into();
@@ -78,7 +78,7 @@ fn init_setting(ui: &AppWindow) {
 
     let font_size = u32::min(50, u32::max(10, config.font_size));
     setting.win_width = slint::format!("{}", u32::max(500, config.win_width));
-    setting.win_height = slint::format!("{}", u32::max(500, config.win_height));
+    setting.win_height = slint::format!("{}", u32::max(800, config.win_height));
     setting.font_size = slint::format!("{}", font_size);
     setting.font_family = config.font_family.into();
     setting.language = config.language.into();

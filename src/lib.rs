@@ -148,8 +148,9 @@ pub async fn desktop_main() {
     ui_before().await;
     let ui = AppWindow::new().unwrap();
     ui.global::<Store>().set_device_type(DeviceType::Desktop);
-    ui.global::<Util>().invoke_update_window_size();
     ui_after(&ui);
+
+    ui.global::<Util>().invoke_set_window_center();
 
     ui.run().unwrap();
 

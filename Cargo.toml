@@ -29,6 +29,7 @@ tokio = { version = "1.38", features = ["full"] }
 serde = { version = "1.0", features = ["serde_derive"] }
 image = { version = "0.24", optional = true }
 qrcode = { version = "0.13", optional = true }
+display-info = { version = "0.5", optional = true }
 sqldb = { version = "0.1", path = "./libs/sqldb", optional = true }
 cutil = { version = "0.1", path = "./libs/cutil", features = [
   "default",
@@ -69,10 +70,11 @@ strip = true
 [features]
 default = []
 web = []
-desktop = []
+desktop = [ ]
 android = ["cutil/native-tls-vendored", "slint/backend-android-activity-06"]
 qrcode = ["dep:image", "dep:qrcode"]
 database = ["dep:sqldb"]
+center-window = ["dep:display-info"]
 
 [lib]
 path = "src/lib.rs"

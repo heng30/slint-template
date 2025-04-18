@@ -35,6 +35,9 @@ desktop-build-debug-nixos:
 desktop-build-release-nixos:
 	nix-shell --run "$(desktop-build-env) cargo build --release --features=desktop"
 
+desktop-debug-nixos-wayland:
+	nix-shell wayland-shell.nix --run "$(desktop-build-env) cargo run --features=desktop"
+
 desktop-debug:
 	$(desktop-build-env) $(run-env) cargo run --features=desktop
 

@@ -13,6 +13,23 @@ use slint::{ComponentHandle, Model, ModelRc, SharedString, VecModel};
 use std::str::FromStr;
 use webbrowser::{self, Browser};
 
+#[cfg(feature = "center-window")]
+use serde::{Deserialize, Serialize};
+
+#[cfg(feature = "center-window")]
+#[derive(Debug, Serialize, Deserialize)]
+struct DisplayMode {
+    width: u32,
+    height: u32,
+    current: bool,
+}
+
+#[cfg(feature = "center-window")]
+#[derive(Debug, Serialize, Deserialize)]
+struct Display {
+    modes: Vec<DisplayMode>,
+}
+
 pub fn init(ui: &AppWindow) {
     let ui_handle = ui.as_weak();
     ui.global::<Util>().on_hide_window(move || {
@@ -96,23 +113,45 @@ pub fn init(ui: &AppWindow) {
         ui.window().set_size(psize);
     });
 
-    let ui_handle = ui.as_weak();
-    ui.global::<Util>().on_set_window_center(move || {
-        let ui = ui_handle.unwrap();
-        let preference = config::preference();
+    cfg_if::cfg_if! {
+        if #[cfg(feature = "center-window")] {
+            let ui_handle = ui.as_weak();
+            ui.global::<Util>().on_set_window_center(move || {
+                let ui = ui_handle.unwrap();
+                let preference = config::preference();
 
-        let scale = ui.window().scale_factor();
-        let _psize = slint::PhysicalSize::from_logical(
-            slint::LogicalSize {
-                width: preference.win_width as f32,
-                height: preference.win_height as f32,
-            },
-            scale,
-        );
+                let scale = ui.window().scale_factor();
+                let psize = slint::PhysicalSize::from_logical(
+                    slint::LogicalSize {
+                        width: preference.win_width as f32,
+                        height: preference.win_height as f32,
+                    },
+                    scale,
+                );
 
-        todo!("Get the monitor size to calculate the position");
-        // ui.window().set_position(pos)
-    });
+                match display_size() {
+                    Some((w, h)) => {
+                        log::info!("display size = ({w}, {h})");
+
+                        if w > psize.width && h > psize.height {
+                            let x = ((w - psize.width) / 2) as f32;
+                            let y = ((h - psize.height) / 2) as f32;
+
+                            log::info!("current pos = ({x}, {y})");
+
+                            let pos =
+                                slint::PhysicalPosition::from_logical(slint::LogicalPosition { x, y }, scale);
+
+                            ui.window().set_position(pos)
+                        }
+                    }
+                    _ => {
+                        log::warn!("can't get display size");
+                    }
+                }
+            });
+        }
+    }
 
     ui.global::<Util>().on_string_fixed2(move |n| {
         let n = n.to_string().parse::<f32>().unwrap_or(0.0f32);
@@ -229,6 +268,14 @@ pub fn init(ui: &AppWindow) {
     }
 }
 
+#[cfg(target_os = "linux")]
+pub fn is_wayland() -> bool {
+    std::env::var("WAYLAND_DISPLAY").is_ok()
+        || std::env::var("XDG_SESSION_TYPE")
+            .map(|t| t == "wayland")
+            .unwrap_or(false)
+}
+
 #[cfg(feature = "qrcode")]
 pub fn init_qrcode(ui: &AppWindow) {
     use crate::slint_generatedAppWindow::Icons;
@@ -253,4 +300,41 @@ pub fn init_qrcode(ui: &AppWindow) {
             _ => ui.global::<Icons>().get_no_data(),
         }
     });
+}
+
+
+#[cfg(feature = "center-window")]
+pub fn display_size() -> Option<(u32, u32)> {
+    cfg_if::cfg_if! {
+        if #[cfg(target_os = "linux")] {
+            if is_wayland() {
+                if let Ok(json_data) = duct::cmd!("wlr-randr", "--json").read() {
+                    if let Ok(displays) = serde_json::from_str::<Vec<Display>>(&json_data) {
+                        for display in displays {
+                            for mode in display.modes {
+                                if mode.current {
+                                    return Some((mode.width, mode.height));
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    if let Ok(displays) = display_info::DisplayInfo::all() {
+        for display in displays.iter() {
+            if display.is_primary {
+                return Some((display.width, display.height));
+            }
+        }
+
+        if displays.len() > 0 {
+            return Some((displays[0].width, displays[0].height));
+        }
+    }
+
+    None
 }
