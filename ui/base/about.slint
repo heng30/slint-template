@@ -11,7 +11,6 @@ import { Brand } from "brand.slint";
 export global AboutSetting {
     in-out property <string> app-name: "slint-template";
     in-out property <string> version: "v0.0.1";
-    in-out property <string> sponsor: "0xf1199999751b1a3A74590adBf95401D19AB30014";
     in-out property <string> text: "Based on Slint-UI. Copyright 2022-2030. All rights reserved. The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.";
 }
 
@@ -35,42 +34,10 @@ export component About inherits SettingDetail {
         }
 
         Label {
+            font-size: Theme.title4-font-size;
             horizontal-alignment: center;
             text: AboutSetting.text;
             wrap: word-wrap;
-        }
-
-        if AboutSetting.sponsor != "": VerticalLayout {
-            spacing: Theme.spacing * 2;
-            HorizontalLayout {
-                alignment: center;
-                spacing: Theme.spacing * 2;
-
-                Label {
-                    text: "🎉❤Buy Me a Coffee(MetaMask)❤🎉";
-                }
-
-                IconBtn {
-                    icon: Icons.copy;
-                    clicked => {
-                        Logic.copy-to-clipboard(AboutSetting.sponsor);
-                    }
-                }
-            }
-
-            HorizontalLayout {
-                alignment: center;
-                Link {
-                    wrap: word-wrap;
-                    text: AboutSetting.sponsor;
-                    color: Theme.placeholder-text-color;
-                    font-size: Theme.default-font-size - 2px;
-
-                    clicked => {
-                        Util.open-url("Default", "https://etherscan.io/address/" + AboutSetting.sponsor);
-                    }
-                }
-            }
         }
 
         HorizontalLayout {

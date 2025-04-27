@@ -1,0 +1,9 @@
+Package: slint-template
+Version: 0.1.0
+Architecture: amd64
+Maintainer: heng30
+Depends:
+Section: utils
+Priority: optional
+Homepage: https://github.com/heng30/slint-template
+Description: Rust Slint GUI template project（Rust Slint GUI 模板项目）

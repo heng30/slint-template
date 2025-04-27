@@ -42,7 +42,7 @@ pub struct Preference {
     #[derivative(Default(value = "\"Source Han Sans CN\".to_string()"))]
     pub font_family: String,
 
-    #[derivative(Default(value = "\"cn\".to_string()"))]
+    #[derivative(Default(value = "\"en\".to_string()"))]
     pub language: String,
 
     #[derivative(Default(value = "false"))]
