@@ -25,6 +25,7 @@ export component Link inherits HorizontalLayout {
         wrap: TextWrap.no-wrap;
         font-size: Theme.title5-font-size;
         color: root.is-read ? Theme.have-read-text-color : Theme.link-text-color;
+        overflow: TextOverflow.elide;
 
         touch := TouchArea {
             mouse-cursor: MouseCursor.pointer;

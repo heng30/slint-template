@@ -13,6 +13,8 @@ export component Dialog inherits Rectangle {
     in-out property <bool> is-hide-confirm-btn: false;
     in-out property <bool> is-hide-cancel-btn: false;
     in-out property <bool> is-prevent-event-forward: false;
+    in-out property <bool> gain-focus-when-init: true;
+    in-out property <bool> gain-focus-when-clicked: true;
 
     callback close <=> cancel-clicked;
     callback canceled <=> cancel-clicked;
@@ -30,7 +32,9 @@ export component Dialog inherits Rectangle {
     forward-focus: fc;
 
     init => {
-        fc.focus();
+        if (gain-focus-when-init) {
+            fc.focus();
+        }
     }
 
     if is-prevent-event-forward: TouchArea { }
@@ -66,6 +70,8 @@ export component Dialog inherits Rectangle {
                             icon: Icons.close;
                             colorize: txt.color;
                             show-icon-hover-background: false;
+                            gain-focus-when-clicked: root.gain-focus-when-clicked;
+
                             clicked => {
                                 root.cancel-clicked();
                             }
@@ -86,6 +92,7 @@ export component Dialog inherits Rectangle {
                 if !is-hide-cancel-btn: CancelBtn {
                     icon: Icons.cancel;
                     text: Logic.tr("Cancel");
+                    gain-focus-when-clicked: root.gain-focus-when-clicked;
 
                     clicked => {
                         root.cancel-clicked();
@@ -95,6 +102,7 @@ export component Dialog inherits Rectangle {
                 if !is-hide-confirm-btn: ConfirmBtn {
                     icon: Icons.success;
                     text: Logic.tr("Confirm");
+                    gain-focus-when-clicked: root.gain-focus-when-clicked;
 
                     clicked => {
                         root.ok-clicked();

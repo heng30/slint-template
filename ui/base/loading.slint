@@ -39,7 +39,7 @@ export component Loading inherits Rectangle {
             }
         }
 
-        HorizontalLayout {
+        if !loading-text.is-empty: HorizontalLayout {
             alignment: LayoutAlignment.center;
             Label {
                 text: root.loading-text;
