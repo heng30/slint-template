@@ -13,7 +13,7 @@ description = "It's a Rust Slint GUI framework project for quick start."
 
 [dependencies]
 log = "0.4"
-slint = "1.10"
+slint = "1.11"
 cfg-if = "1.0"
 
 [target.'cfg(any(target_os = "windows", target_os = "linux", target_os = "macos", target_os = "android"))'.dependencies]
@@ -55,7 +55,7 @@ getrandom = { version = "0.2", features = ["js"] }
 
 [build-dependencies]
 cmd_lib = "1.9"
-slint-build = "1.10"
+slint-build = "1.11"
 
 [target.'cfg(target_os = "windows")'.build-dependencies]
 embed-resource = "2.4"
