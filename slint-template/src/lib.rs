@@ -124,7 +124,7 @@ fn ui_after(ui: &AppWindow) {
 }
 
 #[cfg(target_os = "android")]
-#[no_mangle]
+#[unsafe(no_mangle)]
 #[tokio::main]
 async fn android_main(app: slint::android::AndroidApp) {
     log::debug!("start...");

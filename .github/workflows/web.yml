@@ -43,7 +43,7 @@ jobs:
         run: |
           binary_name=`cat target/app-name`
           output="$binary_name-${{ env.VERSION }}-web.tar.gz"
-          cp -rf web/dist dist
+          cp -rf ${binary_name}/web/dist dist
           tar -zcf $output dist
           echo "ASSET=$output" >> $GITHUB_ENV
       - run: echo "end packing..."

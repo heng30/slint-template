@@ -1,0 +1,4 @@
+build.log
+/target
+/web/pkg
+/web/dist

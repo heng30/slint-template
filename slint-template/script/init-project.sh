@@ -5,7 +5,6 @@ if [ $# -ne 1 ] || [ "$1" == "-h" ] || [ "$1" == "--help" ] || [ "$1" == "-help"
     exit
 fi
 
-
 LOC=$(readlink -f "$0")
 DIR=$(dirname "$LOC")
 
@@ -26,8 +25,11 @@ cp -f $DIR/cache.txt $DIR/../Cargo.toml
 sed "s/$old_android_project_name/$android_project_name/g" $DIR/../Cargo.toml > $DIR/cache.txt
 cp -f $DIR/cache.txt $DIR/../Cargo.toml
 
-sed "s/$old_project_name/$project_name/g" $DIR/../Makefile > $DIR/cache.txt
-cp -f $DIR/cache.txt $DIR/../Makefile
+sed "s/$old_project_name/$project_name/g" $DIR/../../Cargo.toml > $DIR/cache.txt
+cp -f $DIR/cache.txt $DIR/../../Cargo.toml
+
+sed "s/$old_project_name/$project_name/g" $DIR/../../Makefile > $DIR/cache.txt
+cp -f $DIR/cache.txt $DIR/../../Makefile
 
 sed "s/$old_project_name/$project_name/g" $DIR/../windows/version.h > $DIR/cache.txt
 cp -f $DIR/cache.txt $DIR/../windows/version.h
@@ -43,6 +45,8 @@ cp -f $DIR/cache.txt $DIR/../web/index.html
 
 sed "s/$old_web_js_file_name/$web_js_file_name/g" $DIR/../web/index.html > $DIR/cache.txt
 cp -f $DIR/cache.txt $DIR/../web/index.html
+
+cd ../.. && mv $old_project_name $project_name
 
 rm -f $DIR/cache.txt
 

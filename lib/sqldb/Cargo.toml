@@ -1,0 +1,14 @@
+[package]
+name = "sqldb"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+once_cell.workspace = true
+tokio = { workspace = true, features = ["sync"] }
+serde = { workspace = true, features = ["serde_derive"] }
+sqlx = { workspace = true, features = ["runtime-tokio", "sqlite"] }
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["full"] }
