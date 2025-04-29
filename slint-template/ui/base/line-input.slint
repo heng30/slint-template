@@ -44,7 +44,7 @@ export component LineInput inherits Rectangle {
     callback clicked();
     callback accepted();
     callback edited <=> text-input.edited;
-    callback key-pressed(KeyEvent);
+    callback key-pressed(key-event: KeyEvent);
 
     preferred-width: 300px;
     preferred-height: hbox.preferred-height;

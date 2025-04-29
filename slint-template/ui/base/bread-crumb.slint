@@ -13,7 +13,7 @@ export component BreadCrumb inherits Rectangle {
     in-out property <bool> is-show-end-separator;
     in-out property <length> items-spacing: 2px;
 
-    callback selected(int);
+    callback selected(index: int);
 
     HorizontalLayout {
         spacing: root.items-spacing;

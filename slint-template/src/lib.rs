@@ -46,25 +46,17 @@ mod logic;
 #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 pub fn init_logger() {
     use cutil::chrono::Local;
-    use env_logger::fmt::Color;
     use std::io::Write;
 
     env_logger::builder()
         .format(|buf, record| {
             let ts = Local::now().format("%Y-%m-%d %H:%M:%S");
-            let mut level_style = buf.style();
-            match record.level() {
-                log::Level::Warn | log::Level::Error => {
-                    level_style.set_color(Color::Red).set_bold(true)
-                }
-                _ => level_style.set_color(Color::Blue).set_bold(true),
-            };
 
             writeln!(
                 buf,
                 "[{} {} {} {}] {}",
                 ts,
-                level_style.value(record.level()),
+                record.level().to_string(),
                 record
                     .file()
                     .unwrap_or("None")

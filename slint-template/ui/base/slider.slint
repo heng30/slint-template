@@ -31,8 +31,8 @@ export component Slider inherits Rectangle {
 
     private property <float> progress: (Math.clamp(value, minimum, maximum) - minimum) / (maximum - minimum);
 
-    callback changed(float);
-    callback released(float);
+    callback changed(value: float);
+    callback released(value: float);
 
     width: orientation == Orientation.horizontal ? 400px : Theme.default-font-size;
     height: orientation == Orientation.horizontal ? Theme.default-font-size : 400px;

@@ -19,9 +19,9 @@ pub fn pretty_size_string(size: u64) -> String {
 }
 
 pub fn random_string(length: usize) -> String {
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     let chars: Vec<char> = ('a'..='z').collect();
     (0..length)
-        .map(|_| chars[rng.gen_range(0..chars.len())])
+        .map(|_| chars[rng.random_range(0..chars.len())])
         .collect()
 }

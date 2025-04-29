@@ -26,8 +26,7 @@ export component SideBar inherits Rectangle {
 
     callback search <=> search.search;
 
-    // (category, title, key) -> void
-    callback clicked(string, string, string);
+    callback clicked(category: string, title: string, key: string);
 
     function random-icon() -> image {
         current-icon-index = Math.mod(current-icon-index, IconsDialogSetting.icons.length);

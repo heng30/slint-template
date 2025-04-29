@@ -6,72 +6,39 @@ export global Util {
     callback show-window();
     callback close-window();
 
-    callback min-window(bool);
+    callback min-window(flag: bool);
     callback get-is-min-window() -> bool;
 
-    callback max-window(bool);
+    callback max-window(flag: bool);
     callback get-is-max-window() -> bool;
 
-    callback fullscreen(bool);
+    callback fullscreen(flag: bool);
     callback get-is-fullscreen() -> bool;
 
     callback get-scale-factor() -> float;
     callback get-current-pos() -> AppPosType;
-    callback set-current-pos(AppPosType);
+    callback set-current-pos(pos: AppPosType);
 
     callback update-window-size();
     callback set-window-center();
 
-    // (message, status)
-    callback show-toast(string, ToastStatus);
+    callback show-toast(message: string, status: ToastStatus);
+    callback handle-confirm-dialog(message-type: string, user-data: string);
 
-    // (message-type, user-data)
-    callback handle-confirm-dialog(string, string);
+    callback open-url(browser: string, url: string);
+    callback remove-str-items-after(items: [string], index: int);
+    callback append-str-to-items(items: [string], text: string);
 
-    pure callback string-fixed2(string) -> string;
-    pure callback float-fixed2(float) -> string;
+    callback search-str-items-by(items: [string], text: string) -> [string];
+    pure callback find-tree-children-nodes(entries: [TreeEntry], target-node: string) -> [TreeEntry];
 
-    // (browser, url) => void
-    callback open-url(string, string);
-
-    callback remove-str-items-after([string], int);
-
-    callback append-str-to-items([string], string);
-
-    pure callback find-tree-children-nodes([TreeEntry], string) -> [TreeEntry];
-    find-tree-children-nodes(entries, target-node) => {
-        return entries;
-    }
-
-    callback search-str-items-by([string], string) -> [string];
-    search-str-items-by(items, text) => {
-        return items;
-    }
-
-    pure callback text-len(string) -> int;
-
-    // (low-bound, up-bound) => void
-    pure callback rand-int(int, int) -> int;
-
-    pure callback qr-code(string) -> image;
-    qr-code => {
-        return Icons.no-data;
-    }
-
-    pure callback local-now(string) -> string;
-    local-now => {
-        return "12:34:45";
-    }
-
-    pure callback format_number_with_commas(string) -> string;
-    format_number-with-commas(number-str) => {
-        return number-str;
-    }
-
-    pure callback split-and-join-string(string, int, string) -> string;
-    split-and-join-string(input, length, sep) => {
-        return input;
-    }
+    pure callback string-fixed2(text: string) -> string;
+    pure callback float-fixed2(num: float) -> string;
+    pure callback rand-int(low: int, up: int) -> int;
+    pure callback qr-code(text: string) -> image;
+    pure callback local-now(format: string) -> string;
+    pure callback format_number_with_commas(num-str: string) -> string;
+    pure callback split-and-join-string(input: string, length: int, sep: string) -> string;
 
     public pure function text-color(status: ToastStatus) -> color {
         if (status == ToastStatus.Success) {
@@ -87,13 +54,13 @@ export global Util {
 
     public pure function icon-source(status: ToastStatus) -> image {
         if (status == ToastStatus.Success) {
-            return @image-url("./images/success.svg");
+            return Icons.success;
         } else if (status == ToastStatus.Warning) {
-            return @image-url("./images/warning.svg");
+            return Icons.warning;
         } else if (status == ToastStatus.Danger) {
-            return @image-url("./images/danger.svg");
+            return Icons.danger;
         }
-        return @image-url("./images/info.svg");
+        return Icons.info;
     }
 
     pure public function bound(low: int, value: int, height: int) -> int {

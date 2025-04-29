@@ -44,7 +44,7 @@ export component AddressBook inherits Rectangle {
 
     callback back <=> sd.back;
     callback add();
-    callback tap(AddressBookEntry);
+    callback tap(entries: AddressBookEntry);
 
     if AddressBookSetting.entries.length == 0: NoDataImg {
         width: 80%;
@@ -99,11 +99,8 @@ export component AddressBookDetail inherits SettingDetail {
     in-out property address <=> address-input.text;
     in-out property name <=> name-input.text;
 
-    // (uuid, name) -> void
-    callback update-name(string, string);
-
-    // (uuid, address) -> void
-    callback update-address(string, string);
+    callback update-name(uuid: string, name: string);
+    callback update-address(uuid: string, address: string);
 
     title: Logic.tr("Address");
 

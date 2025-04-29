@@ -12,7 +12,7 @@ export component TokenList inherits SettingDetailInner {
     vbox-alignment: LayoutAlignment.start;
     vbox-spacing: Theme.spacing * 2;
 
-    callback clicked(TokenTileEntry);
+    callback clicked(entry: TokenTileEntry);
 
     for item[index] in entries: TokenTile {
         entry: item;
@@ -27,8 +27,8 @@ export component TokenListWithSwitch inherits SettingDetail {
     in-out property <[TokenTileWithSwitchEntry]> entries;
     in-out property <bool> is-loading;
 
-    callback clicked(TokenTileEntry);
-    callback toggled(bool, TokenTileEntry);
+    callback clicked(entry: TokenTileEntry);
+    callback toggled(flag: bool, entry: TokenTileEntry);
 
     if !is-loading && entries.length > 0: SettingDetailInner {
         vbox-alignment: LayoutAlignment.start;

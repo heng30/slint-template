@@ -25,12 +25,12 @@ export component Mnemonic inherits Rectangle {
     private property <string> switch-mnemonic-counts-btn-text: (is-mnemonic-counts-12 ? "24" : "12") + Logic.tr("mnemonics");
 
     callback back();
-    callback copy([string]);
+    callback copy(items: [string]);
     callback paste();
-    callback refresh(int);
+    callback refresh(mnemonic-counts: int);
     callback canceled();
     callback confirmed();
-    callback switch-mnemonic-counts(int);
+    callback switch-mnemonic-counts(mnemonic-counts: int);
 
     public function reset-mnemonics(counts: int) {
         if (counts == 12) {

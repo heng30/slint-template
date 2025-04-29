@@ -76,8 +76,7 @@ export component Tree inherits Rectangle {
 
     private property <string> checked-id;
 
-    // (entries, path, key) -> void
-    callback clicked([string], string, string);
+    callback clicked(entries: [string], path: string, key: string);
 
     preferred-width: 300px;
     preferred-height: 500px;

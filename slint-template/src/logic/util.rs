@@ -246,13 +246,8 @@ pub fn init(ui: &AppWindow) {
     ui.global::<Util>()
         .on_local_now(move |format| time::local_now(format.as_str()).into());
 
-    ui.global::<Util>().on_text_len(move |text| {
-        let chars_text = text.chars().collect::<Vec<_>>();
-        chars_text.len() as i32
-    });
-
     ui.global::<Util>()
-        .on_rand_int(move |low, up| rand::thread_rng().gen_range(low..up) as i32);
+        .on_rand_int(move |low, up| rand::rng().random_range(low..up) as i32);
 
     ui.global::<Util>()
         .on_split_and_join_string(move |input, length, sep| {
@@ -301,7 +296,6 @@ pub fn init_qrcode(ui: &AppWindow) {
         }
     });
 }
-
 
 #[cfg(feature = "center-window")]
 pub fn display_size() -> Option<(u32, u32)> {

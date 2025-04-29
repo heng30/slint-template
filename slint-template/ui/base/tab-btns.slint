@@ -27,7 +27,7 @@ export component TabBtns inherits Rectangle {
     width: next-pos-x + Theme.padding;
     height: btn-height + Theme.padding * 2;
 
-    callback clicked(int);
+    callback clicked(index: int);
 
     Rectangle {
         opacity: is-init ? 0 : 1;

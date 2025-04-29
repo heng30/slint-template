@@ -51,13 +51,13 @@ slint-build.workspace = true
 embed-resource.workspace = true
 
 [features]
-web = []
 default = []
+web = []
 desktop = []
+android = ["cutil/native-tls-vendored", "slint/backend-android-activity-06"]
 database = ["dep:sqldb"]
 qrcode = ["dep:image", "dep:qrcode"]
 center-window = ["dep:display-info"]
-android = ["cutil/native-tls-vendored", "slint/backend-android-activity-06"]
 
 [lib]
 path = "src/lib.rs"

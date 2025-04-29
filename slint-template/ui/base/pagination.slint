@@ -22,7 +22,7 @@ export component Pagination inherits Rectangle {
     private property <int> real-show-pages: real-show-pages-half * 2;
     private property <int> real-current-page: Math.clamp(init-page, 0, total-pages - 1);
 
-    callback jump(int);
+    callback jump(index: int);
 
     public function set-current-page(page: int) {
         root.real-current-page = Math.clamp(page, 0, root.total-pages - 1);

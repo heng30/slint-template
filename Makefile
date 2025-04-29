@@ -10,7 +10,7 @@ android-build-env=SLINT_STYLE=material $(build-env)
 desktop-build-env=SLINT_STYLE=fluent $(build-env)
 web-build-env=SLINT_STYLE=fluent $(build-env)
 
-run-env=RUST_LOG=debug,sqlx=off,reqwest=off
+run-env=RUST_LOG=debug RUST_LOG_STYLE=always
 
 all: desktop-build-release
 

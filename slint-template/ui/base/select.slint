@@ -37,7 +37,7 @@ export component Select inherits Rectangle {
     border-width: fs.has-focus ? 2px : 0;
     border-color: Theme.focus-color;
 
-    callback selected(int, string);
+    callback selected(current-index: int, current-value: string);
 
     init => {
         is-indicator-down = true;

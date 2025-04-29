@@ -20,7 +20,7 @@ export component PinCodes inherits Rectangle {
 
     private property <[string]> codes;
 
-    callback finished([string]);
+    callback finished(items: [string]);
 
     init => {
         if (root.count == PinCodesCount.Four) {

@@ -87,7 +87,7 @@ export component IconsDialog inherits Dialog {
     in-out property <int> column-count: 5;
     in-out property <length> body-height: self.icon-size * 5;
 
-    callback select-index(string, int, string); // (handle-type, icon-index, user-data) -> void
+    callback select-index(handle-type: string, icon-index: int, user-data: string);
 
     flick := Flickable {
         height: root.body-height;

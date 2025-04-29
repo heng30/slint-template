@@ -6,16 +6,16 @@ export global Logic {
     callback update-cache-size();
     callback remove-all-cache();
 
-    callback copy-to-clipboard(string);
+    callback copy-to-clipboard(text: string);
     callback paste-from-clipboard() -> string;
 
     callback get-setting-preference() -> SettingPreference;
-    callback set-setting-preference(SettingPreference);
+    callback set-setting-preference(setting: SettingPreference);
 
     callback get-setting-proxy() -> SettingProxy;
-    callback set-setting-proxy(SettingProxy);
+    callback set-setting-proxy(setting: SettingProxy);
 
-    pure callback inner-tr(bool, string) -> string;
+    pure callback inner-tr(is-cn: bool, text: string) -> string;
     inner-tr(is-cn, text) => {
         return text;
     }
@@ -46,12 +46,9 @@ export global Logic {
 
     //////////////////////////////// Logic Start  ////////////////////////////////
 
-    pure callback generate-search-values([SideBarEntry]) -> [string];
-
-    // (entries, search-value) -> entry
-    pure callback get-sidebar-key-from-search-values([SideBarEntry], string) -> string;
-
-    callback web-debug(string);
+    callback web-debug(text: string);
+    pure callback generate-search-values(entries: [SideBarEntry]) -> [string];
+    pure callback get-sidebar-key-from-search-values(entries: [SideBarEntry], value: string) -> string;
 
     //////////////////////////////// Logic End  ////////////////////////////////
 }

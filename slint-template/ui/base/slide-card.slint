@@ -39,7 +39,7 @@ import { Label } from "./label.slint";
 export component SlideCard inherits Rectangle {
     height: vbox.preferred-height;
 
-    callback icon-clicked(int);
+    callback icon-clicked(index: int);
 
     in-out property <MouseCursor> mouse-cursor <=> ta.mouse-cursor;
     in property <[{icon: image, text: string, colorize: color}]> icons;

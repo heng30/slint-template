@@ -14,9 +14,7 @@ export component SignIn inherits Rectangle {
     private property <string> error-message;
 
     callback back();
-
-    //(username, password-frist, password-second) -> error-message
-    callback confirmed(string, string, string) -> string;
+    callback confirmed(username: string, password-first: string, password-second: string) -> string;
 
     public function reset() {
         error-message = "";

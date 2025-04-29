@@ -31,15 +31,15 @@ export component TokenSender inherits SettingDetail {
     private property <bool> is-token-edit;
 
     callback update-send-token-name();
-    callback recipient-address-edited(string);
-    callback prioritization-fee-edited(string);
+    callback recipient-address-edited(address: string);
+    callback prioritization-fee-edited(fee: string);
     callback copy-send-address <=> send-address-input.clicked;
     callback open-address-book <=> recipient-address-input.clicked;
     callback open-network <=> network-input.clicked;
     callback cancel <=> cancel-btn.clicked;
     callback confirm <=> confirm-btn.clicked;
 
-    callback get-prioritization-fee(PrioritizationFeeStatus) -> int;
+    callback get-prioritization-fee(fee-status: PrioritizationFeeStatus) -> int;
 
     public function reset-advance-setting() {
         root.memo = "";
