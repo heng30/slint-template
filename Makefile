@@ -15,13 +15,13 @@ run-env=RUST_LOG=debug,sqlx=off,reqwest=off
 all: desktop-build-release
 
 android-build:
-	$(android-build-env) cargo apk build --lib --features=android
+	$(android-build-env) cargo apk build --lib -p ${app-name} --features=android
 
 android-build-release:
-	$(android-build-env) cargo apk build --lib --release --features=android
+	$(android-build-env) cargo apk build --lib --release -p ${app-name} --features=android
 
 android-debug:
-	$(android-build-env) $(run-env) cargo apk run --lib --features=android
+	$(android-build-env) $(run-env) cargo apk run --lib -p ${app-name} --features=android
 
 desktop-build-debug:
 	$(desktop-build-env) cargo build --features=desktop
@@ -42,22 +42,21 @@ desktop-debug:
 	$(desktop-build-env) $(run-env) cargo run --features=desktop
 
 web-build-debug:
-	$(web-build-env) wasm-pack build --target web --out-dir ./web/pkg --features=web
+	cd $(app-name) && $(web-build-env) wasm-pack build --target web --out-dir ./web/pkg --features=web
 
 web-build-release:
-	$(web-build-env) wasm-pack build --release --target web --out-dir ./web/pkg --features=web
+	cd $(app-name) && $(web-build-env) wasm-pack build --release --target web --out-dir ./web/pkg --features=web
 
 web-build-dist:
 	- rm -rf ./web/dist/*
-	$(web-build-env) wasm-pack build --release --target web --out-dir ./web/dist/pkg --features=web
-	cp -f ./web/index.html ./web/dist
-	cp -f ./ui/images/brand.png ./web/dist/pkg/favicon.png
+	cd $(app-name) && $(web-build-env) wasm-pack build --release --target web --out-dir ./web/dist/pkg --features=web
+	cd $(app-name) && cp -f ./web/index.html ./web/dist && cp -f ./ui/images/brand.png ./web/dist/pkg/favicon.png
 
 web-server:
-	python3 -m http.server -d web 8000
+	cd $(app-name) && python3 -m http.server -d web 8000
 
 web-server-dist:
-	python3 -m http.server -d web/dist 8800
+	cd $(app-name) && python3 -m http.server -d web/dist 8800
 
 packing-android:
 	cp -f target/release/apk/${app-name}.apk target/${app-name}-${version}-aarch64-linux-android.apk
@@ -76,20 +75,24 @@ packing-darwin:
 	echo "${app-name}-${version}-x86_64-darwin" > target/output-name
 
 packing-web:
-	tar -zcf target/$(app-name)-$(version)-web.tar.gz web/dist
+	tar -zcf target/$(app-name)-$(version)-web.tar.gz ${app-name}/web/dist
 	echo "$(app-name)-$(version)-web.tar.gz" > target/output-name
 
 reduce-linux-binary-size:
 	upx -9 target/release/$(app-name)
 
 slint-viewer-android:
-	$(android-build-env) slint-viewer --auto-reload -I ui ./ui/android-window.slint
+	$(android-build-env) slint-viewer --auto-reload -I ui ./${app-name}/ui/android-window.slint
 
 slint-viewer-desktop:
-	$(desktop-build-env) slint-viewer --auto-reload -I ui ./ui/desktop-window.slint
+	$(desktop-build-env) slint-viewer --auto-reload -I ui ./${app-name}/ui/desktop-window.slint
 
 slint-viewer-web:
-	$(web-build-env) slint-viewer --auto-reload -I ui ./ui/web-window.slint
+	$(web-build-env) slint-viewer --auto-reload -I ui ./${app-name}/ui/web-window.slint
+
+deb:
+	cd ./${app-name}/pkg/deb && bash -e "./create_deb.sh"
+	mv ./${app-name}/pkg/deb/$(app-name).deb ./target
 
 test:
 	$(build-env) $(run-env) cargo test -- --nocapture
@@ -112,7 +115,7 @@ app-name:
 	echo "$(app-name)" > target/app-name
 
 get-font-name:
-	fc-scan ./ui/fonts/SourceHanSerifCN.ttf | grep fullname
+	fc-scan ./${app-name}/ui/fonts/SourceHanSerifCN.ttf | grep fullname
 
 outdated:
 	cargo outdated

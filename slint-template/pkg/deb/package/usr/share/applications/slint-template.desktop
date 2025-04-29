@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=slint-template
+Exec=/usr/local/bin/slint-template
+Icon=slint-template
+Terminal=false
+Type=Application
+Categories=Utility;Development;
+StartupNotify=true
+StartupWMClass=slint-template
+Comment=Description: Rust Slint GUI template project（Rust Slint GUI 模板项目）
