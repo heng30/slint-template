@@ -9,7 +9,7 @@ dst_icon_name_svg="${app_name}.svg"
 sizes=(16x16 22x22 24x24 32x32 36x36 48x48 64x64 72x72 96x96 128x128 192x192 256x256 512x512)
 
 mkdir -p ${bin_dir}
-cp ../../target/release/${app_name} ${bin_dir}
+cp ../../../target/release/${app_name} ${bin_dir}
 chmod a+x ${bin_dir}/${app_name}
 
 for size in "${sizes[@]}"; do
