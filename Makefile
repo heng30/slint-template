@@ -8,7 +8,7 @@ version=`git describe --tags --abbrev=0`
 build-env=
 android-build-env=SLINT_STYLE=material $(build-env)
 desktop-build-env=SLINT_STYLE=fluent $(build-env)
-web-build-env=SLINT_STYLE=fluent $(build-env)
+web-build-env=SLINT_STYLE=fluent $(build-env) RUSTFLAGS='--cfg getrandom_backend="wasm_js"'
 
 run-env=RUST_LOG=debug RUST_LOG_STYLE=always
 

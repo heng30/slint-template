@@ -45,16 +45,16 @@ mod logic;
 
 #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 pub fn init_logger() {
-    use cutil::chrono::Local;
     use std::io::Write;
 
     env_logger::builder()
         .format(|buf, record| {
-            let ts = Local::now().format("%Y-%m-%d %H:%M:%S");
+            let style = buf.default_level_style(record.level());
+            let ts = cutil::time::local_now("%H:%M:%S");
 
             writeln!(
                 buf,
-                "[{} {} {} {}] {}",
+                "[{} {style}{}{style:#} {} {}] {}",
                 ts,
                 record.level().to_string(),
                 record

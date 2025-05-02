@@ -40,7 +40,7 @@ terminal-clipboard.workspace = true
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen.workspace = true
-getrandom = { workspace = true, features = ["js"] }
+getrandom = { workspace = true, features = ["wasm_js"] }
 console_log = { workspace = true, features = ["color"] }
 
 [build-dependencies]
