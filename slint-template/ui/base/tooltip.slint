@@ -38,8 +38,7 @@ export component ToolTip inherits Rectangle {
         } else if (ToolTipSetting.position == ComponentPosition.Right) {
             return ToolTipSetting.x + ToolTipSetting.width + Theme.padding;
         } else {
-            return Util.bound(0,
-                    (ToolTipSetting.x + (ToolTipSetting.width - self.width) / 2) / 1px,
+            return Math.clamp((ToolTipSetting.x + (ToolTipSetting.width - self.width) / 2) / 1px, 0,
                     (root.window-width - self.width - Theme.padding) / 1px) * 1px;
         }
     }
@@ -50,9 +49,7 @@ export component ToolTip inherits Rectangle {
         } else if (ToolTipSetting.position == ComponentPosition.Bottom) {
             return ToolTipSetting.y + ToolTipSetting.height + Theme.padding;
         } else {
-            return Util.bound(0,
-                (ToolTipSetting.y + (ToolTipSetting.height - self.height) / 2) / 1px,
-                (root.window-height - self.height - Theme.padding) / 1px) * 1px;
+            return Math.clamp((ToolTipSetting.y + (ToolTipSetting.height - self.height) / 2) / 1px, 0, (root.window-height - self.height - Theme.padding) / 1px) * 1px;
         }
     }
 

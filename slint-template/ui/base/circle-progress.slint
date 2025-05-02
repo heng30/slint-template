@@ -12,7 +12,7 @@ import { Label } from "label.slint";
 
 export component CircleProgress inherits Rectangle {
     pure function calc-percent(ring-angle: angle) -> int {
-        return Util.bound(0, ring-angle * 100 / 360deg, 100);
+        return Math.clamp(ring-angle * 100 / 360deg, 0, 100);
     }
 
     in-out property <float> progress;
@@ -72,7 +72,7 @@ export component CircleProgress inherits Rectangle {
         }
 
         if ring-angle > 0deg && ring-angle < 360deg: Path {
-            private property <angle> inner-ring-angle: Util.bound(1, root.ring-angle / 1deg, 365) * 1deg;
+            private property <angle> inner-ring-angle: Math.clamp(root.ring-angle / 1deg, 1, 365) * 1deg;
             private property <float> outline-end-x: Util.lenght2float(root.radius) * (1 - Math.cos(inner-ring-angle));
             private property <float> outline-end-y:  Util.lenght2float(root.radius) * (1 - Math.sin(inner-ring-angle));
 

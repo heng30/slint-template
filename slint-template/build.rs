@@ -1,22 +1,12 @@
-use cmd_lib::run_fun;
-use std::fs::File;
-use std::io::Write;
-
 fn main() {
     #[cfg(target_os = "windows")]
     set_windows_info();
 
-    let _ = write_app_version();
-}
-
-#[allow(unused)]
-fn build_log(msg: &str) {
-    let mut file = File::create("build.log").unwrap();
-    _ = file.write(msg.as_bytes());
+    _ = write_app_version();
 }
 
 fn write_app_version() -> Result<(), Box<dyn std::error::Error>> {
-    let tags = run_fun!(git describe --tags --abbrev=0)?
+    let tags = duct::cmd!("git", "describe", "--tags", "--abbrev=0").read()?
         .split(char::is_whitespace)
         .map(|s| s.to_owned())
         .collect::<Vec<String>>();

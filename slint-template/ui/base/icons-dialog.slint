@@ -20,7 +20,7 @@ export global IconsDialogSetting {
     }
 
     pure public function icon(index: int) -> image {
-        return icons[Util.bound(0, index, icons.length - 1)];
+        return icons[Math.clamp(index, 0, icons.length - 1)];
     }
 
     out property <[image]> icons: [

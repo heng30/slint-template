@@ -44,8 +44,7 @@ getrandom = { workspace = true, features = ["wasm_js"] }
 console_log = { workspace = true, features = ["color"] }
 
 [build-dependencies]
-cmd_lib.workspace = true
-slint-build.workspace = true
+duct.workspace = true
 
 [target.'cfg(target_os = "windows")'.build-dependencies]
 embed-resource.workspace = true

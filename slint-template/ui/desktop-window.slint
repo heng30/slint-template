@@ -4,11 +4,9 @@ import "fonts/SourceHanSansCN.otf";
 import { Util } from "util.slint";
 import { Logic } from "logic.slint";
 import { Theme, Icons } from "theme.slint";
-import { Store, SettingDetailIndex, DeviceType, SettingProxy } from "store.slint";
-
+import { Store, DeviceType } from "store.slint";
 import { DesktopPanel } from "panel/desktop/panel.slint";
-import { SettingIconsBar } from "panel/setting/desktop.slint";
-import { LoadingStatus, Toast, IconsDialogSetting, IconsDialog, ConfirmDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, ToastStatus, AppPosType, PopupActionSetting } from "base/widgets.slint";
+import { Toast, IconsDialogSetting, IconsDialog, ConfirmDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, PopupActionSetting } from "base/widgets.slint";
 
 export component AppWindow inherits Window {
     preferred-width: Theme.default-width;
@@ -74,6 +72,4 @@ export component AppWindow inherits Window {
     }
 }
 
-export {
-    AppPosType, Util, Logic, Store, Theme, Icons, IconsDialogSetting, LoadingStatus, SettingDetailIndex, AboutSetting, ToastSetting, ToastStatus, DeviceType , SettingProxy, PopupActionSetting
-    }
+export { Util, Logic, Store, Theme, AboutSetting, PopupActionSetting, ToastSetting }

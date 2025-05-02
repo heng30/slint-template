@@ -1,5 +1,5 @@
-import { Palette } from "std-widgets.slint";
 import { Store } from "./store.slint";
+import { Palette } from "std-widgets.slint";
 
 export global Theme {
     out property <bool> is-dark: Store.setting-preference.is-dark;
@@ -82,15 +82,15 @@ export global Theme {
     }
 
     public pure function title-font-size(level: int) -> length {
-        if(level == 1) {
+        if (level == 1) {
             return title1-font-size;
-        } else if(level == 2) {
+        } else if (level == 2) {
             return title2-font-size;
-        } else if(level == 3) {
+        } else if (level == 3) {
             return title3-font-size;
-        } else if(level == 4) {
+        } else if (level == 4) {
             return title4-font-size;
-        } else if(level == 5) {
+        } else if (level == 5) {
             return title5-font-size;
         } else {
             return title6-font-size;

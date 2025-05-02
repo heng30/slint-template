@@ -63,10 +63,6 @@ export global Util {
         return Icons.info;
     }
 
-    pure public function bound(low: int, value: int, height: int) -> int {
-        return Math.max(low, Math.min(value, height));
-    }
-
     pure public function get-token-icon(symbol: string, mint-address: string, icon-extension: string) -> image {
         return Icons.token;
     }

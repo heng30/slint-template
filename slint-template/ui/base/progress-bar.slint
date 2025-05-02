@@ -13,7 +13,7 @@ import { Label } from "label.slint";
 
 export component ProgressBar inherits Rectangle {
     pure function calc-percent(progress: float) -> int {
-        return Util.bound(0, progress * 100, 100);
+        return Math.clamp(progress * 100, 0, 100);
     }
 
     in-out property <float> progress;
