@@ -8,12 +8,11 @@ use slint::ComponentHandle;
 
 #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 fn copy_to_clipboard(msg: &str) -> Result<()> {
-    cfg_if::cfg_if! {
-        if #[cfg(target_os = "linux")] {
-            if super::util::is_wayland() {
-                if let Ok(_) = copy_to_wayland_clipboard(msg) {
-                    return Ok(());
-                }
+    #[cfg(target_os = "linux")]
+    {
+        if super::util::is_wayland() {
+            if let Ok(_) = copy_to_wayland_clipboard(msg) {
+                return Ok(());
             }
         }
     }
@@ -32,12 +31,11 @@ fn copy_to_clipboard(msg: &str) -> Result<()> {
 
 #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 fn paste_from_clipboard() -> Result<String> {
-    cfg_if::cfg_if! {
-        if #[cfg(target_os = "linux")] {
-            if super::util::is_wayland() {
-                if let Ok(text) = paste_from_wayland_clipboard() {
-                    return Ok(text);
-                }
+    #[cfg(target_os = "linux")]
+    {
+        if super::util::is_wayland() {
+            if let Ok(text) = paste_from_wayland_clipboard() {
+                return Ok(text);
             }
         }
     }

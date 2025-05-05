@@ -6,7 +6,8 @@ fn main() {
 }
 
 fn write_app_version() -> Result<(), Box<dyn std::error::Error>> {
-    let tags = duct::cmd!("git", "describe", "--tags", "--abbrev=0").read()?
+    let tags = duct::cmd!("git", "describe", "--tags", "--abbrev=0")
+        .read()?
         .split(char::is_whitespace)
         .map(|s| s.to_owned())
         .collect::<Vec<String>>();

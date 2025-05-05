@@ -113,44 +113,45 @@ pub fn init(ui: &AppWindow) {
         ui.window().set_size(psize);
     });
 
-    cfg_if::cfg_if! {
-        if #[cfg(feature = "center-window")] {
-            let ui_handle = ui.as_weak();
-            ui.global::<Util>().on_set_window_center(move || {
-                let ui = ui_handle.unwrap();
-                let preference = config::preference();
+    #[cfg(feature = "center-window")]
+    {
+        let ui_handle = ui.as_weak();
+        ui.global::<Util>().on_set_window_center(move || {
+            let ui = ui_handle.unwrap();
+            let preference = config::preference();
 
-                let scale = ui.window().scale_factor();
-                let psize = slint::PhysicalSize::from_logical(
-                    slint::LogicalSize {
-                        width: preference.win_width as f32,
-                        height: preference.win_height as f32,
-                    },
-                    scale,
-                );
+            let scale = ui.window().scale_factor();
+            let psize = slint::PhysicalSize::from_logical(
+                slint::LogicalSize {
+                    width: preference.win_width as f32,
+                    height: preference.win_height as f32,
+                },
+                scale,
+            );
 
-                match display_size() {
-                    Some((w, h)) => {
-                        log::info!("display size = ({w}, {h})");
+            match display_size() {
+                Some((w, h)) => {
+                    log::info!("display size = ({w}, {h})");
 
-                        if w > psize.width && h > psize.height {
-                            let x = ((w - psize.width) / 2) as f32;
-                            let y = ((h - psize.height) / 2) as f32;
+                    if w > psize.width && h > psize.height {
+                        let x = ((w - psize.width) / 2) as f32;
+                        let y = ((h - psize.height) / 2) as f32;
 
-                            log::info!("current pos = ({x}, {y})");
+                        log::info!("current pos = ({x}, {y})");
 
-                            let pos =
-                                slint::PhysicalPosition::from_logical(slint::LogicalPosition { x, y }, scale);
+                        let pos = slint::PhysicalPosition::from_logical(
+                            slint::LogicalPosition { x, y },
+                            scale,
+                        );
 
-                            ui.window().set_position(pos)
-                        }
-                    }
-                    _ => {
-                        log::warn!("can't get display size");
+                        ui.window().set_position(pos)
                     }
                 }
-            });
-        }
+                _ => {
+                    log::warn!("can't get display size");
+                }
+            }
+        });
     }
 
     ui.global::<Util>().on_string_fixed2(move |n| {
@@ -256,10 +257,9 @@ pub fn init(ui: &AppWindow) {
                 .into()
         });
 
-    cfg_if::cfg_if! {
-        if #[cfg(feature = "qrcode")] {
-            init_qrcode(ui);
-        }
+    #[cfg(feature = "qrcode")]
+    {
+        init_qrcode(ui);
     }
 }
 
@@ -299,20 +299,18 @@ pub fn init_qrcode(ui: &AppWindow) {
 
 #[cfg(feature = "center-window")]
 pub fn display_size() -> Option<(u32, u32)> {
-    cfg_if::cfg_if! {
-        if #[cfg(target_os = "linux")] {
-            if is_wayland() {
-                if let Ok(json_data) = duct::cmd!("wlr-randr", "--json").read() {
-                    if let Ok(displays) = serde_json::from_str::<Vec<Display>>(&json_data) {
-                        for display in displays {
-                            for mode in display.modes {
-                                if mode.current {
-                                    return Some((mode.width, mode.height));
-                                }
+    #[cfg(target_os = "linux")]
+    {
+        if is_wayland() {
+            if let Ok(json_data) = duct::cmd!("wlr-randr", "--json").read() {
+                if let Ok(displays) = serde_json::from_str::<Vec<Display>>(&json_data) {
+                    for display in displays {
+                        for mode in display.modes {
+                            if mode.current {
+                                return Some((mode.width, mode.height));
                             }
                         }
                     }
-
                 }
             }
         }

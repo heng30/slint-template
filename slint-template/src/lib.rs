@@ -99,10 +99,12 @@ async fn ui_before() {
     init_logger();
     config::init();
 
-    cfg_if::cfg_if! {
-        if #[cfg(feature = "database")] {
-            db::init(config::db_path().to_str().expect("invalid db path")).await;
-        }
+    #[cfg(feature = "database")]
+    db::init(config::db_path().to_str().expect("invalid db path")).await;
+
+    #[cfg(target_os = "linux")]
+    {
+        _ = slint::set_xdg_app_id("slint-template".to_string());
     }
 }
 

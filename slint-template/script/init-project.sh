@@ -37,6 +37,9 @@ cp -f $DIR/cache.txt $DIR/../windows/version.h
 sed "s/$old_desktop_project_name/$desktop_project_name/g" $DIR/../src/desktop.rs > $DIR/cache.txt
 cp -f $DIR/cache.txt $DIR/../src/desktop.rs
 
+sed "s/$old_project_name/$project_name/g" $DIR/../src/lib.rs > $DIR/cache.txt
+cp -f $DIR/cache.txt $DIR/../src/lib.rs
+
 sed "s/$old_project_name/$project_name/g" $DIR/../ui/base/about.slint > $DIR/cache.txt
 cp -f $DIR/cache.txt $DIR/../ui/base/about.slint
 

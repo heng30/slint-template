@@ -9,21 +9,19 @@ use crate::config;
 use std::collections::HashMap;
 
 pub fn tr(text: &str) -> String {
-    cfg_if::cfg_if! {
-        if #[cfg(any(
-            target_os = "windows",
-            target_os = "linux",
-            target_os = "macos",
-            target_os = "android"
-            ))] {
-            if config::preference().language == "en" {
-                return text.to_string();
-            }
+    #[cfg(any(
+        target_os = "windows",
+        target_os = "linux",
+        target_os = "macos",
+        target_os = "android"
+    ))]
+    {
+        if config::preference().language == "en" {
+            return text.to_string();
         }
     }
 
     let items: HashMap<&str, &str> = HashMap::from([
-        ("10 ~ 50", "10 ~ 50"),
         ("about", "关于"),
         ("About", "关于"),
         ("Account address", "账户地址"),
