@@ -6,7 +6,7 @@ import { Logic } from "logic.slint";
 import { Theme, Icons } from "theme.slint";
 import { Store, DeviceType } from "store.slint";
 import { MobilePanel } from "panel/mobile/panel.slint";
-import { Toast, IconsDialogSetting, IconsDialog, ConfirmDialog, ConfirmDialogSetting, Blanket, LandingPage, ToastSetting } from "base/widgets.slint";
+import { Toast, IconsDialogSetting, IconsDialog, ConfirmDialog, ConfirmDialogSetting, Blanket, LandingPage, ToastSetting, PopupActionSetting, AboutSetting } from "base/widgets.slint";
 
 export component AppWindow inherits Window {
     default-font-size: Theme.default-font-size;
@@ -66,4 +66,4 @@ export component AppWindow inherits Window {
     }
 }
 
-export { Util, Logic, Store, Theme, Icons, ToastSetting }
+export { Util, Logic, Store, Theme, Icons, ToastSetting, PopupActionSetting, AboutSetting}
