@@ -82,13 +82,13 @@ reduce-linux-binary-size:
 	upx -9 target/release/$(app-name)
 
 slint-viewer-android:
-	$(android-build-env) slint-viewer --auto-reload -I ui ./${app-name}/ui/android-window.slint
+	$(android-build-env) slint-viewer --auto-reload -I $(app-name)/ui ${app-name}/ui/android-window.slint
 
 slint-viewer-desktop:
-	$(desktop-build-env) slint-viewer --auto-reload -I ui ./${app-name}/ui/desktop-window.slint
+	$(desktop-build-env) slint-viewer --auto-reload -I $(app-name)/ui ${app-name}/ui/desktop-window.slint
 
 slint-viewer-web:
-	$(web-build-env) slint-viewer --auto-reload -I ui ./${app-name}/ui/web-window.slint
+	$(web-build-env) slint-viewer --auto-reload -I $(app-name)/ui ${app-name}/ui/web-window.slint
 
 deb:
 	cd ./${app-name}/pkg/deb && bash -e "./create_deb.sh"
