@@ -86,13 +86,13 @@ export component StatusBar inherits Rectangle {
             spacing: Theme.spacing;
             Image {
                 source: root.icon;
-                width: root.icon-size;
+                width: Math.min(root.icon-size + Theme.padding * 2, root.height);
             }
 
             Label {
                 text: root.title;
                 color: Theme.secondary-text-color;
-                font-size: root.icon-size * 2 / 3;
+                font-size: root.icon-size;
             }
         }
 
