@@ -9,6 +9,8 @@ export component DesktopPanel inherits Rectangle {
 
     private property <length> home-height: self.height;
 
+    background: Theme.base-background;
+
     VerticalLayout {
         if Store.setting-preference.no-frame: sb := StatusBar {
             background: Theme.secondary-background;
