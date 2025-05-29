@@ -21,8 +21,8 @@ incremental = true
 
 [profile.release]
 lto = true
-debug = true
 strip = true
+debug = false
 panic = "abort"
 opt-level = "s"
 codegen-units = 1
