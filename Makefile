@@ -10,7 +10,7 @@ android-build-env=SLINT_STYLE=material $(build-env)
 desktop-build-env=SLINT_STYLE=fluent $(build-env)
 web-build-env=SLINT_STYLE=fluent $(build-env) RUSTFLAGS='--cfg getrandom_backend="wasm_js"'
 
-run-env=RUST_LOG=debug RUST_LOG_STYLE=always
+run-env=RUST_LOG=debug,reqwest=warn,sqlx=warn
 
 all: desktop-build-release
 
@@ -28,15 +28,6 @@ desktop-build-debug:
 
 desktop-build-release:
 	$(desktop-build-env) cargo build --release --features=desktop
-
-desktop-build-debug-nixos:
-	nix-shell --run "$(desktop-build-env) cargo build --features=desktop"
-
-desktop-build-release-nixos:
-	nix-shell --run "$(desktop-build-env) cargo build --release --features=desktop"
-
-desktop-debug-nixos-wayland:
-	nix-shell wayland-shell.nix --run "$(desktop-build-env) cargo run --features=desktop"
 
 desktop-debug:
 	$(desktop-build-env) $(run-env) cargo run --features=desktop
@@ -92,15 +83,17 @@ slint-viewer-desktop:
 slint-viewer-web:
 	$(web-build-env) slint-viewer --auto-reload -I $(app-name)/ui ${app-name}/ui/web-window.slint
 
-deb:
-	cd ./${app-name}/pkg/deb && bash -e "./create_deb.sh"
-	mv ./${app-name}/pkg/deb/$(app-name).deb ./target
+nix-shell:
+	nix-shell
 
 test:
 	$(build-env) $(run-env) cargo test -- --nocapture
 
 clippy:
 	cargo clippy
+
+outdated:
+	cargo outdated
 
 clean-incremental:
 	rm -rf ./target/debug/incremental
@@ -112,12 +105,14 @@ clean-unused-dependences:
 clean:
 	cargo clean
 
+deb:
+	cd ./${app-name}/pkg/deb && bash -e "./create_deb.sh"
+	mv ./${app-name}/pkg/deb/$(app-name).deb ./target
+
 app-name:
 	- mkdir -p target
 	echo "$(app-name)" > target/app-name
 
 get-font-name:
-	fc-scan ./${app-name}/ui/fonts/SourceHanSerifCN.ttf | grep fullname
+	fc-scan ./${app-name}/ui/fonts/*.{ttf,otf} | grep "fullname:"
 
-outdated:
-	cargo outdated
