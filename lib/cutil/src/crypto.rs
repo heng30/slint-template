@@ -1,44 +1,47 @@
-use aes::Aes256;
+use aes::cipher::{block_padding::Pkcs7, BlockDecryptMut, BlockEncryptMut, KeyIvInit};
 use anyhow::{anyhow, Context, Result};
-use block_modes::{block_padding, BlockMode, Cbc};
 use crypto_hash::{hex_digest, Algorithm};
 
-type Aes256Cbc = Cbc<Aes256, block_padding::Pkcs7>;
+type Aes128CbcEnc = cbc::Encryptor<aes::Aes128>;
+type Aes128CbcDec = cbc::Decryptor<aes::Aes128>;
 
-fn key_iv(password: &str) -> Result<(Vec<u8>, Vec<u8>)> {
-    let key = hex_digest(Algorithm::SHA256, password.as_bytes());
-    let key = hex::decode(key).context("Decoding key failed")?;
+fn key_iv(password: &str) -> Result<([u8; 16], [u8; 16])> {
+    let ki = hex_digest(Algorithm::SHA256, password.as_bytes());
+    let ki = hex::decode(ki).context("Decoding key failed")?;
 
-    let iv = hex_digest(Algorithm::MD5, password.as_bytes());
-    let iv = hex::decode(iv).context("Decoding iv failed")?;
+    let (mut key, mut iv) = ([0_u8; 16], [0_u8; 16]);
+    key[..].copy_from_slice(&ki[..16]);
+    iv[..].copy_from_slice(&ki[16..]);
+
     Ok((key, iv))
 }
 
 pub fn encrypt(password: &str, plain_text: &[u8]) -> Result<String> {
-    let (key, iv) = key_iv(password)?;
-    let cipher = Aes256Cbc::new_from_slices(&key, &iv)?;
-
-    let pos = plain_text.len();
-    if pos > 4096 {
+    let len = plain_text.len();
+    if len > 4096 {
         return Err(anyhow!(
             "input text is too long, the max text len is 4096 bytes."
         ));
     }
 
-    let mut buffer = [0u8; 4096];
-    buffer[..pos].copy_from_slice(plain_text);
-    let text = cipher.encrypt(&mut buffer, pos)?;
+    let (key, iv) = key_iv(password)?;
+    let mut buf = [0u8; 4096];
+    buf[..len].copy_from_slice(&plain_text);
 
-    Ok(hex::encode(text))
+    match Aes128CbcEnc::new(&key.into(), &iv.into()).encrypt_padded_mut::<Pkcs7>(&mut buf, len) {
+        Ok(encrypt_text) => Ok(hex::encode(encrypt_text)),
+        Err(e) => anyhow::bail!(e.to_string()),
+    }
 }
 
 pub fn decrypt(password: &str, encrypt_text: &str) -> Result<Vec<u8>> {
     let (key, iv) = key_iv(password)?;
-
-    let cipher = Aes256Cbc::new_from_slices(&key, &iv)?;
     let mut buf = hex::decode(encrypt_text.as_bytes())?.to_vec();
-    let text = cipher.decrypt(&mut buf)?;
-    Ok(Vec::from(text))
+
+    match Aes128CbcDec::new(&key.into(), &iv.into()).decrypt_padded_mut::<Pkcs7>(&mut buf) {
+        Ok(plain_text) => Ok(Vec::from(plain_text)),
+        Err(e) => anyhow::bail!(e.to_string()),
+    }
 }
 
 pub fn hash(text: &str) -> String {
@@ -50,8 +53,8 @@ pub fn hash(text: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use super::super::str::random_string;
+    use super::*;
 
     #[test]
     fn test_random_string() {

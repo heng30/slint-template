@@ -29,6 +29,7 @@ codegen-units = 1
 incremental = true
 
 [workspace.dependencies]
+cbc = "0.1"
 log = "0.4"
 hex = "0.4"
 aes = "0.8"
@@ -55,7 +56,6 @@ derivative = "2.2"
 serde_with = "3.12"
 env_logger = "0.11"
 console_log = "1.0"
-block-modes = "0.9"
 crypto-hash = "0.3"
 wasm-bindgen = "0.2"
 display-info = "0.5"
@@ -63,5 +63,6 @@ platform-dirs = "0.3"
 embed-resource = "3.0"
 android_logger = "0.15"
 terminal-clipboard = "0.4"
+
 cutil = { path = "lib/cutil" }
 sqldb = { path = "lib/sqldb" }
