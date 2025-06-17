@@ -1,16 +1,17 @@
 #!/bin/sh
 
-pwd=${shell pwd}
+pwd = ${shell pwd}
 
-app-name=slint-template
-version=`git describe --tags --abbrev=0`
+app-name = slint-template
+version = `git describe --tags --abbrev=0`
 
-build-env=
-android-build-env=SLINT_STYLE=material $(build-env)
-desktop-build-env=SLINT_STYLE=fluent $(build-env)
-web-build-env=SLINT_STYLE=fluent $(build-env) RUSTFLAGS='--cfg getrandom_backend="wasm_js"'
+build-env =
+android-build-env = SLINT_STYLE=material $(build-env)
+desktop-build-env = SLINT_STYLE=fluent $(build-env)
+web-build-env = SLINT_STYLE=fluent $(build-env) RUSTFLAGS='--cfg getrandom_backend="wasm_js"'
 
-run-env=RUST_LOG=debug,reqwest=warn,sqlx=warn
+run-envw = RUST_LOG=debug,reqwest=warn,sqlx=warn
+proj-features = --features=desktop,database,qrcode,center-window
 
 all: desktop-build-release
 
@@ -89,11 +90,14 @@ nix-shell:
 test:
 	$(build-env) $(run-env) cargo test -- --nocapture
 
-clippy:
-	cargo clippy
+timings:
+	$(build-env) cargo build --timings $(proj-features)
 
-outdated:
-	cargo outdated
+clippy:
+	cargo clippy $(proj-features)
+
+check:
+	cargo check $(proj-features)
 
 clean-incremental:
 	rm -rf ./target/debug/incremental

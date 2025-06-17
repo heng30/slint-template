@@ -56,12 +56,12 @@ pub fn init_logger() {
                 buf,
                 "[{} {style}{}{style:#} {} {}] {}",
                 ts,
-                record.level().to_string(),
+                record.level(),
                 record
                     .file()
                     .unwrap_or("None")
                     .split('/')
-                    .last()
+                    .next_back()
                     .unwrap_or("None"),
                 record.line().unwrap_or(0),
                 record.args()

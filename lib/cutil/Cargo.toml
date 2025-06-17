@@ -18,5 +18,6 @@ crypto-hash = { workspace = true, optional = true }
 time = []
 default = []
 http = ["reqwest/json", "reqwest/socks"]
-native-tls-vendored = ["reqwest/native-tls-vendored"]
 crypto = ["dep:aes", "dep:cbc", "dep:crypto-hash"]
+native-tls-vendored = ["reqwest/native-tls-vendored"]
+all = ["time", "http", "native-tls-vendored", "crypto"]

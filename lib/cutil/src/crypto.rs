@@ -26,7 +26,7 @@ pub fn encrypt(password: &str, plain_text: &[u8]) -> Result<String> {
 
     let (key, iv) = key_iv(password)?;
     let mut buf = [0u8; 4096];
-    buf[..len].copy_from_slice(&plain_text);
+    buf[..len].copy_from_slice(plain_text);
 
     match Aes128CbcEnc::new(&key.into(), &iv.into()).encrypt_padded_mut::<Pkcs7>(&mut buf, len) {
         Ok(encrypt_text) => Ok(hex::encode(encrypt_text)),

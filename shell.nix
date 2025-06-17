@@ -4,6 +4,7 @@ let
   libPath = with pkgs;
     lib.makeLibraryPath [
       wayland
+      openssl
       qt6.full
       libGL.dev
       xorg.libxcb

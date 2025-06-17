@@ -14,7 +14,7 @@ pub fn init(ui: &AppWindow) {
         .on_generate_search_values(move |entries| {
             let values = entries
                 .iter()
-                .map(|entry| {
+                .flat_map(|entry| {
                     if entry.children.row_count() > 0 {
                         entry
                             .children
@@ -25,7 +25,6 @@ pub fn init(ui: &AppWindow) {
                         vec![entry.category]
                     }
                 })
-                .flatten()
                 .collect::<Vec<_>>();
             ModelRc::new(VecModel::from_slice(&values[..]))
         });
@@ -38,7 +37,7 @@ pub fn init(ui: &AppWindow) {
 
             let entries = entries
                 .iter()
-                .map(|entry| {
+                .flat_map(|entry| {
                     if entry.children.row_count() > 0 {
                         entry
                             .children
@@ -49,7 +48,6 @@ pub fn init(ui: &AppWindow) {
                         vec![(entry.category, entry.key)]
                     }
                 })
-                .flatten()
                 .filter_map(|item| {
                     if item.0.to_lowercase().contains(text.to_lowercase().as_str()) {
                         Some(item.1)

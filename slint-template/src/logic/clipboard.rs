@@ -3,17 +3,15 @@ use crate::{
     slint_generatedAppWindow::{AppWindow, Logic},
     toast_success, toast_warn,
 };
-use anyhow::{Result, bail};
+use anyhow::{bail, Result};
 use slint::ComponentHandle;
 
 #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 fn copy_to_clipboard(msg: &str) -> Result<()> {
     #[cfg(target_os = "linux")]
     {
-        if super::util::is_wayland() {
-            if let Ok(_) = copy_to_wayland_clipboard(msg) {
-                return Ok(());
-            }
+        if super::util::is_wayland() && copy_to_wayland_clipboard(msg).is_ok() {
+            return Ok(());
         }
     }
 

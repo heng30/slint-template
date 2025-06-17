@@ -323,7 +323,7 @@ pub fn display_size() -> Option<(u32, u32)> {
             }
         }
 
-        if displays.len() > 0 {
+        if !displays.is_empty() {
             return Some((displays[0].width, displays[0].height));
         }
     }

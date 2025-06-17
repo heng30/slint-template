@@ -63,10 +63,10 @@ pub fn file_extension(url: &str) -> Result<Option<String>> {
 
     Ok(Path::new(path)
         .file_name()
-        .and_then(|item| Some(Path::new(item)))
+        .map(Path::new)
         .and_then(Path::extension)
         .and_then(OsStr::to_str)
-        .and_then(|item| Some(String::from(item))))
+        .map(String::from))
 }
 
 #[cfg(test)]
