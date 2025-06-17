@@ -8,13 +8,13 @@ fn main() {
 }
 
 fn build_slint() {
-    #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
+    #[cfg(feature = "desktop")]
     slint_build::compile("ui/desktop-window.slint").unwrap();
 
-    #[cfg(target_os = "android")]
+    #[cfg(feature = "android")]
     slint_build::compile("ui/android-window.slint").unwrap();
 
-    #[cfg(target_arch = "wasm32")]
+    #[cfg(feature = "web")]
     slint_build::compile("ui/web-window.slint").unwrap();
 }
 
