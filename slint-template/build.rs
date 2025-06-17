@@ -3,6 +3,19 @@ fn main() {
     set_windows_info();
 
     _ = write_app_version();
+
+    build_slint();
+}
+
+fn build_slint() {
+    #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
+    slint_build::compile("ui/desktop-window.slint").unwrap();
+
+    #[cfg(target_os = "android")]
+    slint_build::compile("ui/android-window.slint").unwrap();
+
+    #[cfg(target_arch = "wasm32")]
+    slint_build::compile("ui/web-window.slint").unwrap();
 }
 
 fn write_app_version() -> Result<(), Box<dyn std::error::Error>> {
@@ -18,7 +31,7 @@ fn write_app_version() -> Result<(), Box<dyn std::error::Error>> {
         format!(r#"pub static VERSION: &str = "{}";"#, "0.0.1")
     };
 
-    let _ = std::fs::write("src/version.rs", output);
+    _ = std::fs::write("src/version.rs", output);
 
     Ok(())
 }

@@ -44,6 +44,7 @@ console_log = { workspace = true, features = ["color"] }
 
 [build-dependencies]
 duct.workspace = true
+slint-build.workspace = true
 
 [target.'cfg(target_os = "windows")'.build-dependencies]
 embed-resource.workspace = true

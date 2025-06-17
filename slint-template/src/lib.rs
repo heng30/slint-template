@@ -1,17 +1,20 @@
-#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
-slint::slint! {
-    export * from "ui/desktop-window.slint";
-}
+// use `build.rs` to compile the slint markup files
+// #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
+// slint::slint! {
+//     export * from "ui/desktop-window.slint";
+// }
+//
+// #[cfg(target_os = "android")]
+// slint::slint! {
+//     export * from "ui/android-window.slint";
+// }
+//
+// #[cfg(target_arch = "wasm32")]
+// slint::slint! {
+//     export * from "ui/web-window.slint";
+// }
 
-#[cfg(target_os = "android")]
-slint::slint! {
-    export * from "ui/android-window.slint";
-}
-
-#[cfg(target_arch = "wasm32")]
-slint::slint! {
-    export * from "ui/web-window.slint";
-}
+slint::include_modules!();
 
 #[cfg(any(
     target_os = "windows",
