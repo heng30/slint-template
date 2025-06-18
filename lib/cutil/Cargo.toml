@@ -4,20 +4,24 @@ version.workspace = true
 edition.workspace = true
 
 [dependencies]
-hex.workspace = true
-rand.workspace = true
-bytes.workspace = true
 anyhow.workspace = true
-chrono.workspace = true
 cbc = { workspace = true, optional = true }
 aes = { workspace = true, optional = true }
-reqwest = { workspace = true, optional = true }
+hex = { workspace = true, optional = true }
+rand = { workspace = true, optional = true }
+bytes = { workspace = true, optional = true }
+chrono = { workspace = true, optional = true }
 crypto-hash = { workspace = true, optional = true }
+reqwest = { workspace = true, features = [
+  "native-tls-vendored",
+], optional = true }
 
 [features]
-time = []
+fs = []
+number = []
 default = []
-http = ["reqwest/json", "reqwest/socks"]
-crypto = ["dep:aes", "dep:cbc", "dep:crypto-hash"]
-native-tls-vendored = ["reqwest/native-tls-vendored"]
-all = ["time", "http", "native-tls-vendored", "crypto"]
+str = ["dep:rand"]
+time = ["dep:chrono"]
+http = ["reqwest/json", "reqwest/socks", "dep:bytes"]
+all = ["fs", "time", "http", "crypto", "str", "number"]
+crypto = ["dep:aes", "dep:cbc", "dep:hex", "dep:crypto-hash"]

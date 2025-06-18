@@ -36,11 +36,9 @@ desktop-debug:
 web-build-debug:
 	cd $(app-name) && $(web-build-env) wasm-pack build --no-opt --dev --target web --out-dir ./web/pkg --features=web
 
-# `--no-opt`: disable wasm-opt. Because wasm-opt can't work on rutc-1.87.0
 web-build-release:
 	cd $(app-name) && $(web-build-env) wasm-pack build --no-opt --release --target web --out-dir ./web/pkg --features=web
 
-# `--no-opt`: disable wasm-opt. Because wasm-opt can't work on rutc-1.87.0
 web-build-dist:
 	- rm -rf ./web/dist/*
 	cd $(app-name) && $(web-build-env) wasm-pack build --no-opt --release --target web --out-dir ./web/dist/pkg --features=web

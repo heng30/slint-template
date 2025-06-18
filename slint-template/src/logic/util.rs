@@ -4,11 +4,8 @@ use crate::{
     slint_generatedAppWindow::{AppPosType, AppWindow, Util},
     toast_warn,
 };
-use cutil::{
-    self, number,
-    rand::{self, Rng},
-    time,
-};
+use cutil::{self, number, time};
+use rand::{self, Rng};
 use slint::{ComponentHandle, Model, ModelRc, SharedString, VecModel};
 use std::str::FromStr;
 use webbrowser::{self, Browser};

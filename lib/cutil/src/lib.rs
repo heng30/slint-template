@@ -1,19 +1,17 @@
-#[cfg(feature = "crypto")]
-pub mod crypto;
+#[cfg(feature = "fs")]
+pub mod fs;
 
-#[cfg(feature = "http")]
-pub mod http;
-
-#[cfg(feature = "http")]
-pub use reqwest;
+#[cfg(feature = "str")]
+pub mod str;
 
 #[cfg(feature = "time")]
 pub mod time;
 
-pub use rand;
-pub use hex;
-pub use chrono;
+#[cfg(feature = "http")]
+pub mod http;
 
-pub mod fs;
+#[cfg(feature = "crypto")]
+pub mod crypto;
+
+#[cfg(feature = "number")]
 pub mod number;
-pub mod str;
