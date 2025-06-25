@@ -1,7 +1,7 @@
 [workspace]
 exclude = []
 resolver = "2"
-members = ["slint-template/", "lib/*"]
+members = ["slint-template", "lib/*"]
 
 [workspace.package]
 license = "MIT"

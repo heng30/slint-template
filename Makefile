@@ -31,7 +31,7 @@ desktop-build-release:
 	$(desktop-build-env) cargo build --release --features=desktop
 
 desktop-debug:
-	$(desktop-build-env) $(run-env) cargo run --features=desktop
+	$(desktop-build-env) $(run-env) cargo run --bin ${app-name} --features=desktop
 
 web-build-debug:
 	cd $(app-name) && $(web-build-env) wasm-pack build --no-opt --dev --target web --out-dir ./web/pkg --features=web

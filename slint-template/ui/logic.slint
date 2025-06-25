@@ -15,6 +15,9 @@ export global Logic {
     callback get-setting-proxy() -> SettingProxy;
     callback set-setting-proxy(setting: SettingProxy);
 
+    callback increase-font-size();
+    callback decrease-font-size();
+
     pure callback inner-tr(is-cn: bool, text: string) -> string;
     inner-tr(is-cn, text) => {
         return text;
@@ -35,7 +38,6 @@ export global Logic {
         if (Store.current-tab-index == index) {
             return;
         }
-
         if (index == TabIndex.Back) {
             Store.current-tab-index = Store.previous-tab-index;
         } else {
