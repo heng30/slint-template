@@ -52,7 +52,7 @@ fn paste_from_clipboard() -> Result<String> {
 
 #[cfg(target_os = "android")]
 fn copy_to_clipboard(msg: &str) -> Result<()> {
-    match terminal_clipboard::set_string(msg) {
+    match android_clipboard::set_text(msg.to_string()) {
         Err(e) => bail!("{e:?}"),
         _ => Ok(()),
     }
@@ -60,7 +60,7 @@ fn copy_to_clipboard(msg: &str) -> Result<()> {
 
 #[cfg(target_os = "android")]
 fn paste_from_clipboard() -> Result<String> {
-    match terminal_clipboard::get_string() {
+    match android_clipboard::get_text() {
         Err(e) => bail!("{e:?}"),
         Ok(msg) => Ok(msg),
     }

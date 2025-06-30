@@ -3,7 +3,7 @@ import { Store, SettingDetailIndex } from "../../store.slint";
 import { Logic } from "../../logic.slint";
 import { Label, Head } from "../../base/widgets.slint";
 
-import { CircleProgress } from "../../base/widgets.slint";
+import { CircleProgress, ConfirmBtn, Label } from "../../base/widgets.slint";
 import { Util } from "../../util.slint";
 
 component TopHead inherits Head {
@@ -18,11 +18,34 @@ component Body inherits Rectangle {
         spacing: Theme.spacing * 4;
 
         HorizontalLayout {
-
             alignment: center;
             CircleProgress {
                 ring-width: 15px;
                 progress: Util.progress-value(5s);
+            }
+        }
+
+        VerticalLayout {
+            spacing: Theme.spacing * 4;
+            lb := Label {
+                horizontal-alignment: center;
+                text: "Hello world!";
+                font-size: Theme.title1-font-size;
+            }
+
+            ConfirmBtn {
+                text: "Copy text to clipboard";
+
+                clicked => {
+                    Logic.copy-to-clipboard(lb.text);
+                }
+            }
+
+            ConfirmBtn {
+                text: "Paste text from clipboard";
+                clicked => {
+                    lb.text = Logic.paste-from-clipboard();
+                }
             }
         }
     }

@@ -36,7 +36,7 @@ duct.workspace = true
 
 [target.'cfg(target_os = "android")'.dependencies]
 android_logger.workspace = true
-terminal-clipboard.workspace = true
+android_clipboard.workspace = true
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen.workspace = true

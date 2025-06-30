@@ -8,9 +8,10 @@ version = `git describe --tags --abbrev=0`
 build-env =
 android-build-env = SLINT_STYLE=material $(build-env)
 desktop-build-env = SLINT_STYLE=fluent $(build-env)
+desktop-debug-build-env = RUSTFLAGS="-Cllvm-args=-inline-threshold=10 -Cllvm-args=-inlinedefault-threshold=10 -Cllvm-args=-inlinehint-threshold=10"
 web-build-env = SLINT_STYLE=fluent $(build-env) RUSTFLAGS='--cfg getrandom_backend="wasm_js"'
 
-run-envw = RUST_LOG=debug,reqwest=warn,sqlx=warn
+run-env = RUST_LOG=debug,reqwest=warn,sqlx=warn
 proj-features = --features=desktop,database,qrcode,center-window
 
 all: desktop-build-release
