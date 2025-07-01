@@ -2,7 +2,7 @@ import { Theme, Icons } from "../../theme.slint";
 import { Util } from "../../util.slint";
 import { Logic } from "../../logic.slint";
 import { Store } from "../../store.slint";
-import { SettingIconsBar }  from "../setting/desktop.slint";
+import { HorizontalSettingIconsBar }  from "../setting/desktop.slint";
 
 import { SettingEntryV2, CenterLayout, IconsDialogSetting, Search, Label, SideBar, SideBarEntry, SideBarChildEntry } from "../../base/widgets.slint";
 import { Introduction }  from "examples/introducion.slint";
@@ -101,7 +101,7 @@ component LeftPanel inherits Rectangle {
             alignment: LayoutAlignment.center;
             padding: Theme.padding * 4;
 
-            SettingIconsBar {
+            HorizontalSettingIconsBar {
                 icon-size: Theme.icon-size;
                 h-padding: Theme.spacing * 2;
                 h-spacing: Theme.padding * 8;
