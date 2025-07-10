@@ -4,6 +4,7 @@ import { SlideCard, TransactionTile, TransactionTileStatus, ExampleComponent } f
 export component TransactionTileExample inherits Flickable {
     viewport-height: vbox.preferred-height;
     viewport-width: vbox.preferred-width;
+    interactive: false; // disable dragging
 
     vbox := VerticalLayout {
         spacing: Theme.spacing * 20;

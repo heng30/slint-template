@@ -4,6 +4,7 @@ import { ProgressBar, CircleProgress, ExampleComponent } from "../../../base/wid
 export component ProgressExample inherits Flickable {
     viewport-height: vbox.preferred-height;
     viewport-width: vbox.preferred-width;
+    interactive: false; // disable dragging
 
     vbox := VerticalLayout {
         spacing: Theme.spacing * 20;

@@ -30,6 +30,8 @@ export component SettingDetailInner inherits Flickable {
     in-out property vbox-padding <=> vbox.padding;
     in-out property vbox-spacing <=> vbox.spacing;
 
+    interactive: false; // disable dragging
+
     vbox := VerticalLayout {
         alignment: root.vbox-alignment;
         padding: Theme.padding * 2;
