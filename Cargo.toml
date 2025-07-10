@@ -19,6 +19,7 @@ description = "It's a Rust Slint GUI framework project for quick start."
 [profile.dev]
 lto = false
 debug = false
+opt-level = 0
 incremental = true
 
 [profile.release]
