@@ -40,14 +40,19 @@ jobs:
         shell: bash
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          binary_name=`cat target/app-name`
+          cd target
+
+          binary_name=`cat app-name`
           output="$binary_name-${{ env.VERSION }}-x86_64-linux.tar.gz"
-          cp -rf target/release/$binary_name $binary_name
+          cp -rf release/$binary_name $binary_name
           tar -zcf $output $binary_name
+          cp $output ..
           echo "ASSET=$output" >> $GITHUB_ENV
-          deb_output="$binary_name-${{ env.VERSION }}-x86_64-linux.deb"
-          cp -rf target/$binary_name.deb $deb_output
-          echo "DEB_ASSET=$deb_output" >> $GITHUB_ENV
+
+          output="$binary_name-${{ env.VERSION }}-x86_64-linux.deb"
+          cp -rf $binary_name.deb $output
+          cp $output ..
+          echo "DEB_ASSET=$output" >> $GITHUB_ENV
       - run: echo "end packing..."
 
       - name: Upload the package

@@ -36,10 +36,12 @@ jobs:
         shell: bash
         if: startsWith(github.ref, 'refs/tags/')
         run: |
-          binary_name=`cat target/app-name`
+          cd target
+          binary_name=`cat app-name`
           output="$binary_name-${{ env.VERSION }}-x86_64-darwin.tar.gz"
-          cp -rf target/release/$binary_name $binary_name
+          cp -rf release/$binary_name $binary_name
           tar -zcf $output $binary_name
+          cp $output ..
           echo "ASSET=$output" >> $GITHUB_ENV
       - run: echo "end packing..."
 
