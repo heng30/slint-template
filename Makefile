@@ -51,6 +51,9 @@ web-server:
 web-server-dist:
 	cd $(app-name) && python3 -m http.server -d web/dist 8800
 
+tr:
+	cargo run --bin tr-helper
+
 packing-android:
 	cp -f target/release/apk/${app-name}.apk target/${app-name}-${version}-aarch64-linux-android.apk
 	echo "${app-name}-${version}-aarch64-linux-android.apk" > target/output-name

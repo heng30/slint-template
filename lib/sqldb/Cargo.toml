@@ -1,7 +1,14 @@
 [package]
 name = "sqldb"
-version.workspace = true
+license.workspace = true
 edition.workspace = true
+version.workspace = true
+readme.workspace = true
+authors.workspace = true
+keywords.workspace = true
+homepage.workspace = true
+repository.workspace = true
+description.workspace = true
 
 [dependencies]
 anyhow.workspace = true

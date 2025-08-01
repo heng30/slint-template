@@ -43,6 +43,9 @@ cp -f $DIR/cache.txt $DIR/../src/lib.rs
 sed "s/$old_project_name/$project_name/g" $DIR/../ui/base/about.slint > $DIR/cache.txt
 cp -f $DIR/cache.txt $DIR/../ui/base/about.slint
 
+sed "s/$old_project_name/$project_name/g" $DIR/../../tr-helper/build.rs > $DIR/cache.txt
+cp -f $DIR/cache.txt $DIR/../../tr-helper/build.rs
+
 sed "s/$old_web_project_name/$project_name/g" $DIR/../web/index.html > $DIR/cache.txt
 cp -f $DIR/cache.txt $DIR/../web/index.html
 

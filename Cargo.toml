@@ -1,7 +1,7 @@
 [workspace]
 exclude = []
 resolver = "2"
-members = ["slint-template", "lib/*"]
+members = ["slint-template", "lib/*", "tr-helper"]
 
 [workspace.package]
 license = "MIT"
@@ -38,12 +38,14 @@ hex = "0.4"
 aes = "0.8"
 sqlx = "0.8"
 rand = "0.9"
-toml = "0.8"
+clap = "4.5"
+toml = "0.9"
 duct = "1.0"
 uuid = "1.17"
 serde = "1.0"
 bytes = "1.10"
 tokio = "1.45"
+regex = "1.11"
 slint = "1.12"
 image = "0.25"
 anyhow = "1.0"
@@ -64,6 +66,7 @@ android_clipboard = "0.1.0"
 
 # maybe outdated
 qrcode = "0.14"
+walkdir = "2.5"
 clipboard = "0.5"
 derivative = "2.2"
 console_log = "1.0"
