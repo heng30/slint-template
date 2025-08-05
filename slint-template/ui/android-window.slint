@@ -8,6 +8,16 @@ import { Store, DeviceType } from "store.slint";
 import { MobilePanel } from "panel/mobile/panel.slint";
 import { Toast, IconsDialogSetting, IconsDialog, ConfirmDialog, ConfirmDialogSetting, Blanket, LandingPage, ToastSetting, PopupActionSetting, AboutSetting, ConfirmDialogSetting } from "base/widgets.slint";
 
+export component TestDialog inherits Dialog {
+    title: "Test Dialog";
+
+    Rectangle {
+        background: red;
+        width: 300px;
+        height: 300px;
+    }
+}
+
 export component AppWindow inherits Window {
     default-font-size: Theme.default-font-size;
     default-font-weight: Theme.normal-font-weight;

@@ -47,6 +47,13 @@ component Body inherits Rectangle {
                     lb.text = Logic.paste-from-clipboard();
                 }
             }
+
+            ConfirmBtn {
+                text: "show test dialog";
+                clicked => {
+                    Logic.show-mobile-test-dialog();
+                }
+            }
         }
     }
 }
