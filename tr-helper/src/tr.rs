@@ -113,6 +113,22 @@ pub fn tr(text: &str) -> String {
         ("Window height", "窗口高度"),
         ("Window size", "窗口大小"),
         ("Window width", "窗口宽度"),
+        ("Based on Slint-UI. Copyright 2022-2030. All rights reserved. The program is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.", "基于Slint-UI框架。版权所有©2022-2030年。本程序按『原样』提供，不附带任何形式的明示或暗示保证，包括但不限于设计适用性、适销性及特定用途适用性保证。"),
+        ("Sun", "  日  "),
+        ("Mon", "  一  "),
+        ("Tue", "  二  "),
+        ("Wed", "  三  "),
+        ("Thu", "  四  "),
+        ("Fri", "  五  "),
+        ("Sat", "  六  "),
+        ("Decrease font size", "减小字体大小"),
+        ("Increase font size", "增大字体大小"),
+        ("Send question", "发送问题"),
+        ("Shortcuts", "快捷方式"),
+        ("Tasks Count", "任务计数"),
+        ("donate", "捐赠"),
+        ("help", "帮助"),
+        ("home", "首页"),
     ]);
 
     if let Some(txt) = items.get(text) {

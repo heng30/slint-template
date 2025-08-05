@@ -1,61 +1,10 @@
-import { Logic, Theme, Store, Util, Icons, SettingPreference, SettingProxy, SettingDetailIndex, DeviceType, TabIndex } from "../def.slint";
-import { IconBtn, SettingEntryV2, Head, SettingDetail, ToastStatus, About, Help, Dialog, ComponentPosition } from "../../base/widgets.slint";
+import { Logic, Theme, Store, Util, Icons, SettingPreference, SettingProxy, SettingDetailIndex, DeviceType, TabIndex, PopupIndex } from "../def.slint";
+import { IconBtn, SettingEntryV2, Head, SettingDetail, ToastStatus, About, Help, Dialog, ComponentPosition, TabBtns } from "../../base/widgets.slint";
+
 import { Preference } from "components/preference.slint";
 import { Donate } from "components/donate.slint";
 import { Proxy } from "components/proxy.slint";
-
-component LeftPanel inherits Rectangle {
-    background: Theme.secondary-background;
-
-    Flickable {
-        width: root.width;
-        viewport-height: vbox.preferred-height;
-
-        vbox := VerticalLayout {
-            alignment: LayoutAlignment.start;
-
-            SettingEntryV2 {
-                text: Logic.tr("Preference");
-                icon: Icons.ui;
-                background: Store.current-setting-detail-index == SettingDetailIndex.Preference ? Theme.checked-background : self.has-hover ? Theme.hover-background : root.background;
-
-                clicked => {
-                    Logic.switch-setting-detail(SettingDetailIndex.Preference);
-                }
-            }
-
-            SettingEntryV2 {
-                text: Logic.tr("Proxy");
-                icon: Icons.proxy-light;
-                background: Store.current-setting-detail-index == SettingDetailIndex.Proxy ? Theme.checked-background : self.has-hover ? Theme.hover-background : root.background;
-
-                clicked => {
-                    Logic.switch-setting-detail(SettingDetailIndex.Proxy);
-                }
-            }
-
-            SettingEntryV2 {
-                text: Logic.tr("Help");
-                icon: Icons.help-light;
-                background: Store.current-setting-detail-index == SettingDetailIndex.Help ? Theme.checked-background : self.has-hover ? Theme.hover-background : root.background;
-
-                clicked => {
-                    Logic.switch-setting-detail(SettingDetailIndex.Help);
-                }
-            }
-
-            SettingEntryV2 {
-                text: Logic.tr("Donate");
-                icon: Icons.donate-light;
-                background: Store.current-setting-detail-index == SettingDetailIndex.Donate ? Theme.checked-background : self.has-hover ? Theme.hover-background : root.background;
-
-                clicked => {
-                    Logic.switch-setting-detail(SettingDetailIndex.Donate);
-                }
-            }
-        }
-    }
-}
+import { HelpDetail } from "components//help-detail.slint";
 
 component RightPanel inherits Rectangle {
     background: Theme.base-background;
@@ -98,14 +47,6 @@ component RightPanel inherits Rectangle {
             Logic.set-setting-proxy(self.get());
         }
     }
-
-    if Store.current-setting-detail-index == SettingDetailIndex.Help: Help {
-        is-show-header: false;
-    }
-
-    if Store.current-setting-detail-index == SettingDetailIndex.Donate: Donate {
-        is-show-header: false;
-    }
 }
 
 component Setting inherits Rectangle {
@@ -113,26 +54,30 @@ component Setting inherits Rectangle {
         rp.apply();
     }
 
-    lp := LeftPanel {
-        x: 0;
-        width: Math.max(root.width * 0.3, Theme.title3-font-size * 10);
-    }
+    VerticalLayout {
+        padding-top: Theme.padding * 2;
+        spacing: Theme.spacing;
 
-    mp := Rectangle {
-        x: lp.width;
-        width: Theme.padding;
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
 
-        TouchArea {
-            mouse-cursor: MouseCursor.col-resize;
-            moved => {
-                lp.width = Math.min(Math.max(0px, lp.width - (self.pressed-x - self.mouse-x)), root.width - self.width)
+            TabBtns {
+                items: [
+                    { icon: Icons.ui, text: Logic.tr("Preference") },
+                    { icon: Icons.model-light, text: Logic.tr("Proxy") },
+                ];
+
+                clicked(index) => {
+                    if (index == 0) {
+                        Logic.switch-setting-detail(SettingDetailIndex.Preference);
+                    } else if (index == 1) {
+                        Logic.switch-setting-detail(SettingDetailIndex.Proxy);
+                    }
+                }
             }
         }
-    }
 
-    rp := RightPanel {
-        x: mp.x + mp.width;
-        width: root.width - self.x;
+        rp := RightPanel { }
     }
 }
 
@@ -149,7 +94,7 @@ export component SettingDialog inherits Dialog {
     }
 
     cancel-clicked => {
-        Logic.switch-tab(TabIndex.Back);
+        Logic.switch-popup(PopupIndex.None);
     }
 
     ok-clicked => {
@@ -170,7 +115,43 @@ export component AboutDialog inherits Dialog {
     }
 
     cancel-clicked => {
-        Logic.switch-tab(TabIndex.Back);
+        Logic.switch-popup(PopupIndex.None);
+    }
+}
+
+export component HelpDialog inherits Dialog {
+    title: Logic.tr("Help");
+    is-hide-bottom-btns: true;
+    is-prevent-event-forward: true;
+
+    in-out property <length> inner-height: 650px;
+
+    Help {
+        height: root.inner-height;
+        is-show-header: false;
+
+        HelpDetail { }
+    }
+
+    cancel-clicked => {
+        Logic.switch-popup(PopupIndex.None);
+    }
+}
+
+export component DonateDialog inherits Dialog {
+    title: Logic.tr("Donate");
+    is-hide-bottom-btns: true;
+    is-prevent-event-forward: true;
+
+    in-out property <length> inner-height: 650px;
+
+    Donate {
+        height: root.inner-height;
+        is-show-header: false;
+    }
+
+    cancel-clicked => {
+        Logic.switch-popup(PopupIndex.None);
     }
 }
 
@@ -199,7 +180,20 @@ export component HorizontalSettingIconsBar inherits Rectangle {
             tip: Logic.tr("setting");
 
             clicked => {
-                Logic.switch-tab(TabIndex.Setting);
+                Logic.switch-popup(PopupIndex.Setting);
+            }
+        }
+
+        IconBtn {
+            icon: Icons.help;
+            icon-size: root.icon-size;
+            show-icon-hover-background: root.show-icon-hover-background;
+            is-show-tip: root.is-show-tip;
+            tip-position: root.tip-position;
+            tip: Logic.tr("help");
+
+            clicked => {
+                Logic.switch-popup(PopupIndex.Help);
             }
         }
 
@@ -212,7 +206,20 @@ export component HorizontalSettingIconsBar inherits Rectangle {
             tip: Logic.tr("about");
 
             clicked => {
-                Logic.switch-tab(TabIndex.About);
+                Logic.switch-popup(PopupIndex.About);
+            }
+        }
+
+        IconBtn {
+            icon: Icons.donate;
+            icon-size: root.icon-size;
+            show-icon-hover-background: root.show-icon-hover-background;
+            is-show-tip: root.is-show-tip;
+            tip-position: root.tip-position;
+            tip: Logic.tr("donate");
+
+            clicked => {
+                Logic.switch-popup(PopupIndex.Donate);
             }
         }
 
@@ -222,7 +229,7 @@ export component HorizontalSettingIconsBar inherits Rectangle {
             show-icon-hover-background: root.show-icon-hover-background;
             is-show-tip: root.is-show-tip;
             tip-position: root.tip-position;
-            tip: Logic.tr("github");
+            tip: "github";
 
             clicked => {
                 Util.open-url("Default","https://github.com/Heng30/slint-template");
@@ -258,7 +265,20 @@ export component VerticalSettingIconsBar inherits Rectangle {
             tip: Logic.tr("setting");
 
             clicked => {
-                Logic.switch-tab(TabIndex.Setting);
+                Logic.switch-popup(PopupIndex.Setting);
+            }
+        }
+
+        IconBtn {
+            icon: Icons.help;
+            icon-size: root.icon-size;
+            show-icon-hover-background: root.show-icon-hover-background;
+            is-show-tip: root.is-show-tip;
+            tip-position: root.tip-position;
+            tip: Logic.tr("help");
+
+            clicked => {
+                Logic.switch-popup(PopupIndex.Help);
             }
         }
 
@@ -271,7 +291,20 @@ export component VerticalSettingIconsBar inherits Rectangle {
             tip: Logic.tr("about");
 
             clicked => {
-                Logic.switch-tab(TabIndex.About);
+                Logic.switch-popup(PopupIndex.About);
+            }
+        }
+
+        IconBtn {
+            icon: Icons.donate;
+            icon-size: root.icon-size;
+            show-icon-hover-background: root.show-icon-hover-background;
+            is-show-tip: root.is-show-tip;
+            tip-position: root.tip-position;
+            tip: Logic.tr("donate");
+
+            clicked => {
+                Logic.switch-popup(PopupIndex.Donate);
             }
         }
 
@@ -281,7 +314,7 @@ export component VerticalSettingIconsBar inherits Rectangle {
             show-icon-hover-background: root.show-icon-hover-background;
             is-show-tip: root.is-show-tip;
             tip-position: root.tip-position;
-            tip: Logic.tr("github");
+            tip: "github";
 
             clicked => {
                 Util.open-url("Default","https://github.com/Heng30/slint-template");

@@ -1,4 +1,4 @@
-import { Theme, Icons, Store, TabIndex, Logic } from "../def.slint";
+import { Theme, Icons, Store, MobileTabIndex, Logic } from "../def.slint";
 import { TabBtn, Divider } from "../../base/widgets.slint";
 
 export component Footer inherits Rectangle {
@@ -20,10 +20,10 @@ export component Footer inherits Rectangle {
             height: root.btn-height;
             icon: Icons.home-light;
             text: Logic.tr("Home");
-            checked: Store.current-tab-index == TabIndex.Home;
+            checked: Store.current-mobile-tab-index == MobileTabIndex.Home;
 
             clicked => {
-                Logic.switch-tab(TabIndex.Home);
+                Logic.switch-mobile-tab(MobileTabIndex.Home);
             }
         }
 
@@ -32,10 +32,10 @@ export component Footer inherits Rectangle {
             height: root.btn-height;
             icon: Icons.setting-light;
             text: Logic.tr("Setting");
-            checked: Store.current-tab-index == TabIndex.Setting;
+            checked: Store.current-mobile-tab-index == MobileTabIndex.Setting;
 
             clicked => {
-                Logic.switch-tab(TabIndex.Setting);
+                Logic.switch-mobile-tab(MobileTabIndex.Setting);
             }
         }
     }
