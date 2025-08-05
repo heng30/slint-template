@@ -1,4 +1,4 @@
-import { LoadingStatus, PrioritizationFeeStatus, ToastStatus, AppPosType,  ComponentPosition, TreeEntry, SideBarEntry, SideBarChildEntry } from "def.slint";
+import { LoadingStatus, PrioritizationFeeStatus, ToastStatus, AppPosType,  ComponentPosition, TreeEntry, SideBarEntry, SideBarChildEntry, ChartBarEntry } from "def.slint";
 import { Toast, ToastSetting } from "toast.slint";
 import { TabBtn } from "tab-btn.slint";
 import { TabBtns } from "tab-btns.slint";
@@ -19,7 +19,7 @@ import { Head } from "head.slint";
 import { SettingEntry, SettingEntryV2 } from "setting-entry.slint";
 import { SettingDetail, SettingDetailInner, SettingDetailLabel, SettingDetailInnerVbox, SettingDetailSwitch } from "setting-detail.slint";
 import { Brand } from "brand.slint";
-import { TxtEdit, TxtEditStd } from "txtedit.slint";
+import { TxtEdit } from "txtedit.slint";
 import { LanguageDialog } from "language-dialog.slint";
 import { RadioBtn } from "radio-btn.slint";
 import { CheckBtn } from "check-btn.slint";
@@ -52,6 +52,7 @@ import { TransactionFee } from "transaction-fee.slint";
 import { WaitTransactionConfirmed } from "wait-transaction-confirmed.slint";
 import { StatusBar } from "status-bar.slint";
 import { CircleProgress } from "circle-progress.slint";
+import { FlashProgress } from "flash-progress.slint";
 import { Rate } from "rate.slint";
 import { ProgressBar } from "progress-bar.slint";
 import { RecordIndicator } from "record-indicator.slint";
@@ -75,6 +76,12 @@ import { Paragraph, ParagraphEntry } from "paragraph.slint";
 import { AudioControl } from "audio-control.slint";
 import { VideoControl } from "video-control.slint";
 import { TodoEntry, TodoList } from "todo-list.slint";
+import { GainFocus } from "gain-focus.slint";
+import { DatePicker, DatePickerPopup } from "date-picker.slint";
+import { HorizontalLedNumber, VerticalLedNumber } from "led.slint";
+import { BlankWelcome } from "blank-welcome.slint";
+import { FlickableWithScrollBar } from "flickable-with-scrollbar.slint";
+import { ChartBar } from "charbar.slint";
 
 export {
     AppPosType,
@@ -117,7 +124,6 @@ export {
     SettingDetailSwitch,
     SettingDetailInnerVbox,
     TxtEdit,
-    TxtEditStd,
     Brand,
     LanguageDialog,
     RadioBtn,
@@ -161,6 +167,7 @@ export {
     WaitTransactionConfirmed,
     StatusBar,
     CircleProgress,
+    FlashProgress,
     Rate,
     ProgressBar,
     RecordIndicator,
@@ -193,4 +200,13 @@ export {
     VideoControl,
     TodoEntry,
     TodoList,
+    GainFocus,
+    DatePicker,
+    DatePickerPopup,
+    HorizontalLedNumber,
+    VerticalLedNumber,
+    BlankWelcome,
+    FlickableWithScrollBar,
+    ChartBar,
+    ChartBarEntry,
 }

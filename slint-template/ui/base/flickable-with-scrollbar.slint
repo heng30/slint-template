@@ -1,0 +1,95 @@
+import { Theme } from "../theme.slint";
+import { Label } from "label.slint";
+
+// Example
+// FlickableWithScrollBar {
+//     VerticalLayout {
+//         spacing: Theme.spacing * 2;
+//         for index in 10: Rectangle {
+//             background: red;
+//             height: 100px;
+//
+//             Label {
+//                 text: index;
+//                 font-size: Theme.title1-font-size;
+//             }
+//         }
+//     }
+// }
+
+export component FlickableWithScrollBar inherits Rectangle {
+    in-out property <bool> is-show-scrollbar: true;
+    in-out property <length> spacing: Theme.spacing;
+
+    in-out property scrollbar-width <=> sb.width;
+    in-out property scrollbar-color <=> sb.background;
+    in-out property scrollbar-border-radius <=> sb.border-radius;
+
+    in-out property interactive <=> flick.interactive;
+    in-out property viewport-x <=> flick.viewport-x;
+    in-out property viewport-y <=> flick.viewport-y;
+    in-out property viewport-width <=> flick.viewport-width;
+    in-out property viewport-height <=> flick.viewport-height;
+
+    private property <bool> is-show-scrollbar-inner: is-show-scrollbar && flick.viewport-height > self.height;
+
+    callback flicked();
+
+    public function scroll(rate: float) {
+        flick.viewport-y = -(flick.viewport-height - flick.height) * rate;
+    }
+
+    flick := Flickable {
+        x: 0;
+        y: 0;
+        width: root.width - (is-show-scrollbar-inner ? (sb.width + root.spacing) : 0);
+        height: 100%;
+
+        private property <float> scroll-rate;
+
+        flicked => {
+            if (is-show-scrollbar-inner) {
+                scroll-rate = -self.viewport-y / (self.viewport-height - self.height);
+                sb.y = (parent.height - sb.height) * scroll-rate;
+            }
+            root.flicked()
+        }
+
+        @children
+    }
+
+    sb := Rectangle {
+        visible: is-show-scrollbar-inner;
+        x: root.width - self.width;
+        y: 0;
+        background: Theme.placeholder-text-color;
+        height: Math.max(parent.height * 0.1, flick.height * 2 - flick.viewport-height);
+        width: Theme.padding * 1.5;
+        border-radius: self.width / 2;
+
+        private property <bool> is-scrolling;
+        private property <length> offset-y;
+
+        TouchArea {
+            mouse-cursor: self.has-hover ? MouseCursor.pointer : MouseCursor.default;
+            moved => {
+                if (!is-scrolling) {
+                    return;
+                }
+                parent.offset-y = self.pressed-y - self.mouse-y;
+                parent.y = Math.clamp(parent.y - parent.offset-y, 0, flick.height - parent.height);
+                root.scroll(parent.y / (flick.height - parent.height));
+            }
+
+            pointer-event(event) => {
+                if (event.button == PointerEventButton.left) {
+                    if (event.kind == PointerEventKind.down) {
+                        is-scrolling = true;
+                    } else {
+                        is-scrolling = false;
+                    }
+                }
+            }
+        }
+    }
+}

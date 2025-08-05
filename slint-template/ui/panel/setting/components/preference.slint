@@ -9,7 +9,7 @@ export component Preference inherits SettingDetail {
     private property <bool> always-on-top;
     private property <bool> no-frame;
 
-    callback confirmed();
+    // callback confirmed();
 
     public function get() -> SettingPreference {
         return {
@@ -171,25 +171,6 @@ export component Preference inherits SettingDetail {
                     check => {
                         Theme.toggle();
                     }
-                }
-            }
-        }
-    }
-
-    if Store.device-type == DeviceType.Desktop: VerticalLayout {
-        padding: Theme.padding * 8;
-        padding-top: 0;
-        alignment: LayoutAlignment.end;
-        height: confirm-btn.preferred-height * 2;
-
-        HorizontalLayout {
-            alignment: LayoutAlignment.end;
-
-            confirm-btn := ConfirmBtn {
-                text: Logic.tr("Apply");
-
-                clicked => {
-                    root.confirmed();
                 }
             }
         }

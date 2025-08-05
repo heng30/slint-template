@@ -1,3 +1,4 @@
+import { LineEdit } from "std-widgets.slint";
 import { Theme, Icons } from "../theme.slint";
 import { Logic } from "../logic.slint";
 import { Util } from "../util.slint";
@@ -153,8 +154,7 @@ export component Pagination inherits Rectangle {
                         is-circle: true;
                         text: inner-real-current-page + 1;
                         font-size: root.font-size;
-                        background: root.real-current-page == inner-real-current-page ? Theme.thirdly-brand-color : Colors.transparent;
-                        text-color: root.real-current-page == inner-real-current-page ? Theme.light-text-color : root.text-color;
+                        background: root.real-current-page == inner-real-current-page ? Theme.thirdly-brand-color : Colors.transparent; text-color: root.real-current-page == inner-real-current-page ? Theme.light-text-color : root.text-color;
 
                         clicked => {
                             root.real-current-page = inner-real-current-page;

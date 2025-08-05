@@ -1,7 +1,7 @@
 use super::tr::tr;
 use crate::{
     config,
-    slint_generatedAppWindow::{AppPosType, AppWindow, Util},
+    slint_generatedAppWindow::{AppPosType, AppWindow, Date as UIDate, Util},
     toast_warn,
 };
 use cutil::{self, number, time};
@@ -252,6 +252,73 @@ pub fn init(ui: &AppWindow) {
             cutil::str::split_string_to_fixed_length_parts(input.as_str(), length as usize)
                 .join(sep.as_str())
                 .into()
+        });
+
+    ui.global::<Util>().on_get_current_date(|| {
+        let date = cutil::time::get_current_date();
+
+        UIDate {
+            year: date.year,
+            month: date.month as i32,
+            day: date.day as i32,
+            main_month: date.month as i32,
+        }
+    });
+
+    let ui_handle = ui.as_weak();
+    ui.global::<Util>()
+        .on_parse_date_str(move |date| match cutil::time::parse_date_str(&date) {
+            Ok(date) => UIDate {
+                year: date.year,
+                month: date.month as i32,
+                day: date.day as i32,
+                main_month: date.month as i32,
+            },
+            _ => ui_handle
+                .unwrap()
+                .global::<Util>()
+                .invoke_get_current_date(),
+        });
+
+    ui.global::<Util>()
+        .on_upate_date_picker(|year: i32, month: i32| {
+            match cutil::time::get_calendar_matrix(year, month as u32) {
+                Ok(dates) => ModelRc::new(
+                    dates
+                        .into_iter()
+                        .map(|row| {
+                            ModelRc::new(VecModel::from_slice(
+                                row.into_iter()
+                                    .map(|item| UIDate {
+                                        year: item.year,
+                                        month: item.month as i32,
+                                        day: item.day as i32,
+                                        main_month: month,
+                                    })
+                                    .collect::<Vec<_>>()
+                                    .as_slice(),
+                            ))
+                        })
+                        .collect::<VecModel<ModelRc<UIDate>>>(),
+                ),
+                Err(e) => {
+                    log::debug!("{e:?}");
+
+                    ModelRc::new(
+                        [[0; 7]; 6]
+                            .into_iter()
+                            .map(|row| {
+                                ModelRc::new(VecModel::from_slice(
+                                    row.into_iter()
+                                        .map(|_| UIDate::default())
+                                        .collect::<Vec<_>>()
+                                        .as_slice(),
+                                ))
+                            })
+                            .collect::<VecModel<ModelRc<UIDate>>>(),
+                    )
+                }
+            }
         });
 
     #[cfg(feature = "qrcode")]

@@ -4,7 +4,7 @@ import { Logic } from "../../logic.slint";
 import { Store } from "../../store.slint";
 import { HorizontalSettingIconsBar }  from "../setting/desktop.slint";
 
-import { SettingEntryV2, CenterLayout, IconsDialogSetting, Search, Label, SideBar, SideBarEntry, SideBarChildEntry } from "../../base/widgets.slint";
+import { SettingEntryV2, CenterLayout, IconsDialogSetting, Search, Label, SideBar, SideBarEntry, SideBarChildEntry, ChartBar } from "../../base/widgets.slint";
 import { Introduction }  from "examples/introducion.slint";
 import { TreeExample } from "examples/tree.slint";
 import { StepExample } from "examples/step.slint";
@@ -43,6 +43,7 @@ import { CenterLayoutExample }  from "examples/center-layout.slint";
 import { SlideCardExample }  from "examples/slide-card.slint";
 import { ListTileExample }  from "examples/list-tile.slint";
 import { DrawerExample }  from "examples/drawer.slint";
+import { FlickableWithScrollBarExample }  from "examples/flickable-with-scrollbar.slint";
 import { NewsExample }  from "examples/news.slint";
 import { HeadExample }  from "examples/head.slint";
 import { AboutExample }  from "examples/about.slint";
@@ -54,6 +55,7 @@ import { SignInExample }  from "examples/sign-in.slint";
 import { LogInExample }  from "examples/log-in.slint";
 import { PasswordExample }  from "examples/password.slint";
 import { ResetPasswordExample }  from "examples/reset-password.slint";
+import { DatePickerExample }  from "examples/date-picker.slint";
 import { SettingExample }  from "examples/setting.slint";
 import { TokenListExample }  from "examples/token-list.slint";
 import { TokenSenderExample }  from "examples/token-sender.slint";
@@ -66,6 +68,7 @@ import { ParagraphExample }  from "examples/paragraph.slint";
 import { AudioControlExample }  from "examples/audio-control.slint";
 import { VideoControlExample }  from "examples/video-control.slint";
 import { TodoListExample } from "examples/todo-list.slint";
+import { ChartBarExample } from "examples/chart-bar.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
@@ -121,6 +124,7 @@ component RightPanel inherits Rectangle {
     if Store.current-sidebar-key == "CenterLayout": CenterLayoutExample { }
     if Store.current-sidebar-key == "SlideCard": SlideCardExample { }
     if Store.current-sidebar-key == "Drawer": DrawerExample { }
+    if Store.current-sidebar-key == "FlickableWithScrollBar": FlickableWithScrollBarExample { }
 
     // Input
     if Store.current-sidebar-key == "Slider": SliderExample { }
@@ -132,6 +136,7 @@ component RightPanel inherits Rectangle {
     if Store.current-sidebar-key == "LogIn": LogInExample { }
     if Store.current-sidebar-key == "Password": PasswordExample { }
     if Store.current-sidebar-key == "ResetPassword": ResetPasswordExample { }
+    if Store.current-sidebar-key == "DatePicker": DatePickerExample { }
 
     // Navigation
     if Store.current-sidebar-key == "Tree": TreeExample { }
@@ -163,6 +168,7 @@ component RightPanel inherits Rectangle {
     if Store.current-sidebar-key == "ListTile": ListTileExample { }
     if Store.current-sidebar-key == "Paragraph": ParagraphExample { }
     if Store.current-sidebar-key == "TodoList": TodoListExample { }
+    if Store.current-sidebar-key == "ChartBar": ChartBarExample { }
 
     // Crypto
     if Store.current-sidebar-key == "Mnemonic": MnemonicExample { }

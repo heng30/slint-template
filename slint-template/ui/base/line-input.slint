@@ -71,12 +71,11 @@ export component LineInput inherits Rectangle {
 
         Flickable {
             viewport-width: text-input.preferred-width + Theme.padding;
-            height: Math.max(text-input.preferred-height, root.icon-size);
+            height: text-input.preferred-height;
 
             Rectangle {
                 x: 0;
                 width: Math.max(parent.width, text-input.preferred-width);
-                height: parent.height;
 
                 fs := FocusScope {
                     key-pressed(event) => {

@@ -1,5 +1,5 @@
 import { Util, Theme } from "../../def.slint";
-import { ProgressBar, CircleProgress, ExampleComponent } from "../../../base/widgets.slint";
+import { ProgressBar, CircleProgress, FlashProgress, ExampleComponent } from "../../../base/widgets.slint";
 
 export component ProgressExample inherits Flickable {
     viewport-height: vbox.preferred-height;
@@ -62,6 +62,22 @@ export component ProgressExample inherits Flickable {
                 }
 
                 code: "ProgressBar {\n    orientation: Orientation.vertical;\n    width: 50px;\n    height: 200px;\n    progress: Util.progress-value(3s);\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.min(1000px, root.width * 0.8);
+
+                FlashProgress {
+                    progress: 0.4;
+                    finished-color: Theme.thirdly-brand-color;
+                }
+
+                code: "FlashProgress {\n    progress: 0.4;\n    finished-color: blue;\n}";
             }
         }
     }

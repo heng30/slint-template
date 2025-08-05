@@ -15,6 +15,8 @@ export component Dialog inherits Rectangle {
     in-out property <bool> is-prevent-event-forward: false;
     in-out property <bool> gain-focus-when-init: true;
     in-out property <bool> gain-focus-when-clicked: true;
+    in-out property <string> cancel-text: Logic.tr("Cancel");
+    in-out property <string> confirm-text: Logic.tr("Confirm");
 
     callback close <=> cancel-clicked;
     callback canceled <=> cancel-clicked;
@@ -91,7 +93,7 @@ export component Dialog inherits Rectangle {
 
                 if !is-hide-cancel-btn: CancelBtn {
                     icon: Icons.cancel;
-                    text: Logic.tr("Cancel");
+                    text: root.cancel-text;
                     gain-focus-when-clicked: root.gain-focus-when-clicked;
 
                     clicked => {
@@ -101,7 +103,7 @@ export component Dialog inherits Rectangle {
 
                 if !is-hide-confirm-btn: ConfirmBtn {
                     icon: Icons.success;
-                    text: Logic.tr("Confirm");
+                    text: root.confirm-text;
                     gain-focus-when-clicked: root.gain-focus-when-clicked;
 
                     clicked => {

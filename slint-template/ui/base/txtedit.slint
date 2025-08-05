@@ -55,6 +55,7 @@ export component TxtEdit inherits Rectangle {
     in-out property text <=> edit.text;
     in-out property font-size <=> edit.font-size;
     in-out property text-color <=> edit.color;
+    in-out property read-only <=> edit.read-only;
 
     callback edited(text: string);
     callback key-pressed <=> edit.key-pressed;

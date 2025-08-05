@@ -107,6 +107,10 @@ export global Store {
                     title: is-cn ? "抽屉" : "Drawer",
                     key: "Drawer",
                 },
+                {
+                    title: is-cn ? "滚动区域" : "FlickableWithScrollBar",
+                    key: "FlickableWithScrollBar",
+                },
             ]
         },
         // Input
@@ -148,6 +152,10 @@ export global Store {
                 {
                     title: is-cn ? "重置密码" : "ResetPassword",
                     key: "ResetPassword",
+                },
+                {
+                    title: is-cn ? "日期选择" : "DatePicker",
+                    key: "DatePicker",
                 },
             ]
         },
@@ -269,6 +277,10 @@ export global Store {
                     title: is-cn ? "代办列表" : "TodoList",
                     key: "TodoList",
                 },
+                {
+                    title: is-cn ? "条形图" : "ChartBar",
+                    key: "ChartBar",
+                },
             ]
         },
         // Crypto
@@ -316,7 +328,7 @@ export global Store {
         // MultiMedia
         {
             category: is-cn ? "多媒体" : "MultiMedia",
-            is-open: true,
+            is-open: false,
             children: [
                 {
                     title: is-cn ? "音乐控制" : "AudioControl",

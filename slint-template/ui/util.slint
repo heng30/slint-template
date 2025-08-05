@@ -1,5 +1,5 @@
 import { Theme, Icons } from "theme.slint";
-import { ToastStatus, AppPosType, TreeEntry, MediaControlStatus } from "./base/def.slint";
+import { ToastStatus, AppPosType, TreeEntry, MediaControlStatus, Date } from "./base/def.slint";
 
 export global Util {
     callback hide-window();
@@ -39,6 +39,18 @@ export global Util {
     pure callback local-now(format: string) -> string;
     pure callback format_number_with_commas(num-str: string) -> string;
     pure callback split-and-join-string(input: string, length: int, sep: string) -> string;
+
+    pure callback parse-date-str(date: string) -> Date;
+    pure callback get-current-date() -> Date;
+    get-current-date => {
+        return {
+            year: 2025,
+            month: 10,
+            day:09,
+        };
+    }
+
+    pure callback upate-date-picker(year: int, month: int) -> [[Date]];
 
     public pure function text-color(status: ToastStatus) -> color {
         if (status == ToastStatus.Success) {
@@ -113,5 +125,9 @@ export global Util {
         } else {
             return MediaControlStatus.Once;
         }
+    }
+
+    pure public function date-str(date: Date) -> string {
+        return date.year + "-" + (date.month < 10 ? "0" + date.month : date.month) + "-" + (date.day < 10 ? "0" + date.day : date.day);
     }
 }

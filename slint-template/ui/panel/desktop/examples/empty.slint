@@ -1,5 +1,5 @@
 import { Util, Theme, Icons, Logic } from "../../def.slint";
-import { NoMessageImg, NoDataImg, ExampleComponent } from "../../../base/widgets.slint";
+import { NoMessageImg, NoDataImg, ExampleComponent, BlankWelcome } from "../../../base/widgets.slint";
 
 export component EmptyExample inherits Flickable {
     viewport-height: vbox.preferred-height;
@@ -12,29 +12,48 @@ export component EmptyExample inherits Flickable {
         padding-bottom: Theme.padding * 5;
         alignment: LayoutAlignment.center;
 
-        HorizontalLayout {
-            width: root.width;
-            alignment: LayoutAlignment.center;
+        VerticalLayout {
+            spacing: Theme.spacing * 10;
 
-            ExampleComponent {
-                width: Math.min(1000px, root.width * 0.8);
+            HorizontalLayout {
+                width: root.width;
+                alignment: LayoutAlignment.center;
 
-                HorizontalLayout {
-                    spacing: Theme.spacing * 10;
+                ExampleComponent {
+                    width: Math.min(1000px, root.width * 0.8);
 
-                    NoMessageImg {
-                        width: 500px;
-                        img-width: 300px;
-                        text: Logic.tr("No Message");
+                    HorizontalLayout {
+                        spacing: Theme.spacing * 10;
+
+                        NoMessageImg {
+                            width: 500px;
+                            img-width: 300px;
+                            text: Logic.tr("No Message");
+                        }
+
+                        NoDataImg {
+                            width: 500px;
+                            text: Logic.tr("No Data");
+                        }
                     }
 
-                    NoDataImg {
-                        width: 500px;
-                        text: Logic.tr("No Data");
-                    }
+                    code: "HorizontalLayout {\n    spacing: Theme.spacing * 10;\n\n    NoMessageImg {\n        width: 500px;\n        img-width: 300px;\n        text: Logic.tr(\"No Message\");\n    }\n\n    NoDataImg {\n        width: 500px;\n        text: Logic.tr(\"No Data\");\n    }\n}";
                 }
+            }
 
-                code: "HorizontalLayout {\n    spacing: Theme.spacing * 10;\n\n    NoMessageImg {\n        width: 500px;\n        img-width: 300px;\n        text: Logic.tr(\"No Message\");\n    }\n\n    NoDataImg {\n        width: 500px;\n        text: Logic.tr(\"No Data\");\n    }\n}";
+            HorizontalLayout {
+                width: root.width;
+                alignment: LayoutAlignment.center;
+                ExampleComponent {
+                    width: Math.min(1000px, root.width * 0.8);
+
+                    BlankWelcome {
+                        title: "Welcome to use slint-template";
+                        sub-title: "It's a template project for slint GUI framework";
+                    }
+
+                    code: "BlankWelcome {\n    title: \"Welcome to use slint-template\";\n    sub-title: \"It's a template project for slint GUI framework\";\n}";
+                }
             }
         }
     }

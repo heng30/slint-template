@@ -12,6 +12,7 @@ export component ProcessStep inherits Rectangle {
     in-out property <[string]> steps;
     in-out property <int> current-step;
     in-out property <Orientation> orientation;
+    in-out property <bool> is-hide-text;
 
     in-out property <length> number-font-size: Theme.title3-font-size;
     in-out property <length> text-font-size: Theme.title5-font-size;
@@ -33,6 +34,8 @@ export component ProcessStep inherits Rectangle {
     private property <float> process-value: Util.progress-value(1s);
 
     if Orientation.horizontal == root.orientation: HorizontalLayout {
+        private property <bool> update-size-flag;
+
         spacing: Theme.padding * 2;
 
         init => {
@@ -40,9 +43,18 @@ export component ProcessStep inherits Rectangle {
             root.preferred-height = self.preferred-height;
         }
 
+        changed update-size-flag => {
+            root.preferred-width = self.preferred-width;
+            root.preferred-height = self.preferred-height;
+        }
+
         for item[index] in steps: VerticalLayout {
             alignment: LayoutAlignment.space-between;
             spacing: root.text-font-size / 2;
+
+            init => {
+                update-size-flag = !update-size-flag;
+            }
 
             HorizontalLayout {
                 spacing: Theme.padding * 2;
@@ -76,7 +88,7 @@ export component ProcessStep inherits Rectangle {
                 }
             }
 
-            if item != "": Label {
+            if item != "" && !is-hide-text: Label {
                 text: item;
                 font-size: root.text-font-size;
                 color: root.text-color;
@@ -85,6 +97,13 @@ export component ProcessStep inherits Rectangle {
     }
 
     if Orientation.vertical == root.orientation: VerticalLayout {
+        private property <bool> update-size-flag;
+
+        changed update-size-flag => {
+            root.preferred-width = self.preferred-width;
+            root.preferred-height = self.preferred-height;
+        }
+
         spacing: Theme.padding * 2;
 
         init => {
@@ -95,6 +114,10 @@ export component ProcessStep inherits Rectangle {
         for item[index] in steps: HorizontalLayout {
             alignment: LayoutAlignment.start;
             spacing: root.text-font-size;
+
+            init => {
+                update-size-flag = !update-size-flag;
+            }
 
             VerticalLayout {
                 spacing: Theme.padding * 2;
@@ -128,7 +151,7 @@ export component ProcessStep inherits Rectangle {
                 }
             }
 
-            if item != "": Rectangle {
+            if item != "" && !is-hide-text: Rectangle {
                 height: step-circle.height;
 
                 Label {

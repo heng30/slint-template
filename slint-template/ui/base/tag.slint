@@ -5,9 +5,9 @@ export component Tag inherits Rectangle {
     in-out property text <=> tag.text;
     in-out property text-color <=> tag.color;
     in-out property font-size <=> tag.font-size;
-    in-out property<bool> is-show-close-btn: false;
-    in-out property<length> hpadding: Theme.padding;
-    in-out property<length> vpadding: Theme.padding;
+    in-out property <bool> is-show-close-btn: false;
+    in-out property <length> hpadding: Theme.padding * 2;
+    in-out property <length> vpadding: Theme.padding;
 
     callback close <=> close-btn.clicked;
 
@@ -23,7 +23,7 @@ export component Tag inherits Rectangle {
         tag := Text {
             vertical-alignment: center;
             font-size: Theme.default-font-size - 4px;
-            color: Theme.invert-base-color;
+            color: root.background.darker(150%);
         }
 
         VerticalLayout {

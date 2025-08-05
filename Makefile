@@ -34,6 +34,9 @@ desktop-build-release:
 desktop-debug:
 	$(desktop-build-env) $(run-env) cargo run --bin ${app-name} --features=desktop
 
+desktop-debug-winit:
+	SLINT_BACKEND=winit-femtovg $(desktop-build-env) $(run-env) cargo run --bin ${app-name} --features=desktop
+
 web-build-debug:
 	cd $(app-name) && $(web-build-env) wasm-pack build --no-opt --dev --target web --out-dir ./web/pkg --features=web
 

@@ -6,7 +6,6 @@ export global Theme {
     out property <length> padding: Math.max(4px, Math.round(default-font-size / 4px) * 1px);
     out property <length> spacing: padding;
     out property <length> border-radius: padding;
-    out property <length> scroll-width: 12px;
     out property <length> header-height: Math.max(32px, icon-size + padding * 2);
     out property <length> footer-height: Math.max(40px, icon-size + default-font-size);
 
@@ -67,9 +66,16 @@ export global Theme {
     out property <color> have-read-text-color: is-dark ? #555555 : #606060;
     out property <color> link-text-color: is-dark ? #4B60D8 : #3F51FF;
 
+    out property <color> table-header-color: is-dark ? thirdly-background.darker(50%) : thirdly-background.brighter(2%);
+    out property <color> table-item-first: is-dark ? #161616 : #FFFFFF;
+    out property <color> table-item-second: is-dark ? #262626 : #EFEFEF.brighter(2%);
+
+    out property <color> divider-color: is-dark ? #3B3B3B : #DCDCDC;
+
     out property <[color]> tag-colors: is-dark ? [#A3B3CC, #94C2AF, #9AC0C4, #B2ACCA, #CCA8A3, #CAA6BC, #A8C085, #B0B2B6] : [#CCE0FF, #BAF3DB, #C1F0F5, #DFD8FD, #FFD2CC, #FDD0EC, #D3F1A7, #DCDFE4];
 
     out property <float> golden-ratio: 0.618;
+    out property <float> blank-welcome-opacity: is-dark ? 0.618 : 0.8;
 
     public function set-dark(flag: bool) {
         Store.setting-preference.is-dark = flag;
@@ -272,4 +278,19 @@ export global Icons {
     out property <image> reasoner: @image-url("./images/reasoner.svg");
     out property <image> mcp: @image-url("./images/mcp.svg");
     out property <image> circle-fill: @image-url("./images/circle-fill.svg");
+    out property <image> record-fill: @image-url("./images/record-fill.svg");
+    out property <image> statistic-fill: @image-url("./images/statistic-fill.svg");
+    out property <image> more-v: @image-url("./images/more-v.svg");
+    out property <image> more-h: @image-url("./images/more-h.svg");
+    out property <image> sort-line: @image-url("./images/sort-line.svg");
+    out property <image> sort-line-light: @image-url("./images/sort-line-light.svg");
+    out property <image> archive-fill: @image-url("./images/archive-fill.svg");
+    out property <image> plan-light: @image-url("./images/plan-light.svg");
+    out property <image> plan-fill: @image-url("./images/plan-fill.svg");
+    out property <image> calender: @image-url("./images/calendar.svg");
+    out property <image> move: @image-url("./images/move.svg");
+    out property <image> ai-robot: @image-url("./images/ai-robot.svg");
+    out property <image> delete-all-light: @image-url("./images/delete-all-light.svg");
+    out property <image> next-fill: @image-url("./images/next-fill.svg");
+    out property <image> next-light: @image-url("./images/next-light.svg");
 }

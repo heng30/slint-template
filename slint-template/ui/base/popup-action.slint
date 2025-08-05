@@ -62,11 +62,11 @@ export component PopupAction inherits Rectangle {
     in-out property <bool> gain-focus-when-clicked;
 
     pure function calc-x() -> length {
-        return Math.clamp(PopupActionSetting.pressed-absolute-x + Theme.padding * 2, 0px, root.window-width - rect.width);
+        return Math.clamp(PopupActionSetting.pressed-absolute-x + Theme.padding * 2, Theme.padding * 2, root.window-width - rect.width - Theme.padding * 2);
     }
 
     pure function calc-y() -> length {
-        return Math.clamp(PopupActionSetting.pressed-absolute-y + Theme.padding * 2, 0px, root.window-height - rect.height);
+        return Math.clamp(PopupActionSetting.pressed-absolute-y + Theme.padding * 2, Theme.padding * 2, root.window-height - rect.height - Theme.padding * 2);
     }
 
     fs := FocusScope { }
@@ -76,7 +76,6 @@ export component PopupAction inherits Rectangle {
             if (gain-focus-when-clicked) {
                 fs.focus();
             }
-
             PopupActionSetting.hide();
         }
     }

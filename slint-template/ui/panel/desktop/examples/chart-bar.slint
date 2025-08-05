@@ -1,0 +1,93 @@
+import { Util, Theme, Icons, Logic } from "../../def.slint";
+import { ExampleComponent, ChartBar } from "../../../base/widgets.slint";
+
+export component ChartBarExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+    interactive: false; // disable dragging
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.min(1000px, root.width * 0.8);
+
+                VerticalLayout {
+                    spacing: Theme.spacing * 10;
+
+                    HorizontalLayout {
+                        alignment: center;
+
+                        ChartBar {
+                            height: 500px;
+                            width: Math.min(1000px, root.width * 0.8);
+
+                            title: Logic.tr("Tasks Count");
+                            entries: [
+                                {
+                                    label: "Running",
+                                    value: 3,
+                                    color: Colors.blue,
+                                },
+                                {
+                                    label: "Finished",
+                                    value: 3,
+                                    color: Colors.green,
+                                },
+                                {
+                                    label: "Giveup",
+                                    value: 2,
+                                    color: Colors.red,
+                                },
+                                {
+                                    label: "Timeout",
+                                    value: 1,
+                                    color: Colors.yellow,
+                                },
+                            ];
+                        }
+                    }
+
+                    ChartBar {
+                        height: 500px;
+                        width: Math.min(1000px, root.width * 0.8);
+                        orientation: Orientation.vertical;
+
+                        title: Logic.tr("Tasks Count");
+                        entries: [
+                            {
+                                label: "Running",
+                                value: 3,
+                                color: Colors.blue,
+                            },
+                            {
+                                label: "Finished",
+                                value: 5,
+                                color: Colors.green,
+                            },
+                            {
+                                label: "Giveup",
+                                value: 2,
+                                color: Colors.red,
+                            },
+                            {
+                                label: "Timeout",
+                                value: 1,
+                                color: Colors.yellow,
+                            },
+                        ];
+                    }
+                }
+
+                code: "ChartBar {\n    height: 500px;\n    width: Math.min(1000px, root.width * 0.8);\n    is-hide-number-axis: true;\n\n    title: Logic.tr(\"Tasks Count\");\n    entries: [\n        {\n            label: \"Running\",\n            value: 30,\n            color: Colors.blue,\n        },\n        {\n            label: \"Finished\",\n            value: 50,\n            color: Colors.green,\n        },\n        {\n            label: \"Giveup\",\n            value: 20,\n            color: Colors.red,\n        },\n        {\n            label: \"Timeout\",\n            value: 5,\n            color: Colors.yellow,\n        },\n    ];\n}";
+            }
+        }
+    }
+}

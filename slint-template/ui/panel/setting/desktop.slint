@@ -60,6 +60,14 @@ component LeftPanel inherits Rectangle {
 component RightPanel inherits Rectangle {
     background: Theme.base-background;
 
+    public function apply() {
+        if (Store.current-setting-detail-index == SettingDetailIndex.Preference) {
+            preference.apply();
+        } else if (Store.current-setting-detail-index == SettingDetailIndex.Proxy) {
+            proxy.apply();
+        }
+    }
+
     init => {
         Logic.switch-setting-detail(SettingDetailIndex.Preference);
     }
@@ -68,7 +76,7 @@ component RightPanel inherits Rectangle {
         visible: Store.current-setting-detail-index == SettingDetailIndex.Preference;
         is-show-header: false;
 
-        confirmed => {
+        public function apply() {
             if (self.get().font-size == "" || self.get().win-width == "" || self.get().win-height == "") {
                 Util.show-toast(Logic.tr("Input can not be empty"), ToastStatus.Warning);
                 return;
@@ -86,7 +94,7 @@ component RightPanel inherits Rectangle {
         visible: Store.current-setting-detail-index == SettingDetailIndex.Proxy;
         is-show-header: false;
 
-        confirmed => {
+        public function apply() {
             Logic.set-setting-proxy(self.get());
         }
     }
@@ -101,6 +109,10 @@ component RightPanel inherits Rectangle {
 }
 
 component Setting inherits Rectangle {
+    public function apply() {
+        rp.apply();
+    }
+
     lp := LeftPanel {
         x: 0;
         width: Math.max(root.width * 0.3, Theme.title3-font-size * 10);
@@ -126,8 +138,9 @@ component Setting inherits Rectangle {
 
 export component SettingDialog inherits Dialog {
     title: Logic.tr("Setting");
-    is-hide-bottom-btns: true;
+    is-hide-cancel-btn: true;
     is-prevent-event-forward: true;
+    confirm-text: Logic.tr("Apply");
 
     in-out property <length> inner-height: 650px;
 
@@ -137,6 +150,10 @@ export component SettingDialog inherits Dialog {
 
     cancel-clicked => {
         Logic.switch-tab(TabIndex.Back);
+    }
+
+    ok-clicked => {
+        setting.apply();
     }
 }
 

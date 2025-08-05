@@ -4,8 +4,6 @@ import { SettingDetail, SettingDetailInner, SettingDetailInnerVbox, SettingDetai
 export component Proxy inherits SettingDetail {
     title: Logic.tr("Proxy");
 
-    callback confirmed();
-
     init => {
         root.set(Logic.get-setting-proxy());
     }
@@ -88,25 +86,6 @@ export component Proxy inherits SettingDetail {
                         input-type: number;
                         placeholder-text: "1080";
                     }
-                }
-            }
-        }
-    }
-
-    if Store.device-type == DeviceType.Desktop: VerticalLayout {
-        padding: Theme.padding * 8;
-        padding-top: 0;
-        alignment: LayoutAlignment.end;
-        height: confirm-btn.preferred-height * 2;
-
-        HorizontalLayout {
-            alignment: LayoutAlignment.end;
-
-            confirm-btn := ConfirmBtn {
-                text: Logic.tr("Apply");
-
-                clicked => {
-                    root.confirmed();
                 }
             }
         }
