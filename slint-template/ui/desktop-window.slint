@@ -45,7 +45,7 @@ export component AppWindow inherits Window {
     if !ToastSetting.is-timeout || ToastSetting.is-hover: Toast {
         x: root.width / 2 - self.width / 2;
         y: 50px;
-        inner-max-width: root.width * 80%;
+        width: Math.min(root.width * 80%, self.preferred-width);
         clicked => {
             Logic.copy-to-clipboard(ToastSetting.text);
         }
