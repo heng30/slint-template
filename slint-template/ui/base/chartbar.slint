@@ -173,7 +173,7 @@ export component ChartBar inherits Rectangle {
                         width: parent.width;
 
                         for index in number-counts: Label {
-                            x: parent.width * self.text.to-float() / max-value;
+                            x: max-value <= 0 ? -self.preferred-width / 2 : parent.width * self.text.to-float() / max-value - self.preferred-width / 2;
                             rotation-angle: number-totation-angle;
                             text: number-counts <= 1 ? 0 : Math.floor(max-value / (number-counts - 1)) * index;
                         }
@@ -213,9 +213,9 @@ export component ChartBar inherits Rectangle {
                     height: parent.height;
 
                     for index in number-counts: Label {
-                        y: parent.height * (number-counts - self.text.to-float()) / max-value - self.preferred-height / 2;
+                        y: max-value <= 0 ? parent.height - self.preferred-height / 2 : parent.height - parent.height * self.text.to-float() / max-value - self.preferred-height / 2;
                         rotation-angle: number-totation-angle;
-                        text: number-counts <= 1 ? 0 : Math.floor(max-value / (number-counts - 1)) * (number-counts - index - 1);
+                        text: number-counts <= 1 ? 0 : Math.floor(max-value / (number-counts - 1)) * index;
                     }
                 }
             }

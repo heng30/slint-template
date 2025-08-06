@@ -28,10 +28,10 @@ export component ToastExample inherits Flickable {
                         bg-color: Theme.success-color;
                         text-color: Colors.white;
                         colorize: Colors.white;
-                        text: Logic.tr("Success");
+                        text: Logic.tr("long success text");
 
                         clicked() => {
-                            Util.show-toast("Success Message", ToastStatus.Success);
+                            Util.show-toast( "IconBtn { \n    use-auto-size: true;\n    icon: Icons.success-fill;\n    bg-color: Theme.success-color;\n    text-color: Colors.white;\n    colorize: Colors.white;\n    text: Logic.tr(\"success\");\n\n    clicked() => {\n        ToastSetting.set(\"Success Message\", ToastStatus.Success);\n    }\n}", ToastStatus.Success);
                         }
                     }
                 }

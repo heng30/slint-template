@@ -94,8 +94,8 @@ clean:
 	cargo clean
 
 deb:
-	cd ./${app-name}/pkg/deb && bash -e "./create_deb.sh"
-	mv ./${app-name}/pkg/deb/$(app-name).deb ./target
+	cd package/deb && bash -e "./pkg-deb.sh"
+	mv package/deb/$(app-name).deb ./target
 
 app-name:
 	echo "$(app-name)" > target/app-name

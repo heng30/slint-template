@@ -13,6 +13,9 @@
 ### Introduction
 It's a Rust template project for Slint GUI. It cantains frequently-used components, setting panel, configure, simple database feature and other somall feature. This project can be compiled to Desktop (Windows, Linix, Macos), Android and Web platform.
 
+### How to initialize a new project?
+Enter the `script` directory and run `./init-project.sh <new-project-name>` to initialize a new project.
+
 ### How to build?
 - Install `Rust`, `Cargo`, `cargo-apk` and `wasm-pack`
 - Install Android `sdk`, `ndk`, `jdk17`, and set environment variables.
@@ -46,5 +49,4 @@ It's a Rust template project for Slint GUI. It cantains frequently-used componen
 - [Viewer for Slint](https://github.com/slint-ui/slint/tree/master/tools/viewer)
 - [LSP (Language Server Protocol) Server for Slint](https://github.com/slint-ui/slint/tree/master/tools/lsp)
 - [developer.android.com](https://developer.android.com/guide)
-- [color4bg](https://www.color4bg.com/zh-hans/)
 - [How to Deploy Rust Binaries with GitHub Actions](https://dzfrias.dev/blog/deploy-rust-cross-platform-github-actions/)
