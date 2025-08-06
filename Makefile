@@ -1,58 +1,50 @@
 #!/bin/sh
 
 pwd = ${shell pwd}
-
 app-name = slint-template
 version = `git describe --tags --abbrev=0`
 
 build-env =
 android-build-env = SLINT_STYLE=material $(build-env)
 desktop-build-env = SLINT_STYLE=fluent $(build-env)
-desktop-debug-build-env = RUSTFLAGS="-Cllvm-args=-inline-threshold=10 -Cllvm-args=-inlinedefault-threshold=10 -Cllvm-args=-inlinehint-threshold=10"
 web-build-env = SLINT_STYLE=fluent $(build-env) RUSTFLAGS='--cfg getrandom_backend="wasm_js"'
 
-run-env = RUST_LOG=debug,reqwest=warn,sqlx=warn
+run-env = RUST_LOG=debug
 proj-features = --features=desktop,database,qrcode,center-window
 
 all: desktop-build-release
 
 android-build:
-	$(android-build-env) cargo apk build --lib -p ${app-name} --features=android
+	$(android-build-env) cargo apk build --lib -p ${app-name} --no-default-features --features=mobile,android
 
 android-build-release:
-	$(android-build-env) cargo apk build --lib --release -p ${app-name} --features=android
+	$(android-build-env) cargo apk build --lib --release -p ${app-name} --no-default-features --features=mobile,android
 
 android-debug:
-	$(android-build-env) $(run-env) cargo apk run --lib -p ${app-name} --features=android
+	$(android-build-env) $(run-env) cargo apk run --lib -p ${app-name} --no-default-features --features=mobile,android
 
-desktop-build-debug:
-	$(desktop-build-env) cargo build --features=desktop
+desktop-build:
+	$(desktop-build-env) cargo build --no-default-features --features=desktop
 
 desktop-build-release:
-	$(desktop-build-env) cargo build --release --features=desktop
+	$(desktop-build-env) cargo build --release --no-default-features --features=desktop
 
 desktop-debug:
-	$(desktop-build-env) $(run-env) cargo run --bin ${app-name} --features=desktop
+	$(desktop-build-env) $(run-env) cargo run --bin ${app-name} --no-default-features --features=desktop
 
 desktop-debug-winit:
-	SLINT_BACKEND=winit-femtovg $(desktop-build-env) $(run-env) cargo run --bin ${app-name} --features=desktop
+	SLINT_BACKEND=winit-femtovg $(desktop-build-env) $(run-env) cargo run --bin ${app-name} --no-default-features --features=desktop
 
-web-build-debug:
-	cd $(app-name) && $(web-build-env) wasm-pack build --no-opt --dev --target web --out-dir ./web/pkg --features=web
+web-build:
+	cd $(app-name) && $(web-build-env) wasm-pack build --no-opt --dev --target web --out-dir ./web/pkg --no-default-features --features=web
 
 web-build-release:
-	cd $(app-name) && $(web-build-env) wasm-pack build --no-opt --release --target web --out-dir ./web/pkg --features=web
-
-web-build-dist:
 	- rm -rf ./web/dist/*
-	cd $(app-name) && $(web-build-env) wasm-pack build --no-opt --release --target web --out-dir ./web/dist/pkg --features=web
+	cd $(app-name) && $(web-build-env) wasm-pack build --no-opt --release --target web --out-dir ./web/dist/pkg --no-default-features --features=web
 	cd $(app-name) && cp -f ./web/index.html ./web/dist && cp -f ./ui/images/brand.png ./web/dist/pkg/favicon.png
 
-web-server:
+web-debug: web-build
 	cd $(app-name) && python3 -m http.server -d web 8000
-
-web-server-dist:
-	cd $(app-name) && python3 -m http.server -d web/dist 8800
 
 tr:
 	cargo run --bin tr-helper
@@ -77,9 +69,6 @@ packing-web:
 	tar -zcf target/$(app-name)-$(version)-web.tar.gz ${app-name}/web/dist
 	echo "$(app-name)-$(version)-web.tar.gz" > target/output-name
 
-reduce-linux-binary-size:
-	upx -9 target/release/$(app-name)
-
 slint-viewer-android:
 	$(android-build-env) slint-viewer --auto-reload -I $(app-name)/ui ${app-name}/ui/android-window.slint
 
@@ -88,9 +77,6 @@ slint-viewer-desktop:
 
 slint-viewer-web:
 	$(web-build-env) slint-viewer --auto-reload -I $(app-name)/ui ${app-name}/ui/web-window.slint
-
-nix-shell:
-	nix-shell
 
 test:
 	$(build-env) $(run-env) cargo test -- --nocapture
@@ -104,13 +90,6 @@ clippy:
 check:
 	cargo check $(proj-features)
 
-clean-incremental:
-	rm -rf ./target/debug/incremental
-	rm -rf ./target/aarch64-linux-android/debug/incremental
-
-clean-unused-dependences:
-	cargo machete
-
 clean:
 	cargo clean
 
@@ -119,7 +98,6 @@ deb:
 	mv ./${app-name}/pkg/deb/$(app-name).deb ./target
 
 app-name:
-	- mkdir -p target
 	echo "$(app-name)" > target/app-name
 
 get-font-name:

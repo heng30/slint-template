@@ -18,13 +18,13 @@ export global Logic {
     callback increase-font-size();
     callback decrease-font-size();
 
-    pure callback inner-tr(is-cn: bool, text: string) -> string;
-    inner-tr(is-cn, text) => {
+    pure callback inner-tr(text: string, lang: string) -> string;
+    inner-tr(text, lang) => {
         return text;
     }
 
     pure public function tr(text: string) -> string {
-        inner-tr(Store.is-cn, text)
+        return inner-tr(text, Store.setting-preference.language);
     }
 
     // desktop

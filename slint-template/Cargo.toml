@@ -58,13 +58,16 @@ slint-build.workspace = true
 embed-resource.workspace = true
 
 [features]
+default = ["desktop"]
+
 web = []
-default = []
 desktop = []
+mobile = ["android"]
+android = ["slint/backend-android-activity-06"]
+
 database = ["dep:sqldb"]
 qrcode = ["dep:image", "dep:qrcode"]
 center-window = ["dep:display-info"]
-android = ["slint/backend-android-activity-06"]
 
 [lib]
 path = "src/lib.rs"

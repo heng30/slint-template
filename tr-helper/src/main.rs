@@ -22,6 +22,9 @@ struct Args {
     /// Output file
     #[arg(short, long)]
     output_file: Option<String>,
+
+    #[arg(short, long, default_value = "cn")]
+    language: String,
 }
 
 fn main() -> Result<()> {
@@ -30,7 +33,7 @@ fn main() -> Result<()> {
 
     let mut final_translations = vec![];
     for item in translations {
-        if tr(&item) == item {
+        if tr(&item, args.language.clone()) == item {
             final_translations.push(item);
         }
     }

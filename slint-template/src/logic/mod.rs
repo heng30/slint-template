@@ -1,60 +1,35 @@
 use crate::slint_generatedAppWindow::AppWindow;
 
-#[cfg(any(
-    target_os = "windows",
-    target_os = "linux",
-    target_os = "macos",
-    target_os = "android"
-))]
+#[cfg(any(feature = "desktop", feature = "mobile"))]
 mod about;
 
-#[cfg(any(
-    target_os = "windows",
-    target_os = "linux",
-    target_os = "macos",
-    target_os = "android"
-))]
+#[cfg(any(feature = "desktop", feature = "mobile"))]
 mod clipboard;
 
-#[cfg(any(
-    target_os = "windows",
-    target_os = "linux",
-    target_os = "macos",
-    target_os = "android"
-))]
+#[cfg(any(feature = "desktop", feature = "mobile"))]
 mod util;
 
-#[cfg(any(
-    target_os = "windows",
-    target_os = "linux",
-    target_os = "macos",
-    target_os = "android"
-))]
+#[cfg(any(feature = "desktop", feature = "mobile"))]
 mod setting;
+
+#[cfg(any(feature = "desktop", feature = "mobile"))]
+mod tr;
 
 mod confirm_dialog;
 mod popup_action;
 mod toast;
 
-#[allow(unused)]
-mod tr;
-
-#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
+#[cfg(feature = "desktop")]
 mod examples_desktop;
 
-#[cfg(any(target_os = "android"))]
+#[cfg(feature = "android")]
 mod examples_mobile;
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "web")]
 mod examples_web;
 
 pub fn init(ui: &AppWindow) {
-    #[cfg(any(
-        target_os = "windows",
-        target_os = "linux",
-        target_os = "macos",
-        target_os = "android",
-    ))]
+    #[cfg(any(feature = "desktop", feature = "mobile"))]
     {
         util::init(ui);
         clipboard::init(ui);
@@ -67,13 +42,13 @@ pub fn init(ui: &AppWindow) {
     popup_action::init(ui);
 
     {
-        #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
+        #[cfg(feature = "desktop")]
         examples_desktop::init(ui);
 
-        #[cfg(any(target_os = "android"))]
+        #[cfg(any(feature = "android"))]
         examples_mobile::init(ui);
 
-        #[cfg(target_arch = "wasm32")]
+        #[cfg(feature = "web")]
         examples_web::init(ui);
     }
 }

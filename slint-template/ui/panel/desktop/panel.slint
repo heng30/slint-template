@@ -138,11 +138,15 @@ export component DesktopPanel inherits Rectangle {
         }
 
         HorizontalLayout {
-            height: root.home-height;
+            vertical-stretch: 1;
 
-            if !Store.setting-preference.no-frame: VerticalStatusBar { }
+            if !Store.setting-preference.no-frame: VerticalStatusBar {
+                vertical-stretch: 1;
+            }
 
-            Home { }
+            Home {
+                vertical-stretch: 1;
+            }
         }
     }
 
@@ -174,7 +178,7 @@ export component DesktopPanel inherits Rectangle {
     }
 
     if is-show-donate-dialog: DonateDialog {
-        width: Math.min(1300px, root.width * 0.95);
+        width: Math.min(600px, root.width * 0.95);
         escape => {
             Logic.switch-popup(PopupIndex.None);
         }

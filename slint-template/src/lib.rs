@@ -1,28 +1,13 @@
 slint::include_modules!();
 
-#[cfg(any(
-    target_os = "windows",
-    target_os = "linux",
-    target_os = "macos",
-    target_os = "android"
-))]
+#[cfg(any(feature = "desktop", feature = "mobile"))]
 #[macro_use]
 extern crate derivative;
 
-#[cfg(any(
-    target_os = "windows",
-    target_os = "linux",
-    target_os = "macos",
-    target_os = "android"
-))]
+#[cfg(any(feature = "desktop", feature = "mobile"))]
 mod config;
 
-#[cfg(any(
-    target_os = "windows",
-    target_os = "linux",
-    target_os = "macos",
-    target_os = "android"
-))]
+#[cfg(any(feature = "desktop", feature = "mobile"))]
 mod version;
 
 #[cfg(feature = "database")]
@@ -30,7 +15,7 @@ mod db;
 
 mod logic;
 
-#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
+#[cfg(feature = "desktop")]
 pub fn init_logger() {
     use std::io::Write;
 
@@ -57,7 +42,7 @@ pub fn init_logger() {
         .init();
 }
 
-#[cfg(target_os = "android")]
+#[cfg(feature = "android")]
 fn init_logger() {
     android_logger::init_once(
         android_logger::Config::default()
@@ -70,18 +55,13 @@ fn init_logger() {
     );
 }
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "web")]
 fn init_logger() {
     use log::Level;
     console_log::init_with_level(Level::Trace).expect("error initializing log");
 }
 
-#[cfg(any(
-    target_os = "windows",
-    target_os = "linux",
-    target_os = "macos",
-    target_os = "android"
-))]
+#[cfg(any(feature = "desktop", feature = "mobile"))]
 async fn ui_before() {
     init_logger();
     config::init();
@@ -95,7 +75,7 @@ async fn ui_before() {
     }
 }
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "web")]
 fn ui_before() {
     init_logger();
 }
@@ -104,7 +84,7 @@ fn ui_after(ui: &AppWindow) {
     logic::init(ui);
 }
 
-#[cfg(target_os = "android")]
+#[cfg(feature = "android")]
 #[unsafe(no_mangle)]
 #[tokio::main]
 async fn android_main(app: slint::android::AndroidApp) {
@@ -122,7 +102,7 @@ async fn android_main(app: slint::android::AndroidApp) {
     log::debug!("exit...");
 }
 
-#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
+#[cfg(feature = "desktop")]
 pub async fn desktop_main() {
     log::debug!("start...");
 
@@ -138,7 +118,7 @@ pub async fn desktop_main() {
     log::debug!("exit...");
 }
 
-#[cfg(target_arch = "wasm32")]
+#[cfg(feature = "web")]
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen::prelude::wasm_bindgen(start))]
 pub fn main() {
     log::debug!("start...");

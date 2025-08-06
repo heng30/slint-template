@@ -14,12 +14,14 @@ fn remove_cfg_blocks(input: &str) -> String {
     let cfg_use_re = Regex::new(r"(?s)#\[cfg\(any\(.*?\)\)]\s*use crate::config;").unwrap();
 
     // 匹配 `#[cfg(any(...))] { if config::preference()... }` 部分
-    let cfg_block_re = Regex::new(
-        r"(?s)#\[cfg\(any\(.*?\)\)]\s*\{\s*if config::preference\(\)\.language == .*?\}.*?}",
-    )
-    .unwrap();
+    let cfg_block_re = Regex::new(r"(?s)#\[cfg\(any\(.*?\)\)]\s*\{\s*lang = .*?\}").unwrap();
 
     // 分步替换
     let result = cfg_use_re.replace_all(input, "").to_string();
-    cfg_block_re.replace_all(&result, "").to_string()
+    let result = cfg_block_re.replace_all(&result, "").to_string();
+    result
+        .replace("#[allow(unused_assignments)]", "")
+        .replace(r#"let mut lang = "en".to_string();"#, "")
+        .replace("tr(text: &str)", "tr(text: &str, lang: String)")
+        .to_string()
 }

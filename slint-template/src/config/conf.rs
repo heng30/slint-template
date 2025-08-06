@@ -7,16 +7,16 @@ use std::{fs, path::PathBuf, sync::Mutex};
 const CARGO_TOML: &str = include_str!("../../Cargo.toml");
 static CONFIG: Lazy<Mutex<Config>> = Lazy::new(|| Mutex::new(Config::default()));
 
-#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
+#[cfg(feature = "desktop")]
 use platform_dirs::AppDirs;
 
-#[cfg(target_os = "android")]
+#[cfg(feature = "android")]
 pub struct AppDirs {
     pub config_dir: PathBuf,
     pub data_dir: PathBuf,
 }
 
-#[cfg(target_os = "android")]
+#[cfg(feature = "android")]
 impl AppDirs {
     pub fn new(name: Option<&str>, _: bool) -> Option<Self> {
         let root_dir = "/data/data";
@@ -104,11 +104,7 @@ impl Config {
             .trim_matches('"')
             .to_string();
 
-        let pkg_name = if cfg!(any(
-            target_os = "windows",
-            target_os = "linux",
-            target_os = "macos"
-        )) {
+        let pkg_name = if cfg!(feature = "desktop") {
             self.app_name.clone()
         } else {
             metadata
