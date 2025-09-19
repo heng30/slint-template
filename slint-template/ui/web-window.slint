@@ -1,0 +1,35 @@
+import { Util } from "util.slint";
+import { Logic } from "logic.slint";
+import { Store } from "store.slint";
+import { Theme, Icons } from "theme.slint";
+import { WebPanel } from "panel/web/panel.slint";
+import { LoadingStatus, Toast, ConfirmDialog, ConfirmDialogSetting, Blanket, ToastSetting, PopupActionSetting } from "base/widgets.slint";
+
+export component AppWindow inherits Window {
+    default-font-weight: Theme.normal-font-weight;
+    background: Theme.base-background;
+
+    WebPanel { }
+
+    if ConfirmDialogSetting.show: Blanket {
+        clicked => {
+            ConfirmDialogSetting.show = false;
+        }
+    }
+
+    if ConfirmDialogSetting.show: ConfirmDialog {
+        is-prevent-event-forward: true;
+        width: Math.min(root.width * 0.9, self.vbox-preferred-width * 2);
+    }
+
+    if !ToastSetting.is-timeout || ToastSetting.is-hover: Toast {
+        x: root.width / 2 - self.width / 2;
+        y: 50px;
+        width: Math.min(root.width * 80%, self.preferred-width);
+        clicked => {
+            Logic.copy-to-clipboard(ToastSetting.text);
+        }
+    }
+}
+
+export { Util, Logic, Store, Theme, Icons, PopupActionSetting, ToastSetting }

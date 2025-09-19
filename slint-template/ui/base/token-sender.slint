@@ -1,0 +1,281 @@
+import { Theme, Icons } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { Store } from "../store.slint";
+import { Label } from "label.slint";
+import { Avatar } from "avatar.slint";
+import { TabBtns } from "tab-btns.slint";
+import { LineInput } from "line-input.slint";
+import { CancelBtn, ConfirmBtn, TextBtn } from "btn.slint";
+import { SettingDetail, SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel } from "setting-detail.slint";
+import { PrioritizationFeeStatus } from "def.slint";
+
+export component TokenSender inherits SettingDetail {
+    in-out property avatar <=> ava.icon;
+    in property name <=> name-label.text;
+    in-out property network <=> network-input.text;
+    in-out property send-token <=> send-token-input.text;
+    in-out property send-address <=> send-address-input.text;
+    in-out property recipient-address <=> recipient-address-input.text;
+    in-out property send-amount <=> amount-input.text;
+    in property total-balance <=> total-balance-label.text;
+    in property total-balance-usdt <=> total-balance-usdt-label.text;
+
+    in-out property <string> recipient-address-error-message;
+    in property <string> prioritization-fee-error-message;
+    in property <string> prioritization-fee-placeholder-text;
+
+    in-out property <string> memo;
+    in-out property <string> prioritization-fee;
+    in-out property <bool> is-show-advance-setting;
+
+    private property <bool> is-token-edit;
+
+    callback update-send-token-name();
+    callback recipient-address-edited(address: string);
+    callback prioritization-fee-edited(fee: string);
+    callback copy-send-address <=> send-address-input.clicked;
+    callback open-address-book <=> recipient-address-input.clicked;
+    callback open-network <=> network-input.clicked;
+    callback cancel <=> cancel-btn.clicked;
+    callback confirm <=> confirm-btn.clicked;
+
+    callback get-prioritization-fee(fee-status: PrioritizationFeeStatus) -> int;
+
+    public function reset-advance-setting() {
+        root.memo = "";
+        root.prioritization-fee = "";
+    }
+
+    title: Logic.tr("Send token");
+
+    SettingDetailInner {
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+            ava := Avatar {
+                background: Theme.base-background.darker(3%);
+                width: Math.min(200px, root.height * 0.2);
+                icon: Icons.about-light;
+                icon-size-rate: 0.8;
+            }
+        }
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+            name-label := Label {
+                text: "Account1";
+                font-size: Theme.title2-font-size;
+                color: Theme.regular-text-color;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Blockchain network");
+            }
+
+            network-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: "test";
+                icon: Icons.browser-access;
+                enabled: false;
+                is-show-icon: true;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Send token");
+            }
+
+            send-token-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: "ETH";
+                icon: is-token-edit ? Icons.checked-box : Icons.edit;
+                enabled: is-token-edit;
+                is-show-icon: true;
+
+                clicked => {
+                    is-token-edit = !is-token-edit;
+                    if (!is-token-edit) {
+                        update-send-token-name();
+                    }
+                }
+
+                accepted => {
+                    update-send-token-name();
+                }
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Send address");
+            }
+
+            send-address-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: "0xf1199999751b1a3A74590adBf95401D19AB30014";
+                icon: Icons.copy;
+                enabled: false;
+                is-show-icon: true;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Recipient address");
+            }
+
+            recipient-address-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: "GEScvfEF1Xt2oyrnJij5V5DYSmPjuUt45DfUs3VFrsED";
+                icon: Icons.address-book;
+                is-show-icon: true;
+
+                edited => {
+                    root.recipient-address-edited(self.text);
+                }
+            }
+
+            if root.recipient-address-error-message != "": SettingDetailLabel {
+                color: Theme.danger-color;
+                text: root.recipient-address-error-message;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Send amount");
+            }
+
+            amount-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: "0";
+                icon: Icons.max;
+                input-type: InputType.decimal;
+                is-show-icon: true;
+
+                clicked => {
+                    self.text = root.total-balance;
+                }
+            }
+
+            HorizontalLayout {
+                padding-left: Theme.padding * 2;
+                padding-right: Theme.padding * 2;
+
+                alignment: LayoutAlignment.space-between;
+
+                total-balance-label := Label {
+                    text: "0.00";
+                    color: Theme.have-read-text-color;
+                }
+
+                total-balance-usdt-label := Label {
+                    text: "$0.00";
+                    color: Theme.have-read-text-color;
+                }
+            }
+        }
+
+        TextBtn {
+            text: Logic.tr("Advance setting");
+            icon: Icons.advance-setting;
+
+            clicked => {
+                root.is-show-advance-setting = !root.is-show-advance-setting;
+            }
+        }
+
+        if is-show-advance-setting: SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Memo");
+            }
+
+            memo-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                icon: Icons.cancel;
+                text: root.memo;
+                is-show-icon: true;
+
+                clicked => {
+                    self.text = "";
+                }
+
+                edited => {
+                    root.memo = self.text;
+                }
+            }
+        }
+
+        if is-show-advance-setting: SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Prioritization fee");
+            }
+
+            prioritization-fee-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                icon: Icons.cancel;
+                input-type: InputType.number;
+                placeholder-text: root.prioritization-fee-placeholder-text;
+                text: root.prioritization-fee;
+                is-show-icon: true;
+
+                clicked => {
+                    self.text = "";
+                }
+
+                edited => {
+                    root.prioritization-fee = self.text;
+                    root.prioritization-fee-edited(self.text);
+                }
+            }
+
+            HorizontalLayout {
+                alignment: LayoutAlignment.start;
+                spacing: Theme.spacing * 4;
+
+                TabBtns {
+                    items: [
+                        { icon: Icons.turtle, text: Logic.tr("Slow") },
+                        { icon: Icons.rabbit, text: Logic.tr("Normal") },
+                        { icon: Icons.horse, text: Logic.tr("Fast") }
+                    ];
+
+                    clicked(index) => {
+                        if (index == 0) {
+                            prioritization-fee-input.text = root.get-prioritization-fee(PrioritizationFeeStatus.Slow);
+                            root.prioritization-fee = prioritization-fee-input.text;
+                        } else if (index == 1) {
+                            prioritization-fee-input.text = root.get-prioritization-fee(PrioritizationFeeStatus.Normal);
+                            root.prioritization-fee = prioritization-fee-input.text;
+                        } else {
+                            prioritization-fee-input.text = root.get-prioritization-fee(PrioritizationFeeStatus.Fast);
+                            root.prioritization-fee = prioritization-fee-input.text;
+                        }
+                    }
+                }
+            }
+
+            if root.prioritization-fee-error-message != "": SettingDetailLabel {
+                color: Theme.danger-color;
+                text: root.prioritization-fee-error-message;
+            }
+        }
+
+        HorizontalLayout {
+            padding-top: Theme.padding * 5;
+            padding-bottom: Theme.padding * 5;
+            spacing: Theme.spacing * 8;
+
+            cancel-btn := CancelBtn {
+                text: Logic.tr("Cancel");
+            }
+
+            confirm-btn := ConfirmBtn {
+                icon: Icons.send;
+                text: Logic.tr("Confirm");
+            }
+        }
+    }
+}

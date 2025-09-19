@@ -1,0 +1,121 @@
+import { Theme, Icons } from "../theme.slint";
+import { ListTile } from "list-tile.slint";
+import { Label } from "label.slint";
+import { IconBtn } from "icon-btn.slint";
+import { Util } from "../util.slint";
+import { SwitchBtn } from "switch-btn.slint";
+
+export struct TokenTileEntry {
+    uuid: string,
+    network: string,
+    symbol: string,
+    icon-extension: string,
+    account-address: string,
+    mint-address: string,
+    balance: string,
+    balance-usdt: string,
+
+    token-account-address: string, // for spl token
+    decimals: int, // for spl token
+}
+
+export struct TokenTileWithSwitchEntry {
+    entry: TokenTileEntry,
+    checked: bool,
+}
+
+component Tile inherits Rectangle {
+    in-out property <TokenTileEntry> entry;
+
+    in property <length> icon-size: Theme.icon-size * 1.5;
+    in property <color> icon-colorize;
+
+    in property <length> symbol-font-size: Theme.title3-font-size;
+    in property <length> balance-font-size: Theme.default-font-size;
+    in property <length> balance-usdt-font-size: Theme.title3-font-size;
+
+    out property <bool> has-hover: ta.has-hover;
+
+    callback clicked <=> ta.clicked;
+
+    height: hbox.preferred-height;
+    background: has-hover ? Theme.base-background.darker(3%) : Theme.base-background;
+    border-radius: Theme.border-radius;
+    drop-shadow-blur: Theme.padding * 2;
+    drop-shadow-color: Theme.base-background-drop-shadow;
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+    }
+
+    hbox := HorizontalLayout {
+        padding: Theme.padding * 2;
+        spacing: Theme.spacing * 2;
+        alignment: LayoutAlignment.space-between;
+
+        HorizontalLayout {
+            horizontal-stretch: 1;
+            spacing: Theme.spacing * 4;
+
+            VerticalLayout {
+                alignment: LayoutAlignment.center;
+                Rectangle {
+                    width: root.icon-size + Theme.padding * 4;
+                    height: self.width;
+                    background: Theme.secondary-background;
+                    border-radius: self.width / 2;
+
+                    img := Image {
+                        height: root.icon-size;
+                        width: self.height;
+                        source: Util.get-token-icon(entry.symbol, entry.mint-address, entry.icon-extension);
+                        colorize: root.icon-colorize;
+                    }
+                }
+            }
+
+            VerticalLayout {
+                alignment: LayoutAlignment.space-between;
+                spacing: Theme.spacing * 2;
+                padding-top: Theme.padding;
+                padding-bottom: Theme.padding;
+
+                Label {
+                    font-size: root.symbol-font-size;
+                    text: entry.symbol;
+                    wrap: TextWrap.no-wrap;
+                    overflow: TextOverflow.elide;
+                    font-weight: 0.5;
+                }
+
+                Label {
+                    font-size: root.balance-font-size;
+                    text: entry.balance;
+                    wrap: TextWrap.no-wrap;
+                    overflow: TextOverflow.elide;
+                }
+            }
+        }
+
+        @children
+    }
+}
+
+export component TokenTile inherits Tile {
+    Label {
+        font-size: root.balance-usdt-font-size;
+        text: root.entry.balance-usdt;
+    }
+}
+
+export component TokenTileWithSwitch inherits Tile {
+    in-out property checked <=> sw.checked;
+    in-out property enabled <=> sw.enabled;
+
+    callback toggled <=> sw.toggled;
+
+    VerticalLayout {
+        alignment: LayoutAlignment.center;
+        sw := SwitchBtn { }
+    }
+}

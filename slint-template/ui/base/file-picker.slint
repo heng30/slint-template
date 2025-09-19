@@ -1,0 +1,115 @@
+import { Theme, Icons } from "../theme.slint";
+import { Util } from "../util.slint";
+import { Logic } from "../logic.slint";
+import { Label } from "label.slint";
+import { ConfirmBtn } from "btn.slint";
+import { DashLine } from "dash-line.slint";
+
+export component FilePicker inherits Rectangle {
+    in-out property <bool> is-show-icon: true;
+    in-out property <image> icon;
+    in-out property <length> icon-size: Theme.icon-size * 3;
+    in-out property <color> icon-color: Theme.icon-color;
+    in-out property <string> title;
+    in-out property <string> sub-title;
+    in-out property <length> inner-padding: Theme.padding * 30;
+
+    private property <color> dashline-color: Theme.base-border-color;
+
+    callback select-file();
+
+    width: vbox.preferred-width;
+    height: vbox.preferred-height;
+
+    DashLine {
+        x: 0;
+        y: 0;
+        width: root.width;
+        height: Theme.default-border-width * 2;
+        line-color: dashline-color;
+    }
+
+    DashLine {
+        x: root.width - self.width;
+        y: 0;
+        width: Theme.default-border-width * 2;
+        height: root.height;
+        line-color: dashline-color;
+    }
+
+    DashLine {
+        x: 0;
+        y: root.height;
+        width: root.width;
+        height: Theme.default-border-width * 2;
+        line-color: dashline-color;
+    }
+
+    DashLine {
+        x: 0;
+        y: 0;
+        width: Theme.default-border-width * 2;
+        height: root.height;
+        line-color: dashline-color;
+    }
+
+    vbox := VerticalLayout {
+        alignment: center;
+
+        VerticalLayout {
+            alignment: start;
+            spacing: Theme.spacing * 2;
+            padding: inner-padding;
+
+            if is-show-icon: HorizontalLayout {
+                alignment: center;
+
+                Image {
+                    width: icon-size;
+                    height: icon-size;
+                    source: icon;
+                    colorize: icon-color;
+                }
+            }
+
+            if !title.is-empty: HorizontalLayout {
+                alignment: center;
+                Label {
+                    text: title;
+                    font-size: Theme.title1-font-size;
+                    font-weight: Theme.bold-font-weight;
+                }
+            }
+
+            if !sub-title.is-empty: HorizontalLayout {
+                alignment: center;
+
+                Label {
+                    horizontal-alignment: center;
+                    text: sub-title;
+                    font-size: Theme.title5-font-size;
+                    wrap: word-wrap;
+                }
+            }
+
+            HorizontalLayout {
+                alignment: center;
+                padding: Theme.padding * 2;
+                padding-top: Theme.padding * 4;
+
+                ConfirmBtn {
+                    icon: Icons.open-file;
+                    text: Logic.tr("Select File");
+                    bg-color: Theme.success-color;
+                    auto-size-hpadding: Theme.spacing * 3;
+                    auto-size-vpadding: Theme.spacing * 2;
+                    spacing: Theme.spacing * 2;
+
+                    clicked => {
+                        root.select-file();
+                    }
+                }
+            }
+        }
+    }
+}

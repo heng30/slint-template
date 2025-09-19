@@ -1,0 +1,37 @@
+import { Theme } from "../theme.slint";
+import { Store } from "../store.slint";
+import { Logic } from "../logic.slint";
+import { Dialog } from "./dialog.slint";
+import { LineInput } from "line-input.slint";
+
+export component RenameDialog inherits Dialog {
+    title: Logic.tr("Rename");
+    is-prevent-event-forward: true;
+
+    in-out property text <=> line-input.text;
+
+    callback rename(text: string);
+
+    init => {
+        line-input.focus();
+    }
+
+    confirmed => {
+        rename(root.text);
+    }
+
+    canceled => {
+        self.escape();
+    }
+
+    VerticalLayout {
+        padding: Theme.padding * 2;
+        padding-top: Theme.padding * 4;
+
+        line-input := LineInput {
+            accepted => {
+                rename(root.text);
+            }
+        }
+    }
+}

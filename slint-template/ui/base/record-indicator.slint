@@ -1,0 +1,21 @@
+import { Theme } from "../theme.slint";
+import { Util } from "../util.slint";
+
+export component RecordIndicator inherits Rectangle {
+    in-out property <bool> is-start;
+    in-out property <length> size: Theme.icon-size;
+    in-out property <duration> duration: 2s;
+    in-out property <color> living-color: Theme.danger-color;
+
+    width: root.size;
+    height: self.width;
+
+    if is-start: Rectangle {
+        private property <float> progress: Util.progress-value(root.duration);
+        width: Math.clamp(progress < 0.5 ? root.size * (0.5 + progress) : root.size * (1 - progress + 0.5), root.size * 0.5, root.size *0.9);
+
+        height: self.width;
+        border-radius: self.width / 2;
+        background: @radial-gradient(circle, root.living-color 0%, root.living-color.brighter(100%) 40%, root.background 80%);
+    }
+}

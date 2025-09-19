@@ -1,0 +1,79 @@
+export enum LoadingStatus {
+    Loading,
+    Fail,
+    Success,
+}
+
+export enum PrioritizationFeeStatus {
+    Slow,
+    Normal,
+    Fast,
+}
+
+export enum ToastStatus {
+    Success,
+    Info,
+    Warning,
+    Danger,
+}
+
+export enum ComponentPosition {
+    Top,
+    Left,
+    Bottom,
+    Right
+}
+
+export enum MediaControlStatus {
+    Once,
+    Loop,
+    LoopOne,
+    Shuffle,
+}
+
+export struct AppPosType {
+    x: length,
+    y: length,
+}
+
+export struct TreeEntry {
+    is-open: bool,
+    key: string,
+    parent-node: string,
+    current-node: string,
+    icon: image,
+}
+
+export struct SideBarChildEntry {
+    key: string,
+    title: string,
+    icon: image,
+}
+
+export struct SideBarEntry {
+    key: string,
+    is-open: bool,
+    category: string,
+    icon: image,
+    children: [SideBarChildEntry],
+}
+
+export struct Date {
+    year: int,
+    month: int,
+    day: int,
+    main-month: int,
+}
+
+export struct ChartBarEntry {
+    label: string,
+    value: int,
+    color: brush,
+}
+
+export struct TextListEntry {
+    id: string,
+    icon: image,
+    text: string,
+}
+

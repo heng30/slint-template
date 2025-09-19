@@ -1,0 +1,283 @@
+import { Theme, Icons } from "../theme.slint";
+import { Util } from "../util.slint";
+import { Logic } from "../logic.slint";
+import { Slider } from "slider.slint";
+import { IconBtn } from "icon-btn.slint";
+import { Label } from "label.slint";
+import { TextBtnWithoutIcon } from "btn.slint";
+import { MediaControlStatus } from "def.slint";
+
+export component VideoControl inherits Rectangle {
+    in-out property <bool> is-hide-prev-btn;
+    in-out property <bool> is-hide-next-btn;
+    in-out property <bool> is-hide-control-status-btn;
+    in-out property <bool> is-hide-full-screen-btn;
+    in-out property <bool> is-hide-time-lable;
+    in-out property <bool> is-hide-speed-btn;
+    in-out property <bool> is-hide-subtitle-btn;
+    in-out property <length> icon-size: Theme.icon-size;
+
+    in-out property <bool> is-playing;
+    in-out property <bool> is-full-screen;
+    in-out property <bool> enable-subtitle;
+    in-out property <float> current-speed: 1.0;
+    in-out property <float> current-sound: 50;
+    in-out property <MediaControlStatus> status: MediaControlStatus.Loop;
+
+    in-out property <length> spacing: Theme.spacing * 4;
+    in-out property <length> inner-padding: Theme.spacing * 4;
+
+    out property <length> children-preferred-height: left-hbox.preferred-height;
+    in-out property <length> children-spacing: 0px;
+    in-out property <length> childre-padding: 0px;
+
+    in-out property <string> current-time: "1:00";
+    in-out property <string> end-time: "4:00";
+
+    in-out property progress-bar-height <=> slider.height;
+    in-out property <float> progress;
+
+    changed progress => {
+        slider.value = progress;
+    }
+
+    callback prev();
+    callback next();
+    callback play();
+    callback stop();
+    callback full-screen();
+    callback exit-full-screen();
+    callback sound-changed(sound: int);
+    callback speed-changed(speed: float);
+    callback media-control-status-changed(status: MediaControlStatus);
+    callback progress-changed <=> slider.changed;
+    callback progress-release <=> slider.released;
+    callback progress-pressed <=> slider.pressed;
+
+    preferred-width: 500px;
+    height: Theme.icon-size * 4;
+
+    vbox := VerticalLayout {
+        spacing: root.spacing;
+        padding: inner-padding;
+
+        slider := Slider {
+            width: root.width - parent.padding-left - parent.padding-right - inner-padding * 2;
+            finished-progress-color: Theme.thirdly-brand-color;
+            height: Theme.default-font-size / 2;
+            indicator-size: self.has-hover ? Theme.icon-size : 0;
+            enable-value-update-progress: true;
+        }
+
+        hbox := HorizontalLayout {
+            alignment: LayoutAlignment.space-between;
+
+            left-hbox := HorizontalLayout {
+                alignment: LayoutAlignment.space-between;
+                spacing: Theme.spacing * 4;
+
+                if !root.is-hide-prev-btn: IconBtn {
+                    icon: Icons.skip-next;
+                    icon-rotation-angle: 180deg;
+                    show-icon-hover-background: false;
+                    icon-size: root.icon-size * 1.8;
+
+                    clicked() => {
+                        root.prev();
+                    }
+                }
+
+                IconBtn {
+                    show-icon-hover-background: false;
+                    icon: root.is-playing ? Icons.audio-stop : Icons.control-start;
+                    icon-size: root.icon-size * 1.8;
+
+                    clicked() => {
+                        root.is-playing = !root.is-playing;
+
+                        if (root.is-playing) {
+                            root.play();
+                        } else {
+                            root.stop();
+                        }
+                    }
+                }
+
+                if !root.is-hide-next-btn: IconBtn {
+                    icon: Icons.skip-next;
+                    show-icon-hover-background: false;
+                    icon-size: root.icon-size * 1.8;
+
+                    clicked() => {
+                        root.next();
+                    }
+                }
+
+                if !root.is-hide-time-lable: HorizontalLayout {
+                    padding-left: Theme.padding * 2;
+
+                    ctime-label := Label {
+                        text: root.current-time + " / " + root.end-time;
+                    }
+                }
+            }
+
+            HorizontalLayout {
+                alignment: LayoutAlignment.end;
+
+                VerticalLayout {
+                    alignment: LayoutAlignment.center;
+                    padding-right: Theme.padding * 4;
+
+                    HorizontalLayout {
+                        alignment: LayoutAlignment.end;
+                        spacing: root.children-spacing;
+                        padding: root.childre-padding;
+
+                        @children
+                    }
+                }
+
+                VerticalLayout {
+                    alignment: center;
+
+                    speed-btn := TextBtnWithoutIcon {
+                        width: speed-btn.visible ? speed-btn.preferred-width : 0;
+                        height: sound-btn.preferred-height;
+                        visible: !root.is-hide-speed-btn;
+                        text: root.current-speed + (root.current-speed == 1.0 || root.current-speed == 2.0 ? ".0x" : "x");
+                        hpadding: Theme.padding * 2;
+
+                        clicked => {
+                            speed-pop.show();
+                        }
+                    }
+                }
+
+                sound-btn := IconBtn {
+                    use-auto-size: true;
+                    icon: root.current-sound <= 0 ? Icons.sound-off : Icons.sound-on;
+                    show-icon-hover-background: false;
+                    icon-size: root.icon-size;
+
+                    clicked => {
+                        sound-pop.show();
+                    }
+                }
+
+                if !root.is-hide-subtitle-btn: IconBtn {
+                    use-auto-size: true;
+                    icon: root.enable-subtitle ? Icons.subtitle : Icons.unsubtitle;
+                    show-icon-hover-background: false;
+                    icon-size: root.icon-size;
+
+                    clicked => {
+                        root.enable-subtitle = !root.enable-subtitle;
+                    }
+                }
+
+                if !root.is-hide-control-status-btn: IconBtn {
+                    use-auto-size: true;
+                    show-icon-hover-background: false;
+                    icon: Util.image-from-media-control-status(root.status);
+                    icon-size: root.icon-size;
+
+                    clicked => {
+                        root.status = Util.next-media-control-status(root.status);
+                        root.media-control-status-changed(root.status);
+                    }
+                }
+
+                if !root.is-hide-full-screen-btn: IconBtn {
+                    use-auto-size: true;
+                    icon: root.is-full-screen ? Icons.exit-full-screen : Icons.full-screen;
+                    show-icon-hover-background: false;
+                    icon-size: root.icon-size;
+
+                    clicked => {
+                        root.is-full-screen = !root.is-full-screen;
+
+                        if (root.is-full-screen) {
+                            root.full-screen();
+                        } else {
+                            root.exit-full-screen();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    sound-pop := PopupWindow {
+        y: -svbox.preferred-height + Theme.padding * 2;
+        x: sound-btn.absolute-position.x - root.absolute-position.x + sound-btn.preferred-width / 2 - self.width / 2;
+        width: Theme.default-font-size * 4;
+        opacity: 0;
+
+        svbox := VerticalLayout {
+            spacing: Theme.spacing * 2;
+            padding-top: Theme.padding * 4;
+            padding-bottom: Theme.padding * 4;
+
+            HorizontalLayout {
+                alignment: LayoutAlignment.center;
+
+                sound-slider := Slider {
+                    width: Theme.default-font-size;
+                    height: Theme.default-font-size * 10;
+                    finished-progress-color: Theme.thirdly-brand-color;
+                    indicator-size: self.width * 1.33;
+                    orientation: Orientation.vertical;
+                    value: root.current-sound;
+
+                    changed(v) => {
+                        if (root.current-sound == Math.round(v)) {
+                            return;
+                        }
+                        root.current-sound = Math.round(v);
+                        root.sound-changed(root.current-sound);
+                    }
+                }
+            }
+        }
+    }
+
+    speed-pop := PopupWindow {
+        y: -rec.preferred-height;
+        x: speed-btn.absolute-position.x - root.absolute-position.x + speed-btn.width / 2 - self.width / 2;
+
+        width: rec.preferred-width + Theme.padding * 4;
+
+        private property <[float]> values: [2.0, 1.75, 1.5, 1.25, 1.0, 0.75, 0.5];
+
+        rec := Rectangle {
+            background: Theme.base-background;
+            border-width: 1px;
+            border-color: Theme.base-border-color;
+
+            VerticalLayout {
+                spacing: Theme.spacing * 2;
+                padding: Theme.padding;
+
+                for value[index] in values: Rectangle {
+                    background: pop-ta.has-hover ? Theme.hover-background : Theme.base-background;
+
+                    pop-lb := Label {
+                        horizontal-alignment: TextHorizontalAlignment.center;
+                        overflow: elide;
+                        text: value + (value == 1.0 || value == 2.0 ? ".0x" : "x");
+                    }
+
+                    pop-ta := TouchArea {
+                        clicked => {
+                            if (root.current-speed != value) {
+                                root.current-speed = value;
+                                root.speed-changed(value);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,37 @@
+[package]
+name = "cutil"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+tar = { workspace = true, optional = true }
+cbc = { workspace = true, optional = true }
+aes = { workspace = true, optional = true }
+hex = { workspace = true, optional = true }
+rand = { workspace = true, optional = true }
+bytes = { workspace = true, optional = true }
+chrono = { workspace = true, optional = true }
+flate2 = { workspace = true, optional = true }
+reqwest = { workspace = true, optional = true }
+once_cell = { workspace = true, optional = true }
+stacksafe = { workspace = true, optional = true }
+crypto-hash = { workspace = true, optional = true }
+
+[features]
+default = []
+
+number = []
+vec = []
+str = ["dep:rand"]
+time = ["dep:chrono"]
+fs = ["dep:stacksafe"]
+backup-recover = ["dep:tar", "dep:flate2"]
+crypto = ["dep:aes", "dep:cbc", "dep:hex", "dep:crypto-hash"]
+http = [
+  "dep:bytes",
+  "dep:once_cell",
+  "reqwest/json",
+  "reqwest/native-tls-vendored",
+]
+all = ["fs", "time", "http", "crypto", "str", "number", "backup-recover"]

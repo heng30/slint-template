@@ -1,0 +1,94 @@
+import { SettingProxy } from "../../../store.slint";
+import { Store, Logic, Theme, DeviceType } from "../../def.slint";
+import { SettingDetail, SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel, LineInput, Select, ConfirmBtn } from "../../../base/widgets.slint";
+
+export component Proxy inherits SettingDetail {
+    title: Logic.tr("Proxy");
+
+    init => {
+        root.set(Logic.get-setting-proxy());
+    }
+
+    public function get() -> SettingProxy {
+        return {
+            proxy-type: type-select.current-value,
+            http-url: http-url-lineedit.text,
+            http-port: http-port-lineedit.text,
+            socks5-url: socks5-url-lineedit.text,
+            socks5-port: socks5-port-lineedit.text,
+        };
+    }
+
+    public function set(setting: SettingProxy) {
+        type-select.current-value = setting.proxy-type;
+        http-url-lineedit.text = setting.http-url;
+        http-port-lineedit.text = setting.http-port;
+        socks5-url-lineedit.text = setting.socks5-url;
+        socks5-port-lineedit.text = setting.socks5-port;
+
+        if (type-select.current-value == "") {
+            type-select.current-value = type-select.values[0];
+        }
+    }
+
+    SettingDetailInner {
+        type-select := Select {
+            values: ["Http", "Socks5"];
+            current-value: self.values[0];
+        }
+
+        Rectangle {
+            VerticalLayout {
+                visible: type-select.current-value == "Http";
+                spacing: Theme.spacing * 4;
+
+                SettingDetailInnerVbox {
+                    http-url-txt := SettingDetailLabel {
+                        text: Logic.tr("Proxy address");
+                    }
+
+                    http-url-lineedit := LineInput {
+                        placeholder-text: "127.0.0.1";
+                    }
+                }
+
+                SettingDetailInnerVbox {
+                    http-port-txt := SettingDetailLabel {
+                        text: Logic.tr("Proxy port");
+                    }
+
+                    http-port-lineedit := LineInput {
+                        input-type: number;
+                        placeholder-text: "3128";
+                    }
+                }
+            }
+
+            VerticalLayout {
+                visible: type-select.current-value == "Socks5";
+                spacing: Theme.spacing * 4;
+
+                SettingDetailInnerVbox {
+                    socks5-url-txt := SettingDetailLabel {
+                        text: Logic.tr("Proxy address");
+                    }
+
+                    socks5-url-lineedit := LineInput {
+                        placeholder-text: "127.0.0.1";
+                    }
+                }
+
+                SettingDetailInnerVbox {
+                    socks5-port-txt := SettingDetailLabel {
+                        text: Logic.tr("Proxy port");
+                    }
+
+                    socks5-port-lineedit := LineInput {
+                        input-type: number;
+                        placeholder-text: "1080";
+                    }
+                }
+            }
+        }
+    }
+}

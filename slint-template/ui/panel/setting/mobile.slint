@@ -1,0 +1,122 @@
+import { Logic, Theme, Store, Util, Icons, SettingPreference, MobileSettingDetailIndex } from "../def.slint";
+import { Head, SettingEntry, SettingDetail, ToastStatus, About, Help } from "../../base/widgets.slint";
+import { Preference } from "components/preference.slint";
+import { Donate  } from "components/donate.slint";
+import { Proxy  } from "components/proxy.slint";
+
+component Body inherits VerticalLayout {
+    alignment: start;
+    spacing: Theme.spacing;
+
+    head := Head {
+        hbox-alignment: LayoutAlignment.start;
+        icon: Icons.setting-fill;
+        title: Logic.tr("Setting");
+    }
+
+    Flickable {
+        viewport-height: vbox.preferred-height;
+
+        vbox := VerticalLayout {
+            spacing: Theme.spacing * 2;
+
+            SettingEntry {
+                text: Logic.tr("Preference");
+                icon: Icons.ui;
+
+                clicked => {
+                    Logic.switch-mobile-setting-detail(MobileSettingDetailIndex.Preference);
+                }
+            }
+
+            SettingEntry {
+                text: Logic.tr("Proxy");
+                icon: Icons.proxy-light;
+
+                clicked => {
+                    Logic.switch-mobile-setting-detail(MobileSettingDetailIndex.Proxy);
+                }
+            }
+
+            SettingEntry {
+                text: Logic.tr("About");
+                icon: Icons.about-light;
+                clicked => {
+                    Logic.switch-mobile-setting-detail(MobileSettingDetailIndex.About);
+                }
+            }
+
+            SettingEntry {
+                text: Logic.tr("Help");
+                icon: Icons.help-light;
+                clicked => {
+                    Logic.switch-mobile-setting-detail(MobileSettingDetailIndex.Help);
+                }
+            }
+
+            SettingEntry {
+                text: Logic.tr("Donate");
+                icon: Icons.donate-light;
+                clicked => {
+                    Logic.switch-mobile-setting-detail(MobileSettingDetailIndex.Donate);
+                }
+            }
+
+            SettingEntry {
+                text: "Github";
+                icon: Icons.github;
+                clicked => {
+                    Util.open-url("Default","https://github.com/Heng30/slint-template");
+                }
+            }
+        }
+    }
+}
+
+export component Setting inherits Rectangle {
+    init => {
+        Logic.switch-mobile-setting-detail(MobileSettingDetailIndex.Home);
+    }
+
+    if Store.current-mobile-setting-detail-index == MobileSettingDetailIndex.Home: Body { }
+
+    if Store.current-mobile-setting-detail-index != MobileSettingDetailIndex.Home: Rectangle {
+        if Store.current-mobile-setting-detail-index == MobileSettingDetailIndex.Preference: Preference {
+            back => {
+                if (self.get().font-size == "") {
+                    Util.show-toast(Logic.tr("Input can not be empty"), ToastStatus.Warning);
+                    return;
+                }
+                Store.setting-preference.font-size = self.get().font-size;
+                Store.setting-preference.font-family = self.get().font-family;
+                Logic.set-setting-preference(self.get());
+                Logic.switch-mobile-setting-detail(MobileSettingDetailIndex.Home);
+            }
+        }
+
+        if Store.current-mobile-setting-detail-index == MobileSettingDetailIndex.Proxy: Proxy {
+            back => {
+                Logic.switch-mobile-setting-detail(MobileSettingDetailIndex.Home);
+                Logic.set-setting-proxy(self.get());
+            }
+        }
+
+        if Store.current-mobile-setting-detail-index == MobileSettingDetailIndex.About: About {
+            back => {
+                Logic.switch-mobile-setting-detail(MobileSettingDetailIndex.Home);
+            }
+        }
+
+        if Store.current-mobile-setting-detail-index == MobileSettingDetailIndex.Help: Help {
+            back => {
+                Logic.switch-mobile-setting-detail(MobileSettingDetailIndex.Home);
+            }
+        }
+
+        if Store.current-mobile-setting-detail-index == MobileSettingDetailIndex.Donate: Donate {
+            back => {
+                Logic.switch-mobile-setting-detail(MobileSettingDetailIndex.Home);
+            }
+        }
+    }
+}

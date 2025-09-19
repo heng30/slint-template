@@ -1,0 +1,83 @@
+import { Store,  SettingPreference, SettingProxy, TabIndex, SettingDetailIndex, MobileSettingDetailIndex, PopupIndex, MobileTabIndex, SettingBackup } from "store.slint";
+
+import { SideBarEntry } from "base/def.slint";
+
+export global Logic {
+    callback caches-size() -> string;
+    callback remove-caches();
+
+    callback copy-to-clipboard(text: string);
+    callback paste-from-clipboard() -> string;
+
+    callback get-setting-preference() -> SettingPreference;
+    callback set-setting-preference(setting: SettingPreference);
+
+    callback increase-font-size();
+    callback decrease-font-size();
+
+    callback backup(setting: SettingBackup);
+    callback recover();
+    callback uninstall();
+
+    pure callback inner-tr(text: string, lang: string) -> string;
+    inner-tr(text, lang) => {
+        return text;
+    }
+
+    pure public function tr(text: string) -> string {
+        return inner-tr(text, Store.setting-preference.language);
+    }
+
+    // desktop
+    public function switch-tab(index: TabIndex) {
+        if (Store.current-tab-index != index) {
+            Store.previous-tab-index = Store.current-tab-index;
+            Store.current-tab-index = index;
+        }
+    }
+
+    //desktop
+    public function switch-popup(index: PopupIndex) {
+        if (Store.current-popup-index != index) {
+            Store.current-popup-index = index;
+        }
+    }
+
+    // desktop
+    public function switch-setting-detail(index: SettingDetailIndex) {
+        if (Store.current-setting-detail-index == index) {
+            return;
+        }
+        Store.current-setting-detail-index = index;
+    }
+
+
+    // android
+    public function switch-mobile-tab(index: MobileTabIndex) {
+        if (Store.current-mobile-tab-index != index) {
+            Store.previous-mobile-tab-index = Store.current-mobile-tab-index;
+            Store.current-mobile-tab-index = index;
+        }
+    }
+
+    // android
+    public function switch-mobile-setting-detail(index: MobileSettingDetailIndex) {
+        if (Store.current-mobile-setting-detail-index == index) {
+            return;
+        }
+        Store.current-mobile-setting-detail-index = index;
+    }
+
+
+    //////////////////////////////// Logic Start  ////////////////////////////////
+    callback get-setting-proxy() -> SettingProxy;
+    callback set-setting-proxy(setting: SettingProxy);
+
+    callback web-debug(text: string);
+    pure callback generate-search-values(entries: [SideBarEntry]) -> [string];
+    pure callback get-sidebar-key-from-search-values(entries: [SideBarEntry], value: string) -> string;
+
+    callback show-mobile-test-dialog();
+
+    //////////////////////////////// Logic End  ////////////////////////////////
+}

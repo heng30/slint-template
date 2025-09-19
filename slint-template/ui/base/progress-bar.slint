@@ -1,0 +1,77 @@
+import { Theme } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { Util } from "../util.slint";
+import { Label } from "label.slint";
+
+// Example:
+// ProgressBar {
+//     width: 300px;
+//     height: 50px;
+//     progress: Util.progress-value(3s);
+//     is-moving-text: true;
+// }
+
+export component ProgressBar inherits Rectangle {
+    public pure function calc-percent(progress: float) -> int {
+        return Math.clamp(progress * 100, 0, 100);
+    }
+
+    in-out property <float> progress;
+    in-out property <bool> is-moving-text;
+    in-out property <Orientation> orientation: Orientation.horizontal;
+
+    in-out property <color> finished-progress-color: Theme.thirdly-brand-color;
+    in-out property <color> unfinished-progress-color: Theme.secondary-background;
+
+    in-out property <string> finished-text: Logic.tr("Finished");
+    in-out property <string> unfinished-text: calc-percent(progress) + "%";
+    in-out property <color> finished-text-color: Theme.light-text-color;
+    in-out property <color> unfinished-text-color: Theme.is-dark ? Theme.invert-base-color : Theme.regular-text-color;
+    in-out property <color> finished-text-background: Theme.success-color;
+    in-out property <length> font-size: Theme.default-font-size;
+    in-out property <int> font-weight: Theme.normal-font-weight;
+
+    private property <int> progress-percent: calc-percent(progress);
+    private property <bool> is-finished: root.progress-percent >= 100;
+
+    // don't change this property
+    background: is-finished ? finished-text-background : unfinished-progress-color;
+
+    preferred-width: 300px;
+    preferred-height: 40px;
+    border-radius: Theme.border-radius;
+
+    if orientation == Orientation.horizontal:Rectangle {
+        x: 0;
+        y: 0;
+        width: root.width * root.progress;
+        height: root.height;
+        border-radius: root.border-radius;
+        background: root.is-finished ? root.finished-text-background : finished-progress-color;
+    }
+
+    if orientation == Orientation.vertical: Rectangle {
+        x: 0;
+        y: root.height - self.height;
+        width: root.width;
+        height: root.height * root.progress;
+        border-radius: root.border-radius;
+        background: root.is-finished ? root.finished-text-background : finished-progress-color;
+    }
+
+    if !is-moving-text || root.is-finished: Label {
+        text: root.is-finished ? root.finished-text : root.unfinished-text;
+        color: root.is-finished ? root.finished-text-color : root.unfinished-text-color;
+        font-size: root.font-size;
+        font-weight: root.font-weight;
+    }
+
+    if is-moving-text && !root.is-finished: Label {
+        x: root.orientation == Orientation.horizontal ? parent.width * root.progress + Theme.padding * 2 : (parent.width - self.preferred-width) / 2;
+        y: root.orientation == Orientation.horizontal ? (parent.height - self.preferred-height) / 2 : parent.height * (1 - root.progress) - self.preferred-height - Theme.padding * 2;
+        text: root.unfinished-text;
+        color: root.unfinished-text-color;
+        font-size: root.font-size;
+        font-weight: root.font-weight;
+    }
+}

@@ -1,0 +1,156 @@
+import { Theme, Icons } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { Store} from "../store.slint";
+import { TextBtn } from "./btn.slint";
+import { CenterLayout } from "center-layout.slint";
+import { Label} from "label.slint";
+import { RadioBtn } from "./radio-btn.slint";
+
+export struct LandingDetail {
+    picture: image,
+    description: string,
+}
+
+component LangPage inherits Rectangle {
+    in property <length> root-width: 100px;
+    in property <length> root-height: 100px;
+
+    HorizontalLayout {
+        height: root.height;
+        alignment: LayoutAlignment.center;
+
+        VerticalLayout {
+            vertical-stretch: 1;
+            alignment: LayoutAlignment.center;
+            spacing: Theme.spacing * 5;
+
+            Image {
+                width: min(root-height, root-width) * 0.5;
+                height: self.width;
+                source: Icons.landing-language-switch;
+            }
+
+            Label {
+                text: Logic.tr("Please select language");
+                font-size: Theme.title3-font-size;
+                color: Theme.secondary-brand-color;
+            }
+
+            RadioBtn {
+                text: "中文";
+                checked: Store.setting-preference.language == "cn";
+                check => {
+                    Store.setting-preference.language = "cn";
+                    Logic.set-setting-preference(Store.setting-preference);
+                }
+            }
+
+            RadioBtn {
+                text: "English";
+                checked: Store.setting-preference.language == "en";
+                check => {
+                    Store.setting-preference.language = "en";
+                    Logic.set-setting-preference(Store.setting-preference);
+                }
+            }
+        }
+    }
+}
+
+component DetailsPage inherits Rectangle {
+    in property <length> root-width: 100px;
+    in property <length> root-height: 100px;
+    in property <[LandingDetail]> details;
+    in property <int> current-index: 0;
+    in-out property <length> font-size: Theme.title3-font-size;
+
+    for detail[index] in details: Rectangle {
+        if current-index == index: VerticalLayout {
+            vertical-stretch: 1;
+            alignment: LayoutAlignment.center;
+            spacing: Theme.spacing * 5;
+
+            Rectangle {
+                Image {
+                    width: min(root-height, root-width) * 0.8;
+                    height: self.width;
+                    source: detail.picture;
+                }
+            }
+
+            Label {
+                horizontal-stretch: 1;
+                horizontal-alignment: TextHorizontalAlignment.center;
+                color: Theme.secondary-brand-color;
+                text: detail.description;
+                wrap: TextWrap.word-wrap;
+                font-size: root.font-size;
+            }
+        }
+    }
+}
+
+export component LandingPage inherits Rectangle {
+    in property <[LandingDetail]> details;
+    in-out property <length> font-size: Theme.title3-font-size;
+
+    private property <int> current-index: -1;
+
+    callback skipped <=> skip-btn.clicked;
+
+    background: Theme.base-background;
+
+    VerticalLayout {
+        padding: Theme.padding * 5;
+        padding-left: Theme.padding * 2;
+        padding-right: Theme.padding * 2;
+        spacing: Theme.spacing * 2;
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.end;
+            skip-btn := TextBtn {
+                text: Logic.tr("Skip");
+                colorize: Theme.have-read-text-color;
+                font-size: Theme.default-font-size - 2px;
+            }
+        }
+
+        if current-index < 0: LangPage {
+            root-width: root.width;
+            root-height: root.height;
+        }
+
+        if current-index >= 0: DetailsPage {
+            root-width: root.width;
+            root-height: root.height;
+            details: details;
+            current-index: current-index;
+            font-size: root.font-size;
+        }
+
+        HorizontalLayout {
+            alignment: current-index == -1 ? LayoutAlignment.end : LayoutAlignment.space-between;
+
+            if current-index > -1: TextBtn {
+                text: Logic.tr("Prev");
+                colorize: Theme.have-read-text-color;
+                font-size: Theme.default-font-size - 2px;
+                clicked => {
+                    current-index -= 1;
+                }
+            }
+
+            TextBtn {
+                font-size: Theme.default-font-size - 2px;
+                text: Logic.tr(details.length == current-index + 1 ? "Finish" : "Next");
+                clicked => {
+                    current-index += 1;
+
+                    if (details.length == current-index) {
+                        root.skipped();
+                    }
+                }
+            }
+        }
+    }
+}

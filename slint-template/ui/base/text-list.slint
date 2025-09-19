@@ -1,0 +1,139 @@
+import { ScrollView } from "std-widgets.slint";
+
+import { TextListEntry, ComponentPosition } from "def.slint";
+import { Logic } from "../logic.slint";
+import { Theme, Icons } from "../theme.slint";
+import { SettingEntryV2 } from "setting-entry.slint";
+import { Search } from "search.slint";
+import { IconsDialogSetting } from "icons-dialog.slint";
+import { PopupActionSetting, PopupActionEntry } from "popup-action.slint";
+import { GainFocus } from "gain-focus.slint";
+import { IconBtn } from "icon-btn.slint";
+
+// Example
+// TextList {
+//     is-use-random-icon: true;
+//     entries: Store.transcribe-entries;
+//
+//     clicked(index) => {
+//         // TODO
+//     }
+//
+//     clicked-right-icon(index) => {
+//         self.popup-action-entries = [
+//             {
+//                 icon: Icons.recover,
+//                 text: Logic.tr("Rename"),
+//                 action: "rename-transcirbe-entry",
+//                 user-data: index,
+//             },
+//             {
+//                 icon: Icons.delete-fill,
+//                 text: Logic.tr("Remove"),
+//                 action: "remove-transcribe-entry",
+//                 user-data: index,
+//             },
+//         ];
+//     }
+// }
+
+export component TextList inherits Rectangle {
+    in-out property <[TextListEntry]> entries;
+    in-out property <[PopupActionEntry]> popup-action-entries;
+    in-out property <bool> is-show-search: true;
+    in-out property <bool> is-show-add: true;
+    in-out property <string> selected-id;
+    in-out property <length> font-size: Theme.title5-font-size;
+    in-out property <length> icon-size: font-size;
+    in-out property <length> indent: Theme.icon-size + Theme.padding * 4;
+    in-out property <bool> is-use-random-icon;
+    in-out property <ComponentPosition> header-tip-position: ComponentPosition.Right;
+
+    private property <int> current-icon-index: 0;
+    private property <image> cache-icon;
+
+    callback search(value: string);
+    callback clicked(index: int);
+    callback clicked-add-icon();
+    callback clicked-right-icon(index: int);
+
+    function random-icon() -> image {
+        current-icon-index = Math.mod(current-icon-index, IconsDialogSetting.icons.length);
+        root.cache-icon = IconsDialogSetting.icons[current-icon-index];
+        root.current-icon-index += 1;
+        return root.cache-icon;
+    }
+
+    GainFocus { }
+
+    VerticalLayout {
+        spacing: Theme.spacing;
+        padding: Theme.padding;
+
+        if is-show-add || is-show-search: HorizontalLayout {
+            spacing: Theme.spacing * 4;
+
+            if is-show-search: Search {
+                border-radius: Theme.border-radius * 2;
+
+                search(value) => {
+                    root.search(value);
+                }
+
+                edited(text) => {
+                    root.search(text);
+                }
+            }
+
+            if is-show-add: HorizontalLayout {
+                alignment: end;
+                padding-right: Theme.padding;
+
+                IconBtn {
+                    is-show-tip: true;
+                    tip: Logic.tr("new");
+                    icon: Icons.add-light;
+                    tip-position: root.header-tip-position;
+
+                    clicked => {
+                        clicked-add-icon();
+                    }
+                }
+            }
+        }
+
+        fl := ScrollView {
+            viewport-height: vbox.preferred-height;
+
+            vbox := VerticalLayout {
+                alignment: LayoutAlignment.start;
+                private property <int> current-icon-index: 0;
+
+                for entry[index] in root.entries: SettingEntryV2 {
+                    text: entry.text;
+                    text-overflow: elide;
+                    font-size: root.font-size;
+                    icon-size: root.icon-size;
+                    is-show-right-icon: true;
+                    right-icon: Icons.more-v;
+                    right-icon-size: self.icon-size;
+                    gain-focus-when-clicked: true;
+                    background: root.selected-id == entry.id ? Theme.checked-background : self.has-hover ? Theme.hover-background : Colors.transparent;
+
+                    init => {
+                        self.icon = is-use-random-icon ? root.random-icon() : entry.icon;
+                    }
+
+                    clicked => {
+                        root.clicked(index);
+                    }
+
+                    clicked-right-icon => {
+                        root.clicked-right-icon(index);
+                        PopupActionSetting.show(self.absolute-position.x + self.width - Theme.padding * 2, self.absolute-position.y, popup-action-entries);
+                    }
+                }
+            }
+        }
+    }
+}

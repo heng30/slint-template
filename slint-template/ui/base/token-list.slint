@@ -1,0 +1,62 @@
+import { Theme } from "../theme.slint";
+import { Store } from "../store.slint";
+import { Logic } from "../logic.slint";
+import { TokenTile, TokenTileWithSwitch, TokenTileEntry, TokenTileWithSwitchEntry } from "token-tile.slint";
+import { SettingDetail, SettingDetailInner } from "setting-detail.slint";
+import { Loading } from "loading.slint";
+import { NoDataImg } from "no-data.slint";
+
+export component TokenList inherits SettingDetailInner {
+    in-out property <[TokenTileEntry]> entries;
+
+    vbox-alignment: LayoutAlignment.start;
+    vbox-spacing: Theme.spacing * 2;
+
+    callback clicked(entry: TokenTileEntry);
+
+    for item[index] in entries: TokenTile {
+        entry: item;
+
+        clicked => {
+            root.clicked(item);
+        }
+    }
+}
+
+export component TokenListWithSwitch inherits SettingDetail {
+    in-out property <[TokenTileWithSwitchEntry]> entries;
+    in-out property <bool> is-loading;
+
+    callback clicked(entry: TokenTileEntry);
+    callback toggled(flag: bool, entry: TokenTileEntry);
+
+    if !is-loading && entries.length > 0: SettingDetailInner {
+        vbox-alignment: LayoutAlignment.start;
+        vbox-spacing: Theme.spacing * 2;
+
+        for item[index] in entries: TokenTileWithSwitch {
+            entry: item.entry;
+            checked: item.checked;
+
+            clicked => {
+                root.clicked(item.entry);
+            }
+
+            toggled => {
+                root.toggled(self.checked, item.entry);
+            }
+        }
+    }
+
+    if is-loading: Loading {
+        loading-text: Logic.tr("Refreshing...");
+        colorize: Theme.secondary-brand-color;
+        icon-size: Theme.icon-size * 2;
+    }
+
+    if !is-loading && entries.length == 0: Rectangle {
+        NoDataImg {
+            text: Logic.tr("No Data");
+        }
+    }
+}

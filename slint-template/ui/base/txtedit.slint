@@ -1,0 +1,111 @@
+import { TextEdit, Palette, ScrollView } from "std-widgets.slint";
+import { Theme } from "../theme.slint";
+
+export component TxtEditStd inherits Rectangle {
+    border-width: edit.has-focus ? 2px : 1px;
+    border-radius: Theme.border-radius;
+    border-color: edit.has-focus ? Theme.thirdly-brand-color : Theme.base-border-color;
+    forward-focus: edit;
+    clip: true;
+
+    in-out property <string> placeholder;
+    in-out property <length> inner-padding: 0;
+    in-out property text <=> edit.text;
+    in-out property font-size <=> edit.font-size;
+
+    callback edited <=> edit.edited;
+
+    public function clear() {
+        root.text = "";
+    }
+
+    public function copy() {
+        edit.copy();
+    }
+
+    public function clear-editor-focus() {
+        edit.clear-focus();
+    }
+
+    hbox := HorizontalLayout {
+        padding: root.inner-padding;
+
+        edit := TextEdit {
+            font-size: Theme.default-font-size;
+        }
+    }
+
+    if !placeholder.is-empty && root.text.is-empty: Text {
+        x: root.inner-padding + Theme.padding * 2;
+        y: root.inner-padding + Theme.padding * 4;
+        text: placeholder;
+        font-size: root.font-size;
+        color: Theme.placeholder-text-color;
+    }
+}
+
+export component TxtEdit inherits Rectangle {
+    border-width: edit.has-focus ? 2px : 1px;
+    border-radius: Theme.border-radius;
+    border-color: edit.has-focus ? Theme.thirdly-brand-color : Theme.base-border-color;
+    forward-focus: edit;
+
+    in-out property <string> placeholder;
+    in-out property <length> inner-padding: Theme.padding * 2;
+    in-out property text <=> edit.text;
+    in-out property font-size <=> edit.font-size;
+    in-out property text-color <=> edit.color;
+    in-out property read-only <=> edit.read-only;
+
+    callback edited(text: string);
+    callback key-pressed <=> edit.key-pressed;
+
+    public function copy() {
+        return edit.copy();
+    }
+
+    public function clear() {
+        root.text = "";
+    }
+
+    public function clear-editor-focus() {
+        edit.clear-focus();
+    }
+
+    function ensure-show-cursor() {
+        if (flick.viewport-height <= flick.height) {
+            flick.viewport-y = 0;
+        } else {
+            if (-flick.viewport-y + edit.font-size * 2 < flick.viewport-height - flick.height) {
+                return;
+            }
+            flick.viewport-y = -flick.viewport-height + flick.height;
+        }
+    }
+
+    flick := ScrollView {
+        VerticalLayout {
+            padding: inner-padding;
+
+            edit := TextInput {
+                single-line: false;
+                wrap: word-wrap;
+                color: Theme.regular-text-color;
+                font-size: Theme.default-font-size;
+
+                edited() => {
+                    ensure-show-cursor();
+                    root.edited(root.text);
+                }
+            }
+        }
+    }
+
+    if !placeholder.is-empty && root.text.is-empty: Text {
+        x: root.inner-padding;
+        y: self.x;
+        text: placeholder;
+        font-size: root.font-size;
+        color: Theme.placeholder-text-color;
+    }
+}

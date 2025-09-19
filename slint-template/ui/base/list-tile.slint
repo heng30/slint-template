@@ -1,0 +1,159 @@
+import { Theme, Icons } from "../theme.slint";
+import { IconBtn } from "./icon-btn.slint";
+import { Label } from "./label.slint";
+
+// Example:
+// VerticalLayout {
+//     alignment: LayoutAlignment.center;
+
+//     ListTile {
+//         height: item-height;
+//         background: Theme.secondary-background;
+//         border-radius: Theme.border-radius;
+//         is-show-left-icon: true;
+//         left-icon-size: item-height / 2;
+//         left-icon-background: Theme.secondary-brand-color;
+//         left-icon: Icons.Home;
+//         left-icon-is-avatar: true;
+
+//         title-text: item.name;
+//         subtitle-text: "$" + item.balance;
+//         middle-mouse-cursor: MouseCursor.pointer;
+
+//         is-show-right-icon: true;
+//         right-icon: Icons.delete;
+//     }
+// }
+
+export component ListTile inherits Rectangle {
+    height: hbox.preferred-height;
+    background: Theme.base-background;
+
+    callback left-clicked();
+    callback right-clicked();
+    callback middle-clicked();
+
+    out property <bool> has-hover: middle-area.has-hover || ta.has-hover;
+
+    in property <bool> is-show-left-icon;
+    in property <bool> left-icon-is-avatar;
+    in property <image> left-icon;
+    in property <length> left-icon-size: Theme.icon-size;
+    in property <color> left-icon-colorize;
+    in property <color> left-icon-background;
+    in property <color> left-icon-hover-background;
+    in property <length> left-icon-border-radius: Theme.border-radius;
+    in property <length> left-icon-border-width;
+    in property <color> left-icon-border-color;
+
+    in property <color> middle-background;
+    in property <color> middle-hover-background;
+    in property <TextWrap> middle-text-wrap: TextWrap.no-wrap;
+    in property <TextOverflow> middle-text-overflow: TextOverflow.elide;
+
+    in property <bool> is-show-right-icon;
+    in property <length> right-icon-size: Theme.icon-size;
+    in property <color> right-colorize: Theme.icon-color;
+    in property <image> right-icon;
+
+    in property <string> title-text;
+    in property <length> title-font-size: Theme.title3-font-size;
+
+    in property <string> subtitle-text;
+    in property <length> subtitle-font-size: Theme.default-font-size;
+
+    in property middle-mouse-cursor <=> middle-area.mouse-cursor;
+
+    private property <LayoutAlignment> horizontal-alignment: is-show-right-icon ? LayoutAlignment.space-between : is-show-left-icon ? LayoutAlignment.start : LayoutAlignment.stretch;
+
+    ta := TouchArea {
+        mouse-cursor: middle-area.mouse-cursor;
+        clicked => {
+            middle-clicked();
+        }
+    }
+
+    hbox := HorizontalLayout {
+        padding: Theme.padding;
+        spacing: Theme.spacing * 2;
+        alignment: root.horizontal-alignment;
+
+        HorizontalLayout {
+            horizontal-stretch: 1;
+            spacing: Theme.spacing * 2;
+
+            if is-show-left-icon: VerticalLayout {
+                alignment: LayoutAlignment.center;
+                Rectangle {
+                    width: root.left-icon-size + Theme.padding * 4;
+                    height: self.width;
+                    border-width: left-icon-border-width;
+                    border-color: left-icon-border-color;
+                    border-radius: left-icon-is-avatar ? self.width / 2 : left-icon-border-radius;
+                    background: img-area.has-hover ? root.left-icon-hover-background : root.left-icon-background;
+
+                    img := Image {
+                        height: root.left-icon-size;
+                        width: self.height;
+                        source: root.left-icon;
+                        colorize: root.left-icon-colorize;
+                    }
+
+                    img-area := TouchArea {
+                        mouse-cursor: MouseCursor.pointer;
+                        clicked => {
+                            root.left-clicked();
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                clip: true;
+                border-radius: Theme.border-radius;
+                background: middle-area.has-hover ? root.middle-hover-background : root.middle-background;
+
+                middle-area := TouchArea {
+                    clicked => {
+                        root.middle-clicked();
+                    }
+                }
+
+                vbox := VerticalLayout {
+                    alignment: LayoutAlignment.start;
+                    spacing: Theme.spacing * 2;
+                    padding: Theme.padding * 2;
+
+                    if root.title-text != "": Label {
+                        font-size: root.title-font-size;
+                        text: root.title-text;
+                        wrap: root.middle-text-wrap;
+                        overflow: root.middle-text-overflow;
+                        font-weight: 0.5;
+                    }
+
+                    if root.subtitle-text != "": Label {
+                        font-size: root.subtitle-font-size;
+                        text: root.subtitle-text;
+                        overflow: root.middle-text-overflow;
+                        wrap: root.middle-text-wrap;
+                    }
+                }
+            }
+        }
+
+        if is-show-right-icon: Rectangle {
+            width: root.right-icon-size + Theme.padding * 4;
+
+            IconBtn {
+                icon-size: root.right-icon-size;
+                icon: root.right-icon;
+                colorize: root.right-colorize;
+
+                clicked => {
+                    root.right-clicked();
+                }
+            }
+        }
+    }
+}

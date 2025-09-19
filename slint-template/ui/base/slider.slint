@@ -1,0 +1,152 @@
+import { Theme } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { ProgressBar } from "progress-bar.slint";
+import { Label } from "label.slint";
+
+// Example:
+// Slider {
+//     value: 30;
+//     minimum: 20;
+//     maximum: 80;
+//     changed(value) => {
+//         debug(value);
+//     }
+//     released(value) => {
+//         debug(value);
+//     }
+// }
+
+export component Slider inherits Rectangle {
+    in-out property <float> value: 0;
+    in-out property <float> minimum: 0;
+    in-out property <float> maximum: 100;
+    in-out property <length> indicator-size: Theme.icon-size * 2;
+    in-out property <Orientation> orientation: Orientation.horizontal;
+    in-out property <bool> enable-value-update-progress;
+
+    in-out property enabled <=> ta.enabled;
+    out property has-focus <=> fs.has-focus;
+    out property <bool> has-hover: ta.has-hover || indicator-has-hover;
+
+    in-out property <color> finished-progress-color: Theme.thirdly-brand-color;
+    in-out property <color> unfinished-progress-color: Theme.secondary-background;
+
+    private property <float> progress: (Math.clamp(value, minimum, maximum) - minimum) / (maximum - minimum);
+
+    private property <bool> indicator-has-hover;
+
+    callback changed(value: float);
+    callback released(value: float);
+    callback pressed(value: float);
+
+    changed value => {
+        if (enable-value-update-progress) {
+            progress = (Math.clamp(value, minimum, maximum) - minimum) / (maximum - minimum);
+        }
+    }
+
+    changed progress => {
+        indicator.update-position();
+    }
+
+    width: orientation == Orientation.horizontal ? 400px : Theme.default-font-size;
+    height: orientation == Orientation.horizontal ? Theme.default-font-size : 400px;
+    border-radius: orientation == Orientation.horizontal ? self.height / 2 : self.width / 2;
+
+    pb := ProgressBar {
+        x: 0;
+        y: 0;
+        width: root.width;
+        height: root.height;
+        border-radius: root.border-radius;
+        orientation: root.orientation;
+        progress: root.progress;
+        finished-text: "";
+        unfinished-text: "";
+        unfinished-progress-color: root.unfinished-progress-color;
+        finished-progress-color: root.enabled ? root.finished-progress-color : (Theme.is-dark ? root.unfinished-progress-color.brighter(50%) : root.unfinished-progress-color.darker(20%));
+        finished-text-background: self.finished-progress-color;
+    }
+
+    fs := FocusScope {
+        enabled: root.enabled;
+    }
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+
+        clicked => {
+            fs.focus();
+
+            if (root.orientation == Orientation.horizontal) {
+                root.progress = self.pressed-x / root.width;
+                root.value = root.progress * (root.maximum - root.minimum) + root.minimum;
+            } else {
+                root.progress = 1 - self.pressed-y / root.height;
+                root.value = root.progress * (root.maximum - root.minimum) + root.minimum;
+            }
+
+            root.changed(root.value);
+            root.released(root.value);
+        }
+    }
+
+    indicator := Rectangle {
+        visible: root.indicator-size > 0;
+        width: root.indicator-size;
+        height: self.width;
+        border-radius: self.width / 2;
+        border-width: indicator-ta.pressed ? 2px : 0;
+        border-color: root.finished-progress-color;
+        background: Theme.light-text-color;
+        drop-shadow-blur: Theme.padding * 2;
+        drop-shadow-color: indicator-ta.pressed ? self.border-color : Theme.secondary-background.darker(30%);
+
+        function update-position() {
+            if (root.orientation == Orientation.horizontal) {
+                self.x = root.width * root.progress - self.width / 2;
+            } else {
+                self.y = root.height - self.height / 2 - root.height * root.progress;
+            }
+        }
+
+        init => {
+            update-position();
+        }
+
+        indicator-ta := TouchArea {
+            enabled: root.enabled;
+            mouse-cursor: MouseCursor.pointer;
+
+            changed has-hover => {
+                if (self.has-hover) {
+                    indicator-has-hover = true;
+                } else {
+                    indicator-has-hover = false;
+                }
+            }
+
+            moved => {
+                if (root.orientation == Orientation.horizontal) {
+                    parent.x = Math.clamp(parent.x + self.mouse-x - self.pressed-x, -parent.width / 2, root.width - parent.width / 2);
+                    root.progress = (parent.x + parent.width / 2) / root.width;
+                    root.value = root.progress * (root.maximum - root.minimum) + root.minimum;
+                } else {
+                    parent.y = Math.clamp(parent.y + self.mouse-y - self.pressed-y, -parent.height / 2, root.height - parent.height / 2);
+                    root.progress = 1 - (parent.y + parent.width / 2) / root.height;
+                    root.value = root.progress * (root.maximum - root.minimum) + root.minimum;
+                }
+
+                root.changed(root.value);
+            }
+
+            pointer-event(event) => {
+                if (event.kind == PointerEventKind.up && event.button == PointerEventButton.left) {
+                    root.released(root.value);
+                } else if (event.kind == PointerEventKind.down && event.button == PointerEventButton.left) {
+                    root.pressed(root.value);
+                }
+            }
+        }
+    }
+}

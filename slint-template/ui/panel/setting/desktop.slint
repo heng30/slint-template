@@ -1,0 +1,487 @@
+import { Logic, Theme, Store, Util, Icons, SettingPreference, SettingDetailIndex, DeviceType, TabIndex, PopupIndex, SettingBackup } from "../def.slint";
+import { IconBtn, SettingEntryV2, Head, SettingDetail, ToastStatus, About, Help, Dialog, ComponentPosition, TabBtns, Divider, ConfirmDialogSetting } from "../../base/widgets.slint";
+
+import { Preference } from "components/preference.slint";
+import { Donate } from "components/donate.slint";
+import { Proxy } from "components/proxy.slint";
+import { HelpDetail } from "components/help-detail.slint";
+import { Backup } from "components/backup.slint";
+
+component SettingBody inherits Rectangle {
+    background: Theme.base-background;
+
+    public function apply() {
+        if (Store.current-setting-detail-index == SettingDetailIndex.Preference) {
+            preference.apply();
+        } else if (Store.current-setting-detail-index == SettingDetailIndex.Proxy) {
+            proxy.apply();
+        }
+    }
+
+    init => {
+        Logic.switch-setting-detail(SettingDetailIndex.Preference);
+    }
+
+    preference := Preference {
+        visible: Store.current-setting-detail-index == SettingDetailIndex.Preference;
+        is-show-header: false;
+
+        public function apply() {
+            if (self.get().font-size == "" || self.get().win-width == "" || self.get().win-height == "") {
+                Util.show-toast(Logic.tr("Input can not be empty"), ToastStatus.Warning);
+                return;
+            }
+            Store.setting-preference.win-width = self.get().win-width;
+            Store.setting-preference.win-height = self.get().win-height;
+            Store.setting-preference.font-size = self.get().font-size;
+            Store.setting-preference.font-family = self.get().font-family;
+
+            Logic.set-setting-preference(self.get());
+        }
+    }
+
+    proxy := Proxy {
+        visible: Store.current-setting-detail-index == SettingDetailIndex.Proxy;
+        is-show-header: false;
+
+        public function apply() {
+            Logic.set-setting-proxy(self.get());
+        }
+    }
+}
+
+component Setting inherits Rectangle {
+    public function apply() {
+        body.apply();
+    }
+
+    VerticalLayout {
+        padding-top: Theme.padding * 2;
+        spacing: Theme.spacing;
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+
+            TabBtns {
+                items: [
+                    { icon: Icons.ui, text: Logic.tr("Preference") },
+                    { icon: Icons.model-light, text: Logic.tr("Proxy") },
+                ];
+
+                clicked(index) => {
+                    if (index == 0) {
+                        Logic.switch-setting-detail(SettingDetailIndex.Preference);
+                    } else if (index == 1) {
+                        Logic.switch-setting-detail(SettingDetailIndex.Proxy);
+                    }
+                }
+            }
+        }
+
+        body := SettingBody { }
+    }
+}
+
+export component SettingDialog inherits Dialog {
+    title: Logic.tr("Setting");
+    is-hide-cancel-btn: true;
+    is-prevent-event-forward: true;
+    confirm-text: Logic.tr("Apply");
+
+    in-out property <length> inner-height: Theme.dialog-inner-height;
+
+    setting := Setting {
+        height: root.inner-height;
+    }
+
+    cancel-clicked => {
+        Logic.switch-popup(PopupIndex.None);
+    }
+
+    ok-clicked => {
+        setting.apply();
+    }
+}
+
+export component BackupDialog inherits Dialog {
+    title: Logic.tr("Backup");
+    is-prevent-event-forward: true;
+
+    public function get-setting-backup() -> SettingBackup {
+        return bk.get-setting-backup();
+    }
+
+    bk := Backup {
+        is-show-header: false;
+    }
+
+    cancel-clicked => {
+        Logic.switch-popup(PopupIndex.None);
+    }
+}
+
+export component AboutDialog inherits Dialog {
+    title: Logic.tr("About");
+    is-hide-bottom-btns: true;
+    is-prevent-event-forward: true;
+
+    in-out property <length> inner-height: Theme.dialog-inner-height;
+
+    About {
+        height: root.inner-height;
+        is-show-header: false;
+    }
+
+    cancel-clicked => {
+        Logic.switch-popup(PopupIndex.None);
+    }
+}
+
+export component HelpDialog inherits Dialog {
+    title: Logic.tr("Help");
+    is-hide-bottom-btns: true;
+    is-prevent-event-forward: true;
+
+    in-out property <length> inner-height: Theme.dialog-inner-height;
+
+    Help {
+        height: root.inner-height;
+        is-show-header: false;
+
+        HelpDetail { }
+    }
+
+    cancel-clicked => {
+        Logic.switch-popup(PopupIndex.None);
+    }
+}
+
+export component DonateDialog inherits Dialog {
+    title: Logic.tr("Donate");
+    is-hide-bottom-btns: true;
+    is-prevent-event-forward: true;
+
+    in-out property <length> inner-height: Theme.dialog-inner-height;
+
+    Donate {
+        height: root.inner-height;
+        is-show-header: false;
+    }
+
+    cancel-clicked => {
+        Logic.switch-popup(PopupIndex.None);
+    }
+}
+
+export component HorizontalSettingIconsBar inherits Rectangle {
+    width: hbox.preferred-width;
+    height: hbox.preferred-height;
+    border-radius: Theme.border-radius;
+
+    in-out property <bool> show-icon-hover-background: false;
+    in-out property <length> icon-size: Theme.icon-size;
+    in-out property <bool> is-show-tip: false;
+    in-out property <ComponentPosition> tip-position;
+    in-out property h-padding <=> hbox.padding;
+    in-out property h-spacing <=> hbox.spacing;
+
+    hbox := HorizontalLayout {
+        padding: Theme.padding * 2;
+
+        HorizontalLayout {
+            spacing: Theme.spacing * 2;
+
+            HorizontalLayout {
+                spacing: Theme.spacing * 4;
+
+                IconBtn {
+                    icon: Icons.backup-fill;
+                    icon-size: root.icon-size * 1.2;
+                    show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("backup");
+
+                    clicked => {
+                        Logic.switch-popup(PopupIndex.Backup);
+                    }
+                }
+
+                IconBtn {
+                    icon: Icons.recover-fill;
+                    icon-size: root.icon-size * 0.90;
+                    show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("recover");
+
+                    clicked => {
+                        Logic.recover();
+                    }
+                }
+
+                if Store.is-show-remove-caches-btn: IconBtn {
+                    icon: Icons.cache-fill;
+                    icon-size: root.icon-size;
+                    show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("remove caches");
+
+                    clicked => {
+                        ConfirmDialogSetting.set(true, Logic.tr("Warning"), Logic.tr("Remove all caches or not?") + "(" + Logic.caches-size() + ")", "remove-caches", "");
+                    }
+                }
+
+                IconBtn {
+                    icon: Icons.uninstall-fill;
+                    icon-size: root.icon-size;
+                    show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("uninstall");
+
+                    clicked => {
+                        ConfirmDialogSetting.set(true, Logic.tr("Warning"), Logic.tr("Remove configuration and all datas or not?"), "uninstall", "");
+                    }
+                }
+            }
+
+            VerticalLayout {
+                alignment: LayoutAlignment.center;
+                Divider {
+                    height: Theme.default-font-size;
+                    width: 2px;
+                }
+            }
+        }
+
+        HorizontalLayout {
+            spacing: Theme.spacing * 4;
+            padding-left: Theme.padding * 2;
+
+            IconBtn {
+                icon: Icons.setting-fill;
+                icon-size: root.icon-size;
+                show-icon-hover-background: root.show-icon-hover-background;
+                is-show-tip: root.is-show-tip;
+                tip-position: root.tip-position;
+                tip: Logic.tr("setting");
+
+                clicked => {
+                    Logic.switch-popup(PopupIndex.Setting);
+                }
+            }
+
+            if Store.is-show-help-btn: IconBtn {
+                icon: Icons.help;
+                icon-size: root.icon-size;
+                show-icon-hover-background: root.show-icon-hover-background;
+                is-show-tip: root.is-show-tip;
+                tip-position: root.tip-position;
+                tip: Logic.tr("help");
+
+                clicked => {
+                    Logic.switch-popup(PopupIndex.Help);
+                }
+            }
+
+            IconBtn {
+                icon: Icons.about-fill;
+                icon-size: root.icon-size;
+                show-icon-hover-background: root.show-icon-hover-background;
+                is-show-tip: root.is-show-tip;
+                tip-position: root.tip-position;
+                tip: Logic.tr("about");
+
+                clicked => {
+                    Logic.switch-popup(PopupIndex.About);
+                }
+            }
+
+            IconBtn {
+                icon: Icons.donate;
+                icon-size: root.icon-size;
+                show-icon-hover-background: root.show-icon-hover-background;
+                is-show-tip: root.is-show-tip;
+                tip-position: root.tip-position;
+                tip: Logic.tr("donate");
+
+                clicked => {
+                    Logic.switch-popup(PopupIndex.Donate);
+                }
+            }
+
+            IconBtn {
+                icon: Icons.github;
+                icon-size: root.icon-size;
+                show-icon-hover-background: root.show-icon-hover-background;
+                is-show-tip: root.is-show-tip;
+                tip-position: root.tip-position;
+                tip: "github";
+
+                clicked => {
+                    Util.open-url("Default","https://github.com/Heng30/slint-template");
+                }
+            }
+        }
+    }
+}
+
+export component VerticalSettingIconsBar inherits Rectangle {
+    width: vbox.preferred-width;
+    height: vbox.preferred-height;
+    border-radius: Theme.border-radius;
+
+    in-out property <bool> show-icon-hover-background: false;
+    in-out property <length> icon-size: Theme.icon-size;
+    in-out property <bool> is-show-tip: false;
+    in-out property <ComponentPosition> tip-position;
+    in-out property <length> v-padding-bottom;
+    in-out property v-padding <=> vbox.padding;
+    in-out property v-spacing <=> vbox.spacing;
+
+    vbox := VerticalLayout {
+        padding: Theme.padding * 2;
+        padding-bottom: root.v-padding-bottom;
+
+        VerticalLayout {
+            spacing: Theme.spacing * 2;
+
+            VerticalLayout {
+                spacing: Theme.spacing * 4;
+
+                IconBtn {
+                    icon: Icons.backup-fill;
+                    icon-size: root.icon-size;
+                    show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("backup");
+
+                    clicked => {
+                        Logic.switch-popup(PopupIndex.Backup);
+                    }
+                }
+
+                IconBtn {
+                    icon: Icons.recover-fill;
+                    icon-size: root.icon-size * 0.90;
+                    show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("recover");
+
+                    clicked => {
+                        Logic.recover();
+                    }
+                }
+
+                if Store.is-show-remove-caches-btn: IconBtn {
+                    icon: Icons.cache-fill;
+                    icon-size: root.icon-size;
+                    show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("remove caches");
+
+                    clicked => {
+                        ConfirmDialogSetting.set(true, Logic.tr("Warning"), Logic.tr("Remove all caches or not?") + "(" + Logic.caches-size() + ")", "remove-caches", "");
+                    }
+                }
+
+                IconBtn {
+                    icon: Icons.uninstall-fill;
+                    icon-size: root.icon-size;
+                    show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("uninstall");
+
+                    clicked => {
+                        ConfirmDialogSetting.set(true, Logic.tr("Warning"), Logic.tr("Remove configuration and all datas or not?"), "uninstall", "");
+                    }
+                }
+            }
+
+            HorizontalLayout {
+                alignment: center;
+
+                Divider {
+                    width: Theme.default-font-size;
+                    height: 2px;
+                }
+            }
+        }
+
+        VerticalLayout {
+            spacing: Theme.spacing * 4;
+            padding-top: Theme.padding * 2;
+
+            IconBtn {
+                icon: Icons.setting-fill;
+                icon-size: root.icon-size;
+                show-icon-hover-background: root.show-icon-hover-background;
+                is-show-tip: root.is-show-tip;
+                tip-position: root.tip-position;
+                tip: Logic.tr("setting");
+
+                clicked => {
+                    Logic.switch-popup(PopupIndex.Setting);
+                }
+            }
+
+            if Store.is-show-help-btn: IconBtn {
+                icon: Icons.help;
+                icon-size: root.icon-size;
+                show-icon-hover-background: root.show-icon-hover-background;
+                is-show-tip: root.is-show-tip;
+                tip-position: root.tip-position;
+                tip: Logic.tr("help");
+
+                clicked => {
+                    Logic.switch-popup(PopupIndex.Help);
+                }
+            }
+
+            IconBtn {
+                icon: Icons.about-fill;
+                icon-size: root.icon-size;
+                show-icon-hover-background: root.show-icon-hover-background;
+                is-show-tip: root.is-show-tip;
+                tip-position: root.tip-position;
+                tip: Logic.tr("about");
+
+                clicked => {
+                    Logic.switch-popup(PopupIndex.About);
+                }
+            }
+
+            IconBtn {
+                icon: Icons.donate;
+                icon-size: root.icon-size;
+                show-icon-hover-background: root.show-icon-hover-background;
+                is-show-tip: root.is-show-tip;
+                tip-position: root.tip-position;
+                tip: Logic.tr("donate");
+
+                clicked => {
+                    Logic.switch-popup(PopupIndex.Donate);
+                }
+            }
+
+            IconBtn {
+                icon: Icons.github;
+                icon-size: root.icon-size;
+                show-icon-hover-background: root.show-icon-hover-background;
+                is-show-tip: root.is-show-tip;
+                tip-position: root.tip-position;
+                tip: "github";
+
+                clicked => {
+                    Util.open-url("Default","https://github.com/Heng30/slint-template");
+                }
+            }
+        }
+    }
+}

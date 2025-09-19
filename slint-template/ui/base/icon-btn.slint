@@ -1,0 +1,156 @@
+import { ComponentPosition } from "def.slint";
+import { Theme } from "../theme.slint";
+import { Label } from "label.slint";
+import { ToolTipSetting } from "tooltip.slint";
+
+export enum RotationType {
+    Auto,
+    Click,
+    None,
+}
+
+export component IconBtn inherits Rectangle {
+    in-out property icon <=> img.source;
+    in-out property colorize <=> img.colorize;
+    in-out property icon-size <=> img.width;
+    in-out property icon-visible <=> img.visible;
+    in-out property icon-rotation-angle <=> img.rotation-angle;
+    in-out property mouse-cursor <=> touch.mouse-cursor;
+    in-out property enabled-toucharea <=> touch.enabled;
+    out property has-hover <=> touch.has-hover;
+    out property mouse-x <=> touch.mouse-x;
+    out property mouse-y <=> touch.mouse-y;
+    out property pressed-x <=> touch.pressed-x;
+    out property pressed-y <=> touch.pressed-y;
+
+    in-out property <bool> show-icon-hover-background: true;
+    in-out property <bool> is-ltr: true;
+    in-out property <bool> gain-focus-when-clicked: true;
+    in-out property <RotationType> rotation-type: RotationType.None;
+
+    in-out property <bool> use-auto-size: false;
+    in-out property <length> auto-size-vpadding: Theme.padding;
+    in-out property <length> auto-size-hpadding: Theme.padding * 4;
+
+    in-out property <length> spacing: Theme.spacing;
+    in-out property <ImageVerticalAlignment> icon-valignment: ImageVerticalAlignment.center;
+
+    in-out property <string> text;
+    in-out property <length> font-size: Theme.title4-font-size;
+    in-out property <color> text-color: root.colorize;
+    in-out property <int> font-weight: Theme.normal-font-weight;
+    in-out property <int> icon-rotation-iteration-count;
+
+    in-out property <bool> is-show-tip;
+    in-out property <string> tip;
+    in-out property <ComponentPosition> tip-position;
+
+    in-out property <color> bg-color: Colors.transparent;
+    in-out property <color> bg-pressed-color: self.bg-color;
+    in-out property <color> hover-color: Theme.is-dark ? Theme.secondary-background.darker(50%) : Theme.secondary-background.darker(5%);
+
+    callback clicked();
+    callback entered();
+    callback leave();
+
+    callback moved <=> touch.moved;
+    callback pointer-event <=> touch.pointer-event;
+
+    border-radius: Theme.border-radius;
+    background: touch.pressed ? bg-pressed-color : (touch.has-hover ? bg-color.darker(10%) : bg-color);
+
+    animate background {
+        duration: Theme.default-animate-duration;
+        easing: ease-in-out;
+    }
+
+    // only is a icon showing this hover color
+    if (text == "" && show-icon-hover-background): Rectangle {
+        x: img.x - Theme.spacing * 2 - (Math.max(Theme.icon-size, root.icon-size) - img.width) / 2;
+        width: Math.max(Theme.icon-size, root.icon-size) + Theme.spacing * 4;
+        height: self.width;
+        border-radius: self.width / 2;
+        background: touch.has-hover ? root.hover-color : Colors.transparent;
+    }
+
+    hbox := HorizontalLayout {
+        alignment: center;
+        spacing: root.spacing;
+
+        padding: root.use-auto-size ? root.auto-size-vpadding : 0;
+        padding-left: root.use-auto-size ? root.auto-size-hpadding : 0;
+        padding-right: root.use-auto-size ? root.auto-size-hpadding : 0;
+
+        if !root.is-ltr && root.text != "": Label {
+            color: root.text-color;
+            font-size: root.font-size;
+            text: root.text;
+            font-weight: root.font-weight;
+        }
+
+        VerticalLayout {
+            alignment: center;
+
+            img := Image {
+                vertical-alignment: root.icon-valignment;
+                width: Theme.icon-size;
+                height: self.width;
+                colorize: Theme.icon-color;
+                rotation-angle: 0;
+
+                animate rotation-angle {
+                    duration: Theme.default-animate-duration;
+                    easing: ease-in-out;
+                    iteration-count: root.rotation-type == RotationType.Auto ? -1 : root.icon-rotation-iteration-count;
+                }
+            }
+        }
+
+        if root.is-ltr && root.text != "": Label {
+            color: root.text-color;
+            font-size: root.font-size;
+            text: root.text;
+        }
+    }
+
+    fs := FocusScope { }
+
+    touch := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+        clicked => {
+            if (RotationType.Click == root.rotation-type) {
+                if (icon-rotation-angle == 0) {
+                    icon-rotation-angle = 360deg;
+                } else {
+                    icon-rotation-angle = 0deg;
+                }
+            }
+            if (gain-focus-when-clicked) {
+                fs.focus();
+            }
+            root.clicked();
+        }
+
+        changed has-hover => {
+            if (self.has-hover) {
+                root.entered();
+            } else {
+                root.leave();
+            }
+
+            if (is-show-tip) {
+                if (self.has-hover) {
+                    ToolTipSetting.show(
+                                    self.absolute-position.x,
+                                    self.absolute-position.y,
+                                    parent.width,
+                                    parent.height,
+                                    root.tip-position,
+                                    root.tip);
+                } else {
+                    ToolTipSetting.hide();
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,117 @@
+import { Theme, Icons } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { Store } from "../store.slint";
+import { Label } from "label.slint";
+import { LineInput } from "line-input.slint";
+import { CancelBtn, ConfirmBtn } from "btn.slint";
+import { SettingDetail, SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel } from "setting-detail.slint";
+import { Loading } from "loading.slint";
+import { LoadingStatus } from "def.slint";
+
+export component WaitTransactionConfirmed inherits SettingDetail {
+    in-out property network <=> network-input.text;
+    in-out property send-token <=> send-token-input.text;
+    in-out property send-amount <=> amount-input.text;
+    in property <string> send-amount-usdt;
+    in-out property signature <=> signature-input.text;
+    in property <LoadingStatus> loading-status;
+
+    callback open-signature <=> signature-input.clicked;
+
+    title: Logic.tr("Transaction signature");
+
+    SettingDetailInner {
+        if loading-status == LoadingStatus.Loading: Loading {
+            height: 150px;
+            loading-text: Logic.tr("Waiting transaction confirmed...");
+            colorize: Theme.secondary-brand-color;
+            icon-size: Theme.icon-size * 2;
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Blockchain network");
+            }
+
+            network-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: "test";
+                enabled: false;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Send token");
+            }
+
+            send-token-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: "ETH";
+                enabled: false;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Send amount");
+            }
+
+            amount-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: "0";
+                input-type: InputType.decimal;
+                enabled: false;
+            }
+
+            if send-amount-usdt != "": Label {
+                text: root.send-amount-usdt;
+                color: Theme.have-read-text-color;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Transaction history");
+            }
+
+            signature-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                enabled: false;
+                icon: Icons.browser-access;
+                is-show-icon: true;
+            }
+        }
+
+        HorizontalLayout {
+            padding-top: Theme.padding * 5;
+            padding-bottom: Theme.padding * 5;
+
+            if loading-status == LoadingStatus.Loading: CancelBtn {
+                border-radius: Theme.border-radius;
+                text: Logic.tr("Close");
+                clicked => {
+                    root.back();
+                }
+            }
+
+            if loading-status == LoadingStatus.Fail: CancelBtn {
+                border-radius: Theme.border-radius;
+                bg-color: Theme.warning-color;
+                text: Logic.tr("Transaction failed");
+                icon: Icons.warning;
+                clicked => {
+                    root.back();
+                }
+            }
+
+            if loading-status == LoadingStatus.Success: ConfirmBtn {
+                border-radius: Theme.border-radius;
+                text: Logic.tr("Transaction success");
+                clicked => {
+                    root.back();
+                }
+            }
+        }
+    }
+}

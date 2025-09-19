@@ -1,0 +1,54 @@
+import { Theme, Icons } from "../theme.slint";
+import { IconBtn } from "icon-btn.slint";
+import { Label } from "label.slint";
+import { Link } from "link.slint";
+import { SettingDetailInner, SettingDetail } from "setting-detail.slint";
+
+export component TokenRecipient inherits SettingDetail {
+    in property account-name <=> account-name-label.text;
+    in-out property address <=> address-link.text;
+    in property qrcode <=> img.source;
+
+    callback clicked-address <=> address-link.clicked;
+    callback copy-address <=> btn.clicked;
+
+    SettingDetailInner {
+        vbox-alignment: LayoutAlignment.center;
+        vbox-spacing: Theme.spacing * 2;
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+
+            account-name-label := Label {
+                font-size: Theme.title2-font-size;
+                font-weight: 0.5;
+            }
+        }
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+
+            img := Image {
+                width: Math.min(300px, root.width * 0.8);
+                height: self.width;
+            }
+        }
+
+        HorizontalLayout {
+            spacing: Theme.spacing * 2;
+            alignment: LayoutAlignment.center;
+
+            address-link := Link {
+                overflow: elide;
+                horizontal-stretch: 1;
+                wrap: TextWrap.no-wrap;
+                font-size: Theme.default-font-size;
+                color: self.has-hover ? Theme.link-text-color : Theme.primary-text-color;
+            }
+
+            btn := IconBtn {
+                icon: Icons.copy;
+            }
+        }
+    }
+}

@@ -1,0 +1,349 @@
+import { Icons, Theme } from "../theme.slint";
+import { Util } from "../util.slint";
+import { IconBtn } from "icon-btn.slint";
+import { Label } from "label.slint";
+import { Date } from "def.slint";
+import { LineInput } from "line-input.slint";
+import { Logic } from "../logic.slint";
+import { CancelBtn, ConfirmBtn } from "btn.slint";
+
+// Eample
+// DatePicker {
+//     canceled => {}
+//     confirmed(date) => {
+//        debug(date);
+//     }
+// }
+
+component DateCell inherits Rectangle {
+    in-out property <Date> date;
+    in-out property <length> cell-size;
+    in-out property <bool> is-selected;
+
+    private property <bool> is-not-in-month: date.month != date.main-month;
+
+    callback clicked <=> ta.clicked;
+
+    height: cell-size;
+    width: cell-size;
+    border-radius: Theme.border-radius;
+    background: ta.has-hover ? Theme.thirdly-brand-color : (is-selected ? Theme.thirdly-brand-color : (is-not-in-month ? Colors.transparent : Theme.hover-background));
+
+    ta := TouchArea {
+        mouse-cursor: self.has-hover ? MouseCursor.pointer : MouseCursor.default;
+    }
+
+    Label {
+        text: date.day;
+        color: is-selected || ta.has-hover ? Theme.light-text-color : Theme.regular-text-color;
+        font-weight: Theme.bold-font-weight;
+    }
+}
+
+export component DatePicker inherits Rectangle {
+    in-out property <int> current-year: 1990;
+    in-out property <int> current-month: 6;
+    in-out property <int> current-day: 3;
+
+    in-out property <[[Date]]> date-cells;
+
+    private property <[[Date]]> cache-date-cells: [
+        [
+            { year: 1989, month: 5, day: 29, main-month: 6 },
+            { year: 1989, month: 5, day: 30, main-month: 6 },
+            { year: 1990, month: 6, day: 1, main-month: 6 },
+            { year: 1990, month: 6, day: 2, main-month: 6 },
+            { year: 1990, month: 6, day: 3, main-month: 6 },
+            { year: 1990, month: 6, day: 4, main-month: 6 },
+            { year: 1990, month: 6, day: 5, main-month: 6 },
+        ],
+        [
+            { year: 1990, month: 6, day: 6, main-month: 6 },
+            { year: 1990, month: 6, day: 7, main-month: 6 },
+            { year: 1990, month: 6, day: 8, main-month: 6 },
+            { year: 1990, month: 6, day: 9, main-month: 6 },
+            { year: 1990, month: 6, day: 10, main-month: 6 },
+            { year: 1990, month: 6, day: 11, main-month: 6 },
+            { year: 1990, month: 6, day: 12, main-month: 6 },
+        ],
+        [
+            { year: 1990, month: 6, day: 13, main-month: 6 },
+            { year: 1990, month: 6, day: 14, main-month: 6 },
+            { year: 1990, month: 6, day: 15, main-month: 6 },
+            { year: 1990, month: 6, day: 16, main-month: 6 },
+            { year: 1990, month: 6, day: 17, main-month: 6 },
+            { year: 1990, month: 6, day: 18, main-month: 6 },
+            { year: 1990, month: 6, day: 19, main-month: 6 },
+        ],
+        [
+            { year: 1990, month: 6, day: 20, main-month: 6 },
+            { year: 1990, month: 6, day: 21, main-month: 6 },
+            { year: 1990, month: 6, day: 22, main-month: 6 },
+            { year: 1990, month: 6, day: 23, main-month: 6 },
+            { year: 1990, month: 6, day: 24, main-month: 6 },
+            { year: 1990, month: 6, day: 26, main-month: 6 },
+            { year: 1990, month: 6, day: 27, main-month: 6 },
+        ],
+        [
+            { year: 1990, month: 6, day: 28, main-month: 6 },
+            { year: 1990, month: 6, day: 29, main-month: 6 },
+            { year: 1990, month: 6, day: 30, main-month: 6 },
+            { year: 1990, month: 6, day: 31, main-month: 6 },
+            { year: 1990, month: 7, day: 1, main-month: 6 },
+            { year: 1990, month: 7, day: 2, main-month: 6 },
+            { year: 1990, month: 7, day: 3, main-month: 6 },
+        ],
+        [
+            { year: 1990, month: 7, day: 4, main-month: 6 },
+            { year: 1990, month: 7, day: 5, main-month: 6 },
+            { year: 1990, month: 7, day: 6, main-month: 6 },
+            { year: 1990, month: 7, day: 7, main-month: 6 },
+            { year: 1990, month: 7, day: 8, main-month: 6 },
+            { year: 1990, month: 7, day: 9, main-month: 6 },
+            { year: 1990, month: 7, day: 10, main-month: 6 },
+        ],
+    ];
+
+    callback canceled();
+    callback confirmed(date: Date);
+
+    public function set-date(date: Date) {
+        if (current-year != date.year || current-month != date.month) {
+            date-cells = Util.upate-date-picker(date.year, date.month);
+        }
+        current-year = date.year;
+        current-month = date.month;
+        current-day = date.day;
+    }
+
+    function prev-month() {
+        if (current-month == 1) {
+            current-year -= 1;
+            current-month = 12;
+        } else {
+            current-month = current-month - 1;
+        }
+
+        date-cells = Util.upate-date-picker(current-year, current-month);
+    }
+
+    function next-month() {
+        if (current-month == 12) {
+            current-year += 1;
+            current-month = 1;
+        } else {
+            current-month = current-month + 1;
+        }
+
+        date-cells = Util.upate-date-picker(current-year, current-month);
+    }
+
+    init => {
+        set-date(Util.get-current-date());
+
+        if (date-cells.length == 0) {
+            date-cells = cache-date-cells;
+        }
+    }
+
+    width: vbox.preferred-width;
+    height: vbox.preferred-height;
+    preferred-width: vbox.preferred-width;
+    preferred-height: vbox.preferred-height;
+    border-radius: Theme.border-radius;
+    background: Theme.base-background;
+    border-width: Theme.default-border-width;
+    border-color: Theme.base-border-color;
+
+    vbox := VerticalLayout {
+        padding: Theme.padding * 4;
+        padding-left: Theme.padding * 8;
+        padding-right: Theme.padding * 8;
+        spacing: Theme.spacing * 4;
+        alignment: LayoutAlignment.start;
+
+        HorizontalLayout {
+            alignment: center;
+            spacing: Theme.spacing * 4;
+
+            IconBtn {
+                icon: Icons.arrow-left;
+
+                clicked => {
+                    prev-month();
+                }
+            }
+
+            HorizontalLayout {
+                private property <string> month: current-month < 10 ? "0" + current-month : "" + current-month;
+                private property <string> day: current-day < 10 ? "0" + current-day : "" + current-day;
+                private property <bool> is-edit;
+
+                if !is-edit: Label {
+                    text: current-year + "-" + month + "-" + day;
+                    color: Theme.primary-text-color;
+                    font-size: Theme.title1-font-size;
+                    font-weight: Theme.bold-font-weight;
+
+                    TouchArea {
+                        mouse-cursor: self.has-hover ? MouseCursor.pointer : MouseCursor.default;
+
+                        clicked => {
+                            is-edit = true;
+                        }
+                    }
+                }
+
+                if is-edit: HorizontalLayout {
+                    function update-edit-date() {
+                        if (year-li.text.to-float() < 1 || month-li.text.to-float() < 1 || month-li.text.to-float() > 12) {
+                            return;
+                        }
+                        is-edit = false;
+                        set-date({ year: year-li.text.to-float(), month: month-li.text.to-float(), day: current-day });
+                    }
+
+                    year-li := LineInput {
+                        text: current-year;
+                        width: self.font-size * 4;
+                        input-type: InputType.number;
+
+                        accepted => {
+                            update-edit-date()
+                        }
+                    }
+
+                    Label {
+                        text: " - ";
+                    }
+
+                    month-li := LineInput {
+                        text: month;
+                        width: self.font-size * 3;
+                        input-type: InputType.number;
+
+                        accepted => {
+                            update-edit-date()
+                        }
+                    }
+
+                    Label {
+                        text: " - " + day;
+                    }
+                }
+            }
+
+            IconBtn {
+                icon: Icons.arrow-right;
+
+                clicked => {
+                    next-month();
+                }
+            }
+        }
+
+        VerticalLayout {
+            spacing: Theme.spacing * 3;
+
+            private property <length> cell-size;
+            private property <[string]> day-names: [
+                Logic.tr("Sun"),
+                Logic.tr("Mon"),
+                Logic.tr("Tue"),
+                Logic.tr("Wed"),
+                Logic.tr("Thu"),
+                Logic.tr("Fri"),
+                Logic.tr("Sat"),
+            ];
+
+            day-names-hbox := HorizontalLayout {
+                alignment: LayoutAlignment.center;
+                spacing: Theme.spacing * 3;
+
+                for day-name[index] in day-names: Rectangle {
+                    width: cell-size;
+
+                    Label {
+                        init => {
+                            cell-size = Math.max(cell-size, self.preferred-width + Theme.padding * 3);
+                        }
+
+                        text: day-name;
+                    }
+                }
+            }
+
+            for week-cells[week-index] in root.date-cells: HorizontalLayout {
+                spacing: Theme.spacing * 3;
+                alignment: LayoutAlignment.center;
+
+                for cell-value[day-index] in week-cells: DateCell {
+                    date: cell-value;
+                    cell-size: cell-size;
+                    is-selected: cell-value.year == current-year && cell-value.month == current-month && cell-value.day == current-day;
+
+                    clicked() => {
+                        set-date(self.date);
+                    }
+                }
+            }
+
+            HorizontalLayout {
+                alignment: end;
+                spacing: Theme.spacing * 4;
+
+                CancelBtn {
+                    text: Logic.tr("Cancel");
+                    icon: Icons.cancel;
+
+                    clicked => {
+                        root.canceled()
+                    }
+                }
+
+                ConfirmBtn {
+                    icon: Icons.success;
+                    text: Logic.tr("Confirm");
+
+                    clicked => {
+                        root.confirmed({
+                            year: current-year,
+                            month: current-month,
+                            day: current-day,
+                            main-month: current-month,
+                        });
+                    }
+                }
+            }
+        }
+    }
+}
+
+export component DatePickerPopup inherits PopupWindow {
+    callback confirmed(date: Date);
+
+    public function set-date(date: Date) {
+        dp.set-date(date);
+    }
+
+    width: dp.preferred-width;
+    close-policy: PopupClosePolicy.close-on-click-outside;
+
+    dp := DatePicker {
+        border-radius: 0;
+
+        init => {
+            root.width = self.width;
+            root.height = self.height;
+        }
+
+        canceled => {
+            root.close();
+        }
+
+        confirmed(date) => {
+            root.close();
+            root.confirmed(date);
+        }
+    }
+}

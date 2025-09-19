@@ -1,0 +1,140 @@
+import { Theme, Icons } from "../theme.slint";
+import { IconBtn } from "./icon-btn.slint";
+import { Label } from "./label.slint";
+
+export component SettingEntry inherits Rectangle {
+    in-out property text <=> sib.text;
+    in-out property font-size <=> sib.font-size;
+    in-out property icon <=> sib.icon;
+    in-out property icon-colorize <=> sib.colorize;
+    in-out property icon-size <=> sib.icon-size;
+    in-out property attach-text <=> eib.text;
+
+    background: Theme.secondary-background;
+    border-radius: Theme.border-radius;
+
+    callback clicked();
+
+    HorizontalLayout {
+        padding: Theme.padding * 2;
+        alignment: space-between;
+
+        sib := IconBtn {
+            background: Colors.transparent;
+        }
+
+        eib := IconBtn {
+            background: Colors.transparent;
+            icon: Icons.back;
+            icon-rotation-angle: 180deg;
+            colorize: root.background.darker(30%);
+            is-ltr: false;
+        }
+    }
+
+    fs := FocusScope { }
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+
+        clicked => {
+            fs.focus();
+            root.clicked();
+        }
+    }
+}
+
+export component SettingEntryV2 inherits Rectangle {
+    in-out property text <=> label.text;
+    in-out property font-size <=> label.font-size;
+    in-out property text-color <=> label.color;
+    in-out property text-overflow <=> label.overflow;
+    in-out property font-weight <=> label.font-weight;
+
+    in-out property icon <=> img.source;
+    in-out property icon-colorize <=> img.colorize;
+    in-out property icon-size <=> img.width;
+    out property has-hover <=> ta.has-hover;
+
+    in-out property <bool> is-show-indicator;
+    in-out property <length> hpadding: Theme.padding * 2;
+    in-out property <length> vpadding: Theme.padding * 2;
+
+    in-out property <bool> is-show-right-icon;
+    in-out property <image> right-icon: Icons.star;
+    in-out property <color> right-icon-colorize: label.color;
+    in-out property <length> right-icon-size;
+
+    in-out property <bool> gain-focus-when-clicked;
+
+    callback clicked();
+    callback clicked-right-icon();
+
+    fs := FocusScope { }
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+
+        clicked => {
+            if (gain-focus-when-clicked) {
+                fs.focus();
+            }
+            root.clicked();
+        }
+    }
+
+    hbox := HorizontalLayout {
+        padding-left: hpadding;
+        padding-right: hpadding;
+        padding-top: vpadding;
+        padding-bottom: vpadding;
+
+        alignment: LayoutAlignment.space-between;
+
+        HorizontalLayout {
+            spacing: Theme.spacing * 2;
+
+            if is-show-indicator: VerticalLayout {
+                alignment: LayoutAlignment.center;
+
+                Rectangle {
+                    width: 4px;
+                    height: root.icon-size;
+                    border-radius: self.width / 2;
+                    background: root.icon-colorize;
+                }
+            }
+
+            img := Image {
+                vertical-alignment: center;
+                width: Theme.icon-size;
+                colorize: Theme.primary-text-color;
+            }
+
+            VerticalLayout {
+                padding-left: Theme.padding * 2;
+                alignment: LayoutAlignment.center;
+                label := Label {
+                    color: root.icon-colorize;
+                }
+            }
+        }
+
+        if is-show-right-icon: Image {
+            vertical-alignment: center;
+            width: root.right-icon-size;
+            colorize: root.right-icon-colorize;
+            source: root.right-icon;
+
+            TouchArea {
+                mouse-cursor: MouseCursor.pointer;
+                clicked => {
+                    if (gain-focus-when-clicked) {
+                        fs.focus();
+                    }
+                    root.clicked-right-icon();
+                }
+            }
+        }
+    }
+}

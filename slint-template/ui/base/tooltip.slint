@@ -1,0 +1,71 @@
+import { ComponentPosition } from "def.slint";
+import { Theme } from "../theme.slint";
+import { Util } from "../util.slint";
+import { Label } from "label.slint";
+
+export global ToolTipSetting {
+    in-out property <bool> is-show;
+    in-out property <ComponentPosition> position;
+    in-out property <string> tip;
+    in-out property <length> x;
+    in-out property <length> y;
+    in-out property <length> width;
+    in-out property <length> height;
+
+    public function show(absolute-x: length, absolute-y: length, width: length, height: length, position: ComponentPosition, tip: string) {
+        self.x = absolute-x;
+        self.y = absolute-y;
+        self.width = width;
+        self.height = height;
+        self.position = position;
+        self.tip = tip;
+
+        self.is-show = true;
+    }
+
+    public function hide() {
+        is-show = false;
+    }
+}
+
+export component ToolTip inherits Rectangle {
+    in-out property <length> window-width;
+    in-out property <length> window-height;
+
+    pure function calc-x() -> length {
+        if (ToolTipSetting.position == ComponentPosition.Left) {
+            return ToolTipSetting.x - self.width - Theme.padding;
+        } else if (ToolTipSetting.position == ComponentPosition.Right) {
+            return ToolTipSetting.x + ToolTipSetting.width + Theme.padding;
+        } else {
+            return Math.clamp((ToolTipSetting.x + (ToolTipSetting.width - self.width) / 2) / 1px, 0,
+                    (root.window-width - self.width - Theme.padding) / 1px) * 1px;
+        }
+    }
+
+    pure function calc-y() -> length {
+        if (ToolTipSetting.position == ComponentPosition.Top) {
+            return ToolTipSetting.y - self.height - Theme.padding;
+        } else if (ToolTipSetting.position == ComponentPosition.Bottom) {
+            return ToolTipSetting.y + ToolTipSetting.height + Theme.padding;
+        } else {
+            return Math.clamp((ToolTipSetting.y + (ToolTipSetting.height - self.height) / 2) / 1px, 0, (root.window-height - self.height - Theme.padding) / 1px) * 1px;
+        }
+    }
+
+    x: calc-x();
+    y: calc-y();
+    width: tip-txt.preferred-width + Theme.padding * 2;
+    height: tip-txt.preferred-height + Theme.padding;
+    background: Theme.base-background;
+    border-color: tip-txt.color;
+    border-width: 1px;
+
+    tip-txt := Label {
+        horizontal-alignment: center;
+        font-size: Theme.default-font-size - 2px;
+        color: Theme.regular-text-color;
+        wrap: no-wrap;
+        text: ToolTipSetting.tip;
+    }
+}

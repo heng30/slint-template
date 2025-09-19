@@ -1,0 +1,235 @@
+import { Theme } from "../theme.slint";
+import { Label } from "./label.slint";
+import { IconBtn } from "./icon-btn.slint";
+
+// Example:
+// LineInput {
+//     placeholder-text: Logic.tr("keyword");
+//     icon: Icons.paste;
+//     icon-colorize: Theme.icon-color;
+//     is-show-icon: true;
+
+//     // catch special keys, likes: Ctrl + A
+//     key-pressed(event) => {
+//         debug(event.text);
+//     }
+
+//     clicked => {
+//         debug("clicked");
+//     }
+
+//     edited => {
+//     }
+//     accepted => {
+//     }
+// }
+
+export component LineInput inherits Rectangle {
+    in-out property text <=> text-input.text;
+    in-out property font-size <=> text-input.font-size;
+    in-out property font-weight <=> text-input.font-weight;
+    in-out property text-color <=> text-input.color;
+    in property input-type <=> text-input.input-type;
+    in property read-only <=> text-input.read-only;
+    in property <bool> enabled <=> text-input.enabled;
+    in property <string> placeholder-text;
+    in-out property <bool> gain-focus-when-clicked: true;
+
+    in property <bool> is-show-icon;
+    in property <image> icon;
+    in property <color> icon-colorize: Theme.icon-color;
+    in property <length> icon-size: Theme.icon-size;
+
+    in property <length> hpadding: Theme.padding * 2;
+    in property <length> vpadding: Theme.padding * 2;
+
+    callback clicked();
+    callback accepted();
+    callback edited <=> text-input.edited;
+    callback key-pressed(key-event: KeyEvent);
+
+    preferred-width: 300px;
+    preferred-height: hbox.preferred-height;
+
+    forward-focus: text-input;
+    border-radius: Theme.border-radius;
+    border-width: text-input.has-focus ? 2px : 1px;
+    border-color: text-input.has-focus ? Theme.thirdly-brand-color : Theme.base-border-color;
+
+    public function paste() {
+        text-input.paste();
+    }
+
+    public function copy() {
+        text-input.copy();
+    }
+
+    hbox := HorizontalLayout {
+        spacing: Theme.spacing * 2;
+        padding-left: root.hpadding;
+        padding-right: root.hpadding;
+        padding-top: root.vpadding;
+        padding-bottom: root.vpadding;
+
+        Flickable {
+            viewport-width: text-input.preferred-width + Theme.padding;
+            height: text-input.preferred-height;
+
+            Rectangle {
+                x: 0;
+                width: Math.max(parent.width, text-input.preferred-width);
+
+                fs := FocusScope {
+                    key-pressed(event) => {
+                        if (event.text == Key.Escape) {
+                            fs.focus();
+                        }
+                        root.key-pressed(event);
+                        accept
+                    }
+
+                    text-input := TextInput {
+                        single-line: true;
+                        vertical-alignment: TextVerticalAlignment.center;
+                        color: Theme.primary-text-color;
+                        font-size: Theme.default-font-size;
+
+                        accepted => {
+                            self.clear-focus();
+                            root.accepted();
+                        }
+                    }
+                }
+
+                if text-input.text == "": Label {
+                    x: 0;
+                    text: root.placeholder-text;
+                    color: Theme.placeholder-text-color;
+                    font-size: text-input.font-size - 2px;
+                }
+
+                ta := TouchArea {
+                    enabled: text-input.text == "";
+                    mouse-cursor: MouseCursor.text;
+
+                    clicked => {
+                        text-input.focus();
+                    }
+                }
+            }
+        }
+
+        if root.is-show-icon: VerticalLayout {
+            alignment: LayoutAlignment.center;
+
+            IconBtn {
+                width: root.icon-size;
+                height: self.width;
+                icon: root.icon;
+                icon-size: root.icon-size;
+                colorize: root.icon-colorize;
+                gain-focus-when-clicked: gain-focus-when-clicked;
+
+                clicked => {
+                    root.clicked();
+                }
+            }
+        }
+    }
+}
+
+export component ClickAndEditLabel inherits Rectangle {
+    in-out property <bool> is-edit;
+    in-out property <bool> use-fixed-width;
+    in-out property <string> text;
+    in-out property <int> font-weight: Theme.normal-font-weight;
+    in-out property <length> font-size: Theme.default-font-size;
+    in-out property <color> text-color: Theme.regular-text-color;
+    in-out property wrap <=> lb.wrap;
+
+    private property <bool> inner-is-edit;
+
+    callback accepted(text: string);
+    callback edited(text: string);
+    callback clicked();
+
+    changed text => {
+        li.text = text;
+    }
+
+    width: lb.preferred-width;
+
+    changed is-edit => {
+        if (is-edit) {
+            inner-is-edit = true;
+        } else {
+            inner-is-edit = false;
+        }
+    }
+
+    VerticalLayout {
+        visible: !inner-is-edit;
+        alignment: center;
+
+        changed visible => {
+            if (!use-fixed-width && self.visible) {
+                root.width = lb.preferred-width;
+            }
+        }
+
+        lb := Label {
+            text: root.text;
+            font-size: root.font-size;
+            font-weight: root.font-weight;
+            color: root.text-color;
+
+            TouchArea {
+                mouse-cursor: MouseCursor.pointer;
+
+                clicked => {
+                    inner-is-edit = !inner-is-edit;
+
+                    if (inner-is-edit) {
+                        li.focus();
+                    }
+                    root.clicked();
+                }
+            }
+        }
+    }
+
+    VerticalLayout {
+        visible: inner-is-edit;
+        alignment: center;
+
+        changed visible => {
+            if (!use-fixed-width && self.visible) {
+                root.width = li.width;
+            }
+        }
+
+        li := LineInput {
+            width: use-fixed-width ? root.width : lb.preferred-width + self.hpadding * 2;
+            text: root.text;
+            font-size: root.font-size;
+            font-weight: root.font-weight;
+            text-color: root.text-color;
+
+            accepted => {
+                inner-is-edit = !inner-is-edit;
+                root.accepted(self.text);
+            }
+
+            edited => {
+                root.text = self.text;
+                root.edited(self.text);
+            }
+
+            key-pressed(key-event) => {
+                if (key-event.text == Key.Escape) {
+                    inner-is-edit = false;
+                }
+            }
+        }
+    }
+}

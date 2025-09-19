@@ -1,0 +1,117 @@
+[package]
+name = "slint-template"
+build = "build.rs"
+license.workspace = true
+edition.workspace = true
+version.workspace = true
+readme.workspace = true
+authors.workspace = true
+keywords.workspace = true
+homepage.workspace = true
+repository.workspace = true
+description.workspace = true
+
+[dependencies]
+log.workspace = true
+slint.workspace = true
+once_cell.workspace = true
+
+[target.'cfg(any(target_os = "windows", target_os = "linux", target_os = "macos", target_os = "android"))'.dependencies]
+rand.workspace = true
+toml.workspace = true
+anyhow.workspace = true
+webbrowser.workspace = true
+derivative.workspace = true
+serde_with.workspace = true
+serde_json.workspace = true
+sqldb = { workspace = true, optional = true }
+image = { workspace = true, optional = true }
+qrcode = { workspace = true, optional = true }
+uuid = { workspace = true, features = ["v4"] }
+tokio = { workspace = true, features = ["full"] }
+display-info = { workspace = true, optional = true }
+serde = { workspace = true, features = ["serde_derive"] }
+cutil = { workspace = true, features = ["str", "time", "number", "fs"] }
+
+[target.'cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))'.dependencies]
+tempfile.workspace = true
+clipboard.workspace = true
+env_logger.workspace = true
+native-dialog.workspace = true
+platform-dirs.workspace = true
+
+[target.'cfg(target_os = "linux")'.dependencies]
+duct.workspace = true
+
+[target.'cfg(target_os = "android")'.dependencies]
+android_logger.workspace = true
+android_clipboard.workspace = true
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen.workspace = true
+getrandom = { workspace = true, features = ["wasm_js"] }
+console_log = { workspace = true, features = ["color"] }
+
+[build-dependencies]
+duct.workspace = true
+slint-build.workspace = true
+
+[target.'cfg(target_os = "windows")'.build-dependencies]
+embed-resource.workspace = true
+
+[features]
+default = ["desktop"]
+
+web = []
+mobile = ["android"]
+desktop = ["cutil/backup-recover"]
+android = ["slint/backend-android-activity-06"]
+
+database = ["dep:sqldb"]
+qrcode = ["dep:image", "dep:qrcode"]
+center-window = ["dep:display-info"]
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["cdylib", "lib"]
+
+[[bin]]
+path = "src/desktop.rs"
+name = "slint-template"
+required-features = ["desktop"]
+
+[package.metadata.android]
+package = "xyz.heng30.slint_template"
+build_targets = ["aarch64-linux-android"]
+resources = "./android/res"
+strip = "strip"
+
+[package.metadata.android.signing.dev]
+path = "android/keystore/debug.keystore"
+keystore_password = "123456"
+
+[package.metadata.android.signing.release]
+path = "android/keystore/release.keystore"
+keystore_password = "123456"
+
+[package.metadata.android.sdk]
+min_sdk_version = 23
+target_sdk_version = 32
+
+[[package.metadata.android.uses_permission]]
+name = "android.permission.INTERNET"
+
+[[package.metadata.android.uses_permission]]
+name = "android.permission.WRITE_EXTERNAL_STORAGE"
+
+[[package.metadata.android.uses_permission]]
+name = "android.permission.READ_EXTERNAL_STORAGE"
+
+[package.metadata.android.application]
+icon = "@mipmap/ic_launcher"
+theme = "@style/AppTheme"
+
+[package.metadata.android.application.activity]
+orientation = "portrait"
+launch_mode = "singleTop"
+always_retain_task_state = true

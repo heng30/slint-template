@@ -1,0 +1,146 @@
+import { ComponentPosition } from "def.slint";
+import { Theme, Icons } from "../theme.slint";
+import { Label } from "label.slint";
+import { ScrollView } from "std-widgets.slint";
+
+// Example:
+// Select {
+//     width: root.width * 0.5;
+//     values: ["One", "Two", "Three", "Four"];
+//     current-value: "Two";
+//     current-index: 1;
+
+//     selected(index, value) => {
+//         debug(index, value);
+//     }
+// }
+
+export component Select inherits Rectangle {
+    in-out property <bool> enabled: true;
+    in-out property <int> current-index;
+    in-out property <string> current-value;
+    in-out property <[string]> values;
+
+    in-out property <length> popup-max-height: 300px;
+    in-out property <ComponentPosition> popup-position:  ComponentPosition.Bottom;
+
+    in-out property <length> font-size: Theme.default-font-size;
+    in-out property <length> hpadding: Theme.padding * 3;
+    in-out property <length> vpadding: Theme.padding * 3;
+    in-out property <length> spacing: Theme.spacing * 2;
+
+    private property <bool> is-indicator-down;
+
+    preferred-width: 200px;
+    height: hbox.preferred-height;
+    background: Theme.secondary-background;
+    border-radius: Theme.border-radius;
+    border-width: fs.has-focus ? 2px : 0;
+    border-color: Theme.focus-color;
+
+    callback selected(current-index: int, current-value: string);
+
+    init => {
+        is-indicator-down = true;
+    }
+
+    hbox := HorizontalLayout {
+        alignment: LayoutAlignment.space-between;
+        padding-left: root.hpadding;
+        padding-right: root.hpadding;
+        padding-top: root.vpadding;
+        padding-bottom: root.vpadding;
+        spacing: Theme.spacing * 2;
+
+        lb := Label {
+            text: root.current-value;
+            font-size: root.font-size;
+            overflow: elide;
+        }
+
+        Image {
+            height: lb.preferred-height;
+            width: self.height;
+            source: is-indicator-down ? Icons.arrow-down : (fs.has-focus ? Icons.arrow-down : Icons.arrow-up);
+            colorize: lb.color;
+        }
+    }
+
+    fs := FocusScope { }
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+        clicked => {
+            is-indicator-down = false;
+            fs.focus();
+            pop.show();
+        }
+    }
+
+    pop := PopupWindow {
+        y: root.popup-position == ComponentPosition.Top ? -pop.height - Theme.padding : root.height + Theme.padding;
+
+        width: root.width;
+        height: Math.min(root.popup-max-height, hbox.preferred-height * root.values.length + Theme.padding * 2);
+        close-policy: PopupClosePolicy.close-on-click-outside;
+
+        Rectangle {
+            background: Theme.base-background;
+            border-width: Theme.default-border-width;
+            border-color: Theme.base-border-color;
+
+            ScrollView {
+                width: pop.width - 2px;
+                height: pop.height;
+                viewport-height: pop.height;
+
+                for value[index] in root.values: Rectangle {
+                    y: Theme.padding + pop-hbox.preferred-height * index;
+                    height: pop-hbox.preferred-height;
+                    background: pop-ta.has-hover ? Theme.hover-background : Theme.base-background;
+
+                    init => {
+                        parent.viewport-height = self.y + self.height + Theme.padding;
+                    }
+
+                    pop-hbox := HorizontalLayout {
+                        private property <bool> is-selected: value == root.current-value;
+
+                        alignment: LayoutAlignment.space-between;
+                        padding-left: root.hpadding;
+                        padding-right: root.hpadding;
+                        padding-top: root.vpadding;
+                        padding-bottom: root.vpadding;
+                        spacing: Theme.spacing * 2;
+
+                        pop-lb := Label {
+                            overflow: elide;
+                            text: value;
+                            font-size: root.font-size;
+                            color: is-selected ? Theme.thirdly-brand-color : Theme.primary-text-color;
+                        }
+
+                        if is-selected: VerticalLayout {
+                            alignment: LayoutAlignment.center;
+                            Image {
+                                height: pop-lb.preferred-height * 0.6;
+                                width: self.height;
+                                source: Icons.checked;
+                                colorize: pop-lb.color;
+                            }
+                        }
+                    }
+
+                    pop-ta := TouchArea {
+                        clicked => {
+                            root.current-index = index;
+                            root.current-value = value;
+                            pop.close();
+                            root.selected(root.current-index, root.current-value);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

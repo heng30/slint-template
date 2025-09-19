@@ -1,0 +1,148 @@
+import { Dialog } from "./dialog.slint";
+import { Theme } from "../theme.slint";
+import { Store } from "../store.slint";
+import { Logic } from "../logic.slint";
+import { Util } from "../util.slint";
+
+export global IconsDialogSetting {
+    in-out property <bool> show;
+    out property <string> handle-type;
+    out property <string> user-data;
+
+    public function set(show: bool, handle-type: string, user-data: string) {
+        self.show = show;
+        self.handle-type = handle-type;
+        self.user-data = user-data;
+    }
+
+    public function rand-icon-index() -> int {
+        return Util.rand-int(0, IconsDialogSetting.icons.length);
+    }
+
+    pure public function icon(index: int) -> image {
+        return icons[Math.clamp(index, 0, icons.length - 1)];
+    }
+
+    out property <[image]> icons: [
+        @image-url("./icons/1.svg"),
+        @image-url("./icons/2.svg"),
+        @image-url("./icons/3.svg"),
+        @image-url("./icons/4.svg"),
+        @image-url("./icons/5.svg"),
+        @image-url("./icons/6.svg"),
+        @image-url("./icons/7.svg"),
+        @image-url("./icons/8.svg"),
+        @image-url("./icons/9.svg"),
+        @image-url("./icons/10.svg"),
+        @image-url("./icons/11.svg"),
+        @image-url("./icons/12.svg"),
+        @image-url("./icons/13.svg"),
+        @image-url("./icons/14.svg"),
+        @image-url("./icons/15.svg"),
+        @image-url("./icons/16.svg"),
+        @image-url("./icons/17.svg"),
+        @image-url("./icons/18.svg"),
+        @image-url("./icons/19.svg"),
+        @image-url("./icons/20.svg"),
+        @image-url("./icons/21.svg"),
+        @image-url("./icons/22.svg"),
+        @image-url("./icons/23.svg"),
+        @image-url("./icons/24.svg"),
+        @image-url("./icons/25.svg"),
+        @image-url("./icons/26.svg"),
+        @image-url("./icons/27.svg"),
+        @image-url("./icons/28.svg"),
+        @image-url("./icons/29.svg"),
+        @image-url("./icons/30.svg"),
+        @image-url("./icons/31.svg"),
+        @image-url("./icons/32.svg"),
+        @image-url("./icons/33.svg"),
+        @image-url("./icons/34.svg"),
+        @image-url("./icons/35.svg"),
+        @image-url("./icons/36.svg"),
+        @image-url("./icons/37.svg"),
+        @image-url("./icons/38.svg"),
+        @image-url("./icons/39.svg"),
+        @image-url("./icons/40.svg"),
+        @image-url("./icons/41.svg"),
+        @image-url("./icons/42.svg"),
+        @image-url("./icons/43.svg"),
+        @image-url("./icons/44.svg"),
+        @image-url("./icons/45.svg"),
+        @image-url("./icons/46.svg"),
+        @image-url("./icons/47.svg"),
+        @image-url("./icons/48.svg"),
+        @image-url("./icons/49.svg"),
+        @image-url("./icons/50.svg"),
+    ];
+}
+
+export component IconsDialog inherits Dialog {
+    title: Logic.tr("Icons");
+    width: (icon-size + icon-spacing) * column-count - icon-spacing + Theme.padding * 2;
+    is-hide-bottom-btns: true;
+
+    in-out property <length> icon-size: Theme.icon-size * 3;
+    in-out property <length> icon-spacing: Theme.spacing;
+    in-out property <int> column-count: 5;
+    in-out property <length> body-height: self.icon-size * 5;
+
+    callback select-index(handle-type: string, icon-index: int, user-data: string);
+
+    flick := Flickable {
+        height: root.body-height;
+        viewport-height: (icon-size + icon-spacing) * Math.ceil(IconsDialogSetting.icons.length / column-count) - icon-spacing + Theme.padding * 2;
+
+        vbox := VerticalLayout {
+            padding: Theme.padding;
+
+            Rectangle {
+                for icon[index] in IconsDialogSetting.icons: Rectangle {
+                    x: (icon-size + icon-spacing) * Math.mod(index, column-count);
+                    y: (icon-size + icon-spacing) * Math.floor(index / column-count);
+                    width: icon-size;
+                    height: icon-size;
+                    border-radius: Theme.border-radius;
+
+                    VerticalLayout {
+                        alignment: center;
+                        HorizontalLayout {
+                            alignment: center;
+                            Image {
+                                width: icon-size * 0.5;
+                                height: self.width;
+                                colorize: Theme.regular-text-color;
+                                source: icon;
+                            }
+                        }
+
+                        HorizontalLayout {
+                            alignment: center;
+                            Text {
+                                text: index + 1;
+                                font-size: Theme.default-font-size;
+                                color: Theme.regular-text-color;
+                            }
+                        }
+                    }
+
+                    touch := TouchArea {
+                        mouse-cursor: self.has-hover ? pointer : default;
+                        clicked => {
+                            root.select-index(IconsDialogSetting.handle-type, index, IconsDialogSetting.user-data);
+                            IconsDialogSetting.show = false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    cancel-clicked => {
+        IconsDialogSetting.show = false;
+    }
+
+    ok-clicked => {
+        IconsDialogSetting.show = false;
+    }
+}

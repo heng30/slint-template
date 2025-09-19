@@ -1,0 +1,48 @@
+import { Theme } from "../theme.slint";
+import { Util } from "../util.slint";
+import { TextBtnWithoutIcon } from "btn.slint";
+import { Label } from "label.slint";
+
+export component BreadCrumb inherits Rectangle {
+    in-out property <string> separator: "/";
+    in-out property <[string]> items;
+    in-out property <length> font-size: Theme.title1-font-size;
+    in-out property <color> unselected-color: Theme.have-read-text-color;
+    in-out property <color> selected-color: Theme.primary-text-color;
+    in-out property <bool> is-show-start-separator;
+    in-out property <bool> is-show-end-separator;
+    in-out property <length> items-spacing: 2px;
+
+    callback selected(index: int);
+
+    HorizontalLayout {
+        spacing: root.items-spacing;
+
+        for item[index] in items: HorizontalLayout {
+            spacing: root.items-spacing;
+
+            if index == 0 && is-show-start-separator: Label {
+                text: root.separator;
+                font-size: root.font-size;
+            }
+
+            TextBtnWithoutIcon {
+                hpadding: 0;
+                vpadding: 0;
+                text: item;
+                font-size: root.font-size;
+                text-color: index == root.items.length - 1 ? root.selected-color : root.unselected-color;
+
+                clicked => {
+                    Util.remove-str-items-after(root.items, index);
+                    selected(index);
+                }
+            }
+
+            if index < root.items.length - 1 || is-show-end-separator: Label {
+                text: root.separator;
+                font-size: root.font-size;
+            }
+        }
+    }
+}

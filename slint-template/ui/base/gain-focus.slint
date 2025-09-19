@@ -1,0 +1,20 @@
+export component GainFocus inherits Rectangle {
+    in-out property <bool> has-hover;
+
+    callback clicked();
+
+    forward-focus: fs;
+
+    fs := FocusScope { }
+
+    ta := TouchArea {
+        clicked => {
+            fs.focus();
+            root.clicked();
+        }
+
+        changed has-hover => {
+            root.has-hover = self.has-hover;
+        }
+    }
+}

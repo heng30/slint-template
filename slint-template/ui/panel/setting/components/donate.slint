@@ -1,0 +1,50 @@
+import { Theme, Logic, Icons } from "../../def.slint";
+import { SettingDetail, SettingDetailInner, TabBtn } from "../../../base/widgets.slint";
+
+export component Donate inherits SettingDetail {
+    private property <bool> is-wechat: true;
+
+    title: Logic.tr("Donate");
+
+    SettingDetailInner {
+        vbox-alignment: LayoutAlignment.stretch;
+
+        HorizontalLayout {
+            TabBtn {
+                width: 50%;
+                height: Theme.footer-height;
+                icon: Icons.wechat-light;
+                text: Logic.tr("Wechat pay");
+                checked: root.is-wechat;
+                clicked => {
+                    root.is-wechat = true;
+                }
+            }
+
+            TabBtn {
+                height: Theme.footer-height;
+                icon: Icons.metamask-light;
+                text: Logic.tr("MetaMask crypto pay");
+                checked: !root.is-wechat;
+                clicked => {
+                    root.is-wechat = false;
+                }
+            }
+        }
+
+        Rectangle {
+            if root.is-wechat: Image {
+                source: Icons.wechat-pay;
+                width: Math.min(root.width * 0.8, root.height * 0.8);
+                height: self.width;
+            }
+
+            if !root.is-wechat: Image {
+                source: Icons.metamask-pay;
+                width: Math.min(root.width * 0.6, root.height * 0.6);
+                height: self.width;
+            }
+        }
+    }
+}
+

@@ -1,0 +1,176 @@
+import { Theme, Logic, Store, Icons, SettingPreference, DeviceType } from "../../def.slint";
+import { SettingDetailInner, SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn, ConfirmBtn, SettingDetailSwitch, ConfirmDialogSetting, Label, LineInput, Select, SettingDetailInner } from "../../../base/widgets.slint";
+
+export component Preference inherits SettingDetail {
+    title: Logic.tr("Preference");
+
+    private property <string> win-width;
+    private property <string> win-height;
+    private property <bool> always-on-top;
+    private property <bool> no-frame;
+
+    public function get() -> SettingPreference {
+        return {
+            win-width: root.win-width,
+            win-height: root.win-height,
+            font-size: font-size-lineedit.text,
+            font-family: fonts-select.current-value,
+            language: Store.setting-preference.language,
+            always-on-top: root.always-on-top,
+            no-frame: root.no-frame,
+            is-dark: Store.setting-preference.is-dark,
+        };
+    }
+
+    init => {
+        font-size-lineedit.text = Store.setting-preference.font-size;
+        fonts-select.current-value = Store.setting-preference.font-family;
+        root.win-width = Store.setting-preference.win-width;
+        root.win-height = Store.setting-preference.win-height;
+        root.always-on-top = Store.setting-preference.always-on-top;
+        root.no-frame = Store.setting-preference.no-frame;
+    }
+
+    SettingDetailInner {
+        if Store.device-type == DeviceType.Desktop: SettingDetailInnerVbox {
+            win-size-txt := SettingDetailLabel {
+                text: Logic.tr("Window size");
+            }
+
+            HorizontalLayout {
+                spacing: Theme.spacing * 2;
+
+                win-width-lineedit := LineInput {
+                    horizontal-stretch: 1;
+                    input-type: number;
+                    placeholder-text: Logic.tr("width");
+                    text: root.win-width;
+
+                    edited => {
+                        root.win-width = self.text;
+                    }
+                }
+
+                Label {
+                    text: "X";
+                }
+
+                win-height-lineedit := LineInput {
+                    horizontal-stretch: 1;
+                    input-type: number;
+                    placeholder-text: Logic.tr("height");
+                    text: root.win-height;
+
+                    edited => {
+                        root.win-height = self.text;
+                    }
+                }
+            }
+        }
+
+        SettingDetailInnerVbox {
+            font-size-txt := SettingDetailLabel {
+                text: Logic.tr("Font size");
+            }
+
+            font-size-lineedit := LineInput {
+                input-type: number;
+                placeholder-text: "10 ~ 50";
+                text: Store.setting-preference.font-size;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            fonts-label := SettingDetailLabel {
+                text: Logic.tr("Font family");
+            }
+
+            fonts-select := Select {
+                values: ["Default", "Source Han Serif CN", "Source Han Sans CN"];
+                current-value: Store.setting-preference.font-family;
+            }
+        }
+
+        if Store.device-type == DeviceType.Desktop: SettingDetailInnerVbox {
+            SettingDetailSwitch {
+                icon: Icons.status;
+                text: Logic.tr("Frameless window");
+                checked: root.no-frame;
+                toggled => {
+                    root.no-frame = self.checked;
+                    Logic.set-setting-preference(root.get());
+                    ConfirmDialogSetting.set(true, Logic.tr("Info"), Logic.tr("Reboot to take setting effect"), "close-window", "");
+                }
+            }
+        }
+
+        if Store.device-type == DeviceType.Desktop: SettingDetailInnerVbox {
+            SettingDetailSwitch {
+                icon: Icons.stackoverflow;
+                text: Logic.tr("Window always on top");
+                checked: root.always-on-top;
+                toggled => {
+                    root.always-on-top = self.checked;
+                    Logic.set-setting-preference(root.get());
+                    ConfirmDialogSetting.set(true, Logic.tr("Info"), Logic.tr("Reboot to take setting effect"), "close-window", "");
+                }
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Choose language");
+            }
+
+            HorizontalLayout {
+                HorizontalLayout {
+                    width: 50%;
+                    cn-radio := RadioBtn {
+                        text: "中文";
+                        checked: Store.setting-preference.language == "cn";
+                        check => {
+                            Store.setting-preference.language = "cn";
+                            Logic.set-setting-preference(root.get());
+                        }
+                    }
+                }
+
+                en-radio := RadioBtn {
+                    text: "English";
+                    checked: Store.setting-preference.language == "en";
+                    check => {
+                        Store.setting-preference.language = "en";
+                        Logic.set-setting-preference(root.get());
+                    }
+                }
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Choose Theme");
+            }
+
+            HorizontalLayout {
+                HorizontalLayout {
+                    width: 50%;
+                    RadioBtn {
+                        text: Logic.tr("Light");
+                        checked: !Theme.is-dark;
+                        check => {
+                            Theme.toggle();
+                        }
+                    }
+                }
+
+                RadioBtn {
+                    text: Logic.tr("Dark");
+                    checked: Theme.is-dark;
+                    check => {
+                        Theme.toggle();
+                    }
+                }
+            }
+        }
+    }
+}

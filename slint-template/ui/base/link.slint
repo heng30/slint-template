@@ -1,0 +1,41 @@
+import { Theme, Icons } from "../theme.slint";
+import { IconBtn } from "icon-btn.slint";
+
+export component Link inherits HorizontalLayout {
+    in-out property <bool> is-read;
+    in-out property <bool> is-show-icon;
+
+    out property has-hover <=> touch.has-hover;
+    in-out property enabled <=> touch.enabled;
+
+    in-out property text <=> tx.text;
+    in-out property color <=> tx.color;
+    in-out property font-size <=> tx.font-size;
+    in-out property wrap <=> tx.wrap;
+    in-out property font-weight <=> tx.font-weight;
+    in-out property horizontal-alignment <=> tx.horizontal-alignment;
+    in-out property overflow <=> tx.overflow;
+
+    callback clicked <=> touch.clicked;
+
+    spacing: Theme.spacing * 2;
+    alignment: LayoutAlignment.start;
+
+    tx := Text {
+        wrap: TextWrap.no-wrap;
+        font-size: Theme.title5-font-size;
+        color: root.is-read ? Theme.have-read-text-color : Theme.link-text-color;
+        overflow: TextOverflow.elide;
+
+        touch := TouchArea {
+            mouse-cursor: MouseCursor.pointer;
+        }
+    }
+
+    if is-show-icon: IconBtn {
+        icon: Icons.browser-access;
+        clicked => {
+            root.clicked();
+        }
+    }
+}

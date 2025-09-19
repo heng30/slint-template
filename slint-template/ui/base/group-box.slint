@@ -1,0 +1,29 @@
+import { Theme } from "../theme.slint";
+import { Label } from "label.slint";
+
+export component GroupBox inherits Rectangle {
+    in-out property title <=> title-lb.text;
+    in-out property title-font-color <=> title-lb.color;
+    in-out property title-font-size <=> title-lb.font-size;
+    in-out property title-font-family <=> title-lb.font-family;
+    in-out property title-background <=> title-rect.background;
+
+    border-width: Theme.default-border-width;
+    border-radius: Theme.border-radius;
+    border-color: Theme.base-border-color;
+
+    title-rect := Rectangle {
+        visible: !title.is-empty;
+        background: Theme.base-background;
+        width: title-lb.preferred-width + Theme.padding * 2;
+        height: title-lb.preferred-height + Theme.padding * 2;
+        x: Theme.padding * 8;
+        y: -self.height / 2;
+
+        title-lb := Label {
+            font-size: Theme.title1-font-size;
+        }
+    }
+
+    @children
+}

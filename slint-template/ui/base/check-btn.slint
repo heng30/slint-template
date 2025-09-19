@@ -1,0 +1,74 @@
+import { Theme, Icons } from "../theme.slint";
+import { Label } from "./label.slint";
+
+export component CheckBtn inherits Rectangle {
+    in-out property text <=> txt.text;
+    in-out property enabled <=> ta.enabled;
+    in-out property h-spacing <=> hbox.spacing;
+
+    in-out property <bool> checked;
+    in-out property <bool> not-allow-breaking-checked-binding;
+    in-out property <color> text-color: Theme.primary-text-color;
+    in-out property <bool> gain-focus-when-clicked: true;
+
+    width: hbox.preferred-width;
+    height: hbox.preferred-height;
+
+    callback toggled();
+
+    if ta.enabled: Rectangle {
+        x: hbox.x - (self.width - inner.width) / 2;
+        width: inner.width + Theme.spacing * 4;
+        height: self.width;
+        border-radius: self.width / 2;
+        background: ta.has-hover ? Theme.hover-background : Colors.transparent;
+    }
+
+    hbox := HorizontalLayout {
+        spacing: Theme.spacing * 2;
+        alignment: start;
+
+        VerticalLayout {
+            alignment: center;
+            inner := Rectangle {
+                width: Theme.default-font-size * 1.3;
+                height: self.width;
+                border-width: 2px;
+                border-radius: Theme.border-radius;
+                border-color: root.enabled ? (root.checked ? Theme.thirdly-brand-color : Theme.secondary-text-color) : Theme.disabled-color;
+                background: root.checked ? (root.enabled ? Theme.thirdly-brand-color : Colors.transparent) : Colors.transparent;
+
+                if root.checked: Image {
+                    width: 60%;
+                    height: self.width;
+                    colorize: root.enabled ? Theme.light-text-color : parent.border-color;
+                    source: Icons.checked;
+                }
+            }
+        }
+
+        VerticalLayout {
+            alignment: center;
+            txt := Label {
+                color: root.enabled ? root.text-color : Theme.disabled-color;
+            }
+        }
+    }
+
+    fs := FocusScope { }
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+
+        clicked => {
+            if (gain-focus-when-clicked) {
+                fs.focus();
+            }
+
+            if (!not-allow-breaking-checked-binding) {
+                root.checked = !root.checked;
+            }
+            root.toggled();
+        }
+    }
+}

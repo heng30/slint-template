@@ -1,0 +1,127 @@
+import { SideBarEntry, SideBarChildEntry } from "def.slint";
+import { Theme, Icons } from "../theme.slint";
+import { SettingEntryV2 } from "setting-entry.slint";
+import { Search } from "search.slint";
+import { IconsDialogSetting } from "icons-dialog.slint";
+
+export component SideBar inherits Rectangle {
+    in-out property <[SideBarEntry]> entries;
+    in-out property <bool> is-show-search;
+    in-out property search-values <=> search.values;
+
+    in-out property <string> selected-key;
+
+    in-out property <length> category-font-size: Theme.title3-font-size;
+    in-out property <int> category-font-weight: Theme.normal-font-weight;
+    in-out property <length> category-icon-size: Theme.title3-font-size;
+
+    in-out property <length> child-font-size: Theme.title5-font-size;
+    in-out property <length> child-icon-size: Theme.title5-font-size;
+
+    in-out property <length> indent: Theme.icon-size + Theme.padding * 4;
+
+    in-out property <bool> is-use-random-icon;
+    private property <int> current-icon-index: 0;
+    private property <image> cache-icon;
+
+    callback search <=> search.search;
+
+    callback clicked(category: string, title: string, key: string);
+
+    function random-icon() -> image {
+        current-icon-index = Math.mod(current-icon-index, IconsDialogSetting.icons.length);
+        root.cache-icon = IconsDialogSetting.icons[current-icon-index];
+        root.current-icon-index += 1;
+        return root.cache-icon;
+    }
+
+    clip: true;
+
+    hbox := HorizontalLayout {
+        visible: root.is-show-search;
+
+        x: 0;
+        y: 0;
+        z: 10;
+        padding: Theme.padding;
+        height: search.height;
+
+        search := Search {
+            border-radius: Theme.border-radius * 2;
+            enabled-popup: root.search-values.length > 0;
+        }
+    }
+
+    fl := Flickable {
+        x: 0;
+        y: root.is-show-search ? hbox.height + Theme.padding * 2 : 0;
+        width: root.width;
+        height: root.height - (root.is-show-search ? hbox.height : 0);
+        viewport-height: vbox.preferred-height;
+
+        vbox := VerticalLayout {
+            alignment: LayoutAlignment.start;
+            private property <int> current-icon-index: 0;
+
+            for entry[top-index] in root.entries: VerticalLayout {
+                SettingEntryV2 {
+                    width: fl.width;
+                    private property <bool> is-checked: root.selected-key != "" && root.selected-key == entry.key;
+
+                    text: entry.category;
+                    font-size: root.category-font-size;
+                    font-weight: root.category-font-weight;
+                    background: self.is-checked ? Theme.checked-background : self.has-hover ? Theme.hover-background : Colors.transparent;
+                    icon-size: root.child-icon-size;
+
+                    is-show-right-icon: entry.children.length > 0;
+                    right-icon: entry.is-open ? Icons.arrow-up : Icons.arrow-down;
+                    right-icon-size: Theme.icon-size;
+
+                    init => {
+                        self.icon = is-use-random-icon ? root.random-icon() : entry.icon;
+                    }
+
+                    clicked => {
+                        if entry.children.length > 0 {
+                            entry.is-open = !entry.is-open;
+                        } else {
+                            root.selected-key = entry.key;
+                            root.clicked(entry.category, "", entry.key);
+                        }
+                    }
+                }
+
+                Rectangle {
+                    clip: true;
+                    height: entry.is-open ? child-vbox.preferred-height : 0;
+
+                    animate height {
+                        duration: Theme.default-animate-duration;
+                        easing: ease-in-out;
+                    }
+
+                    child-vbox := VerticalLayout {
+                        for item[index] in entry.children: SettingEntryV2 {
+                            private property <bool> is-checked: root.selected-key != "" && root.selected-key == item.key;
+                            text: item.title;
+                            font-size: root.child-font-size;
+                            background: self.is-checked ? Theme.checked-background : self.has-hover ? Theme.hover-background : Colors.transparent;
+                            icon-size: root.child-icon-size;
+                            hpadding: root.indent;
+
+                            init => {
+                                self.icon = is-use-random-icon ? root.random-icon() : item.icon;
+                            }
+
+                            clicked => {
+                                root.selected-key = item.key;
+                                root.clicked(entry.category, item.title, item.key);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

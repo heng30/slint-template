@@ -1,0 +1,116 @@
+import { Theme, Icons } from "../theme.slint";
+import { Store } from "../store.slint";
+import { Logic } from "../logic.slint";
+import { IconBtn } from "./icon-btn.slint";
+import { CenterLayout } from "./center-layout.slint";
+import { ConfirmBtn, CancelBtn } from "./btn.slint";
+
+export component Dialog inherits Rectangle {
+    in-out property <string> title;
+    in-out property <color> title-bg: Theme.secondary-brand-color;
+    in-out property <bool> is-hide-close-btn: false;
+    in-out property <bool> is-hide-bottom-btns: false;
+    in-out property <bool> is-hide-confirm-btn: false;
+    in-out property <bool> is-hide-cancel-btn: false;
+    in-out property <bool> is-prevent-event-forward: false;
+    in-out property <bool> gain-focus-when-init: true;
+    in-out property <bool> gain-focus-when-clicked: true;
+    in-out property <string> cancel-text: Logic.tr("Cancel");
+    in-out property <string> confirm-text: Logic.tr("Confirm");
+
+    callback close <=> cancel-clicked;
+    callback canceled <=> cancel-clicked;
+    callback confirmed <=> ok-clicked;
+
+    callback cancel-clicked();
+    callback ok-clicked();
+    callback escape();
+
+    width: 800px;
+    height: vbox.preferred-height;
+    background: Theme.base-background;
+    border-radius: Theme.border-radius;
+    clip: true;
+    forward-focus: fc;
+
+    init => {
+        if (gain-focus-when-init) {
+            fc.focus();
+        }
+    }
+
+    if is-prevent-event-forward: TouchArea { }
+
+    fc := FocusScope {
+        key-pressed(event) => {
+            if (event.text == Key.Escape) {
+                root.escape();
+                return EventResult.accept;
+            } else {
+                return EventResult.reject;
+            }
+        }
+
+        vbox := VerticalLayout {
+            alignment: space-between;
+
+            if root.title != "": Rectangle {
+                height: txt.preferred-height * 1.33;
+                background: root.title-bg;
+                txt := Text {
+                    color: Theme.light-text-color;
+                    font-size: Theme.title3-font-size;
+                    text: root.title;
+                }
+
+                if !is-hide-close-btn: HorizontalLayout {
+                    alignment: end;
+                    padding-right: Theme.padding;
+                    CenterLayout {
+                        IconBtn {
+                            width: Theme.icon-size;
+                            icon: Icons.close;
+                            colorize: txt.color;
+                            show-icon-hover-background: false;
+                            gain-focus-when-clicked: root.gain-focus-when-clicked;
+
+                            clicked => {
+                                root.cancel-clicked();
+                            }
+                        }
+                    }
+                }
+            }
+
+            VerticalLayout {
+                @children
+            }
+
+            if !is-hide-bottom-btns: HorizontalLayout {
+                alignment: LayoutAlignment.end;
+                spacing: Theme.spacing * 4;
+                padding: Theme.padding * 4;
+
+                if !is-hide-cancel-btn: CancelBtn {
+                    icon: Icons.cancel;
+                    text: root.cancel-text;
+                    gain-focus-when-clicked: root.gain-focus-when-clicked;
+
+                    clicked => {
+                        root.cancel-clicked();
+                    }
+                }
+
+                if !is-hide-confirm-btn: ConfirmBtn {
+                    icon: Icons.success;
+                    text: root.confirm-text;
+                    gain-focus-when-clicked: root.gain-focus-when-clicked;
+
+                    clicked => {
+                        root.ok-clicked();
+                    }
+                }
+            }
+        }
+    }
+}

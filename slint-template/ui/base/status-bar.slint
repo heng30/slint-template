@@ -1,0 +1,172 @@
+import { AppPosType } from "def.slint";
+import { Theme, Icons } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { Util } from "../util.slint";
+import { Label } from "label.slint";
+import { IconBtn } from "icon-btn.slint";
+import { ConfirmDialogSetting } from "confirm-dialog.slint";
+import { ComponentPosition } from "def.slint";
+
+export component StatusBar inherits Rectangle {
+    in-out property <length> icon-size: Theme.default-font-size;
+    in-out property <bool> show-icon-hover-background: false;
+
+    in-out property <bool> disable-maximal: false;
+    in-out property <bool> is-app-window-bar: true;
+    in-out property <bool> disable-window-ctrl-btns;
+
+    in-out property <bool> is-show-icon;
+    in-out property <image> icon;
+    in-out property <string> title;
+
+    in-out property <bool> is-show-tip: false;
+    in-out property <ComponentPosition> tip-position: ComponentPosition.Bottom;
+
+    in-out property <length> container-width;
+    in-out property <length> container-height;
+
+    private property <AppPosType> origin-pos;
+    private property <length> offset-x;
+    private property <length> offset-y;
+    private property <bool> enable-move;
+
+    callback maximal();
+    callback minimal();
+    callback close();
+    callback start-moving();
+    callback stop-moving();
+
+    background: Theme.secondary-background;
+    height: Theme.header-height;
+
+    if !disable-window-ctrl-btns: TouchArea {
+        mouse-cursor: MouseCursor.grabbing;
+
+        moved => {
+            if (!root.enable-move) {
+                return;
+            }
+            if (root.is-app-window-bar) {
+                root.origin-pos = Util.get-current-pos();
+                root.offset-x = self.pressed-x - self.mouse-x;
+                root.offset-y = self.pressed-y - self.mouse-y;
+
+                Util.set-current-pos({
+                    x: root.origin-pos.x - root.offset-x,
+                    y: root.origin-pos.y - root.offset-y,
+                });
+            } else {
+                root.offset-x = self.pressed-x - self.mouse-x;
+                root.offset-y = self.pressed-y - self.mouse-y;
+                root.x = Math.clamp(root.x - root.offset-x, 0 - root.width / 2, root.container-width - root.width / 2);
+                root.y = Math.clamp(root.y - root.offset-y, 0 - root.height / 2, root.container-height - root.height / 2);
+            }
+        }
+
+        pointer-event(event) => {
+            if (event.button == PointerEventButton.left) {
+                if (event.kind == PointerEventKind.down) {
+                    root.enable-move = true;
+                    root.start-moving();
+                } else {
+                    root.enable-move = false;
+                    root.stop-moving();
+                }
+            }
+        }
+    }
+
+    HorizontalLayout {
+        padding-left: Theme.padding * 2;
+        padding-right: Theme.padding * 2;
+
+        alignment: root.is-show-icon ? LayoutAlignment.space-between : LayoutAlignment.end;
+
+        if root.is-show-icon: HorizontalLayout {
+            spacing: Theme.spacing;
+            Image {
+                source: root.icon;
+                width: Math.min(root.icon-size + Theme.padding, root.height);
+            }
+
+            Label {
+                text: root.title;
+                color: Theme.secondary-text-color;
+                font-size: root.icon-size;
+            }
+        }
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.end;
+
+            @children
+
+            if !disable-window-ctrl-btns: HorizontalLayout {
+                spacing: Theme.spacing * 2;
+
+                IconBtn {
+                    icon: Icons.status-bar-min;
+                    icon-size: root.icon-size;
+                    colorize: Theme.warning-color;
+                    show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("minimal");
+
+                    clicked => {
+                        if (root.is-app-window-bar) {
+                            Util.min-window(true);
+                        } else {
+                            root.minimal();
+                        }
+                    }
+                }
+
+                IconBtn {
+                    enabled-toucharea: !root.disable-maximal;
+                    icon: Icons.status-bar-max;
+                    icon-size: root.icon-size;
+                    colorize: root.disable-maximal ? Theme.disabled-color : Theme.success-color;
+                    show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("maximal");
+
+                    clicked => {
+                        if (root.is-app-window-bar) {
+                            if (Util.get-is-max-window()) {
+                                Util.max-window(false);
+                                self.icon = Icons.status-bar-max;
+                                self.tip = Logic.tr("maximal");
+                            } else {
+                                Util.max-window(true);
+                                self.icon = Icons.status-bar-normal;
+                                self.tip = Logic.tr("normal");
+                            }
+                        } else {
+                            root.maximal();
+                        }
+                    }
+                }
+
+                IconBtn {
+                    icon: Icons.status-bar-close;
+                    icon-size: root.icon-size;
+                    colorize: Theme.danger-color;
+                    show-icon-hover-background: root.show-icon-hover-background;
+                    is-show-tip: root.is-show-tip;
+                    tip-position: root.tip-position;
+                    tip: Logic.tr("close");
+
+                    clicked => {
+                        if (root.is-app-window-bar) {
+                            ConfirmDialogSetting.set(true, Logic.tr("Warning"), Logic.tr("Quit application or not?"), "close-window", "");
+                        } else {
+                            root.close();
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

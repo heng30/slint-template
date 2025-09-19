@@ -1,0 +1,46 @@
+import { Theme, Icons } from "../theme.slint";
+import { Label } from "./label.slint";
+
+export component SwitchBtn inherits Rectangle {
+    in-out property enabled <=> ta.enabled;
+    in-out property <bool> checked;
+
+    in-out property <color> unchecked-background: Theme.is-dark ? Theme.secondary-background.brighter(50%) : Theme.secondary-background.darker(10%);
+    in-out property <length> indicator-size: Theme.icon-size;
+    in-out property <length> hpadding: Theme.padding;
+    in-out property <length> vpadding: Theme.padding;
+
+    width: indicator.width * 2 + hpadding * 2;
+    height: indicator.height + vpadding * 2;
+    border-radius: self.height / 2;
+    border-width: root.enabled ? 0 : 2px;
+    border-color: Theme.disabled-color;
+    background: root.enabled ? (root.checked ? Theme.success-color : root.unchecked-background) : Theme.base-background;
+
+    callback toggled();
+
+    indicator := Rectangle {
+        animate x {
+            duration: Theme.default-animate-duration;
+            easing: ease-in-out;
+        }
+
+        x: root.checked ? root.width - self.width - root.hpadding : root.hpadding;
+        width: root.indicator-size;
+        height: self.width;
+        border-radius: self.width / 2;
+        background: root.enabled ? Theme.light-text-color : Theme.disabled-color;
+    }
+
+    fs := FocusScope { }
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+
+        clicked => {
+            fs.focus();
+            root.checked = !root.checked;
+            root.toggled();
+        }
+    }
+}

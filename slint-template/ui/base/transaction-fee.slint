@@ -1,0 +1,204 @@
+import { Theme, Icons } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { Store } from "../store.slint";
+import { Label } from "label.slint";
+import { LineInput } from "line-input.slint";
+import { CancelBtn, ConfirmBtn } from "btn.slint";
+import { SettingDetail, SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel } from "setting-detail.slint";
+import { Loading } from "loading.slint";
+import { LoadingStatus } from "def.slint";
+
+export component TransactionFee inherits SettingDetail {
+    in-out property network <=> network-input.text;
+    in-out property send-token <=> send-token-input.text;
+    in-out property send-address <=> send-address-input.text;
+    in-out property recipient-address <=> recipient-address-input.text;
+    in-out property send-amount <=> amount-input.text;
+    in property <string> send-amount-usdt;
+    in property <string> fee;
+    in property <string> fee-usdt;
+    in property <string> create-token-account-fee;
+    in property <string> create-token-account-fee-usdt;
+    in property <string> memo;
+    in property <string> prioritization-fee;
+
+    in property <LoadingStatus> loading-status;
+
+    callback cancel();
+    callback confirm();
+
+    title: Logic.tr("Transaction detail");
+
+    SettingDetailInner {
+        if loading-status == LoadingStatus.Loading: Loading {
+            height: 150px;
+            loading-text: Logic.tr("Evaluating gas fee...");
+            colorize: Theme.secondary-brand-color;
+            icon-size: Theme.icon-size * 2;
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Blockchain network");
+            }
+
+            network-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: "test";
+                enabled: false;
+                is-show-icon: false;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Send token");
+            }
+
+            send-token-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: "ETH";
+                enabled: false;
+                is-show-icon: false;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Send address");
+            }
+
+            send-address-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: "0xf1199999751b1a3A74590adBf95401D19AB30014";
+                enabled: false;
+                is-show-icon: false;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Recipient address");
+            }
+
+            recipient-address-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: "GEScvfEF1Xt2oyrnJij5V5DYSmPjuUt45DfUs3VFrsED";
+                enabled: false;
+                is-show-icon: false;
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Send amount");
+            }
+
+            amount-input := LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: "0";
+                input-type: InputType.decimal;
+                is-show-icon: false;
+                enabled: false;
+            }
+
+            if send-amount-usdt != "": Label {
+                text: root.send-amount-usdt;
+                color: Theme.have-read-text-color;
+            }
+        }
+
+        if loading-status == LoadingStatus.Success: SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Base fee");
+            }
+
+            LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: root.fee;
+                is-show-icon: false;
+                enabled: false;
+            }
+
+            if fee-usdt != "": Label {
+                text: root.fee-usdt;
+                color: Theme.have-read-text-color;
+            }
+        }
+
+        if root.prioritization-fee != "": SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Prioritization fee");
+            }
+
+            LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: root.prioritization-fee;
+                is-show-icon: false;
+                enabled: false;
+            }
+        }
+
+        if loading-status == LoadingStatus.Success && root.create-token-account-fee != "": SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Create token account fee");
+            }
+
+            LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: root.create-token-account-fee;
+                is-show-icon: false;
+                enabled: false;
+            }
+
+            if root.create-token-account-fee-usdt != "": Label {
+                text: root.create-token-account-fee-usdt;
+                color: Theme.have-read-text-color;
+            }
+        }
+
+        if root.memo != "": SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Memo");
+            }
+
+            LineInput {
+                width: root.width - Theme.spacing * 4;
+                text: root.memo;
+                is-show-icon: false;
+                enabled: false;
+            }
+        }
+
+        HorizontalLayout {
+            padding-top: Theme.padding * 5;
+            padding-bottom: Theme.padding * 5;
+
+            if loading-status == LoadingStatus.Loading: CancelBtn {
+                border-radius: Theme.border-radius;
+                text: Logic.tr("Cancel");
+                clicked => {
+                    root.cancel();
+                }
+            }
+
+            if loading-status == LoadingStatus.Fail: CancelBtn {
+                border-radius: Theme.border-radius;
+                bg-color: Theme.warning-color;
+                text: Logic.tr("Evaluating transaction fee failed");
+                icon: Icons.warning;
+                clicked => {
+                    root.back();
+                }
+            }
+
+            if loading-status == LoadingStatus.Success: ConfirmBtn {
+                border-radius: Theme.border-radius;
+                text: Logic.tr("Confirm");
+                clicked => {
+                    root.confirm();
+                }
+            }
+        }
+    }
+}

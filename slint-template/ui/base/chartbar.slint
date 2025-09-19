@@ -1,0 +1,299 @@
+import { Theme, Icons } from "../theme.slint";
+import { Util } from "../util.slint";
+import { Label } from "label.slint";
+import { ChartBarEntry } from "def.slint";
+
+// Example
+// ChartBar {
+//     title: Logic.tr("Tasks Count");
+//     entries: [
+//         {
+//             label: "NotStarted",
+//             value: 10,
+//             color: Logic.state-color(RecordState.NotStarted,
+//         },
+//         {
+//             label: "Running",
+//             value: 30,
+//             color: Logic.state-color(RecordState.Running,
+//         },
+//         {
+//             label: "Finished",
+//             value: 50,
+//             color: Logic.state-color(RecordState.Finished,
+//         },
+//         {
+//             label: "Giveup",
+//             value: 20,
+//             color: Logic.state-color(RecordState.Giveup,
+//         },
+//         {
+//             label: "Timeout",
+//             value: 5,
+//             color: Logic.state-color(RecordState.Timeout),
+//         },
+//     ];
+// }
+
+export component ChartBar inherits Rectangle {
+    in-out property <[ChartBarEntry]> entries;
+    // in-out property <Orientation> orientation: Orientation.vertical;
+    in-out property <Orientation> orientation: Orientation.horizontal;
+    in-out property <string> title;
+    in-out property <length> bar-size: Theme.icon-size * 2;
+    in-out property <length> axis-size: Theme.default-border-width;
+    in-out property <color> axis-color: Theme.regular-text-color;
+    in-out property <length> axis-padding: Theme.padding * 8;
+    in-out property <angle> label-totation-angle: orientation == Orientation.horizontal ? 0 : 20deg;
+    in-out property <angle> number-totation-angle;
+    in-out property <bool> is-hide-number-axis;
+    in-out property <duration> animate-duration: Theme.default-animate-duration * 2;
+
+    private property <int> max-value-tmp;
+    private property <int> max-value: max-value-tmp * 1.2;
+    private property <bool> animation-flag;
+
+    Timer {
+        interval: 100ms;
+        running: true;
+        triggered() => {
+            animation-flag = true;
+            self.running = false;
+        }
+    }
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 4;
+        alignment: start;
+
+        title-label := Label {
+            text: title;
+            horizontal-alignment: center;
+            font-size: Theme.title1-font-size;
+            font-weight: Theme.bold-font-weight;
+        }
+
+        if orientation == Orientation.horizontal: VerticalLayout {
+            height: root.height - title-label.preferred-height - vbox.spacing;
+
+            private property <length> viewport-height: self.height - number-labels-vbox.preferred-height;
+            private property <length> viewport-width: self.width - labels-vbox.preferred-width - axis-v.width;
+
+            HorizontalLayout {
+                alignment: start;
+
+                labels-vbox := VerticalLayout {
+                    alignment: space-between;
+                    padding: Theme.padding * 2;
+                    padding-top: axis-padding;
+                    padding-bottom: axis-padding;
+
+                    for entry in entries: HorizontalLayout {
+                        alignment: end;
+                        height: bar-size;
+
+                        init => {
+                            max-value-tmp = Math.max(max-value-tmp, entry.value);
+                        }
+
+                        Label {
+                            rotation-angle: label-totation-angle;
+                            text: entry.label;
+                        }
+                    }
+                }
+
+                axis-v := Rectangle {
+                    height: viewport-height;
+                    width: axis-size;
+                    background: axis-color;
+                }
+
+                VerticalLayout {
+                    alignment: space-between;
+                    padding-top: Theme.padding * 8;
+                    padding-bottom: Theme.padding * 8;
+
+                    for entry in entries: HorizontalLayout {
+                        alignment: start;
+                        height: bar-size;
+                        spacing: Theme.spacing * 2;
+
+                        Rectangle {
+                            background: entry.color;
+                            border-top-right-radius: Theme.border-radius;
+                            border-bottom-right-radius: Theme.border-radius;
+
+                            states [
+                                animate-running when animation-flag: {
+                                    width: Math.max(0, max-value <= 0 ? 0 : (viewport-width - axis-padding) * entry.value / max-value);
+                                    in {
+                                        animate width { duration: animate-duration; }
+                                    }
+                                }
+                                animate-stop when !animation-flag: {
+                                    width: 0;
+                                }
+                            ]
+                        }
+
+                        if entry.value > 0: Label {
+                            text: entry.value;
+                            color: entry.color;
+                        }
+                    }
+                }
+            }
+
+            number-labels-vbox := VerticalLayout {
+                visible: !is-hide-number-axis;
+                x: axis-v.x;
+                width: viewport-width;
+                height: is-hide-number-axis ? 0 : self.preferred-height;
+                alignment: start;
+                spacing: Theme.spacing * 4;
+
+                Rectangle {
+                    height: axis-size;
+                    background: axis-color;
+                }
+
+                HorizontalLayout {
+                    width: number-labels-vbox.width - axis-padding;
+
+                    private property <int> number-counts: Math.min(self.width / (Theme.default-font-size * 4), max-value);
+
+                    init => {
+                        if (number-counts == 0) {
+                            is-hide-number-axis = true;
+                        }
+                    }
+
+                    Rectangle {
+                        width: parent.width;
+
+                        for index in number-counts: Label {
+                            x: max-value <= 0 ? -self.preferred-width / 2 : parent.width * self.text.to-float() / max-value - self.preferred-width / 2;
+                            rotation-angle: number-totation-angle;
+                            text: number-counts <= 1 ? 0 : Math.floor(max-value / (number-counts - 1)) * index;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if orientation == Orientation.vertical: HorizontalLayout {
+        height: root.height - title-label.preferred-height - vbox.spacing;
+
+        private property <length> viewport-height: self.height - labels-hbox.preferred-height;
+        private property <length> viewport-width: self.width - number-hbox2.preferred-width;
+
+        number-hbox2 := HorizontalLayout {
+            visible: !is-hide-number-axis;
+            alignment: start;
+            height: viewport-height;
+
+            number-labels-vbox2 := VerticalLayout {
+                height: parent.height - self.padding-top;
+                alignment: space-between;
+                padding: Theme.padding * 4;
+                padding-top: axis-padding;
+                padding-bottom: 0;
+
+                private property <int> number-counts: Math.min(self.height / (Theme.default-font-size * 4), max-value);
+
+                init => {
+                    if (number-counts == 0) {
+                        is-hide-number-axis = true;
+                    }
+                }
+
+                Rectangle {
+                    height: parent.height;
+
+                    for index in number-counts: Label {
+                        y: max-value <= 0 ? parent.height - self.preferred-height / 2 : parent.height - parent.height * self.text.to-float() / max-value - self.preferred-height / 2;
+                        rotation-angle: number-totation-angle;
+                        text: number-counts <= 1 ? 0 : Math.floor(max-value / (number-counts - 1)) * index;
+                    }
+                }
+            }
+
+            axis-v2 := Rectangle {
+                height: viewport-height;
+                width: axis-size;
+                background: axis-color;
+            }
+        }
+
+        VerticalLayout {
+            alignment: end;
+            height: parent.height;
+
+            HorizontalLayout {
+                alignment: space-between;
+                padding-left: axis-padding;
+                padding-right: axis-padding;
+
+                for entry in entries: VerticalLayout {
+                    alignment: end;
+                    width: bar-size;
+                    spacing: Theme.spacing * 2;
+
+                    if entry.value > 0: Label {
+                        horizontal-alignment: center;
+                        text: entry.value;
+                        color: entry.color;
+                    }
+
+                    Rectangle {
+                        background: entry.color;
+                        border-top-left-radius: Theme.border-radius;
+                        border-top-right-radius: Theme.border-radius;
+
+                        states [
+                            animate-running when animation-flag: {
+                                height: Math.max(0, max-value <= 0 ? 0 : (viewport-height - axis-padding) * entry.value / max-value);
+                                in {
+                                    animate height { duration: animate-duration; }
+                                }
+                            }
+                            animate-stop when !animation-flag: {
+                                height: 0;
+                            }
+                        ]
+                    }
+                }
+            }
+
+            Rectangle {
+                height: axis-size;
+                width: viewport-width;
+                background: axis-color;
+            }
+
+            labels-hbox := HorizontalLayout {
+                alignment: space-between;
+                padding-top: Theme.padding;
+                padding-left: axis-padding;
+                padding-right: axis-padding;
+
+                for entry in entries: HorizontalLayout {
+                    alignment: center;
+                    width: bar-size;
+
+                    init => {
+                        max-value-tmp = Math.max(max-value-tmp, entry.value);
+                    }
+
+                    Label {
+                        rotation-origin-x: 0;
+                        rotation-angle: label-totation-angle;
+                        text: entry.label;
+                    }
+                }
+            }
+        }
+    }
+}

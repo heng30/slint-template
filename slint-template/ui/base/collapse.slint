@@ -1,0 +1,107 @@
+import { Theme, Icons } from "../theme.slint";
+import { Label } from "label.slint";
+import { Divider } from "divider.slint";
+
+export struct CollapseEntry {
+    disabled: bool,
+    title: string,
+    description: string,
+    is-open: bool,
+}
+
+export component Collapse inherits Rectangle {
+    in-out property <bool> is-accordion;
+    in-out property <image> open-icon: Icons.arrow-down;
+    in-out property <image> close-icon: Icons.arrow-up;
+    in-out property <[CollapseEntry]> entries;
+
+    in-out property <color> title-color: Theme.primary-text-color;
+    in-out property <length> title-font-size: Theme.title3-font-size;
+    in-out property <int> title-font-weight: Theme.bold-font-weight;
+
+    in-out property <length> description-font-size: Theme.default-font-size;
+    in-out property <color> description-color: Theme.regular-text-color;
+
+    in-out property <length> spacing: Theme.spacing * 2;
+    in-out property <length> hpadding: Theme.padding;
+    in-out property <length> vpadding: Theme.padding * 2;
+
+    private property <int> prev-index: 0;
+
+    width: 300px;
+
+    VerticalLayout {
+        alignment: start;
+        spacing: root.spacing;
+
+        for entry[index] in root.entries: VerticalLayout {
+            title-rect := Rectangle {
+                background: ta.has-hover ? Theme.secondary-background : Colors.transparent;
+                border-radius: Theme.border-radius;
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.space-between;
+                    spacing: Theme.spacing * 2;
+                    padding-left: root.hpadding;
+                    padding-right: root.hpadding;
+                    padding-top: root.vpadding;
+                    padding-bottom: root.vpadding;
+
+                    lb := Label {
+                        overflow: elide;
+                        text: entry.title;
+                        font-size: root.title-font-size;
+                        color: entry.disabled ? Theme.disabled-color : root.title-color;
+                        font-weight: root.title-font-weight;
+                    }
+
+                    VerticalLayout {
+                        alignment: LayoutAlignment.center;
+                        Image {
+                            width: Theme.icon-size;
+                            height: self.width;
+                            colorize: entry.disabled ? Theme.disabled-color : Theme.icon-color;
+                            source: entry.is-open ? root.close-icon : root.open-icon;
+                        }
+                    }
+                }
+
+                ta := TouchArea {
+                    enabled: !entry.disabled;
+
+                    clicked => {
+                        entry.is-open = !entry.is-open;
+
+                        if (root.is-accordion && root.prev-index != index) {
+                            root.entries[root.prev-index].is-open = false;
+                            root.prev-index = index;
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                height: entry.is-open ? desc-lb.preferred-height + root.vpadding * 2 : 0;
+                width: root.width - root.hpadding * 2;
+                clip: true;
+
+                animate height {
+                    duration: Theme.default-animate-duration;
+                    easing: ease-in-out;
+                }
+
+                desc-lb := Label {
+                    x: root.hpadding;
+                    y: root.vpadding;
+                    width: 100%;
+                    text: entry.description;
+                    font-size: root.description-font-size;
+                    color: entry.disabled ? Theme.disabled-color : root.description-color;
+                    wrap: word-wrap;
+                }
+            }
+
+            Divider { }
+        }
+    }
+}

@@ -1,0 +1,101 @@
+import { Theme, Icons } from "../theme.slint";
+import { IconBtn } from "icon-btn.slint";
+import { Label } from "label.slint";
+import { Head } from "head.slint";
+import { SwitchBtn } from "switch-btn.slint";
+import { FlickableWithScrollBar } from "flickable-with-scrollbar.slint";
+import { ScrollView } from "std-widgets.slint";
+
+export component SettingDetail inherits Rectangle {
+    callback back;
+
+    in-out property <string> title;
+    in-out property <bool> is-show-header: true;
+    in-out property <bool> is-show-divider;
+
+    VerticalLayout {
+        if is-show-header: Head {
+            title: root.title;
+            is-show-divider: root.is-show-divider;
+            hbox-alignment: LayoutAlignment.start;
+            clicked => {
+                root.back();
+            }
+        }
+
+        @children
+    }
+}
+
+export component SettingDetailInner inherits Flickable {
+    in-out property <LayoutAlignment> vbox-alignment: LayoutAlignment.start;
+    in-out property vbox-padding <=> vbox.padding;
+    in-out property vbox-spacing <=> vbox.spacing;
+
+    vbox := VerticalLayout {
+        alignment: root.vbox-alignment;
+        width: parent.width;
+        padding: Theme.padding * 2;
+        spacing: Theme.spacing * 4;
+
+        @children
+    }
+}
+
+export component SettingDetailInnerWithScrollBar inherits ScrollView {
+    in-out property <LayoutAlignment> vbox-alignment: LayoutAlignment.start;
+    in-out property vbox-padding <=> vbox.padding;
+    in-out property vbox-spacing <=> vbox.spacing;
+
+    vbox := VerticalLayout {
+        alignment: root.vbox-alignment;
+        width: parent.width;
+        padding: Theme.padding * 2;
+        spacing: Theme.spacing * 4;
+
+        @children
+    }
+}
+
+export component SettingDetailInnerVbox inherits VerticalLayout {
+    spacing: Theme.spacing;
+    @children
+}
+
+export component SettingDetailLabel inherits Label {
+    font-size: Theme.title4-font-size;
+}
+
+export component SettingDetailSwitch inherits Rectangle {
+    in-out property text <=> sib.text;
+    in-out property font-size <=> sib.font-size;
+    in-out property icon <=> sib.icon;
+    in-out property icon-colorize <=> sib.colorize;
+    in-out property icon-size <=> sib.icon-size;
+    in-out property enabled <=> eib.enabled;
+    in-out property checked <=> eib.checked;
+
+    height: vbox.preferred-height;
+    background: Theme.secondary-background;
+    border-radius: Theme.border-radius;
+
+    callback toggled();
+
+    fs := FocusScope { }
+
+    vbox := HorizontalLayout {
+        padding: Theme.padding * 2;
+        alignment: space-between;
+
+        sib := IconBtn {
+            background: Colors.transparent;
+        }
+
+        eib := SwitchBtn {
+            toggled => {
+                fs.focus();
+                root.toggled();
+            }
+        }
+    }
+}

@@ -1,0 +1,125 @@
+import { Theme, Icons } from "../theme.slint";
+import { IconBtn } from "./icon-btn.slint";
+import { Logic } from "../logic.slint";
+import { Label } from "label.slint";
+import { ElevatedBtn } from "elevated-btn.slint";
+
+export component CancelBtn inherits IconBtn {
+    use-auto-size: true;
+    icon: Icons.cancel;
+    icon-size: Theme.icon-size;
+    border-radius: Theme.border-radius;
+    bg-color: Theme.info-color.brighter(50%);
+    bg-pressed-color: self.bg-color.darker(30%);
+    colorize: self.bg-pressed-color.darker(100%);
+    icon-valignment: ImageVerticalAlignment.bottom;
+    text: Logic.tr("Cancel");
+}
+
+export component ConfirmBtn inherits IconBtn {
+    use-auto-size: true;
+    icon: Icons.success;
+    border-radius: Theme.border-radius;
+    bg-color: Theme.thirdly-brand-color.darker(20%);
+    bg-pressed-color: self.bg-color.darker(30%);
+    colorize: Theme.light-text-color;
+    icon-valignment: ImageVerticalAlignment.bottom;
+    text: Logic.tr("Confirm");
+}
+
+export component TextBtn inherits IconBtn {
+    use-auto-size: true;
+    background: Colors.transparent;
+    colorize: Theme.secondary-brand-color;
+}
+
+export component TextBtnWithoutIcon inherits Rectangle {
+    in-out property text <=> label.text;
+    in-out property text-color <=> label.color;
+    in-out property font-weight <=> label.font-weight;
+    in-out property enabled-touch <=> ta.enabled;
+    out property has-hover <=> ta.has-hover;
+
+    in-out property <bool> is-circle: false;
+
+    out property text-width <=> label.width;
+    out property text-height <=> label.height;
+
+    in-out property <length> font-size: Theme.default-font-size;
+    in-out property <color> bg-color: Colors.transparent;
+    in-out property <color> bg-pressed-color: self.bg-color;
+
+    in-out property <length> hpadding: Theme.padding;
+    in-out property <length> vpadding: Theme.padding / 2;
+
+    callback clicked;
+
+    width: (is-circle ? Math.max(label.preferred-width, label.preferred-height) : label.preferred-width) + root.hpadding * 2;
+    height: is-circle ? self.width : label.preferred-height + root.vpadding * 2;
+    border-radius: is-circle ? self.width / 2 : Theme.border-radius;
+    background: ta.pressed ? bg-pressed-color : (ta.has-hover ? bg-color.darker(10%) : bg-color);
+
+    label := Label {
+        font-size: root.font-size;
+        wrap: no-wrap;
+    }
+
+    fs := FocusScope { }
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+
+        clicked => {
+            fs.focus();
+            root.clicked();
+        }
+    }
+}
+
+export component CancelAndConfirmIconsBtn inherits HorizontalLayout {
+    spacing: Theme.spacing * 4;
+
+    in-out property <bool> is-hide-cancel-btn;
+    in-out property <bool> is-hide-confirm-btn;
+    in-out property <bool> is-show-tip: true;
+    in-out property <length> icon-size: Theme.icon-size;
+    in-out property <string> cancel-tip: Logic.tr("cancel");
+    in-out property <string> confirm-tip: Logic.tr("confirm");
+
+    callback cancelled();
+    callback confirmed();
+
+    if !is-hide-cancel-btn: VerticalLayout {
+        alignment: center;
+
+        ElevatedBtn {
+            is-show-tip: root.is-show-tip;
+            tip: root.cancel-tip;
+            icon: Icons.close;
+            width: root.icon-size;
+            colorize: Colors.white;
+            background: self.has-hover ? Theme.info-color : Theme.info-color.brighter(30%);
+
+            clicked => {
+                cancelled();
+            }
+        }
+    }
+
+    if !is-hide-confirm-btn: VerticalLayout {
+        alignment: center;
+
+        ElevatedBtn {
+            is-show-tip: root.is-show-tip;
+            tip: root.confirm-tip;
+            icon: Icons.checked;
+            width: root.icon-size;
+            colorize: Colors.white;
+            background: self.has-hover ? Theme.success-color.darker(20%) : Theme.success-color;
+
+            clicked => {
+                confirmed();
+            }
+        }
+    }
+}

@@ -1,0 +1,12 @@
+import { Theme } from "../theme.slint";
+
+export component Blanket inherits Rectangle {
+    opacity: Theme.is-dark ? 0.6 : 0.3;
+    background: Theme.is-dark ? Theme.secondary-background.brighter(10%) : Theme.invert-base-color;
+
+    callback clicked <=> ta.clicked;
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+    }
+}

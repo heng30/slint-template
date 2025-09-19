@@ -1,0 +1,69 @@
+import { Theme } from "../theme.slint";
+import { Util } from "../util.slint";
+
+export enum PinCodesCount {
+    Four,
+    Six,
+    Eight,
+}
+
+export component PinCodes inherits Rectangle {
+    in-out property <PinCodesCount> count: PinCodesCount.Six;
+    in-out property <length> input-size: Theme.icon-size * 2;
+    in-out property <length> font-size: Theme.title1-font-size;
+    in-out property <color> text-color: Theme.primary-text-color;
+    in-out property <InputType> input-type: number;
+
+    in-out property <length> item-hpadding: Theme.padding;
+    in-out property <length> item-vpadding: Theme.padding;
+    in-out property <length> item-spacing: Theme.spacing * 5;
+
+    private property <[string]> codes;
+
+    callback finished(items: [string]);
+
+    init => {
+        if (root.count == PinCodesCount.Four) {
+            root.codes = ["", "", "", ""];
+        } else if (root.count == PinCodesCount.Six) {
+            root.codes = ["", "", "", "", "", ""];
+        } else {
+            root.codes = ["", "", "", "", "", "", "", ""];
+        }
+    }
+
+    HorizontalLayout {
+        padding-top: root.item-vpadding;
+        padding-bottom: root.item-vpadding;
+        padding-left: root.item-hpadding;
+        padding-right: root.item-hpadding;
+        spacing: root.item-spacing;
+
+        for code[index] in root.codes: Rectangle {
+            width: root.input-size;
+            height: self.width;
+            border-radius: Theme.border-radius;
+            background: Theme.secondary-background;
+            border-width: 2px;
+            border-color: tinput.has-focus ? Theme.thirdly-brand-color : Theme.base-border-color;
+
+            tinput := TextInput {
+                input-type: root.input-type;
+                font-size: root.font-size;
+                single-line: true;
+                vertical-alignment: TextVerticalAlignment.center;
+                horizontal-alignment: TextHorizontalAlignment.center;
+                color: root.text-color;
+
+                edited => {
+                    root.codes[index] = self.text;
+                }
+
+                accepted => {
+                    self.clear-focus();
+                    root.finished(root.codes);
+                }
+            }
+        }
+    }
+}

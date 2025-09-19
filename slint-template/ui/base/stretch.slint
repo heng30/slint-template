@@ -1,0 +1,77 @@
+import { Theme, Icons } from "../theme.slint";
+import { Label } from "label.slint";
+import { Divider } from "divider.slint";
+
+export component Stretch inherits Rectangle {
+    in-out property <bool> is-checked;
+    in-out property <bool> is-show-children;
+    in-out property <bool> is-show-indicator;
+    in-out property <string> title;
+
+    callback body-clicked <=> outer-ta.clicked;
+    callback title-clicked <=> ta.clicked;
+    callback title-double-clicked <=> ta.double-clicked;
+
+    border-width: 1px;
+    border-radius: Theme.border-radius;
+    border-color: root.is-checked ? Theme.secondary-brand-color : Theme.base-border-color;
+
+    drop-shadow-blur: Theme.padding * 2;
+    drop-shadow-color: Theme.base-background-drop-shadow;
+
+    background: ta.has-hover || outer-ta.has-hover ? Theme.secondary-background : Theme.base-background;
+
+    outer-ta := TouchArea { }
+
+    VerticalLayout {
+        alignment: LayoutAlignment.start;
+        padding: Theme.padding * 2;
+
+        title-rect := Rectangle {
+            HorizontalLayout {
+                alignment: LayoutAlignment.space-between;
+                spacing: Theme.spacing * 2;
+                padding: Theme.spacing;
+
+                lb := Label {
+                    overflow: elide;
+                    text: root.title;
+                    font-size: Theme.title4-font-size;
+                    color: Theme.primary-text-color;
+                    font-weight: Theme.bold-font-weight;
+                }
+
+                if root.is-show-indicator: VerticalLayout {
+                    alignment: LayoutAlignment.center;
+                    Image {
+                        width: Theme.icon-size;
+                        height: self.width;
+                        colorize: Theme.icon-color;
+                        source: root.is-show-children ? Icons.arrow-up : Icons.arrow-down;
+                    }
+                }
+            }
+
+            ta := TouchArea { }
+        }
+
+        if is-show-children: Divider { }
+
+        Rectangle {
+            height: root.is-show-children ? vbox.preferred-height + Theme.padding * 2 : 0;
+
+            width: root.width - Theme.padding * 2;
+            clip: true;
+
+            animate height {
+                duration: Theme.default-animate-duration;
+                easing: ease-in-out;
+            }
+
+            vbox := VerticalLayout {
+                padding: Theme.padding;
+                @children
+            }
+        }
+    }
+}

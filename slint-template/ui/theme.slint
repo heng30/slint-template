@@ -1,0 +1,330 @@
+import { Store } from "./store.slint";
+import { Palette } from "std-widgets.slint";
+
+export global Theme {
+    out property <bool> is-dark: Store.setting-preference.is-dark;
+    out property <length> padding: Math.max(4px, Math.round(default-font-size / 4px) * 1px);
+    out property <length> spacing: padding;
+    out property <length> scrollbar-size: padding * 2;
+    out property <length> border-radius: padding;
+    out property <length> header-height: Math.max(32px, icon-size + padding * 2);
+    out property <length> footer-height: Math.max(40px, icon-size + default-font-size);
+
+    in-out property <length> default-width: Store.setting-preference.win-width.to-float() * 1px;
+    in-out property <length> default-height: Store.setting-preference.win-height.to-float() * 1px;
+
+    in-out property <string> default-font-family: Store.setting-preference.font-family;
+    in-out property <length> default-font-size: Store.setting-preference.font-size.to-float() * 1px;
+    in-out property <length> title6-font-size: default-font-size + 0px;
+    in-out property <length> title5-font-size: default-font-size + 1px;
+    in-out property <length> title4-font-size: default-font-size + 2px;
+    in-out property <length> title3-font-size: default-font-size + 4px;
+    in-out property <length> title2-font-size: default-font-size + 6px;
+    in-out property <length> title1-font-size: default-font-size + 8px;
+
+    in-out property <int> normal-font-weight: 400;
+    in-out property <int> bold-font-weight: 700;
+
+    out property <length> icon-size: Math.max(24px, default-font-size + 8px);
+    out property <length> avatar-size: icon-size + Theme.padding * 2;
+    out property <duration> default-animate-duration: 200ms;
+    out property <length> default-border-width: 1px;
+    out property <length> default-text-cursor-width: 2px;
+
+    out property <color> brand-color: is-dark ? #3F51B5 : #0000B8;
+    out property <color> secondary-brand-color: is-dark ? #324090 : #3F51B5;
+    out property <color> thirdly-brand-color: is-dark ? #4B60D8 : #5E79ff;
+    out property <color> success-color: is-dark ? #336633 : #67C23A;
+    out property <color> warning-color: is-dark ? #996600 : #E6A23C;
+    out property <color> danger-color: is-dark ? #AA3333 : #F56C6C;
+    out property <color> info-color:is-dark ? #6F6F6F : #909090;
+    out property <color> mark-color: is-dark ? #996600 : #E6A23C;
+    out property <color> unmark-color: is-dark ? #646464 : #E8F2FD;
+    out property <color> disabled-color: is-dark ? #555555 : #AAAAAA;
+    out property <color> focus-color: is-dark ? #4B60D8 : #5E79FF;
+
+    out property <color> base-color: is-dark ? #000000 : #FFFFFF;
+    out property <color> invert-base-color: is-dark ? #FFFFFF : #000000;
+    out property <color> base-background: is-dark ? #16161A : #FFFFFF;
+    out property <color> secondary-background: is-dark ? #232429 : #F5F5F5;
+    out property <color> thirdly-background: is-dark ? #011627 : #E0E0E0;
+    out property <color> hover-background: is-dark ? #262626 : #EFEFEF;
+    out property <color> checked-background: is-dark ? #2D3F54 : #EAF5FF.darker(5%);
+    out property <color> base-background-drop-shadow: is-dark ? #2D2D2D : #DBDBDB;
+    out property <color> secondary-background-drop-shadow: is-dark ? #2C2C2C : #DADADA;
+
+    out property <color> light-text-color: is-dark ? #EEEEEE : #FFFFFF;
+    out property <color> dark-text-color: is-dark ? #000000 : #000000;
+    out property <color> primary-text-color: is-dark ? #969696 : #222222;
+    out property <color> secondary-text-color: is-dark ? #555555 : #333333;
+    out property <color> regular-text-color: is-dark ? #666666 : #282828;
+    out property <color> placeholder-text-color: is-dark ? #4B4B4B : #A8ABAB;
+
+    out property <color> avatar-color: is-dark ? #ADADAD : #333333;
+    out property <color> icon-color: is-dark ? #AAAAAA : #515151;
+    out property <color> base-border-color: is-dark ? #2A2A2A : #DCDCDC;
+
+    out property <color> have-read-text-color: is-dark ? #555555 : #606060;
+    out property <color> link-text-color: is-dark ? #4B60D8 : #3F51FF;
+
+    out property <color> table-header-color: is-dark ? thirdly-background.darker(50%) : thirdly-background.brighter(2%);
+    out property <color> table-item-first: is-dark ? #161616 : #FFFFFF;
+    out property <color> table-item-second: is-dark ? #262626 : #EFEFEF.brighter(2%);
+
+    out property <color> divider-color: is-dark ? #3B3B3B : #DCDCDC;
+
+    out property <[color]> tag-colors: is-dark ? [#A3B3CC, #94C2AF, #9AC0C4, #B2ACCA, #CCA8A3, #CAA6BC, #A8C085, #B0B2B6] : [#CCE0FF, #BAF3DB, #C1F0F5, #DFD8FD, #FFD2CC, #FDD0EC, #D3F1A7, #DCDFE4];
+
+    out property <float> golden-ratio: 0.618;
+    out property <float> blank-welcome-opacity: is-dark ? 0.618 : 0.8;
+
+    out property <length> dialog-max-width: 1300px;
+    out property <length> dialog-normal-width: 600px;
+    out property <length> dialog-inner-height: 650px;
+
+    public function set-dark(flag: bool) {
+        Store.setting-preference.is-dark = flag;
+        Palette.color-scheme = is-dark ? ColorScheme.dark : ColorScheme.light;
+    }
+
+    public function toggle() {
+        Store.setting-preference.is-dark = !Store.setting-preference.is-dark;
+        Palette.color-scheme = is-dark ? ColorScheme.dark : ColorScheme.light;
+    }
+
+    public pure function title-font-size(level: int) -> length {
+        if (level == 1) {
+            return title1-font-size;
+        } else if (level == 2) {
+            return title2-font-size;
+        } else if (level == 3) {
+            return title3-font-size;
+        } else if (level == 4) {
+            return title4-font-size;
+        } else if (level == 5) {
+            return title5-font-size;
+        } else {
+            return title6-font-size;
+        }
+    }
+}
+
+export global Icons {
+    out property <image> empty-image;
+    out property <image> github-action-release: @image-url("./images/github-action-release.png");
+    out property <image> wechat-pay: @image-url("./images/wechat-pay.png");
+    out property <image> metamask-pay: @image-url("./images/metamask-pay.png");
+    out property <image> brand: @image-url("./images/brand.png");
+    out property <image> github: @image-url("./images/github.svg");
+    out property <image> rss-fill: @image-url("./images/rss-fill.svg");
+    out property <image> rss-light: @image-url("./images/rss-light.svg");
+    out property <image> setting-fill: @image-url("./images/setting-fill.svg");
+    out property <image> setting-light: @image-url("./images/setting-light.svg");
+    out property <image> add-fill: @image-url("./images/add-fill.svg");
+    out property <image> add-small: @image-url("./images/add-small.svg");
+    out property <image> add-in-rect: @image-url("./images/add-in-rect.svg");
+    out property <image> back: @image-url("./images/back.svg");
+    out property <image> menu: @image-url("./images/menu.svg");
+    out property <image> star: @image-url("./images/star.svg");
+    out property <image> star-round: @image-url("./images/star-round.svg");
+    out property <image> no-message: @image-url("./images/no-message.svg");
+    out property <image> no-data: @image-url("./images/no-data.svg");
+    out property <image> delete: @image-url("./images/delete-light.svg");
+    out property <image> delete-fill: @image-url("./images/delete-fill.svg");
+    out property <image> refresh: @image-url("./images/refresh.svg");
+    out property <image> cancel-fill: @image-url("./images/cancel-fill.svg");
+    out property <image> cancel: @image-url("./images/cancel-light.svg");
+    out property <image> success-fill: @image-url("./images/success-fill.svg");
+    out property <image> success: @image-url("./images/success.svg");
+    out property <image> danger: @image-url("./images/danger.svg");
+    out property <image> info: @image-url("./images/info.svg");
+    out property <image> close: @image-url("./images/close.svg");
+    out property <image> close-light: @image-url("./images/close-light.svg");
+    out property <image> favorite-fill: @image-url("./images/favorite-fill.svg");
+    out property <image> find-light: @image-url("./images/find.svg");
+    out property <image> edit: @image-url("./images/edit.svg");
+    out property <image> copy: @image-url("./images/copy.svg");
+    out property <image> copy-fill: @image-url("./images/copy-fill.svg");
+    out property <image> paste: @image-url("./images/paste.svg");
+    out property <image> recover: @image-url("./images/recover.svg");
+    out property <image> backup-recover: @image-url("./images/backup-recover.svg");
+    out property <image> recover-from-trash: @image-url("./images/recover-from-trash.svg");
+    out property <image> upload-cloud: @image-url("./images/upload-cloud.svg");
+    out property <image> download-cloud: @image-url("./images/download-cloud.svg");
+
+    out property <image> ui: @image-url("./images/ui.svg");
+    out property <image> sync: @image-url("./images/sync.svg");
+    out property <image> sync-failed: @image-url("./images/sync-failed.svg");
+    out property <image> proxy-light: @image-url("./images/proxy-light.svg");
+    out property <image> cache-light: @image-url("./images/clear-light.svg");
+    out property <image> about-light: @image-url("./images/about-light.svg");
+    out property <image> about-fill: @image-url("./images/about-fill.svg");
+    out property <image> help: @image-url("./images/help.svg");
+    out property <image> help-light: @image-url("./images/help-light.svg");
+    out property <image> reading: @image-url("./images/reading.svg");
+    out property <image> feedback: @image-url("./images/feedback.svg");
+    out property <image> donate: @image-url("./images/donate.svg");
+    out property <image> donate-light: @image-url("./images/donate-light.svg");
+    out property <image> send: @image-url("./images/send.svg");
+    out property <image> send2: @image-url("./images/send2.svg");
+    out property <image> search: @image-url("./images/search.svg");
+    out property <image> version: @image-url("./images/version.svg");
+    out property <image> download: @image-url("./images/download.svg");
+    out property <image> hide: @image-url("./images/hide.svg");
+    out property <image> loading: @image-url("./images/loading.svg");
+    out property <image> crypto: @image-url("./images/crypto.svg");
+    out property <image> recipient: @image-url("./images/recipient.svg");
+    out property <image> notify: @image-url("./images/notify.svg");
+    out property <image> notify-light: @image-url("./images/notify-light.svg");
+    out property <image> address: @image-url("./images/address.svg");
+    out property <image> address-book: @image-url("./images/address-book.svg");
+    out property <image> eye: @image-url("./images/eye.svg");
+    out property <image> noeye: @image-url("./images/noeye.svg");
+    out property <image> close-eye: @image-url("./images/close-eye.svg");
+    out property <image> account: @image-url("./images/account.svg");
+    out property <image> switch: @image-url("./images/switch.svg");
+    out property <image> checked-box: @image-url("./images/checked-box.svg");
+    out property <image> mnemonic: @image-url("./images/mnemonic.svg");
+    out property <image> pending-fill: @image-url("./images/pending-fill.svg");
+    out property <image> error-fill: @image-url("./images/error-fill.svg");
+    out property <image> success-big-fill: @image-url("./images/success-big-fill.svg");
+    out property <image> security: @image-url("./images/security.svg");
+    out property <image> developer: @image-url("./images/developer.svg");
+    out property <image> password: @image-url("./images/password.svg");
+    out property <image> reset-in-trash: @image-url("./images/reset-in-trash.svg");
+    out property <image> debug-light: @image-url("./images/debug-light.svg");
+    out property <image> add-light: @image-url("./images/add-light.svg");
+    out property <image> management: @image-url("./images/management.svg");
+    out property <image> airdrop: @image-url("./images/airdrop.svg");
+    out property <image> max: @image-url("./images/max.svg");
+    out property <image> browser-access: @image-url("./images/browser-access.svg");
+    out property <image> warning: @image-url("./images/warning.svg");
+    out property <image> qrcode: @image-url("./images/qrcode.svg");
+    out property <image> advance-setting: @image-url("./images/advance-setting.svg");
+    out property <image> turtle: @image-url("./images/turtle.svg");
+    out property <image> rabbit: @image-url("./images/rabbit.svg");
+    out property <image> horse: @image-url("./images/horse.svg");
+    out property <image> logout: @image-url("./images/logout.svg");
+    out property <image> logout-fill: @image-url("./images/logout-fill.svg");
+
+    out property <image> solana: @image-url("./images/solana.svg");
+    out property <image> usdt: @image-url("./images/usdt.svg");
+    out property <image> usdc: @image-url("./images/usdc.svg");
+    out property <image> eth: @image-url("./images/eth.svg");
+    out property <image> doge: @image-url("./images/doge.svg");
+    out property <image> curve: @image-url("./images/curve.svg");
+    out property <image> token: @image-url("./images/token.svg");
+
+    out property <image> wechat-fill: @image-url("./images/wechat-fill.svg");
+    out property <image> wechat-light: @image-url("./images/wechat-light.svg");
+    out property <image> metamask-light: @image-url("./images/metamask-light.svg");
+
+    out property <image> landing-subscription: @image-url("./images/landing-subscription.svg");
+    out property <image> landing-reading: @image-url("./images/landing-reading.svg");
+    out property <image> landing-welcome: @image-url("./images/landing-welcome.svg");
+    out property <image> landing-language-switch: @image-url("./images/landing-language-switch.svg");
+    out property <image> landing-account: @image-url("./images/landing-account.svg");
+    out property <image> landing-send: @image-url("./images/landing-send.svg");
+    out property <image> home-light: @image-url("./images/home-light.svg");
+    out property <image> home-fill: @image-url("./images/home-fill.svg");
+
+    out property <image> blur-10: @image-url("./images/blur-10.svg");
+    out property <image> blur-20: @image-url("./images/blur-20.svg");
+    out property <image> blur-30: @image-url("./images/blur-30.svg");
+    out property <image> blur-40: @image-url("./images/blur-40.svg");
+    out property <image> blur-50: @image-url("./images/blur-50.svg");
+    out property <image> blur-60: @image-url("./images/blur-60.svg");
+    out property <image> blur-70: @image-url("./images/blur-70.svg");
+    out property <image> blur-80: @image-url("./images/blur-80.svg");
+
+    out property <image> status: @image-url("./images/status.svg");
+    out property <image> status-bar-close: @image-url("./images/status-bar-close.svg");
+    out property <image> status-bar-min: @image-url("./images/status-bar-min.svg");
+    out property <image> status-bar-max: @image-url("./images/status-bar-max.svg");
+    out property <image> status-bar-normal: @image-url("./images/status-bar-normal.svg");
+    out property <image> stackoverflow: @image-url("./images/stackoverflow.svg");
+
+    out property <image> arrow-left: @image-url("./images/arrow-left.svg");
+    out property <image> arrow-left-fill: @image-url("./images/arrow-left-fill.svg");
+    out property <image> arrow-left-round: @image-url("./images/arrow-left-round.svg");
+    out property <image> arrow-right: @image-url("./images/arrow-right.svg");
+    out property <image> arrow-right-fill: @image-url("./images/arrow-right-fill.svg");
+    out property <image> arrow-right-round: @image-url("./images/arrow-right-round.svg");
+    out property <image> arrow-up: @image-url("./images/arrow-up.svg");
+    out property <image> arrow-up-fill: @image-url("./images/arrow-up-fill.svg");
+    out property <image> arrow-down: @image-url("./images/arrow-down.svg");
+    out property <image> arrow-down-fill: @image-url("./images/arrow-down-fill.svg");
+    out property <image> checked: @image-url("./images/checked.svg");
+    out property <image> skip-next: @image-url("./images/skip-next.svg");
+    out property <image> control-start: @image-url("./images/control-start.svg");
+    out property <image> control-stop: @image-url("./images/control-stop.svg");
+    out property <image> audio-stop: @image-url("./images/audio-stop.svg");
+    out property <image> sound-on: @image-url("./images/sound-on.svg");
+    out property <image> sound-off: @image-url("./images/sound-off.svg");
+
+    out property <image> oblong-loop: @image-url("./images/oblong-loop.svg");
+    out property <image> loop-one: @image-url("./images/loop-one.svg");
+    out property <image> play-once: @image-url("./images/play-once.svg");
+    out property <image> shuffle: @image-url("./images/shuffle.svg");
+    out property <image> full-screen: @image-url("./images/full-screen.svg");
+    out property <image> exit-full-screen: @image-url("./images/exit-full-screen.svg");
+    out property <image> prompt: @image-url("./images/prompt.svg");
+    out property <image> prompt-light: @image-url("./images/prompt-light.svg");
+    out property <image> model: @image-url("./images/model.svg");
+    out property <image> model-light: @image-url("./images/model-light.svg");
+    out property <image> chat: @image-url("./images/chat.svg");
+    out property <image> stop: @image-url("./images/stop.svg");
+    out property <image> retry: @image-url("./images/retry.svg");
+    out property <image> new-chat: @image-url("./images/new-chat.svg");
+    out property <image> new: @image-url("./images/new.svg");
+    out property <image> wifi: @image-url("./images/test-network.svg");
+    out property <image> proxy: @image-url("./images/proxy.svg");
+    out property <image> network: @image-url("./images/network.svg");
+    out property <image> reasoner: @image-url("./images/reasoner.svg");
+    out property <image> mcp: @image-url("./images/mcp.svg");
+    out property <image> circle-fill: @image-url("./images/circle-fill.svg");
+    out property <image> record-fill: @image-url("./images/record-fill.svg");
+    out property <image> statistic-fill: @image-url("./images/statistic-fill.svg");
+    out property <image> more-v: @image-url("./images/more-v.svg");
+    out property <image> more-h: @image-url("./images/more-h.svg");
+    out property <image> sort-line: @image-url("./images/sort-line.svg");
+    out property <image> sort-line-light: @image-url("./images/sort-line-light.svg");
+    out property <image> archive-fill: @image-url("./images/archive-fill.svg");
+    out property <image> plan-light: @image-url("./images/plan-light.svg");
+    out property <image> plan-fill: @image-url("./images/plan-fill.svg");
+    out property <image> calender: @image-url("./images/calendar.svg");
+    out property <image> move: @image-url("./images/move.svg");
+    out property <image> ai-robot: @image-url("./images/ai-robot.svg");
+    out property <image> delete-all-light: @image-url("./images/delete-all-light.svg");
+    out property <image> next-fill: @image-url("./images/next-fill.svg");
+    out property <image> next-light: @image-url("./images/next-light.svg");
+    out property <image> backup-fill: @image-url("./images/backup-fill.svg");
+    out property <image> recover-fill: @image-url("./images/recover-fill.svg");
+    out property <image> uninstall-fill: @image-url("./images/uninstall-fill.svg");
+    out property <image> cache-fill: @image-url("./images/cache-fill.svg");
+    out property <image> caption-fill: @image-url("./images/caption-fill.svg");
+    out property <image> open-file: @image-url("./images/open-file.svg");
+    out property <image> media: @image-url("./images/media.svg");
+    out property <image> transcirbe: @image-url("./images/transcribe.svg");
+    out property <image> subtitle: @image-url("./images/subtitle.svg");
+    out property <image> unsubtitle: @image-url("./images/unsubtitle.svg");
+    out property <image> export-video: @image-url("./images/export-video.svg");
+    out property <image> traditional-to-simple-chinese: @image-url("./images/traditional-to-simple-chinese.svg");
+    out property <image> simple-chinese: @image-url("./images/simple-chinese.svg");
+    out property <image> announcement-fill: @image-url("./images/announcement-fill.svg");
+    out property <image> arrow-forward: @image-url("./images/arrow-forward.svg");
+    out property <image> save-fill: @image-url("./images/save-fill.svg");
+    out property <image> cell-insert-above: @image-url("./images/cell-insert-above.svg");
+    out property <image> cell-insert-below: @image-url("./images/cell-insert-below.svg");
+    out property <image> export: @image-url("./images/export.svg");
+    out property <image> import: @image-url("./images/import.svg");
+    out property <image> translation: @image-url("./images/translation.svg");
+    out property <image> edit-rect: @image-url("./images/edit-rect.svg");
+    out property <image> correction: @image-url("./images/correction.svg");
+    out property <image> polish: @image-url("./images/polish.svg");
+    out property <image> replace: @image-url("./images/replace.svg");
+    out property <image> list-accept: @image-url("./images/list-accept.svg");
+    out property <image> browser: @image-url("./images/browser.svg");
+    out property <image> browser-light: @image-url("./images/browser-light.svg");
+    out property <image> optimize-light: @image-url("./images/optimize.svg");
+}

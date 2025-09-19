@@ -1,0 +1,49 @@
+import { Theme } from "../theme.slint";
+import { Util } from "../util.slint";
+import { Label } from "label.slint";
+import { CenterLayout } from "center-layout.slint";
+import { ToastStatus } from "def.slint";
+
+export global ToastSetting {
+    in-out property <string> text;
+    in-out property <ToastStatus> status;
+    in-out property <bool> is-hover;
+    in-out property <bool> is-timeout: true;
+
+    public function set(text: string, status: ToastStatus) {
+        self.text = text;
+        self.status = status;
+    }
+}
+
+export component Toast inherits Rectangle {
+    callback clicked <=> touch.clicked;
+
+    preferred-width: vbox.preferred-width;
+    height: vbox.preferred-height;
+    border-radius: Theme.border-radius;
+    border-color: Theme.base-border-color;
+    background: Util.text-color(ToastSetting.status);
+
+    vbox := VerticalLayout {
+        padding: Theme.padding * 2;
+
+        txt := Label {
+            font-size: Theme.title4-font-size;
+            color: Colors.white;
+            text: ToastSetting.text;
+            overflow: elide;
+        }
+    }
+
+    touch := TouchArea {
+        mouse-cursor: self.has-hover ? MouseCursor.pointer : MouseCursor.default;
+        changed has-hover => {
+            if (self.has-hover) {
+                ToastSetting.is-hover = true;
+            } else {
+                ToastSetting.is-hover = false;
+            }
+        }
+    }
+}

@@ -1,0 +1,159 @@
+import { Theme, Icons } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { Store } from "../store.slint";
+import { IconBtn } from "./icon-btn.slint";
+import { Label } from "./label.slint";
+import { Head } from "./head.slint";
+import { TextBtnWithoutIcon } from "./btn.slint";
+import { LineInput } from "line-input.slint";
+import { SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel } from "./setting-detail.slint";
+
+export component SignIn inherits Rectangle {
+    in property <bool> is-show-header: true;
+
+    private property <string> error-message;
+
+    callback back();
+    callback confirmed(username: string, password-first: string, password-second: string) -> string;
+
+    public function reset() {
+        error-message = "";
+        username-lineedit.text = "";
+        password-first-lineedit.text = "";
+        password-second-lineedit.text = "";
+    }
+
+    forward-focus: username-lineedit;
+
+    vbox := VerticalLayout {
+        if is-show-header: Head {
+            title: Logic.tr("Back");
+            hbox-alignment: LayoutAlignment.start;
+            clicked => {
+                root.back();
+            }
+        }
+
+        SettingDetailInner {
+            vbox-alignment: LayoutAlignment.center;
+
+            SettingDetailInnerVbox {
+                HorizontalLayout {
+                    alignment: LayoutAlignment.center;
+                    Label {
+                        text: Logic.tr("Sign in");
+                        font-size: Theme.title1-font-size;
+                        font-weight: Theme.bold-font-weight;
+                    }
+                }
+            }
+
+            SettingDetailInnerVbox {
+                username-txt := SettingDetailLabel {
+                    text: Logic.tr("Please enter username");
+                }
+
+                HorizontalLayout {
+                    spacing: Theme.spacing;
+
+                    username-lineedit := LineInput {
+                        icon: Icons.paste;
+                        width: root.width - Theme.padding * 4;
+                        placeholder-text: Logic.tr("Username");
+                        is-show-icon: true;
+
+                        edited => {
+                            root.error-message = "";
+                        }
+
+                        clicked => {
+                            username-lineedit.text = "";
+                            username-lineedit.paste();
+                        }
+                    }
+                }
+            }
+
+            SettingDetailInnerVbox {
+                password-first-txt := SettingDetailLabel {
+                    text: Logic.tr("Please enter password");
+                }
+
+                HorizontalLayout {
+                    spacing: Theme.spacing;
+
+                    private property <bool> is-show-password;
+
+                    password-first-lineedit := LineInput {
+                        width: root.width - Theme.padding * 4;
+                        placeholder-text: Logic.tr("At least 8 chars");
+                        icon: parent.is-show-password ? Icons.eye : Icons.close-eye;
+                        input-type: parent.is-show-password ? InputType.text : InputType.password;
+                        is-show-icon: true;
+
+                        edited => {
+                            root.error-message = "";
+                        }
+
+                        clicked => {
+                            parent.is-show-password = !parent.is-show-password;
+                        }
+                    }
+                }
+            }
+
+            SettingDetailInnerVbox {
+                password-second-txt := SettingDetailLabel {
+                    text: Logic.tr("Please enter password again");
+                }
+
+                HorizontalLayout {
+                    spacing: Theme.spacing;
+
+                    private property <bool> is-show-password;
+
+                    password-second-lineedit := LineInput {
+                        width: root.width - Theme.padding * 4;
+                        placeholder-text: Logic.tr("At least 8 chars");
+                        icon: parent.is-show-password ? Icons.eye : Icons.close-eye;
+                        input-type: is-show-password ? InputType.text : InputType.password;
+                        is-show-icon: true;
+
+                        edited => {
+                            root.error-message = "";
+                        }
+
+                        clicked => {
+                            parent.is-show-password = !parent.is-show-password;
+                        }
+                    }
+                }
+            }
+
+            if root.error-message != "": SettingDetailInnerVbox {
+                SettingDetailLabel {
+                    color: Theme.danger-color;
+                    text: root.error-message;
+                }
+            }
+
+            HorizontalLayout {
+                padding-top: Theme.padding * 5;
+                padding-bottom: Theme.padding * 5;
+
+                TextBtnWithoutIcon {
+                    width: password-first-lineedit.width;
+                    height: self.text-height + Theme.padding * 2;
+                    text: Logic.tr("Sign in");
+                    font-size: Theme.title3-font-size;
+                    bg-color: Theme.thirdly-brand-color;
+                    text-color: Theme.light-text-color;
+
+                    clicked => {
+                        root.error-message = root.confirmed(username-lineedit.text, password-first-lineedit.text, password-second-lineedit.text);
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,13 @@
+import { Theme } from "../theme.slint";
+import { Store } from "../store.slint";
+import { Logic } from "../logic.slint";
+import { SettingDetail, SettingDetailInnerWithScrollBar } from "setting-detail.slint";
+import { Label } from "label.slint";
+
+export component Help inherits SettingDetail {
+    title: Logic.tr("Help");
+
+    SettingDetailInnerWithScrollBar {
+        @children
+    }
+}

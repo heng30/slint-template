@@ -1,0 +1,22 @@
+[package]
+name = "tr-helper"
+build = "build.rs"
+license.workspace = true
+edition.workspace = true
+version.workspace = true
+readme.workspace = true
+authors.workspace = true
+keywords.workspace = true
+homepage.workspace = true
+repository.workspace = true
+description.workspace = true
+
+[dependencies]
+regex.workspace = true
+anyhow.workspace = true
+walkdir.workspace = true
+once_cell.workspace = true
+clap = { workspace = true, features = ["derive"] }
+
+[build-dependencies]
+regex.workspace = true

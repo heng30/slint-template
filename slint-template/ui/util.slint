@@ -1,0 +1,135 @@
+import { Theme, Icons } from "theme.slint";
+import { ToastStatus, AppPosType, TreeEntry, MediaControlStatus, Date } from "./base/def.slint";
+
+export global Util {
+    callback hide-window();
+    callback show-window();
+    callback close-window();
+
+    callback min-window(flag: bool);
+    callback get-is-min-window() -> bool;
+
+    callback max-window(flag: bool);
+    callback get-is-max-window() -> bool;
+
+    callback fullscreen(flag: bool);
+    callback get-is-fullscreen() -> bool;
+
+    callback get-scale-factor() -> float;
+    callback get-current-pos() -> AppPosType;
+    callback set-current-pos(pos: AppPosType);
+
+    callback update-window-size();
+    callback set-window-center();
+
+    callback show-toast(message: string, status: ToastStatus);
+    callback handle-confirm-dialog(message-type: string, user-data: string);
+
+    callback open-url(browser: string, url: string);
+    callback remove-str-items-after(items: [string], index: int);
+    callback append-str-to-items(items: [string], text: string);
+
+    callback search-str-items-by(items: [string], text: string) -> [string];
+    pure callback find-tree-children-nodes(entries: [TreeEntry], target-node: string) -> [TreeEntry];
+
+    pure callback string-fixed2(text: string) -> string;
+    pure callback float-fixed2(num: float) -> string;
+    pure callback rand-int(low: int, up: int) -> int;
+    pure callback qr-code(text: string) -> image;
+    pure callback local-now(format: string) -> string;
+    pure callback format_number_with_commas(num-str: string) -> string;
+    pure callback split-and-join-string(input: string, length: int, sep: string) -> string;
+    pure callback file-name(filepath: string) -> string;
+
+    pure callback parse-date-str(date: string) -> Date;
+    pure callback get-current-date() -> Date;
+    get-current-date => {
+        return {
+            year: 2025,
+            month: 10,
+            day:09,
+        };
+    }
+
+    pure callback upate-date-picker(year: int, month: int) -> [[Date]];
+    pure callback seconds-to-media-timestamp(seconds: float) -> string;
+
+    public pure function text-color(status: ToastStatus) -> color {
+        if (status == ToastStatus.Success) {
+            return Theme.success-color;
+        } else if (status == ToastStatus.Warning) {
+            return Theme.warning-color.darker(10%);
+        } else if (status == ToastStatus.Danger) {
+            return Theme.danger-color;
+        } else {
+            return Theme.info-color;
+        }
+    }
+
+    public pure function icon-source(status: ToastStatus) -> image {
+        if (status == ToastStatus.Success) {
+            return Icons.success;
+        } else if (status == ToastStatus.Warning) {
+            return Icons.warning;
+        } else if (status == ToastStatus.Danger) {
+            return Icons.danger;
+        }
+        return Icons.info;
+    }
+
+    pure public function get-token-icon(symbol: string, mint-address: string, icon-extension: string) -> image {
+        return Icons.token;
+    }
+
+    pure public function lenght2float(len: length) -> float {
+        return len / 1px;
+    }
+
+    pure public function progress-value(interval: duration) -> float {
+        return Math.mod(animation-tick(), interval) / interval;
+    }
+
+    pure public function progress-value-int(max-int: int, interval: duration) -> int {
+        return Math.floor(progress-value(interval) * max-int);
+    }
+
+    pure public function progress-angle(total-angle: angle, interval: duration) -> angle {
+        return progress-value(interval) * total-angle;
+    }
+
+    pure public function progress-sin(angle: angle, interval: duration) -> float {
+        return progress-value(interval) * Math.sin(angle);
+    }
+
+    pure public function rand-animation-tick(min-v: int, max-v: int) -> int {
+        return Math.mod(animation-tick() / 1ms, max-v - min-v + 1) + min-v;
+    }
+
+    pure public function image-from-media-control-status(status: MediaControlStatus) -> image {
+        if (status == MediaControlStatus.Once) {
+            return Icons.play-once;
+        } else if (status == MediaControlStatus.Loop) {
+            return Icons.oblong-loop;
+        } else if (status == MediaControlStatus.LoopOne) {
+            return Icons.loop-one;
+        } else {
+            return Icons.shuffle;
+        }
+    }
+
+    pure public function next-media-control-status(status: MediaControlStatus) -> MediaControlStatus {
+        if (status == MediaControlStatus.Once) {
+            return MediaControlStatus.Loop;
+        } else if (status == MediaControlStatus.Loop) {
+            return MediaControlStatus.LoopOne;
+        } else if (status == MediaControlStatus.LoopOne) {
+            return MediaControlStatus.Shuffle;
+        } else {
+            return MediaControlStatus.Once;
+        }
+    }
+
+    pure public function date-str(date: Date) -> string {
+        return date.year + "-" + (date.month < 10 ? "0" + date.month : date.month) + "-" + (date.day < 10 ? "0" + date.day : date.day);
+    }
+}

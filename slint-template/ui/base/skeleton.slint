@@ -1,0 +1,318 @@
+import { Theme } from "../theme.slint";
+import { Util } from "../util.slint";
+
+export enum SkeletonType {
+    Content,
+    Picture,
+    Number,
+    Avatar,
+    AvatarWithDetail,
+    Paragraph,
+    Table,
+    List
+}
+
+component InnerItem inherits Rectangle {
+    in-out property <color> active-item-color: Theme.base-background;
+    in-out property <bool> enabled-active: true;
+    in-out property <float> active-opacity: 0.4;
+    in-out property <duration> active-duration: 500ms;
+
+    width: root.width * 80%;
+    height: 40%;
+    border-radius: Theme.border-radius * 2;
+    clip: true;
+
+    if root.enabled-active: Rectangle {
+        x: Util.progress-sin(90deg, root.active-duration) * root.width;
+        opacity: root.active-opacity;
+        width: 50%;
+        height: 100%;
+        background: @linear-gradient(90deg, root.background 0%, root.active-item-color 50%, root.background 100%);
+        drop-shadow-blur: self.width * 20%;
+        drop-shadow-color: self.background.brighter(5%);
+    }
+}
+
+export component Skeleton inherits Rectangle {
+    in-out property <SkeletonType> type;
+    in-out property <color> item-color: Theme.is-dark ? Theme.secondary-background.darker(5%) : Theme.secondary-background.darker(5%);
+
+    in-out property <bool> enabled-active: true;
+    in-out property <color> active-item-color: self.item-color.brighter(50%);
+    in-out property <float> active-opacity: 0.4;
+    in-out property <duration> active-duration: 800ms;
+
+    pure public function from-number(index: int) -> SkeletonType {
+        if (index == 0) {
+            return SkeletonType.Content;
+        } else if (index == 1) {
+            return SkeletonType.Picture;
+        } else if (index == 2) {
+            return SkeletonType.Number;
+        } else if (index == 3) {
+            return SkeletonType.Avatar;
+        } else if (index == 4) {
+            return SkeletonType.AvatarWithDetail;
+        } else if (index == 5) {
+            return SkeletonType.Paragraph;
+        } else if (index == 6) {
+            return SkeletonType.Table;
+        } else {
+            return SkeletonType.List;
+        }
+    }
+
+    if root.type == SkeletonType.Content: VerticalLayout {
+        alignment: LayoutAlignment.start;
+        spacing: root.height * 5%;
+
+        InnerItem {
+            height: 30%;
+            width: self.height;
+            border-radius: self.width / 2;
+            background: root.item-color;
+            active-item-color: root.active-item-color;
+            active-opacity: root.active-opacity;
+            active-duration: root.active-duration;
+        }
+
+        InnerItem {
+            width: root.width * 80%;
+            height: 30%;
+            background: root.item-color;
+            active-item-color: root.active-item-color;
+            active-opacity: root.active-opacity;
+            active-duration: root.active-duration;
+        }
+
+        InnerItem {
+            width: root.width * 40%;
+            height: 5%;
+            background: root.item-color;
+            active-item-color: root.active-item-color;
+            active-opacity: root.active-opacity;
+            active-duration: root.active-duration;
+        }
+
+        InnerItem {
+            width: root.width * 90%;
+            height: 10%;
+            background: root.item-color;
+            active-item-color: root.active-item-color;
+            active-opacity: root.active-opacity;
+            active-duration: root.active-duration;
+        }
+
+        InnerItem {
+            width: root.width * 60%;
+            height: 5%;
+            background: root.item-color;
+            active-item-color: root.active-item-color;
+            active-opacity: root.active-opacity;
+            active-duration: root.active-duration;
+        }
+    }
+
+    if root.type == SkeletonType.Picture: VerticalLayout {
+        alignment: LayoutAlignment.start;
+        spacing: root.height * 10%;
+
+        InnerItem {
+            width: root.width * 90%;
+            height: 70%;
+            background: root.item-color;
+            active-item-color: root.active-item-color;
+            active-opacity: root.active-opacity;
+            active-duration: root.active-duration;
+        }
+
+        InnerItem {
+            width: root.width * 70%;
+            height: 20%;
+            background: root.item-color;
+            active-item-color: root.active-item-color;
+            active-opacity: root.active-opacity;
+            active-duration: root.active-duration;
+        }
+    }
+
+    if root.type == SkeletonType.Number: VerticalLayout {
+        alignment: LayoutAlignment.start;
+        spacing: root.height * 10%;
+
+        InnerItem {
+            width: root.width * 50%;
+            height: 20%;
+            background: root.item-color;
+            active-item-color: root.active-item-color;
+            active-opacity: root.active-opacity;
+            active-duration: root.active-duration;
+        }
+
+        InnerItem {
+            width: root.width * 90%;
+            height: 70%;
+            background: root.item-color;
+            active-item-color: root.active-item-color;
+            active-opacity: root.active-opacity;
+            active-duration: root.active-duration;
+        }
+    }
+
+    if root.type == SkeletonType.Avatar: HorizontalLayout {
+        alignment: LayoutAlignment.start;
+
+        InnerItem {
+            width: Math.min(root.width, root.height);
+            height: self.width;
+            border-radius: self.width / 2;
+            background: root.item-color;
+            active-item-color: root.active-item-color;
+            active-opacity: root.active-opacity;
+            active-duration: root.active-duration;
+        }
+    }
+
+    if root.type == SkeletonType.AvatarWithDetail: HorizontalLayout {
+        alignment: LayoutAlignment.start;
+        spacing: root.height * 10%;
+
+        avatar-item := InnerItem {
+            width: root.width * 30%;
+            height: self.width;
+            border-radius: self.width / 2;
+            background: root.item-color;
+            active-item-color: root.active-item-color;
+            active-opacity: root.active-opacity;
+            active-duration: root.active-duration;
+        }
+
+        VerticalLayout {
+            alignment: LayoutAlignment.center;
+            spacing: root.height * 5%;
+            height: avatar-item.height;
+
+            InnerItem {
+                width: root.width * 50%;
+                height: avatar-item.height * 30%;
+                background: root.item-color;
+                active-item-color: root.active-item-color;
+                active-opacity: root.active-opacity;
+                active-duration: root.active-duration;
+            }
+
+            InnerItem {
+                width: root.width * 65%;
+                height: avatar-item.height * 25%;
+                background: root.item-color;
+                active-item-color: root.active-item-color;
+                active-opacity: root.active-opacity;
+                active-duration: root.active-duration;
+            }
+        }
+    }
+
+    if root.type == SkeletonType.Paragraph: VerticalLayout {
+        alignment: LayoutAlignment.center;
+        spacing: root.height * 5%;
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+            InnerItem {
+                width: root.width * 90%;
+                height: 15%;
+                background: root.item-color;
+                active-item-color: root.active-item-color;
+                active-opacity: root.active-opacity;
+                active-duration: root.active-duration;
+            }
+        }
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+            InnerItem {
+                width: root.width * 90%;
+                height: 15%;
+                background: root.item-color;
+                active-item-color: root.active-item-color;
+                active-opacity: root.active-opacity;
+                active-duration: root.active-duration;
+            }
+        }
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+            InnerItem {
+                width: root.width * 60%;
+                height: 20%;
+                background: root.item-color;
+                active-item-color: root.active-item-color;
+                active-opacity: root.active-opacity;
+                active-duration: root.active-duration;
+            }
+        }
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+            InnerItem {
+                width: root.width * 40%;
+                height: 30%;
+                background: root.item-color;
+                active-item-color: root.active-item-color;
+                active-opacity: root.active-opacity;
+                active-duration: root.active-duration;
+            }
+        }
+    }
+
+    if root.type == SkeletonType.Table: VerticalLayout {
+        alignment: LayoutAlignment.start;
+        spacing: root.height * 10%;
+
+        for index in 4: HorizontalLayout {
+            alignment: LayoutAlignment.start;
+            spacing: root.width * 5%;
+
+            InnerItem {
+                width: root.width * 15%;
+                height: root.height * 15%;
+                background: root.item-color;
+                active-item-color: root.active-item-color;
+                active-opacity: root.active-opacity;
+                active-duration: root.active-duration;
+            }
+
+            InnerItem {
+                width: root.width * 25%;
+                height: root.height * 15%;
+                background: root.item-color;
+                active-item-color: root.active-item-color;
+                active-opacity: root.active-opacity;
+                active-duration: root.active-duration;
+            }
+
+            InnerItem {
+                width: root.width * 50%;
+                height: root.height * 15%;
+                background: root.item-color;
+                active-item-color: root.active-item-color;
+                active-opacity: root.active-opacity;
+                active-duration: root.active-duration;
+            }
+        }
+    }
+
+    if root.type == SkeletonType.List: VerticalLayout {
+        alignment: LayoutAlignment.space-between;
+
+        for index in 4: InnerItem {
+            width: root.width;
+            height: root.height * 17.5%;
+            background: root.item-color;
+            active-item-color: root.active-item-color;
+            active-opacity: root.active-opacity;
+            active-duration: root.active-duration;
+        }
+    }
+}

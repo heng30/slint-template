@@ -1,0 +1,34 @@
+import { Theme } from "../theme.slint";
+
+export component DashLine inherits Rectangle {
+    in-out property <length> space: Theme.spacing * 2;
+    in-out property <length> line-size: Theme.spacing * 2;
+    in-out property <color> line-color: Theme.base-border-color;
+
+    private property <Orientation> orientation: self.width > self.height ? horizontal : vertical;
+    private property <int> line-count: Math.ceil(Math.max(self.width, self.height) / (line-size + root.space));
+
+    clip: true;
+
+    if orientation == Orientation.horizontal: HorizontalLayout {
+        spacing: root.space;
+        alignment: space-between;
+
+        for index in line-count: Rectangle {
+            background: root.line-color;
+            height: root.height;
+            width: root.line-size;
+        }
+    }
+
+    if orientation == Orientation.vertical: VerticalLayout {
+        spacing: root.space;
+        alignment: space-between;
+
+        for index in line-count: Rectangle {
+            background: root.line-color;
+            height: root.line-size;
+            width: root.width;
+        }
+    }
+}

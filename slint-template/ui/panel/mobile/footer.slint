@@ -1,0 +1,42 @@
+import { Theme, Icons, Store, MobileTabIndex, Logic } from "../def.slint";
+import { TabBtn, Divider } from "../../base/widgets.slint";
+
+export component Footer inherits Rectangle {
+    private property <length> btn-height: self.height * 0.9;
+    private property <length> btn-width: self.width * 0.5;
+    height: Theme.footer-height;
+
+    Divider {
+        x: 0;
+        y: 0;
+        background: Theme.base-border-color;
+    }
+
+    HorizontalLayout {
+        padding-top: Theme.padding;
+
+        TabBtn {
+            width: root.btn-width;
+            height: root.btn-height;
+            icon: Icons.home-light;
+            text: Logic.tr("Home");
+            checked: Store.current-mobile-tab-index == MobileTabIndex.Home;
+
+            clicked => {
+                Logic.switch-mobile-tab(MobileTabIndex.Home);
+            }
+        }
+
+        TabBtn {
+            width: root.btn-width;
+            height: root.btn-height;
+            icon: Icons.setting-light;
+            text: Logic.tr("Setting");
+            checked: Store.current-mobile-tab-index == MobileTabIndex.Setting;
+
+            clicked => {
+                Logic.switch-mobile-tab(MobileTabIndex.Setting);
+            }
+        }
+    }
+}

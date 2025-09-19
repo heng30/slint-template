@@ -1,0 +1,84 @@
+import { Util, Theme } from "../../def.slint";
+import { ProgressBar, CircleProgress, FlashProgress, ExampleComponent } from "../../../base/widgets.slint";
+
+export component ProgressExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+    interactive: false; // disable dragging
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.min(1000px, root.width * 0.8);
+
+                CircleProgress {
+                    ring-width: 20px;
+                    radius: 100px;
+                    progress: Util.progress-value(3s);
+                }
+
+                code: "CircleProgress {\n    ring-width: 20px;\n    radius: 100px;\n    progress: Util.progress-value(3s);\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.min(1000px, root.width * 0.8);
+
+                ProgressBar {
+                    width: 300px;
+                    height: 50px;
+                    progress: Util.progress-value(3s);
+                    is-moving-text: true;
+                }
+
+                code: "ProgressBar {\n    width: 300px;\n    height: 50px;\n    progress: Util.progress-value(3s);\n    is-moving-text: true;\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.min(1000px, root.width * 0.8);
+
+                ProgressBar {
+                    orientation: Orientation.vertical;
+                    width: 50px;
+                    height: 200px;
+                    progress: Util.progress-value(3s);
+                }
+
+                code: "ProgressBar {\n    orientation: Orientation.vertical;\n    width: 50px;\n    height: 200px;\n    progress: Util.progress-value(3s);\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.min(1000px, root.width * 0.8);
+
+                FlashProgress {
+                    progress: 0.4;
+                    finished-color: Theme.thirdly-brand-color;
+                }
+
+                code: "FlashProgress {\n    progress: 0.4;\n    finished-color: blue;\n}";
+            }
+        }
+    }
+}

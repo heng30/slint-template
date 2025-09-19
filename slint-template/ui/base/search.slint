@@ -1,0 +1,147 @@
+import { ComponentPosition } from "def.slint";
+import { Theme, Icons } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { Util } from "../util.slint";
+import { LineInput } from "line-input.slint";
+import { Label } from "label.slint";
+
+// Example:
+// Search {
+//     width: 500px;
+//     values: ["Hello", "World", "Nice", "Good"];
+//     enabled-popup: true;
+//     search(text) => {
+//         debug(text);
+//     }
+//     edited(text) => {
+//         debug(text);
+//     }
+// }
+
+export component Search inherits Rectangle {
+    in-out property text <=> input.text;
+
+    in-out property <[string]> values;
+    in-out property <bool> enabled-popup: false;
+    in-out property <length> popup-max-height: 300px;
+    in-out property <ComponentPosition> popup-position: ComponentPosition.Bottom;
+
+    in-out property <length> font-size: Theme.default-font-size;
+    in-out property <length> hpadding: Theme.padding * 3;
+    in-out property <length> vpadding: Theme.padding * 3;
+    in-out property <length> spacing: Theme.spacing * 2;
+
+    in-out property gain-focus-when-clicked <=> input.gain-focus-when-clicked;
+
+    private property <[string]> matched-values;
+    private property <bool> is-show-popup;
+
+    callback search(value: string);
+    callback edited(text: string);
+    callback key-pressed(key-event: KeyEvent);
+
+    function inner-search(text: string) {
+        if (text == "") {
+            root.is-show-popup = false;
+            return;
+        }
+        matched-values = Util.search-str-items-by(root.values, text);
+        if (matched-values.length > 0) {
+            root.is-show-popup = true;
+        } else {
+            root.is-show-popup = false;
+        }
+    }
+
+    preferred-width: 300px;
+    height: input.preferred-height;
+    background: Theme.base-background;
+    border-radius: Theme.border-radius;
+    border-color: Theme.focus-color;
+    forward-focus: input;
+
+    input := LineInput {
+        is-show-icon: true;
+        icon: Icons.search;
+        placeholder-text: Logic.tr("Search");
+        border-radius: root.border-radius;
+        font-size: root.font-size;
+
+        clicked => {
+            root.is-show-popup = false;
+            root.search(self.text);
+        }
+
+        accepted => {
+            root.is-show-popup = false;
+            root.search(self.text);
+        }
+
+        edited => {
+            if (root.enabled-popup) {
+                root.inner-search(self.text);
+            }
+            root.edited(self.text);
+        }
+
+        key-pressed(event) => {
+            if (event.text == Key.Escape) {
+                input.clear-focus();
+                root.is-show-popup = false;
+            }
+            root.key-pressed(event);
+        }
+    }
+
+    if root.enabled-popup && root.is-show-popup: pop := Rectangle {
+        y: root.popup-position == ComponentPosition.Top ? -pop.height - Theme.padding : root.height + Theme.padding;
+        height: Math.min(root.popup-max-height, input.preferred-height * root.matched-values.length + Theme.padding * 2);
+
+        background: Theme.base-background;
+        border-width: 1px;
+        border-color: Theme.base-border-color;
+        border-radius: Theme.border-radius;
+
+        Flickable {
+            width: pop.width - 2px;
+            height: pop.height;
+            viewport-height: pop.height;
+
+            for value[index] in root.matched-values: Rectangle {
+                y: Theme.padding + pop-hbox.preferred-height * index;
+                height: pop-hbox.preferred-height;
+                background: pop-ta.has-hover ? Theme.hover-background : Theme.base-background;
+
+                init => {
+                    parent.viewport-height = self.y + self.height + Theme.padding;
+                }
+
+                pop-hbox := HorizontalLayout {
+                    alignment: LayoutAlignment.space-between;
+                    padding-left: root.hpadding;
+                    padding-right: root.hpadding;
+                    padding-top: root.vpadding;
+                    padding-bottom: root.vpadding;
+                    spacing: Theme.spacing * 2;
+
+                    pop-lb := Label {
+                        overflow: elide;
+                        text: value;
+                        font-size: root.font-size;
+                        color: Theme.primary-text-color;
+                    }
+                }
+
+                pop-ta := TouchArea {
+                    clicked => {
+                        root.text = value;
+                        root.search(value);
+                        root.is-show-popup = false;
+
+                        input.clear-focus();
+                    }
+                }
+            }
+        }
+    }
+}

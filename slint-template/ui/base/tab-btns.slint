@@ -1,0 +1,95 @@
+import { Theme } from "../theme.slint";
+import { TextBtn } from "btn.slint";
+
+// Example:
+// TabBtns {
+//     items: [
+//         { icon: Icons.cancel-fill, text: "Cancel" },
+//         { icon: Icons.address, text: "Address" },
+//         { icon: Icons.airdrop, text: "Airdrop" }
+//     ];
+// }
+
+export component TabBtns inherits Rectangle {
+    in-out property <[{icon: image, text: string}]> items;
+    in-out property <length> font-size: Theme.default-font-size;
+
+    private property <length> next-pos-x;
+    private property <length> btn-height;
+    private property <length> btn-width;
+    private property <length> btn-pos-x;
+    private property <length> btn-pos-y;
+
+    private property <bool> is-init: true;
+
+    background: Theme.secondary-background;
+    border-radius: Theme.border-radius;
+    width: next-pos-x + Theme.padding;
+    height: btn-height + Theme.padding * 2;
+
+    callback clicked(index: int);
+
+    Rectangle {
+        opacity: is-init ? 0 : 1;
+        x: btn-pos-x;
+        y: btn-pos-y;
+        width: btn-width;
+        height: btn-height;
+        background: Theme.base-background;
+        border-radius: Theme.border-radius;
+
+        animate x, y, width, height {
+            duration: Theme.default-animate-duration;
+            easing: ease-in-out;
+        }
+    }
+
+    if is-init: Rectangle {
+        x: btn-pos-x;
+        y: btn-pos-y;
+        width: btn-width;
+        height: btn-height;
+        background: Theme.base-background;
+        border-radius: Theme.border-radius;
+    }
+
+    for item[index] in items: Rectangle {
+        width: btn.preferred-width;
+        height: btn.preferred-height;
+        border-radius: Theme.border-radius;
+
+        function update-btn() {
+            btn-width = btn.preferred-width;
+            btn-height = Math.max(btn-height, btn.preferred-height);
+            btn-pos-x = self.x + Theme.padding;
+            btn-pos-y = self.y;
+        }
+
+        init => {
+            if (index == 0) {
+                next-pos-x = 0;
+            }
+
+            self.x = next-pos-x;
+            next-pos-x = self.x + btn.preferred-width + Theme.padding;
+
+            if (index == 0) {
+                update-btn();
+            }
+        }
+
+        btn := TextBtn {
+            icon: item.icon;
+            text: item.text;
+            font-size: root.font-size;
+            icon-size: self.font-size;
+            colorize: Theme.is-dark ? Theme.light-text-color : Theme.primary-text-color;
+
+            clicked => {
+                root.clicked(index);
+                root.is-init = false;
+                update-btn();
+            }
+        }
+    }
+}

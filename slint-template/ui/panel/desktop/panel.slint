@@ -1,0 +1,213 @@
+import { Theme, Store, TabIndex, SettingDetailIndex, SettingBackup, Logic, Util, Icons, PopupIndex } from "../def.slint";
+import { SettingDialog, AboutDialog, BackupDialog, HorizontalSettingIconsBar, HelpDialog, DonateDialog, VerticalSettingIconsBar } from "../setting/desktop.slint";
+import { Blanket, StatusBar, Divider, AboutSetting, ToolTip, ToolTipSetting, PopupAction, PopupActionSetting, ComponentPosition, IconBtn, ToastStatus } from "../../base/widgets.slint";
+import { Home } from "home.slint";
+
+component HorizontalHomeIconsBar inherits Rectangle {
+    width: hbox.preferred-width;
+    height: hbox.preferred-height;
+    border-radius: Theme.border-radius;
+
+    in-out property <bool> show-icon-hover-background: false;
+    in-out property <length> icon-size: Theme.icon-size;
+    in-out property <bool> is-show-tip: false;
+    in-out property <ComponentPosition> tip-position;
+    in-out property h-padding <=> hbox.padding;
+    in-out property h-spacing <=> hbox.spacing;
+
+    hbox := HorizontalLayout {
+        padding: Theme.padding * 2;
+        spacing: Theme.spacing * 4;
+
+        IconBtn {
+            icon: Icons.home-fill;
+            icon-size: root.icon-size;
+            show-icon-hover-background: root.show-icon-hover-background;
+            colorize: Store.current-tab-index == TabIndex.Home ? Theme.thirdly-brand-color : Theme.icon-color;
+            is-show-tip: root.is-show-tip;
+            tip-position: root.tip-position;
+            tip: Logic.tr("home");
+
+            clicked => {
+                Logic.switch-tab(TabIndex.Home);
+            }
+        }
+    }
+}
+
+component HorizontalStatusBar inherits StatusBar {
+    background: Theme.secondary-background;
+    is-show-icon: true;
+    icon: Icons.brand;
+    title: AboutSetting.app-name;
+    is-show-tip: true;
+
+    HorizontalLayout {
+        padding-right: Theme.padding * 2;
+
+        HorizontalHomeIconsBar {
+            icon-size: Theme.default-font-size;
+            show-icon-hover-background: false;
+            is-show-tip: root.is-show-tip;
+            tip-position: root.tip-position;
+        }
+
+        VerticalLayout {
+            alignment: LayoutAlignment.center;
+            Divider {
+                height: Theme.default-font-size;
+                width: 2px;
+            }
+        }
+
+        HorizontalSettingIconsBar {
+            icon-size: Theme.default-font-size;
+            h-spacing: Theme.spacing * 3;
+            show-icon-hover-background: false;
+            is-show-tip: root.is-show-tip;
+            tip-position: root.tip-position;
+        }
+
+        VerticalLayout {
+            alignment: LayoutAlignment.center;
+            Divider {
+                height: Theme.default-font-size;
+                width: 2px;
+            }
+        }
+    }
+}
+
+component VerticalStatusBar inherits Rectangle {
+    background: Theme.secondary-background;
+
+    private property <bool> is-show-tip: true;
+    private property <bool> show-icon-hover-background: false;
+    private property <length> icon-size: Theme.icon-size;
+    private property <ComponentPosition> tip-position: ComponentPosition.Right;
+
+    VerticalLayout {
+        alignment: space-between;
+
+        VerticalLayout {
+            spacing: Theme.spacing * 5;
+            padding: Theme.padding * 2;
+            padding-top: Theme.padding * 3;
+
+            IconBtn {
+                icon: Icons.home-fill;
+                icon-size: root.icon-size;
+                show-icon-hover-background: root.show-icon-hover-background;
+                colorize: Store.current-tab-index == TabIndex.Home ? Theme.thirdly-brand-color : Theme.icon-color;
+                is-show-tip: root.is-show-tip;
+                tip-position: root.tip-position;
+                tip: Logic.tr("home");
+
+                clicked => {
+                    Logic.switch-tab(TabIndex.Home);
+                }
+            }
+        }
+
+        VerticalSettingIconsBar {
+            icon-size: Theme.icon-size;
+            v-spacing: Theme.spacing * 5;
+            v-padding: Theme.padding * 2;
+            v-padding-bottom: Theme.padding * 5;
+            show-icon-hover-background: root.show-icon-hover-background;
+            is-show-tip: root.is-show-tip;
+            tip-position: root.tip-position;
+        }
+    }
+}
+
+export component DesktopPanel inherits Rectangle {
+    private property <bool> is-show-setting-dialog: Store.current-popup-index == PopupIndex.Setting;
+    private property <bool> is-show-backup-dialog: Store.current-popup-index == PopupIndex.Backup;
+    private property <bool> is-show-help-dialog: Store.current-popup-index == PopupIndex.Help;
+    private property <bool> is-show-about-dialog: Store.current-popup-index == PopupIndex.About;
+    private property <bool> is-show-donate-dialog: Store.current-popup-index == PopupIndex.Donate;
+
+    background: Theme.base-background;
+
+    VerticalLayout {
+        if Store.setting-preference.no-frame: HorizontalStatusBar { }
+
+        HorizontalLayout {
+            vertical-stretch: 1;
+
+            if !Store.setting-preference.no-frame: VerticalStatusBar {
+                vertical-stretch: 1;
+            }
+
+            Home {
+                vertical-stretch: 1;
+            }
+        }
+    }
+
+    if is-show-setting-dialog || is-show-about-dialog || is-show-help-dialog || is-show-donate-dialog || is-show-backup-dialog: Blanket {
+        clicked => {
+            Logic.switch-popup(PopupIndex.None);
+        }
+    }
+
+    if is-show-setting-dialog: SettingDialog {
+        width: Math.min(Theme.dialog-max-width, root.width * 0.95);
+        escape => {
+            Logic.switch-popup(PopupIndex.None);
+        }
+    }
+
+    if is-show-backup-dialog: BackupDialog {
+        width: Math.min(Theme.dialog-normal-width, root.width * 0.95);
+
+        private property <SettingBackup> setting;
+
+        ok-clicked => {
+            setting = self.get-setting-backup();
+
+            if (!setting.configuration && !setting.data && !setting.cache) {
+                Util.show-toast(Logic.tr("No backup options selected"), ToastStatus.Warning);
+                return;
+            }
+            Logic.switch-popup(PopupIndex.None);
+            Logic.backup(setting);
+        }
+
+        escape => {
+            Logic.switch-popup(PopupIndex.None);
+        }
+    }
+
+    if is-show-about-dialog: AboutDialog {
+        width: Math.min(Theme.dialog-normal-width, root.width * 0.95);
+        escape => {
+            Logic.switch-popup(PopupIndex.None);
+        }
+    }
+
+    if is-show-help-dialog: HelpDialog {
+        width: Math.min(Theme.dialog-max-width, root.width * 0.95);
+        escape => {
+            Logic.switch-popup(PopupIndex.None);
+        }
+    }
+
+    if is-show-donate-dialog: DonateDialog {
+        width: Math.min(Theme.dialog-normal-width, root.width * 0.95);
+        escape => {
+            Logic.switch-popup(PopupIndex.None);
+        }
+    }
+
+    if PopupActionSetting.is-show: PopupAction {
+        window-width: root.width;
+        window-height: root.height;
+    }
+
+    if ToolTipSetting.is-show: ToolTip {
+        window-width: root.width;
+        window-height: root.height;
+    }
+}

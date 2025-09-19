@@ -1,0 +1,201 @@
+import { Theme, Icons } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { Store } from "../store.slint";
+import { SettingDetail, SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel } from "setting-detail.slint";
+import { SettingEntry } from "setting-entry.slint";
+import { ElevatedBtn } from "elevated-btn.slint";
+import { ListTile } from "list-tile.slint";
+import { NoDataImg } from "no-data.slint";
+import { CancelBtn } from "btn.slint";
+import { LineInput } from "line-input.slint";
+import { ConfirmDialogSetting } from "confirm-dialog.slint";
+import { IconBtn } from "icon-btn.slint";
+
+export struct AddressBookEntry {
+    uuid: string,
+    name: string,
+    address: string,
+}
+
+export global AddressBookSetting {
+    in-out property <[AddressBookEntry]> entries: [
+        {
+            uuid: "uuid-1",
+            name: "Address-1",
+            address: "0xf1199999751b1a3A74590adBf95401D19AB30014"
+        },
+        {
+            uuid: "uuid-1",
+            name: "Address-1",
+            address: "0xf1199999751b1a3A74590adBf95401D19AB30014"
+        }
+    ];
+
+    in-out property <AddressBookEntry> current-entry;
+    in-out property <bool> enabled-input;
+
+    public function clear() {
+        self.entries = [];
+    }
+}
+
+export component AddressBook inherits Rectangle {
+    in property <bool> is-show-add-btn;
+
+    callback back <=> sd.back;
+    callback add();
+    callback tap(entries: AddressBookEntry);
+
+    if AddressBookSetting.entries.length == 0: NoDataImg {
+        width: 80%;
+        text: Logic.tr("No Data");
+    }
+
+    sd := SettingDetail {
+        title: Logic.tr("Address book");
+
+        SettingDetailInner {
+            vbox-spacing: Theme.spacing * 2;
+            for item[index] in AddressBookSetting.entries: ListTile {
+                background: self.has-hover ? Theme.base-background.darker(3%) : Theme.base-background;
+                border-radius: Theme.border-radius;
+                drop-shadow-blur: Theme.padding * 2;
+                drop-shadow-color: Theme.base-background-drop-shadow;
+
+                title-text: item.name;
+                subtitle-text: item.address;
+                subtitle-font-size: Theme.default-font-size - 2px;
+                middle-mouse-cursor: MouseCursor.pointer;
+
+                is-show-right-icon: true;
+                right-icon: Icons.copy;
+
+                middle-clicked => {
+                    AddressBookSetting.current-entry = item;
+                    root.tap(item);
+                }
+
+                right-clicked => {
+                    Logic.copy-to-clipboard(self.subtitle-text);
+                }
+            }
+        }
+    }
+
+    if is-show-add-btn: ElevatedBtn {
+        x: root.width - self.width - Theme.padding * 4;
+        y: root.height - self.height - Theme.padding * 4 - Theme.footer-height;
+        icon: Icons.add-light;
+
+        clicked => {
+            root.add();
+        }
+    }
+}
+
+export component AddressBookDetail inherits SettingDetail {
+    private property <AddressBookEntry> entry: AddressBookSetting.current-entry;
+    in property <image> qr-code: Icons.no-data;
+    in-out property address <=> address-input.text;
+    in-out property name <=> name-input.text;
+
+    callback update-name(uuid: string, name: string);
+    callback update-address(uuid: string, address: string);
+
+    title: Logic.tr("Address");
+
+    SettingDetailInner {
+        HorizontalLayout {
+            private property <length> icon-size: Math.min(300px, root.width - Theme.padding * 4);
+            alignment: LayoutAlignment.center;
+
+            IconBtn {
+                width: parent.icon-size;
+                height: self.width;
+                colorize: Colors.transparent;
+                icon-size: parent.icon-size;
+                icon: qr-code;
+                show-icon-hover-background: false;
+
+                clicked => {
+                    Logic.copy-to-clipboard(address-input.text);
+                }
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Address name");
+            }
+
+            name-input := LineInput {
+                enabled: AddressBookSetting.enabled-input;
+                width: root.width - Theme.padding * 4;
+                text: entry.name;
+                is-show-icon: true;
+                icon: self.enabled ? Icons.checked-box : Icons.edit;
+                clicked => {
+                    self.enabled = !self.enabled;
+
+                    if (self.enabled) {
+                        self.focus();
+                    } else {
+                        root.update-name(entry.uuid, self.text);
+                    }
+                }
+
+                accepted => {
+                    self.clear-focus();
+                    self.enabled = !self.enabled;
+                    root.update-name(entry.uuid, self.text);
+                }
+            }
+        }
+
+        SettingDetailInnerVbox {
+            SettingDetailLabel {
+                text: Logic.tr("Account address");
+            }
+
+            address-input := LineInput {
+                enabled: AddressBookSetting.enabled-input;
+                width: root.width - Theme.padding * 4;
+                text: entry.address;
+
+                icon: self.enabled ? Icons.checked-box : Icons.edit;
+                is-show-icon: true;
+                clicked => {
+                    self.enabled = !self.enabled;
+
+                    if (self.enabled) {
+                        self.focus();
+                    } else {
+                        root.update-address(entry.uuid, self.text);
+                    }
+                }
+
+                accepted => {
+                    self.clear-focus();
+                    self.enabled = !self.enabled;
+                    root.update-address(entry.uuid, self.text);
+                }
+            }
+        }
+
+        VerticalLayout {
+            padding-top: Theme.padding * 5;
+            CancelBtn {
+                icon: Icons.delete;
+                colorize: Theme.danger-color;
+                text-color: Theme.danger-color;
+                border-radius: Theme.border-radius;
+                font-size: Theme.title3-font-size;
+                text: Logic.tr("Delete address");
+
+                clicked => {
+                    ConfirmDialogSetting.set(true, Logic.tr("Warning"), Logic.tr("Delete address or not?"), "remove-address-book-entry", entry.uuid);
+                }
+            }
+        }
+    }
+}

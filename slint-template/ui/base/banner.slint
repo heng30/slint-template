@@ -1,0 +1,79 @@
+import { Theme, Icons } from "../theme.slint";
+import { Label } from "label.slint";
+import { IconBtn } from "icon-btn.slint";
+
+// Example:
+// Banner {
+//     width: 500px;
+//     text: "This is a banner";
+//     text-color: Colors.white;
+
+//     close => {
+//         debug("close");
+//     }
+// }
+
+export component Banner inherits Rectangle {
+    in-out property <string> text;
+    in-out property <length> font-size: Theme.default-font-size;
+    in-out property <color> text-color: Colors.white;
+    in-out property <bool> is-show-close: true;
+    in-out property <length> icon-size: Theme.icon-size;
+    in-out property <color> icon-colorize: root.text-color;
+
+    callback close();
+
+    preferred-width: hbox.preferred-width;
+    preferred-height: hbox.preferred-height;
+    background: Theme.warning-color;
+    border-radius: Theme.border-radius;
+
+    hbox := HorizontalLayout {
+        alignment: LayoutAlignment.space-between;
+        padding: Theme.padding * 2;
+        padding-left: Theme.padding * 4;
+        padding-right: Theme.padding * 4;
+        spacing: Theme.spacing * 4;
+
+        HorizontalLayout {
+            alignment: start;
+            spacing: Theme.spacing * 4;
+
+            VerticalLayout {
+                alignment: center;
+
+                Image {
+                    width: icon-size;
+                    height: self.width;
+                    source: Icons.announcement-fill;
+                    colorize: root.icon-colorize;
+                }
+            }
+
+            if !root.text.is-empty: Label {
+                vertical-alignment: center;
+                font-size: Theme.title3-font-size;
+                color: root.text-color;
+                wrap: word-wrap;
+                text: root.text;
+            }
+
+            @children
+        }
+
+        if root.is-show-close: VerticalLayout {
+            alignment: center;
+
+            IconBtn {
+                icon: Icons.close;
+                icon-size: root.icon-size;
+                colorize: root.icon-colorize;
+                show-icon-hover-background: false;
+
+                clicked => {
+                    root.close();
+                }
+            }
+        }
+    }
+}

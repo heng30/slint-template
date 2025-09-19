@@ -1,0 +1,221 @@
+import { Theme, Icons } from "../theme.slint";
+import { Store } from "../store.slint";
+import { Logic } from "../logic.slint";
+import { Util } from "../util.slint";
+import { IconBtn } from "icon-btn.slint";
+import { CancelBtn, ConfirmBtn, TextBtn } from "btn.slint";
+import { Label } from "label.slint";
+import { Head } from "head.slint";
+import { LineInput } from "line-input.slint";
+
+export component Mnemonic inherits Rectangle {
+    in-out property <[string]> mnemonics;
+    in property <bool> is-read-only;
+    in property <bool> is-show-btns;
+    in property <bool> is-show-header;
+    in property <bool> is-show-refresh-btn;
+    in property <bool> is-show-switch-mnemonic-counts-btn;
+    in property <string> header-title;
+
+    private property <int> cell-pre-row: 2;
+    private property <length> label-width: Theme.default-font-size * 2;
+    private property <int> max-blocks: mnemonics.length == 24 ? 2 : (mnemonics.length == 12 ? 1 : 0);
+
+    out property <bool> is-mnemonic-counts-12: max-blocks != 2;
+    private property <string> switch-mnemonic-counts-btn-text: (is-mnemonic-counts-12 ? "24" : "12") + Logic.tr("mnemonics");
+
+    callback back();
+    callback copy(items: [string]);
+    callback paste();
+    callback refresh(mnemonic-counts: int);
+    callback canceled();
+    callback confirmed();
+    callback switch-mnemonic-counts(mnemonic-counts: int);
+
+    public function reset-mnemonics(counts: int) {
+        if (counts == 12) {
+            mnemonics = [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            ];
+        } else if (counts == 24) {
+            mnemonics = [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            ];
+        } else {
+            mnemonics = [];
+        }
+    }
+
+    init => {
+        if root.mnemonics.length == 0 {
+            root.reset-mnemonics(12);
+        }
+    }
+
+    VerticalLayout {
+        if is-show-header: Head {
+            title: Logic.tr(root.header-title);
+            hbox-alignment: LayoutAlignment.start;
+            clicked => {
+                root.back();
+            }
+        }
+
+        Flickable {
+            VerticalLayout {
+                padding: Theme.padding * 5;
+                spacing: Theme.spacing * 2;
+                alignment: LayoutAlignment.center;
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.end;
+                    spacing: Theme.padding * 4;
+
+                    if is-show-refresh-btn: IconBtn {
+                        icon: Icons.refresh;
+
+                        clicked => {
+                            refresh(is-mnemonic-counts-12 ? 12 : 24);
+                        }
+                    }
+
+                    if is-read-only: IconBtn {
+                        icon: Icons.copy;
+                        clicked => {
+                            copy(mnemonics);
+                        }
+                    }
+
+                    if !is-read-only: IconBtn {
+                        icon: Icons.paste;
+                        clicked => {
+                            paste();
+                        }
+                    }
+                }
+
+                for block-index in max-blocks: VerticalLayout {
+                    private property <int> block-start-index: 12 * block-index;
+
+                    VerticalLayout {
+                        spacing: Theme.spacing * 2;
+
+                        for index in 6: HorizontalLayout {
+                            spacing: Theme.spacing * 5;
+
+                            private property <int> cell-start-index: index * cell-pre-row + block-start-index;
+
+                            HorizontalLayout {
+                                spacing: Theme.spacing * 2;
+                                horizontal-stretch: 1;
+
+                                Label {
+                                    width: label-width;
+                                    text: cell-start-index + 1;
+                                    horizontal-alignment: TextHorizontalAlignment.right;
+                                }
+
+                                LineInput {
+                                    horizontal-stretch: 1;
+                                    read-only: is-read-only;
+                                    text: mnemonics[cell-start-index];
+
+                                    edited => {
+                                        mnemonics[cell-start-index] = self.text;
+                                    }
+                                }
+                            }
+
+                            HorizontalLayout {
+                                horizontal-stretch: 1;
+                                spacing: Theme.spacing * 2;
+
+                                Label {
+                                    width: label-width;
+                                    text: cell-start-index + 2;
+                                    horizontal-alignment: TextHorizontalAlignment.right;
+                                }
+
+                                LineInput {
+                                    horizontal-stretch: 1;
+                                    read-only: is-read-only;
+                                    text: mnemonics[cell-start-index + 1];
+
+                                    edited => {
+                                        mnemonics[cell-start-index + 1] = self.text;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if is-show-switch-mnemonic-counts-btn: TextBtn {
+                    icon: Icons.switch;
+                    text: switch-mnemonic-counts-btn-text;
+                    clicked => {
+                        if (is-read-only) {
+                            switch-mnemonic-counts(is-mnemonic-counts-12 ? 24 : 12);
+                        } else {
+                            reset-mnemonics(is-mnemonic-counts-12 ? 24 : 12);
+                        }
+                    }
+                }
+
+                if is-show-btns: HorizontalLayout {
+                    padding-top: Theme.padding * 5;
+                    padding-bottom: Theme.padding * 5;
+                    spacing: Theme.spacing * 8;
+
+                    CancelBtn {
+                        text: Logic.tr("Cancel");
+                        clicked => {
+                            root.canceled();
+                        }
+                    }
+
+                    ConfirmBtn {
+                        text: Logic.tr("Confirm");
+                        clicked => {
+                            root.confirmed();
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,48 @@
+import { Theme, Util } from "../../def.slint";
+import { ProcessStep, ExampleComponent } from "../../../base/widgets.slint";
+
+export component StepExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+    interactive: false; // disable dragging
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.min(1000px, root.width * 0.8);
+
+                ProcessStep {
+                    steps: ["First Step", "Second Step", "Third Step", "Finished"];
+                    current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
+                }
+
+                code: "ProcessStep {\n    steps: [\"First Step\", \"Second Step\", \"Third Step\", \"Finished\"];\n    current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.min(1000px, root.width * 0.8);
+
+                ProcessStep {
+                    orientation: Orientation.vertical;
+                    steps: ["First Step", "Second Step", "Third Step", "Finished"];
+                    current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);
+                }
+
+                code: "ProcessStep {\n    orientation: Orientation.vertical;\n    steps: [\"First Step\", \"Second Step\", \"Third Step\", \"Finished\"];\n    current-step: Util.progress-value-int(self.steps.length, self.steps.length * 1s);\n}";
+            }
+        }
+    }
+}

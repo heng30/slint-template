@@ -1,0 +1,79 @@
+import { Theme } from "../theme.slint";
+
+export component HorizontalLedNumber inherits Rectangle {
+    in-out property <[int]> numbers;
+    in-out property <color> colorize: Theme.icon-color;
+    in-out property <length> number-size: Theme.icon-size;
+    in-out property <length> number1-width: number-size / 3;
+    in-out property <length> number-spacing: Theme.spacing;
+    in-out property <length> number-padding: Theme.padding * 2;
+
+    private property <[image]> images: [
+        @image-url("icons/led0.svg"),
+        @image-url("icons/led1.svg"),
+        @image-url("icons/led2.svg"),
+        @image-url("icons/led3.svg"),
+        @image-url("icons/led4.svg"),
+        @image-url("icons/led5.svg"),
+        @image-url("icons/led6.svg"),
+        @image-url("icons/led7.svg"),
+        @image-url("icons/led8.svg"),
+        @image-url("icons/led9.svg"),
+    ];
+
+    width: hbox.preferred-width;
+    height: hbox.preferred-height;
+
+    hbox := HorizontalLayout {
+        spacing: number-spacing;
+        padding: number-padding;
+
+        for number in numbers: Image {
+            width: number == 1 ? number1-width : number-size;
+            height: number-size * 2;
+            colorize: colorize;
+            source: images[number];
+        }
+    }
+}
+
+export component VerticalLedNumber inherits Rectangle {
+    in-out property <[int]> numbers;
+    in-out property <color> colorize: Theme.icon-color;
+    in-out property <length> number-size: Theme.icon-size;
+    in-out property <length> number1-width: number-size / 3;
+    in-out property <length> number-spacing: Theme.spacing;
+    in-out property <length> number-padding: Theme.padding * 2;
+
+    private property <[image]> images: [
+        @image-url("icons/led0.svg"),
+        @image-url("icons/led1.svg"),
+        @image-url("icons/led2.svg"),
+        @image-url("icons/led3.svg"),
+        @image-url("icons/led4.svg"),
+        @image-url("icons/led5.svg"),
+        @image-url("icons/led6.svg"),
+        @image-url("icons/led7.svg"),
+        @image-url("icons/led8.svg"),
+        @image-url("icons/led9.svg"),
+    ];
+
+    width: vbox.preferred-width;
+    height: vbox.preferred-height;
+
+    vbox := VerticalLayout {
+        spacing: number-spacing;
+        padding: number-padding;
+
+        for number in numbers: HorizontalLayout {
+            alignment: LayoutAlignment.center;
+
+            Image {
+                width: number == 1 ? number1-width : number-size;
+                height: number-size * 2;
+                colorize: colorize;
+                source: images[number];
+            }
+        }
+    }
+}

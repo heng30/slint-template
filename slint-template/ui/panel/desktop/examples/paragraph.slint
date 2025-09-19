@@ -1,0 +1,60 @@
+import { Util, Theme, Store, Icons } from "../../def.slint";
+import { Paragraph, ParagraphEntry, ExampleComponent } from "../../../base/widgets.slint";
+
+export component ParagraphExample inherits Flickable {
+    viewport-height: vbox.preferred-height;
+    viewport-width: vbox.preferred-width;
+    interactive: false; // disable dragging
+
+    vbox := VerticalLayout {
+        spacing: Theme.spacing * 20;
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        alignment: LayoutAlignment.center;
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.min(1000px, root.width * 0.8);
+
+                HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+
+                    VerticalLayout {
+                        spacing: Theme.spacing * 10;
+
+                        Paragraph {
+                            is-show-divider: true;
+                            is-picture-before-contents: true;
+                            entry: {
+                                title:"How to accelerate rust-analyzer efficient?",
+                                picture: Icons.landing-account,
+                                contents: [
+                                    "For single-threaded improvements, one area to focus on is Rowan, the library rust-analyzer uses for syntax   tree construction.",
+                                    "Benchmarks indicate that Rowan's tree construction can be slower than other libraries like syntree. Using a syntax tree library structure with a more contiguous representation could lead to faster initial workspace loading and indexing.",
+                                ]
+                            };
+                        }
+
+                        Paragraph {
+                            picture-size: 500px;
+
+                            entry: {
+                                title:"Rust analyzer: any tips to increase its performance?",
+                                title-link: "https://users.rust-lang.org/t/rust-analyzer-any-tips-to-increase-its-performance/112150",
+                                picture: Icons.landing-account,
+                                contents: [
+                                    "For single-threaded improvements, one area to focus on is Rowan, the library rust-analyzer uses for syntax   tree construction. Benchmarks indicate that Rowan's tree construction can be slower than other libraries like syntree. Using a syntax tree library structure with a more contiguous representation could lead to faster initial workspace loading and indexing."
+                                ],
+                            };
+                        }
+                    }
+                }
+
+                code: "VerticalLayout {\n    spacing: Theme.spacing * 10;\n\n    Paragraph {\n        width: 100%;\n        is-show-divider: true;\n        entry: {\n            title:\"How to accelerate rust-analyzer efficient?\",\n            text: \"For single-threaded improvements, one area to focus on is Rowan, the library rust-analyzer uses for syntax   tree construction. Benchmarks indicate that Rowan's tree construction can be slower than other libraries like syntree. Using a syntax tree library structure with a more contiguous representation could lead to faster initial workspace loading and indexing.\",\n        };\n    }\n\n    Paragraph {\n        width: 100%;\n        picture-size: 500px;\n\n        entry: {\n            title:\"Rust analyzer: any tips to increase its performance?\",\n            title-link: \"https://users.rust-lang.org/t/rust-analyzer-any-tips-to-increase-its-performance/112150\",\n            text: \"For single-threaded improvements, one area to focus on is Rowan, the library rust-analyzer uses for syntax   tree construction. Benchmarks indicate that Rowan's tree construction can be slower than other libraries like syntree. Using a syntax tree library structure with a more contiguous representation could lead to faster initial workspace loading and indexing.\",\n            picture: Icons.landing-account,\n        };\n    }\n}";
+            }
+        }
+    }
+}

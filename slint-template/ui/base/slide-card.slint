@@ -1,0 +1,137 @@
+import { Theme } from "../theme.slint";
+import { IconBtn } from "./icon-btn.slint";
+import { Label } from "./label.slint";
+
+
+// Example:
+// Rectangle {
+//     width: parent.width * 0.5;
+//     height: 80px;
+//     border-radius: Theme.border-radius;
+//     clip: true;
+
+//     SlideCard {
+//         icons-background: Theme.secondary-background;
+//         icons: [
+//             {
+//                 icon: Icons.delete,
+//                 text: "Delete",
+//                 colorize: Colors.red,
+//             },
+//             {
+//                 icon: Icons.edit,
+//                 text: "Edit",
+//                 colorize: Colors.blue,
+//             },
+//         ];
+
+//         Rectangle {
+//             height: 80px;
+//             background: pink;
+
+//             Label {
+//                 text: Store.is-cn ? "向左侧滑动" : "Slide left to show icons";
+//             }
+//         }
+//     }
+// }
+
+export component SlideCard inherits Rectangle {
+    height: vbox.preferred-height;
+
+    callback icon-clicked(index: int);
+
+    in-out property <MouseCursor> mouse-cursor <=> ta.mouse-cursor;
+    in property <[{icon: image, text: string, colorize: color}]> icons;
+    in property <color> icons-background;
+    in property <bool> hide-icons-after-clicked: true;
+    in property <length> gap: 0px;
+
+    in-out property <length> inner-hpadding: 0px;
+    in-out property <length> inner-vpadding: 0px;
+
+    private property <length> max-move-pixels-up-bound: self.width * 0.04;
+    private property <length> max-move-pixels-low-bound: self.width * 0.02;
+    private property <bool> is-show-icons: false;
+    private property <bool> is-hide-icons: true;
+
+    public function show-icons() {
+        root.x = -icons-scope.width - gap;
+        root.is-show-icons = true;
+        root.is-hide-icons = false;
+    }
+
+    public function hide-icons() {
+        root.x = 0;
+        root.is-hide-icons = true;
+        root.is-show-icons = false;
+    }
+
+    animate x {
+        duration: Theme.default-animate-duration;
+        easing: ease-in-out;
+    }
+
+    ta := TouchArea {
+        moved => {
+            if (!root.is-show-icons) {
+                if (self.pressed-x - self.mouse-x > parent.max-move-pixels-up-bound) {
+                    show-icons();
+                }
+            }
+            if (!root.is-hide-icons) {
+                if (self.mouse-x - self.pressed-x > parent.max-move-pixels-up-bound) {
+                    hide-icons();
+                }
+            }
+        }
+    }
+
+    vbox := VerticalLayout {
+        padding-top: root.inner-vpadding;
+        padding-bottom: root.inner-vpadding;
+        padding-left: root.inner-hpadding;
+        padding-right: root.inner-hpadding;
+
+        @children
+    }
+
+    icons-scope := Rectangle {
+        x: root.width + gap;
+        background: root.icons-background;
+        width: Math.max(root.width * 0.15, Theme.icon-size * 2) * icons.length;
+
+        HorizontalLayout {
+            spacing: Theme.spacing;
+            for item[index] in root.icons: Rectangle {
+                VerticalLayout {
+                    spacing: Theme.spacing;
+                    alignment: LayoutAlignment.center;
+
+                    IconBtn {
+                        icon: item.icon;
+                        colorize: item.colorize;
+                    }
+
+                    if item.text != "": HorizontalLayout {
+                        alignment: LayoutAlignment.center;
+                        Label {
+                            text: item.text;
+                            color: item.colorize;
+                        }
+                    }
+                }
+
+                TouchArea {
+                    mouse-cursor: MouseCursor.pointer;
+                    clicked => {
+                        if (hide-icons-after-clicked) {
+                            root.hide-icons();
+                        }
+                        root.icon-clicked(index);
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,214 @@
+import { Theme, Icons } from "../../theme.slint";
+import { Util } from "../../util.slint";
+import { Logic } from "../../logic.slint";
+import { Store } from "../../store.slint";
+import { HorizontalSettingIconsBar }  from "../setting/desktop.slint";
+
+import { SettingEntryV2, CenterLayout, IconsDialogSetting, Search, Label, SideBar, SideBarEntry, SideBarChildEntry, ChartBar } from "../../base/widgets.slint";
+import { Introduction }  from "examples/introducion.slint";
+import { TreeExample } from "examples/tree.slint";
+import { StepExample } from "examples/step.slint";
+import { ProgressExample } from "examples/progress.slint";
+import { SliderExample } from "examples/slider.slint";
+import { ButtonExample } from "examples/button.slint";
+import { ToastExample } from "examples/toast.slint";
+import { RateExample } from "examples/rate.slint";
+import { PaginationExample } from "examples/pagination.slint";
+import { RecordIndicatorExample } from "examples/record-indicator.slint";
+import { ToolTipExample } from "examples/tooltip.slint";
+import { BreadCrumbExample } from "examples/bread-crumb.slint";
+import { SkeletonExample } from "examples/skeleton.slint";
+import { PinCodesExample } from "examples/pin-codes.slint";
+import { SelectExample } from "examples/select.slint";
+import { CollapseExample } from "examples/collapse.slint";
+import { StretchExample } from "examples/stretch.slint";
+import { InputExample } from "examples/input.slint";
+import { BadgeExample } from "examples/badge.slint";
+import { LabelExample } from "examples/label.slint";
+import { TagExample } from "examples/tag.slint";
+import { LoadingExample } from "examples/loading.slint";
+import { TabBtnExample } from "examples/tab-btn.slint";
+import { PopupActionExample } from "examples/popup-action.slint";
+import { BannerExample } from "examples/banner.slint";
+import { DividerExample } from "examples/divider.slint";
+import { LinkExample } from "examples/link.slint";
+import { BlanketExample } from "examples/blanket.slint";
+import { AvatarExample } from "examples/avatar.slint";
+import { BrandExample }  from "examples/brand.slint";
+import { EmptyExample }  from "examples/empty.slint";
+import { LandingPageExample }  from "examples/landing-page.slint";
+import { StatusBarExample }  from "examples/status-bar.slint";
+import { DialogExample }  from "examples/dialog.slint";
+import { CenterLayoutExample }  from "examples/center-layout.slint";
+import { SlideCardExample }  from "examples/slide-card.slint";
+import { ListTileExample }  from "examples/list-tile.slint";
+import { DrawerExample }  from "examples/drawer.slint";
+import { FlickableWithScrollBarExample }  from "examples/flickable-with-scrollbar.slint";
+import { NewsExample }  from "examples/news.slint";
+import { HeadExample }  from "examples/head.slint";
+import { AboutExample }  from "examples/about.slint";
+import { HelpExample }  from "examples/help.slint";
+import { AddressBookExample }  from "examples/address-book.slint";
+import { MnemonicExample }  from "examples/mnemonic.slint";
+import { AccountBalanceExample }  from "examples/account-balance.slint";
+import { SignInExample }  from "examples/sign-in.slint";
+import { LogInExample }  from "examples/log-in.slint";
+import { PasswordExample }  from "examples/password.slint";
+import { ResetPasswordExample }  from "examples/reset-password.slint";
+import { DatePickerExample }  from "examples/date-picker.slint";
+import { SettingExample }  from "examples/setting.slint";
+import { TokenListExample }  from "examples/token-list.slint";
+import { TokenSenderExample }  from "examples/token-sender.slint";
+import { TokenRecipientExample }  from "examples/token-recipient.slint";
+import { TransactionFeeExample }  from "examples/transaction-fee.slint";
+import { WaitTransactionConfirmedExample }  from "examples/wait-transaction-confirmed.slint";
+import { TransactionTileExample }  from "examples/transaction-tile.slint";
+import { SideBarExample }  from "examples/sidebar.slint";
+import { ParagraphExample }  from "examples/paragraph.slint";
+import { AudioControlExample }  from "examples/audio-control.slint";
+import { VideoControlExample }  from "examples/video-control.slint";
+import { TodoListExample } from "examples/todo-list.slint";
+import { ChartBarExample } from "examples/chart-bar.slint";
+
+component LeftPanel inherits Rectangle {
+    background: Theme.secondary-background;
+    border-radius: Theme.border-radius * 2;
+    clip: true;
+
+    VerticalLayout {
+        SideBar {
+            private property <string> cache-selected-key;
+
+            selected-key: Store.current-sidebar-key;
+            entries: Store.sidebar-entries;
+            is-show-search: true;
+            is-use-random-icon: true;
+            search-values: Logic.generate-search-values(Store.sidebar-entries);
+
+            search(value) => {
+                self.cache-selected-key = Logic.get-sidebar-key-from-search-values(Store.sidebar-entries, value);
+
+                if (self.cache-selected-key == "None" || self.cache-selected-key == "") {
+                    return;
+                }
+                self.selected-key = Store.current-sidebar-key;
+                Store.current-sidebar-key = self.cache-selected-key;
+            }
+
+            clicked(category, title, key) => {
+                Store.current-sidebar-key = key;
+            }
+        }
+    }
+}
+
+component RightPanel inherits Rectangle {
+    if Store.current-sidebar-key == "Introduction": Introduction { }
+
+    // Base
+    if Store.current-sidebar-key == "Button": ButtonExample { }
+    if Store.current-sidebar-key == "Label": LabelExample { }
+    if Store.current-sidebar-key == "Divider": DividerExample { }
+    if Store.current-sidebar-key == "Blanket": BlanketExample { }
+    if Store.current-sidebar-key == "CenterLayout": CenterLayoutExample { }
+    if Store.current-sidebar-key == "SlideCard": SlideCardExample { }
+    if Store.current-sidebar-key == "Drawer": DrawerExample { }
+    if Store.current-sidebar-key == "FlickableWithScrollBar": FlickableWithScrollBarExample { }
+
+    // Input
+    if Store.current-sidebar-key == "Slider": SliderExample { }
+    if Store.current-sidebar-key == "Rate": RateExample { }
+    if Store.current-sidebar-key == "PinCodes": PinCodesExample { }
+    if Store.current-sidebar-key == "Select": SelectExample { }
+    if Store.current-sidebar-key == "Input": InputExample { }
+    if Store.current-sidebar-key == "SignIn": SignInExample { }
+    if Store.current-sidebar-key == "LogIn": LogInExample { }
+    if Store.current-sidebar-key == "Password": PasswordExample { }
+    if Store.current-sidebar-key == "ResetPassword": ResetPasswordExample { }
+    if Store.current-sidebar-key == "DatePicker": DatePickerExample { }
+
+    // Navigation
+    if Store.current-sidebar-key == "Tree": TreeExample { }
+    if Store.current-sidebar-key == "Pagination": PaginationExample { }
+    if Store.current-sidebar-key == "TabBtn": TabBtnExample { }
+    if Store.current-sidebar-key == "StatusBar": StatusBarExample { }
+    if Store.current-sidebar-key == "Head": HeadExample { }
+    if Store.current-sidebar-key == "SideBar": SideBarExample { }
+
+    // Display
+    if Store.current-sidebar-key == "Badge": BadgeExample { }
+    if Store.current-sidebar-key == "Step": StepExample { }
+    if Store.current-sidebar-key == "Progress": ProgressExample { }
+    if Store.current-sidebar-key == "Toast": ToastExample { }
+    if Store.current-sidebar-key == "RecordIndicator": RecordIndicatorExample { }
+    if Store.current-sidebar-key == "ToolTip": ToolTipExample { }
+    if Store.current-sidebar-key == "BreadCrumb": BreadCrumbExample { }
+    if Store.current-sidebar-key == "Skeleton": SkeletonExample { }
+    if Store.current-sidebar-key == "Collapse": CollapseExample { }
+    if Store.current-sidebar-key == "Stretch": StretchExample { }
+    if Store.current-sidebar-key == "Tag": TagExample { }
+    if Store.current-sidebar-key == "Loading": LoadingExample { }
+    if Store.current-sidebar-key == "PopupAction": PopupActionExample { }
+    if Store.current-sidebar-key == "Banner": BannerExample { }
+    if Store.current-sidebar-key == "Link": LinkExample { }
+    if Store.current-sidebar-key == "Avatar": AvatarExample { }
+    if Store.current-sidebar-key == "Empty": EmptyExample { }
+    if Store.current-sidebar-key == "News": NewsExample { }
+    if Store.current-sidebar-key == "ListTile": ListTileExample { }
+    if Store.current-sidebar-key == "Paragraph": ParagraphExample { }
+    if Store.current-sidebar-key == "TodoList": TodoListExample { }
+    if Store.current-sidebar-key == "ChartBar": ChartBarExample { }
+
+    // Crypto
+    // if Store.current-sidebar-key == "Mnemonic": MnemonicExample { }
+    // if Store.current-sidebar-key == "AddressBook": AddressBookExample { }
+    // if Store.current-sidebar-key == "AccountBalance": AccountBalanceExample { }
+    // if Store.current-sidebar-key == "TokenList": TokenListExample { }
+    // if Store.current-sidebar-key == "TokenSender": TokenSenderExample { }
+    // if Store.current-sidebar-key == "TokenRecipient": TokenRecipientExample { }
+    // if Store.current-sidebar-key == "TransactionFee": TransactionFeeExample { }
+    // if Store.current-sidebar-key == "WaitTransactionConfirmed": WaitTransactionConfirmedExample { }
+    // if Store.current-sidebar-key == "TransactionTile": TransactionTileExample { }
+
+    // MultiMedia
+    if Store.current-sidebar-key == "AudioControl": AudioControlExample { }
+    if Store.current-sidebar-key == "VideoControl": VideoControlExample { }
+
+    // Other
+    if Store.current-sidebar-key == "Setting": SettingExample { }
+    if Store.current-sidebar-key == "About": AboutExample { }
+    if Store.current-sidebar-key == "Dialog": DialogExample { }
+    if Store.current-sidebar-key == "LandingPage": LandingPageExample { }
+    if Store.current-sidebar-key == "Brand": BrandExample { }
+    if Store.current-sidebar-key == "Help": HelpExample { }
+}
+
+export component Home inherits VerticalLayout {
+    padding: Theme.padding;
+
+    Rectangle {
+        lp := LeftPanel {
+            x: 0;
+            width: root.width * 0.2;
+        }
+
+        mp := Rectangle {
+            x: lp.width;
+            width: Theme.padding;
+            border-radius: self.width / 2;
+            background: ta.has-hover ? Theme.checked-background : Colors.transparent;
+
+            ta := TouchArea {
+                mouse-cursor: MouseCursor.col-resize;
+                moved => {
+                    lp.width = Math.min(Math.max(0px, lp.width - (self.pressed-x - self.mouse-x)), root.width - self.width - root.padding * 2)
+                }
+            }
+        }
+
+        RightPanel {
+            x: mp.x + mp.width;
+            width: root.width - root.padding * 2 - self.x;
+        }
+    }
+}

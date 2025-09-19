@@ -1,0 +1,81 @@
+import { Theme, Icons } from "../theme.slint";
+import { Logic } from "../logic.slint";
+import { IconBtn } from "icon-btn.slint";
+import { Label } from "label.slint";
+
+export component ExampleComponent inherits VerticalLayout {
+    in-out property <string> detail;
+    in-out property <string> code;
+
+    in-out property <length> font-size: Theme.default-font-size;
+    in-out property <length> icon-size: Theme.icon-size;
+    in-out property <color> text-color: Theme.primary-text-color;
+
+    private property <[{title: string, content: string}]> entries: [{ title: "Detail", content: root.detail }, { title: "Example", content: root.code }];
+
+    spacing: Theme.spacing * 4;
+
+    VerticalLayout {
+        @children
+    }
+
+    for item in root.entries: VerticalLayout {
+        spacing: Theme.spacing * 2;
+        private property <bool> is-open: true;
+
+        if item.content != "": HorizontalLayout {
+            alignment: start;
+
+            IconBtn {
+                use-auto-size: true;
+                icon: is-open ? Icons.arrow-down-fill : Icons.arrow-right-fill;
+                icon-size: root.icon-size;
+                font-size: Theme.title3-font-size;
+                text: Logic.tr(item.title);
+                clicked => {
+                    is-open = !is-open;
+                }
+            }
+        }
+
+        if item.content != "": Rectangle {
+            height: parent.is-open ? lb-vbox.preferred-height : 0px;
+            background: Theme.secondary-background;
+            border-radius: Theme.border-radius;
+            clip: true;
+
+            animate height {
+                duration: Theme.default-animate-duration;
+                easing: ease-in-out;
+            }
+
+            lb-vbox := VerticalLayout {
+                padding: Theme.padding * 4;
+
+                Label {
+                    text: item.content;
+                    font-size: root.font-size;
+                    color: root.text-color;
+                    wrap: word-wrap;
+                }
+            }
+
+            HorizontalLayout {
+                x: 0;
+                y: 0;
+                alignment: end;
+                padding: Theme.padding * 2;
+                height: ic.preferred-height + self.padding * 2;
+
+                ic := IconBtn {
+                    icon: Icons.copy;
+                    icon-size: root.icon-size;
+
+                    clicked => {
+                        Logic.copy-to-clipboard(item.content);
+                    }
+                }
+            }
+        }
+    }
+}

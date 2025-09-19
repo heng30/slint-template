@@ -1,0 +1,76 @@
+import { Theme } from "../theme.slint";
+import { Store } from "../store.slint";
+import { Logic } from "../logic.slint";
+import { Dialog } from "./dialog.slint";
+import { LineInput } from "line-input.slint";
+import { Label } from "label.slint";
+
+export component ReplaceDialog inherits Dialog {
+    title: Logic.tr("Replace");
+    is-prevent-event-forward: true;
+
+    in-out property old-text <=> old-line-input.text;
+    in-out property new-text <=> new-line-input.text;
+
+    callback replace(old-text: string, new-text: string);
+
+    init => {
+        old-line-input.focus();
+    }
+
+    confirmed => {
+        replace(root.old-text, root.new-text);
+    }
+
+    canceled => {
+        self.escape();
+    }
+
+    Timer {
+        private property <bool> is-running: true;
+
+        interval: 200ms;
+        running: is-running;
+        triggered() => {
+            is-running = false;
+            old-line-input.focus();
+        }
+    }
+
+    VerticalLayout {
+        padding: Theme.padding * 2;
+        padding-top: Theme.padding * 4;
+        spacing: Theme.spacing * 4;
+
+        VerticalLayout {
+            spacing: Theme.spacing * 2;
+            Label {
+                text: Logic.tr("Replaced text");
+            }
+
+            old-line-input := LineInput {
+                key-pressed(event) => {
+                    if (event.text == Key.Tab) {
+                        new-line-input.focus();
+                    }
+                }
+            }
+        }
+
+        VerticalLayout {
+            spacing: Theme.spacing * 2;
+
+            Label {
+                text: Logic.tr("Target text");
+            }
+
+            new-line-input := LineInput {
+                key-pressed(event) => {
+                    if (event.text == Key.Tab) {
+                        old-line-input.focus();
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,51 @@
+import { Store, Logic, Theme } from "../../def.slint";
+import { SettingBackup } from "../../../store.slint";
+import { SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, CheckBtn, SettingDetailInner } from "../../../base/widgets.slint";
+
+export component Backup inherits SettingDetail {
+    title: Logic.tr("Backup");
+
+    public function get-setting-backup() -> SettingBackup {
+        return {
+            configuration: config-checkbtn.checked,
+            data: data-checkbtn.checked,
+            cache: cache-checkbtn.checked,
+        };
+    }
+
+    SettingDetailInner {
+        VerticalLayout {
+            padding: Theme.spacing * 2;
+            padding-top: Theme.spacing * 4;
+
+            HorizontalLayout {
+                HorizontalLayout {
+                    width: 33.3%;
+
+                    config-checkbtn := CheckBtn {
+                        text: Logic.tr("Configuration");
+                        checked: true;
+                    }
+                }
+
+                HorizontalLayout {
+                    width: 33.3%;
+
+                    data-checkbtn := CheckBtn {
+                        text: Logic.tr("Data");
+                        checked: true;
+                    }
+                }
+
+                HorizontalLayout {
+                    width: 33.3%;
+
+                    cache-checkbtn := CheckBtn {
+                        text: Logic.tr("Cache");
+                        checked: false;
+                    }
+                }
+            }
+        }
+    }
+}

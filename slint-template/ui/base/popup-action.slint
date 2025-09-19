@@ -1,0 +1,136 @@
+import { ComponentPosition } from "def.slint";
+import { Theme } from "../theme.slint";
+import { Util } from "../util.slint";
+import { Label } from "label.slint";
+import { SettingEntryV2 } from "setting-entry.slint";
+import { Divider } from "divider.slint";
+
+// Example:
+// Rectangle {
+//     background: red;
+//     width: 300px;
+//     height: 300px;
+//     ta := TouchArea {
+//         pointer-event(event) => {
+//             if (event.button == PointerEventButton.right) {
+//                 PopupActionSetting.show(parent.absolute-position.x + self.mouse-x, parent.absolute-position.y + self.mouse-y, [
+//                     { icon: Icons.delete, text: "Delete", action: "delete-item" },
+//                     { icon: Icons.add-fill, text: "Add", action: "add-item" },
+//                     { icon: Icons.recover-from-trash, text: "Remove trash", action: "remove-all-cache" }
+//                 ]);
+//             }
+//         }
+//     }
+// }
+
+export struct PopupActionEntry {
+    icon: image,
+    text: string,
+    action: string,
+    user-data: string,
+}
+
+export global PopupActionSetting {
+    in-out property <bool> is-show;
+    in-out property <[PopupActionEntry]> actions;
+    in-out property <length> pressed-absolute-x;
+    in-out property <length> pressed-absolute-y;
+
+    public function show(absolute-x: length, absolute-y: length, actions: [PopupActionEntry]) {
+        self.pressed-absolute-x = absolute-x;
+        self.pressed-absolute-y = absolute-y;
+        self.actions = actions;
+        self.is-show = true;
+    }
+
+    public function hide() {
+        is-show = false;
+    }
+
+    callback action(action: string, user-data: string);
+}
+
+export component PopupAction inherits Rectangle {
+    in-out property <length> window-width;
+    in-out property <length> window-height;
+    in-out property <length> spacing: Theme.spacing * 2;
+
+    in-out property <color> icon-colorize: Theme.icon-color;
+    in-out property <length> icon-size: Theme.icon-size;
+    in-out property <length> font-size: Theme.title3-font-size;
+
+    in-out property <bool> gain-focus-when-clicked;
+
+    pure function calc-x() -> length {
+        return Math.clamp(PopupActionSetting.pressed-absolute-x + Theme.padding * 2, Theme.padding * 2, root.window-width - rect.width - Theme.padding * 2);
+    }
+
+    pure function calc-y() -> length {
+        return Math.clamp(PopupActionSetting.pressed-absolute-y + Theme.padding * 2, Theme.padding * 2, root.window-height - rect.height - Theme.padding * 2);
+    }
+
+    fs := FocusScope { }
+
+    TouchArea {
+        clicked => {
+            if (gain-focus-when-clicked) {
+                fs.focus();
+            }
+            PopupActionSetting.hide();
+        }
+    }
+
+    rect := Rectangle {
+        x: calc-x();
+        y: calc-y();
+
+        width: vbox.preferred-width + Theme.spacing * 2;
+        height: vbox.preferred-height + Theme.padding * 2;
+        background: Theme.base-background;
+        border-color: Theme.base-border-color;
+        border-width: 1px;
+        border-radius: Theme.border-radius;
+
+        vbox := VerticalLayout {
+            alignment: LayoutAlignment.center;
+            spacing: root.spacing;
+            width: self.preferred-width;
+            height: self.preferred-height;
+
+            for entry[index] in PopupActionSetting.actions: VerticalLayout {
+                private property <bool> next-entries-is-empty: index + 1 < PopupActionSetting.actions.length ? PopupActionSetting.actions[index + 1].text.is-empty : true;
+
+                if !entry.text.is-empty: SettingEntryV2 {
+                    icon: entry.icon;
+                    text: entry.text;
+                    font-size: root.font-size;
+                    icon-colorize: root.icon-colorize;
+                    icon-size: root.icon-size;
+                    background: self.has-hover ? Theme.secondary-background : Colors.transparent;
+                    gain-focus-when-clicked: gain-focus-when-clicked;
+
+                    clicked => {
+                        PopupActionSetting.hide();
+                        PopupActionSetting.action(entry.action, entry.user-data);
+                    }
+                }
+
+                if entry.text.is-empty: HorizontalLayout {
+                    padding-left: Theme.padding * 2;
+                    padding-right: Theme.padding * 2;
+
+                    Rectangle {
+                        height: Theme.default-border-width;
+                        background: Theme.thirdly-brand-color;
+                    }
+                }
+
+                if index != PopupActionSetting.actions.length - 1 && !entry.text.is-empty && !next-entries-is-empty:  HorizontalLayout {
+                    padding-left: Theme.padding * 2;
+                    padding-right: Theme.padding * 2;
+                    Divider { }
+                }
+            }
+        }
+    }
+}

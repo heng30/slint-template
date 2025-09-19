@@ -1,0 +1,140 @@
+import { Theme, Logic, Store } from "../../def.slint";
+import { Label, Paragraph, ParagraphEntry } from "../../../base/widgets.slint";
+
+component SettingHelp inherits VerticalLayout {
+    spacing: Theme.spacing * 4;
+
+    private property <[ParagraphEntry]> entries-cn:
+    [
+        {
+            title: "简介",
+            title-link: "https://github.com/heng30/flymoon",
+            contents: [
+                "这是一个基于Rust和Slint GUI构建的大语言模型聊天客户端，兼容OpenAI的API。",
+                "1. 支持聊天和深度思考两种聊天模式",
+                "2. 支持联网谷歌搜索",
+                "3. 自动保存历史聊天记录",
+                "4. 自定义系统提示词",
+                "5. 支持MCP服务"
+            ],
+        },
+        {
+            title: "如何配置大语言模型？",
+            title-link: "https://api-docs.deepseek.com/zh-cn/",
+            contents: [
+                "1. 「API基础URL」是和OpenAI兼容的API基地址",
+                "2. 「思考模型」是可选的",
+            ],
+        },
+        {
+            title: "如何配置谷歌搜索？",
+            title-link: "https://developers.google.com/custom-search/v1/overview",
+            contents: [
+                "1. 「CX」是谷歌搜索ID，需要自己创建",
+                "2. 「链接数量」是每次进行搜索的网页数量，最高支持10个网页",
+                "启用网络搜索后，会先使用谷歌搜索引擎进行搜索。然后下载网页，并将网页转换为Markdown。从而避免发送大量Html标签给大语言模型，也能减少Token消耗。"
+            ],
+        },
+    ];
+
+    private property <[ParagraphEntry]> entries-en:
+    [
+        {
+            title: "Introduction",
+            title-link: "https://github.com/heng30/flymoon",
+            contents: [
+                "This is a large language model chat client built with Rust and Slint GUI, compatible with OpenAI's API.",
+                "1. Supports both chat and deep thinking modes",
+                "2. Supports online Google search",
+                "3. Automatically saves chat history",
+                "4. Customizable system prompts",
+                "5. Supports MCP service"
+            ],
+        },
+        {
+            title: "How to Configure the LLM?",
+            title-link: "https://api-docs.deepseek.com/en/",
+            contents: [
+                "1. 「API base URL」 is the OpenAI-compatible API base address",
+                "2. 「Reasoner model」 is optional",
+            ],
+        },
+        {
+            title: "How to Configure Google Search?",
+            title-link: "https://developers.google.com/custom-search/v1/overview",
+            contents: [
+                "1. 「CX」 is the Google Search ID, which you need to create yourself",
+                "2. 「Link number」 is the number of web pages searched per query, with a maximum of 10 pages",
+                "When web search is enabled, the Google search engine will be used first. The web pages will then be downloaded and converted to Markdown. This avoids sending excessive HTML tags to the large language model and reduces token consumption."
+            ],
+        },
+    ];
+
+    private property <[ParagraphEntry]> entries: Store.is-cn ? entries-cn : entries-en;
+
+    for entry in root.entries: Paragraph {
+        entry: entry;
+        is-picture-before-contents: true;
+        content-font-size: Theme.title4-font-size;
+        picture-size: 400px;
+    }
+}
+
+component ShortcutsHelp inherits VerticalLayout {
+    private property <[{shortcut: string, detail: string}]> shortcuts: [
+        {
+            shortcut: "Ctrl + +",
+            detail: Logic.tr("Increase font size"),
+        },
+        {
+            shortcut: "Ctrl + -",
+            detail: Logic.tr("Decrease font size"),
+        },
+        {
+            shortcut: "Ctrl + Enter",
+            detail: Logic.tr("Send question"),
+        },
+    ];
+
+    HorizontalLayout {
+        padding-bottom: Theme.padding * 4;
+        Label {
+            text: Logic.tr("Shortcuts");
+            font-size: Theme.title1-font-size;
+            font-weight: Theme.bold-font-weight;
+        }
+    }
+
+    VerticalLayout {
+        alignment: LayoutAlignment.start;
+
+        for entry[index] in shortcuts: Rectangle {
+            background: Math.mod(index, 2) == 0 ? Theme.hover-background : Colors.transparent;
+
+            HorizontalLayout {
+                padding: Theme.padding * 2;
+
+                Label {
+                    width: 30%;
+                    text: entry.shortcut;
+                    overflow: elide;
+                }
+
+                Label {
+                    text: entry.detail;
+                    font-size: Theme.title4-font-size;
+                    overflow: elide;
+                }
+            }
+        }
+    }
+}
+
+export component HelpDetail inherits VerticalLayout {
+    spacing: Theme.spacing * 4;
+    padding: Theme.padding * 2;
+
+    SettingHelp { }
+
+    ShortcutsHelp { }
+}

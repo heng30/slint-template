@@ -1,0 +1,41 @@
+import { Theme, Icons } from "../theme.slint";
+import { IconBtn } from "icon-btn.slint";
+import { TextBtn } from "btn.slint";
+import { Label } from "label.slint";
+import { Link } from "link.slint";
+
+export component AccountBalance inherits Rectangle {
+    in-out property account-name <=> account.text;
+    in-out property balance <=> balance-label.text;
+
+    callback name-clicked <=> account.clicked;
+    callback copy <=> copy-btn.clicked;
+
+    VerticalLayout {
+        padding-top: Theme.padding * 5;
+        padding-bottom: Theme.padding * 5;
+        spacing: Theme.spacing * 2;
+        alignment: LayoutAlignment.start;
+
+        HorizontalLayout {
+            alignment: LayoutAlignment.center;
+            spacing: Theme.spacing * 2;
+
+            account := Link {
+                horizontal-alignment: TextHorizontalAlignment.center;
+                font-weight: 0.5;
+                font-size: Theme.title2-font-size;
+            }
+
+            copy-btn := IconBtn {
+                icon: Icons.copy;
+            }
+        }
+
+        balance-label := Label {
+            horizontal-alignment: TextHorizontalAlignment.center;
+            font-weight: 0.5;
+            font-size: Theme.title1-font-size * 1.5;
+        }
+    }
+}

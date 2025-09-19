@@ -1,0 +1,79 @@
+import "fonts/SourceHanSerifCN.ttf";
+import "fonts/SourceHanSansCN.otf";
+
+import { Util } from "util.slint";
+import { Logic } from "logic.slint";
+import { Theme, Icons } from "theme.slint";
+import { Store, DeviceType } from "store.slint";
+import { MobilePanel } from "panel/mobile/panel.slint";
+import { Toast, IconsDialogSetting, IconsDialog, ConfirmDialog, ConfirmDialogSetting, Blanket, LandingPage, ToastSetting, PopupActionSetting, AboutSetting, ConfirmDialogSetting } from "base/widgets.slint";
+
+export component TestDialog inherits Dialog {
+    title: "Test Dialog";
+
+    Rectangle {
+        background: red;
+        width: 300px;
+        height: 300px;
+    }
+}
+
+export component AppWindow inherits Window {
+    default-font-size: Theme.default-font-size;
+    default-font-weight: Theme.normal-font-weight;
+    default-font-family: Theme.default-font-family;
+    background: Theme.base-background;
+
+    MobilePanel { }
+
+    if IconsDialogSetting.show || ConfirmDialogSetting.show: Blanket {
+        clicked => {
+            IconsDialogSetting.show = false;
+            ConfirmDialogSetting.show = false;
+        }
+    }
+
+    if IconsDialogSetting.show: IconsDialog {
+        is-prevent-event-forward: true;
+        column-count: Store.device-type == DeviceType.Desktop ? 6 : 5;
+        icon-size: Store.device-type == DeviceType.Desktop ? Theme.icon-size * 3 : Theme.icon-size;
+        select-index(handle-type, index, user-data) => {
+        }
+    }
+
+    if ConfirmDialogSetting.show: ConfirmDialog {
+        is-prevent-event-forward: true;
+        width: Math.min(root.width * 0.9, self.vbox-preferred-width * 2);
+    }
+
+    if !ToastSetting.is-timeout || ToastSetting.is-hover: Toast {
+        x: root.width / 2 - self.width / 2;
+        y: 50px;
+        width: Math.min(root.width * 80%, self.preferred-width);
+        clicked => {
+            Logic.copy-to-clipboard(ToastSetting.text);
+        }
+    }
+
+    if Store.is-show-landing-page: LandingPage {
+        details: [
+            {
+                picture: Icons.landing-account,
+                description: Store.is-cn ? "这是一个Rust Slint 模板项目，提供一些基础的组件和其他基础功能，为新手提供一个快速开始一个新项目" : "This is a Rsut Slint template project. It provide some basic components and other features. It can help us start a new project quickly",
+            },
+            {
+                picture: Icons.landing-send,
+                description: Store.is-cn ? "这个项目集成了Github Action，每次push都会重新编译项目，每次更新tag都会重新发布二进制文件" : "It integrates Github Action, which will compile the project after pushing the project and publish the binary package to the release page after updating tag",
+            },
+            {
+                picture: Icons.landing-welcome,
+                description: Store.is-cn ? "欢迎使用" : "Welcome to use",
+            }
+        ];
+        skipped => {
+            Store.is-show-landing-page = false;
+        }
+    }
+}
+
+export { Util, Logic, Store, Theme, Icons, ToastSetting, PopupActionSetting, AboutSetting, ConfirmDialogSetting }

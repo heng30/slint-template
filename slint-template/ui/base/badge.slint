@@ -1,0 +1,42 @@
+import { Theme } from "../theme.slint";
+import { Label  } from "label.slint";
+
+// Example:
+// Rectangle {
+//     width: 200px;
+//     height: 200px;
+//     background: red;
+
+//     Badge {
+//         text: "99+";
+//         target-component-width: parent.width;
+//         target-component-height: parent.height;
+//     }
+// }
+
+export component Badge inherits Rectangle {
+    in-out property <color> text-color: Theme.base-color;
+    in-out property text <=> txt.text;
+    in-out property font-size <=> txt.font-size;
+
+    in-out property <length> target-component-width;
+    in-out property <length> target-component-height;
+
+    in-out property <length> hpadding: Theme.padding * 4;
+    in-out property <length> vpadding: Theme.padding;
+
+    background: Theme.thirdly-brand-color;
+    border-width: 2px;
+    border-radius: self.height / 2;
+    border-color: Theme.base-color;
+
+    x: target-component-width - self.width / 2;
+    y: -self.height / 2;
+    width: txt.width + root.hpadding;
+    height: txt.height + root.vpadding;
+
+    txt := Label {
+        text: "99+";
+        color: root.text-color;
+    }
+}

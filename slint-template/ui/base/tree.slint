@@ -1,0 +1,261 @@
+import { Theme, Icons } from "../theme.slint";
+import { Util } from "../util.slint";
+import { Label } from "label.slint";
+import { IconBtn } from "icon-btn.slint";
+import { TreeEntry } from "def.slint";
+
+// Example:
+// Tree {
+//     level-one-entries: [
+//         {
+//             is-open: true,
+//             current-node: "亚洲",
+//             icon: Icons.address,
+//         },
+//         {
+//             current-node: "北美洲",
+//         }
+//     ];
+//     level-two-entries: [
+//         {
+//             is-open: true,
+//             parent-node: "亚洲",
+//             current-node: "中国",
+//             icon: Icons.address,
+//         },
+//         {
+//             parent-node: "北美洲",
+//             current-node: "美国",
+//         }
+//     ];
+//     level-three-entries: [
+//         {
+//             parent-node: "中国",
+//             current-node: "珠海",
+//             icon: Icons.address,
+//             key: "zhuhai",
+//         },
+//         {
+//             parent-node: "中国",
+//             current-node: "广州",
+//             key: "guangzhou",
+//         },
+//         {
+//             parent-node: "美国",
+//             current-node: "纽约",
+//         },
+//         {
+//             parent-node: "美国",
+//             current-node: "加州",
+//         }
+//     ];
+//     clicked(entries, path) => {
+//         debug(entries[0], entries[1], entries[3]);
+//         debug(path);
+//     }
+// }
+
+export component Tree inherits Rectangle {
+    in-out property <length> font-size: Theme.title3-font-size;
+    in-out property <length> hpadding: Theme.padding * 2;
+    in-out property <length> vpadding: Theme.padding * 2;
+    in-out property <length> vspacing: Theme.padding * 2;
+    in-out property <length> indent: Theme.icon-size;
+    in-out property <length> indicator-icon-size: Theme.icon-size;
+    in-out property <color> indicator-icon-colorize: Theme.icon-color;
+    in-out property <length> icon-size: Theme.icon-size;
+    in-out property <color> icon-colorize: Theme.icon-color;
+    in-out property <color> checked-background: Theme.checked-background;
+
+    in-out property <image> open-indicator: Icons.arrow-down-fill;
+    in-out property <image> close-indicator: Icons.arrow-right-fill;
+
+    in-out property <[TreeEntry]> level-one-entries;
+    in-out property <[TreeEntry]> level-two-entries;
+    in-out property <[TreeEntry]> level-three-entries;
+
+    private property <string> checked-id;
+
+    callback clicked(entries: [string], path: string, key: string);
+
+    preferred-width: 300px;
+    preferred-height: 500px;
+
+    Flickable {
+        viewport-height: vbox.preferred-height;
+
+        vbox := VerticalLayout {
+            alignment: LayoutAlignment.start;
+
+            for lone[lone-index] in level-one-entries: VerticalLayout {
+                alignment: LayoutAlignment.start;
+                spacing: root.vspacing;
+                height: lone.is-open ? self.preferred-height : lone-rect.preferred-height;
+
+                lone-rect := Rectangle {
+                    private property <string> inner-checked-id: lone.current-node;
+                    private property <[string]> inner-checked-entries: [lone.current-node];
+
+                    property <[TreeEntry]> children-nodes: Util.find-tree-children-nodes(level-two-entries, lone.current-node);
+
+                    border-radius: Theme.border-radius;
+                    background: root.checked-id == inner-checked-id ? root.checked-background : (lone-ta.has-hover || lone-icon.has-hover ? Theme.hover-background : Colors.transparent);
+                    lone-ta := TouchArea {
+                        clicked => {
+                            root.checked-id = inner-checked-id;
+                            root.clicked(inner-checked-entries, inner-checked-id, lone.key);
+                        }
+                    }
+
+                    HorizontalLayout {
+                        padding-top: root.vpadding;
+                        padding-bottom: root.vpadding;
+                        padding-left: root.hpadding;
+                        padding-right: root.hpadding;
+                        spacing: Theme.spacing * 2;
+                        alignment: start;
+
+                        VerticalLayout {
+                            alignment: LayoutAlignment.center;
+
+                            lone-icon := IconBtn {
+                                visible: children-nodes.length > 0;
+                                icon-size: root.indicator-icon-size;
+                                icon: lone.is-open ? root.open-indicator : root.close-indicator;
+                                colorize: root.indicator-icon-colorize;
+                                clicked => {
+                                    lone.is-open = !lone.is-open;
+                                }
+                            }
+                        }
+
+                        if lone.icon.width > 0: VerticalLayout {
+                            alignment: LayoutAlignment.center;
+
+                            Image {
+                                width: root.icon-size;
+                                source: lone.icon;
+                                colorize: root.icon-colorize;
+                            }
+                        }
+
+                        Label {
+                            text: lone.current-node;
+                            font-size: root.font-size;
+                            overflow: elide;
+                        }
+                    }
+                }
+
+                for ltwo[ltwo-index] in lone-rect.children-nodes: VerticalLayout {
+                    visible: lone.is-open;
+                    height: lone.is-open ? self.preferred-height : 0;
+                    alignment: LayoutAlignment.start;
+
+                    ltwo-rect := Rectangle {
+                        private property <string> inner-checked-id: lone.current-node + "/" + ltwo.current-node;
+                        private property <[string]> inner-checked-entries: [lone.current-node, ltwo.current-node];
+
+                        property <[TreeEntry]> children-nodes: Util.find-tree-children-nodes(root.level-three-entries, ltwo.current-node);
+
+                        background: root.checked-id == inner-checked-id ? root.checked-background : (ltwo-ta.has-hover || ltwo-icon.has-hover ? Theme.hover-background : Colors.transparent);
+                        border-radius: Theme.border-radius;
+
+                        ltwo-ta := TouchArea {
+                            clicked => {
+                                root.checked-id = inner-checked-id;
+                                root.clicked(inner-checked-entries, inner-checked-id, ltwo.key);
+                            }
+                        }
+
+                        HorizontalLayout {
+                            padding-top: root.vpadding;
+                            padding-bottom: root.vpadding;
+                            padding-left: root.hpadding + root.indent;
+                            padding-right: root.hpadding;
+                            spacing: Theme.spacing * 2;
+                            alignment: start;
+
+                            VerticalLayout {
+                                alignment: LayoutAlignment.center;
+
+                                ltwo-icon := IconBtn {
+                                    visible: children-nodes.length > 0;
+                                    icon-size: root.indicator-icon-size;
+                                    icon: ltwo.is-open ? root.open-indicator : root.close-indicator;
+                                    colorize: root.indicator-icon-colorize;
+
+                                    clicked => {
+                                        ltwo.is-open = !ltwo.is-open;
+                                    }
+                                }
+                            }
+
+                            if ltwo.icon.width > 0: VerticalLayout {
+                                alignment: LayoutAlignment.center;
+
+                                Image {
+                                    width: root.icon-size;
+                                    source: ltwo.icon;
+                                    colorize: root.icon-colorize;
+                                }
+                            }
+
+                            Label {
+                                text: ltwo.current-node;
+                                font-size: root.font-size;
+                                overflow: elide;
+                            }
+                        }
+                    }
+
+                    for lthree[iltree-ndex] in ltwo-rect.children-nodes: VerticalLayout {
+                        visible: ltwo.is-open;
+                        height: ltwo.is-open ? self.preferred-height : 0;
+                        alignment: LayoutAlignment.start;
+
+                        lthree-rect := Rectangle {
+                            private property <string> inner-checked-id: lone.current-node + "/" + ltwo.current-node + "/" + lthree.current-node;
+                            private property <[string]> inner-checked-entries: [lone.current-node, ltwo.current-node, lthree.current-node];
+
+                            border-radius: Theme.border-radius;
+                            background: root.checked-id == inner-checked-id ? root.checked-background : (lthree-ta.has-hover ? Theme.hover-background : Colors.transparent);
+
+                            lthree-ta := TouchArea {
+                                clicked => {
+                                    root.checked-id = inner-checked-id;
+                                    root.clicked(inner-checked-entries, inner-checked-id, lthree.key);
+                                }
+                            }
+
+                            HorizontalLayout {
+                                padding-top: root.vpadding;
+                                padding-bottom: root.vpadding;
+                                padding-left: (root.hpadding + root.indent) * 2 + root.icon-size;
+                                padding-right: root.hpadding;
+                                spacing: Theme.spacing * 2;
+                                alignment: start;
+
+                                if lthree.icon.width > 0: VerticalLayout {
+                                    alignment: LayoutAlignment.center;
+
+                                    Image {
+                                        width: root.icon-size;
+                                        source: lthree.icon;
+                                        colorize: root.icon-colorize;
+                                    }
+                                }
+
+                                Label {
+                                    text: lthree.current-node;
+                                    font-size: root.font-size;
+                                    overflow: elide;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

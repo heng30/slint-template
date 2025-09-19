@@ -1,0 +1,99 @@
+import { Theme } from "../theme.slint";
+import { Util } from "../util.slint";
+import { Label } from "label.slint";
+import { Link } from "link.slint";
+import { Divider } from "divider.slint";
+
+export struct ParagraphEntry {
+    title: string,
+    title-link: string,
+    contents: [string],
+    picture: image,
+}
+
+export component Paragraph inherits Rectangle {
+    in-out property <ParagraphEntry> entry;
+
+    in-out property <length> title-font-size: Theme.title2-font-size;
+    in-out property title-color <=> lb-title.color;
+
+    in-out property <length> content-font-size: Theme.default-font-size;
+    in-out property <color> content-color: Theme.regular-text-color;
+
+    in-out property <length> picture-size: 300px;
+    in-out property <bool> is-picture-before-contents;
+    in-out property <bool> is-show-divider;
+
+    preferred-height: vbox.preferred-height;
+
+    vbox := VerticalLayout {
+        lb-title := Link {
+            padding-bottom: Theme.padding * 4;
+            enabled: entry.title-link != "";
+            text: entry.title;
+            font-size: root.title-font-size;
+            font-weight: Theme.bold-font-weight;
+            color: Theme.primary-text-color;
+            is-show-icon: entry.title-link != "";
+
+            clicked => {
+                Util.open-url("Default", entry.title-link);
+            }
+        }
+
+        if entry.picture.width > 0 && root.is-picture-before-contents: HorizontalLayout {
+            alignment: LayoutAlignment.center;
+            padding: Theme.padding * 4;
+
+            Rectangle {
+                border-radius: Theme.border-radius * 2;
+                width: img.width;
+                height: img.height;
+                clip: true;
+
+                img := Image {
+                    width: Math.min(root.picture-size, entry.picture.width * 1px);
+                    height: self.width * entry.picture.height / entry.picture.width;
+                    source: entry.picture;
+                }
+            }
+        }
+
+        for item[index] in entry.contents: VerticalLayout {
+            padding-bottom: index == entry.contents.length - 1 ? 0 : Theme.padding * 2;
+
+            TextInput {
+                text: item;
+                font-size: root.content-font-size;
+                color: root.content-color;
+                wrap: word-wrap;
+                read-only: true;
+                single-line: false;
+                vertical-alignment: TextVerticalAlignment.center;
+            }
+        }
+
+        if entry.picture.width > 0 && !root.is-picture-before-contents: HorizontalLayout {
+            alignment: LayoutAlignment.center;
+            padding: Theme.padding * 4;
+
+            Rectangle {
+                border-radius: Theme.border-radius * 2;
+                width: img2.width;
+                height: img2.height;
+                clip: true;
+
+                img2 := Image {
+                    width: Math.min(root.picture-size, entry.picture.width * 1px);
+                    height: self.width * entry.picture.height / entry.picture.width;
+                    source: entry.picture;
+                }
+            }
+        }
+
+        if root.is-show-divider: HorizontalLayout {
+            padding-top: Theme.padding * 4;
+            Divider { }
+        }
+    }
+}

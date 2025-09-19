@@ -1,0 +1,41 @@
+import { Theme } from "../theme.slint";
+import { Util } from "../util.slint";
+
+// Example:
+// FlashProgress {
+//     progress: 0.4;
+//     finished-color: blue;
+// }
+
+export component FlashProgress inherits Rectangle {
+    in-out property <float> progress;
+    in-out property <bool> is-stop;
+    in-out property <color> finished-color: Theme.thirdly-brand-color;
+    in-out property <length> move-px-per-second: 200px;
+
+    height: Theme.default-font-size / 2;
+    border-radius: self.height / 2;
+    background: Theme.placeholder-text-color;
+    clip: true;
+
+    init => {
+        debug(progress, root.width, left-rec.width);
+    }
+
+    left-rec := Rectangle {
+        x: 0;
+        width: parent.width * parent.progress;
+        border-radius: parent.border-radius;
+        background: finished-color;
+    }
+
+    if progress < 1.0 && !is-stop: Rectangle {
+        private property <length> start-x: left-rec.width - self.width / 2;
+        private property <length> remain-len: parent.width - left-rec.width - self.width / 2;
+
+        x: start-x + remain-len * Util.progress-value(Math.max(1s, 1s * remain-len / Math.max(1px, move-px-per-second)));
+        width: Math.max((parent.width - left-rec.width) * 0.2, left-rec.height * 2);
+        border-radius: self.height / 2;
+        background: left-rec.background;
+    }
+}

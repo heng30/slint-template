@@ -1,0 +1,123 @@
+import { Theme, Icons } from "../theme.slint";
+import { IconBtn, RotationType } from "./icon-btn.slint";
+import { Label } from "./label.slint";
+
+export enum TransactionTileStatus {
+    Success,
+    Pending,
+    Error,
+    Loading,
+}
+
+export struct TransactionTileEntry {
+    uuid: string,
+    network: string,
+    hash: string,
+    balance: string,
+    time: string,
+    status: TransactionTileStatus,
+}
+
+export component TransactionTile inherits Rectangle {
+    callback icon-clicked <=> icon-btn.clicked;
+    callback hash-clicked <=> hash-ta.clicked;
+
+    in property <image> icon: status-icon(entry.status);
+    in property <color> icon-colorize: status-icon-colorize(entry.status);
+    in property <length> icon-size: Theme.icon-size;
+
+    in-out property <color> hash-color: Theme.primary-text-color;
+    in-out property <length> hash-font-size: Theme.title3-font-size;
+
+    in-out property <color> balance-color: Theme.regular-text-color;
+    in-out property <length> balance-font-size: Theme.default-font-size;
+
+    in-out property <TransactionTileEntry> entry;
+
+    pure public function status-icon(status: TransactionTileStatus) -> image {
+        if (status == TransactionTileStatus.Success) {
+            return Icons.success-big-fill;
+        } else if (status == TransactionTileStatus.Pending) {
+            return Icons.pending-fill;
+        } else if (status == TransactionTileStatus.Loading) {
+            return Icons.loading;
+        } else {
+            return Icons.error-fill;
+        }
+    }
+
+    pure public function status-icon-colorize(status: TransactionTileStatus) -> color {
+        if (status == TransactionTileStatus.Success) {
+            return Theme.success-color;
+        } else if (status == TransactionTileStatus.Pending) {
+            return Theme.warning-color;
+        } else if (status == TransactionTileStatus.Loading) {
+            return Theme.secondary-brand-color;
+        } else {
+            return Theme.danger-color;
+        }
+    }
+
+    background: Theme.base-background;
+    drop-shadow-blur: Theme.padding * 2;
+    drop-shadow-color: Theme.base-background-drop-shadow;
+
+    HorizontalLayout {
+        padding: Theme.padding * 2;
+        spacing: Theme.spacing * 2;
+        alignment: LayoutAlignment.space-between;
+
+        VerticalLayout {
+            width: root.width - icon-rect.width - parent.spacing - parent.padding * 2;
+            alignment: LayoutAlignment.space-between;
+            horizontal-stretch: 1;
+
+            Label {
+                width: self.preferred-width;
+                font-size: root.hash-font-size;
+                color: root.hash-color;
+                text: entry.hash;
+                wrap: TextWrap.no-wrap;
+                overflow: TextOverflow.elide;
+                font-weight: Theme.bold-font-weight;
+
+                hash-ta := TouchArea {
+                    mouse-cursor: MouseCursor.pointer;
+                }
+            }
+
+            HorizontalLayout {
+                alignment: LayoutAlignment.space-between;
+                spacing: Theme.spacing;
+
+                Label {
+                    text: entry.balance;
+                    wrap: TextWrap.no-wrap;
+                    overflow: TextOverflow.elide;
+                    color: root.balance-color;
+                    font-size: root.balance-font-size;
+                }
+
+                Label {
+                    text: entry.time;
+                    wrap: TextWrap.no-wrap;
+                    overflow: TextOverflow.elide;
+                    color: Theme.have-read-text-color;
+                    font-size: Theme.default-font-size - 2px;
+                }
+            }
+        }
+
+        icon-rect := Rectangle {
+            width: root.icon-size + Theme.padding * 4;
+
+            icon-btn := IconBtn {
+                icon-size: root.icon-size;
+                colorize: root.icon-colorize;
+                icon: root.icon;
+                rotation-type: TransactionTileStatus.Loading == entry.status ? RotationType.Auto : RotationType.None;
+                icon-rotation-angle: TransactionTileStatus.Loading == entry.status ? 240deg * animation-tick() / 0.5s : 0;
+            }
+        }
+    }
+}

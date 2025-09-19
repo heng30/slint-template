@@ -1,0 +1,68 @@
+import { Theme } from "../theme.slint";
+import { Link } from "./link.slint";
+
+// Example:
+// News {
+//     width: parent.width * 0.6;
+//     link-text: "How to learn Slint";
+//     pub-date: "12-15 10:12";
+//     summary: "the character will be either a control character, or it will be mapped to a private unicode character. The mapping of these non-printable, special characters is available in the Key namespace";
+//     author: "Heng30";
+//     is-read: false;
+// }
+
+export component News inherits Rectangle {
+    height: vbox.preferred-height;
+
+    callback link-clicked();
+
+    in property <string> link-text;
+    in property <string> pub-date;
+    in property <string> summary;
+    in property <string> author;
+    in property <bool> is-read;
+
+    background: Theme.base-background;
+    border-radius: Theme.border-radius;
+    drop-shadow-blur: Theme.padding * 2;
+    drop-shadow-color: Theme.base-background-drop-shadow;
+
+    vbox := VerticalLayout {
+        padding: Theme.padding * 2;
+        spacing: Theme.spacing * 2;
+        alignment: start;
+
+        link := Link {
+            is-read: root.is-read;
+            text: root.link-text;
+
+            clicked => {
+                root.link-clicked();
+            }
+        }
+
+        Text {
+            font-size: Theme.default-font-size - 1px;
+            color: root.is-read ? Theme.have-read-text-color : Theme.regular-text-color;
+            text: root.summary;
+            wrap: word-wrap;
+        }
+
+        HorizontalLayout {
+            alignment: end;
+            spacing: Theme.padding * 4;
+
+            if root.author != "": Text {
+                font-size: Theme.default-font-size - 4px;
+                color: Theme.placeholder-text-color;
+                text: root.author;
+            }
+
+            if pub-date != "": Text {
+                font-size: Theme.default-font-size - 4px;
+                color: Theme.placeholder-text-color;
+                text: root.pub-date;
+            }
+        }
+    }
+}
