@@ -1,4 +1,7 @@
-use crate::{slint_generatedAppWindow::{AppWindow, Logic}, global_logic}
+use crate::{
+    global_logic,
+    slint_generatedAppWindow::{AppWindow, Logic},
+};
 
 use slint::ComponentHandle;
 
