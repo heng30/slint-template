@@ -6,7 +6,7 @@ import { ElevatedBtn } from "elevated-btn.slint";
 
 export component CancelBtn inherits IconBtn {
     use-auto-size: true;
-    icon: Icons.cancel;
+    icon: Icons.cancel-light;
     icon-size: Theme.icon-size;
     border-radius: Theme.border-radius;
     bg-color: Theme.info-color.brighter(50%);
@@ -18,7 +18,7 @@ export component CancelBtn inherits IconBtn {
 
 export component ConfirmBtn inherits IconBtn {
     use-auto-size: true;
-    icon: Icons.success;
+    icon: Icons.success-light;
     border-radius: Theme.border-radius;
     bg-color: Theme.thirdly-brand-color.darker(20%);
     bg-pressed-color: self.bg-color.darker(30%);
@@ -95,7 +95,7 @@ export component CancelAndConfirmIconsBtn inherits HorizontalLayout {
         ElevatedBtn {
             is-show-tip: root.is-show-tip;
             tip: root.cancel-tip;
-            icon: Icons.close;
+            icon: Icons.close2-light;
             width: root.icon-size;
             colorize: Colors.white;
             background: self.has-hover ? Theme.info-color : Theme.info-color.brighter(30%);
@@ -112,7 +112,7 @@ export component CancelAndConfirmIconsBtn inherits HorizontalLayout {
         ElevatedBtn {
             is-show-tip: root.is-show-tip;
             tip: root.confirm-tip;
-            icon: Icons.checked;
+            icon: Icons.checked-light;
             width: root.icon-size;
             colorize: Colors.white;
             background: self.has-hover ? Theme.success-color.darker(20%) : Theme.success-color;

@@ -6,7 +6,7 @@ ROOT_DIR="$DIR/../.."
 
 app_name="slint-template"
 icon_name="brand.png"
-icon_dir="$ROOT_DIR/slint-template/ui/images"
+icon_dir="$ROOT_DIR/slint-template/ui/images/png"
 bin_dir="$DIR/package/usr/local/bin"
 dst_icon_name="${app_name}.png"
 dst_icon_name_svg="${app_name}.svg"

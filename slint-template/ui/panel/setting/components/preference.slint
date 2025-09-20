@@ -93,7 +93,7 @@ export component Preference inherits SettingDetail {
 
         if Store.device-type == DeviceType.Desktop: SettingDetailInnerVbox {
             SettingDetailSwitch {
-                icon: Icons.status;
+                icon: Icons.frameless-window-light;
                 text: Logic.tr("Frameless window");
                 checked: root.no-frame;
                 toggled => {
@@ -106,7 +106,7 @@ export component Preference inherits SettingDetail {
 
         if Store.device-type == DeviceType.Desktop: SettingDetailInnerVbox {
             SettingDetailSwitch {
-                icon: Icons.stackoverflow;
+                icon: Icons.stack-overflow-fill;
                 text: Logic.tr("Window always on top");
                 checked: root.always-on-top;
                 toggled => {

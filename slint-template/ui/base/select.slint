@@ -61,7 +61,7 @@ export component Select inherits Rectangle {
         Image {
             height: lb.preferred-height;
             width: self.height;
-            source: is-indicator-down ? Icons.arrow-down : (fs.has-focus ? Icons.arrow-down : Icons.arrow-up);
+            source: is-indicator-down ? Icons.arrow-down-light : (fs.has-focus ? Icons.arrow-down-light : Icons.arrow-up-light);
             colorize: lb.color;
         }
     }
@@ -125,7 +125,7 @@ export component Select inherits Rectangle {
                             Image {
                                 height: pop-lb.preferred-height * 0.6;
                                 width: self.height;
-                                source: Icons.checked;
+                                source: Icons.checked-light;
                                 colorize: pop-lb.color;
                             }
                         }

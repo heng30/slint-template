@@ -57,7 +57,7 @@ export component SignIn inherits Rectangle {
                     spacing: Theme.spacing;
 
                     username-lineedit := LineInput {
-                        icon: Icons.paste;
+                        icon: Icons.paste-light;
                         width: root.width - Theme.padding * 4;
                         placeholder-text: Logic.tr("Username");
                         is-show-icon: true;
@@ -87,7 +87,7 @@ export component SignIn inherits Rectangle {
                     password-first-lineedit := LineInput {
                         width: root.width - Theme.padding * 4;
                         placeholder-text: Logic.tr("At least 8 chars");
-                        icon: parent.is-show-password ? Icons.eye : Icons.close-eye;
+                        icon: parent.is-show-password ? Icons.eye-light : Icons.close-eye-light;
                         input-type: parent.is-show-password ? InputType.text : InputType.password;
                         is-show-icon: true;
 
@@ -115,7 +115,7 @@ export component SignIn inherits Rectangle {
                     password-second-lineedit := LineInput {
                         width: root.width - Theme.padding * 4;
                         placeholder-text: Logic.tr("At least 8 chars");
-                        icon: parent.is-show-password ? Icons.eye : Icons.close-eye;
+                        icon: parent.is-show-password ? Icons.eye-light : Icons.close-eye-light;
                         input-type: is-show-password ? InputType.text : InputType.password;
                         is-show-icon: true;
 

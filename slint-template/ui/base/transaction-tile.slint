@@ -36,11 +36,11 @@ export component TransactionTile inherits Rectangle {
 
     pure public function status-icon(status: TransactionTileStatus) -> image {
         if (status == TransactionTileStatus.Success) {
-            return Icons.success-big-fill;
+            return Icons.success-fill;
         } else if (status == TransactionTileStatus.Pending) {
             return Icons.pending-fill;
         } else if (status == TransactionTileStatus.Loading) {
-            return Icons.loading;
+            return Icons.loading-light;
         } else {
             return Icons.error-fill;
         }

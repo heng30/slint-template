@@ -8,7 +8,7 @@ import { CancelBtn, ConfirmBtn } from "./btn.slint";
 
 export global ConfirmDialogSetting {
     in-out property <bool> show;
-    out property <string> title-text: "警告";
+    out property <string> title-text: Logic.tr("Warn");
     out property <string> body-text;
     out property <string> handle-type;
     out property <string> user-data;
@@ -61,7 +61,6 @@ export component ConfirmDialog inherits Rectangle {
 
             CancelBtn {
                 text: Logic.tr("Cancel");
-                icon: Icons.cancel;
 
                 clicked => {
                     ConfirmDialogSetting.show = false;
@@ -69,7 +68,6 @@ export component ConfirmDialog inherits Rectangle {
             }
 
             ConfirmBtn {
-                icon: Icons.success;
                 text: Logic.tr("Confirm");
 
                 clicked => {

@@ -31,13 +31,13 @@ export component ElevatedBtn inherits Rectangle {
 }
 
 export component CancelElevatedBtn inherits ElevatedBtn {
-    icon: Icons.close;
+    icon: Icons.close2-light;
     colorize: Colors.white;
     background: self.has-hover ? Theme.info-color : Theme.info-color.brighter(30%);
 }
 
 export component ConfirmElevatedBtn inherits ElevatedBtn {
-    icon: Icons.checked;
+    icon: Icons.checked-light;
     colorize: Colors.white;
     background: self.has-hover ? Theme.success-color.darker(20%) : Theme.success-color;
 }

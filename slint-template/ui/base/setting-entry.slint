@@ -25,7 +25,7 @@ export component SettingEntry inherits Rectangle {
 
         eib := IconBtn {
             background: Colors.transparent;
-            icon: Icons.back;
+            icon: Icons.back-light;
             icon-rotation-angle: 180deg;
             colorize: root.background.darker(30%);
             is-ltr: false;
@@ -61,7 +61,7 @@ export component SettingEntryV2 inherits Rectangle {
     in-out property <length> vpadding: Theme.padding * 2;
 
     in-out property <bool> is-show-right-icon;
-    in-out property <image> right-icon: Icons.star;
+    in-out property <image> right-icon: Icons.star-fill;
     in-out property <color> right-icon-colorize: label.color;
     in-out property <length> right-icon-size;
 

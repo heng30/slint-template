@@ -66,17 +66,6 @@ export global Util {
         }
     }
 
-    public pure function icon-source(status: ToastStatus) -> image {
-        if (status == ToastStatus.Success) {
-            return Icons.success;
-        } else if (status == ToastStatus.Warning) {
-            return Icons.warning;
-        } else if (status == ToastStatus.Danger) {
-            return Icons.danger;
-        }
-        return Icons.info;
-    }
-
     pure public function get-token-icon(symbol: string, mint-address: string, icon-extension: string) -> image {
         return Icons.token;
     }
@@ -107,13 +96,13 @@ export global Util {
 
     pure public function image-from-media-control-status(status: MediaControlStatus) -> image {
         if (status == MediaControlStatus.Once) {
-            return Icons.play-once;
+            return Icons.play-once-light;
         } else if (status == MediaControlStatus.Loop) {
-            return Icons.oblong-loop;
+            return Icons.loop-light;
         } else if (status == MediaControlStatus.LoopOne) {
-            return Icons.loop-one;
+            return Icons.loop-one-light;
         } else {
-            return Icons.shuffle;
+            return Icons.shuffle-light;
         }
     }
 

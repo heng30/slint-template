@@ -42,7 +42,7 @@ export component CheckBtn inherits Rectangle {
                     width: 60%;
                     height: self.width;
                     colorize: root.enabled ? Theme.light-text-color : parent.border-color;
-                    source: Icons.checked;
+                    source: Icons.checked-light;
                 }
             }
         }
@@ -64,7 +64,6 @@ export component CheckBtn inherits Rectangle {
             if (gain-focus-when-clicked) {
                 fs.focus();
             }
-
             if (!not-allow-breaking-checked-binding) {
                 root.checked = !root.checked;
             }

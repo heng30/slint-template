@@ -74,7 +74,7 @@ export component AudioControl inherits Rectangle {
 
             sound-btn := IconBtn {
                 use-auto-size: true;
-                icon: root.current-sound <= 0 ? Icons.sound-off : Icons.sound-on;
+                icon: root.current-sound <= 0 ? Icons.sound-off-fill : Icons.sound-on-fill;
                 show-icon-hover-background: false;
                 icon-size: root.icon-size;
 
@@ -106,7 +106,7 @@ export component AudioControl inherits Rectangle {
             spacing: is-hide-tree-control-btns ? Theme.spacing * 4 : 0;
 
             if is-hide-tree-control-btns: IconBtn {
-                icon: root.is-playing ? Icons.audio-stop : Icons.control-start;
+                icon: root.is-playing ? Icons.audio-stop-light : Icons.control-start-light;
                 icon-size: root.icon-size * 1.8;
 
                 clicked() => {
@@ -140,7 +140,7 @@ export component AudioControl inherits Rectangle {
             IconBtn {
                 width: root.width * 25%;
                 show-icon-hover-background: false;
-                icon: Icons.skip-next;
+                icon: Icons.skip-next-light;
                 icon-size: root.icon-size;
                 bg-color: Theme.base-background;
                 use-auto-size: true;
@@ -157,7 +157,7 @@ export component AudioControl inherits Rectangle {
             IconBtn {
                 width: root.width * 40%;
                 show-icon-hover-background: false;
-                icon: root.is-playing ? Icons.audio-stop : Icons.control-start;
+                icon: root.is-playing ? Icons.audio-stop-light : Icons.control-start-light;
                 icon-size: root.icon-size;
                 bg-color: Theme.base-background;
                 use-auto-size: true;
@@ -179,7 +179,7 @@ export component AudioControl inherits Rectangle {
             IconBtn {
                 width: root.width * 25%;
                 show-icon-hover-background: false;
-                icon: Icons.skip-next;
+                icon: Icons.skip-next-light;
                 icon-size: root.icon-size;
                 bg-color: Theme.base-background;
                 use-auto-size: true;

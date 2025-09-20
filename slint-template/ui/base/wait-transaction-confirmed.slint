@@ -78,7 +78,7 @@ export component WaitTransactionConfirmed inherits SettingDetail {
             signature-input := LineInput {
                 width: root.width - Theme.spacing * 4;
                 enabled: false;
-                icon: Icons.browser-access;
+                icon: Icons.browser-access-light;
                 is-show-icon: true;
             }
         }
@@ -99,7 +99,7 @@ export component WaitTransactionConfirmed inherits SettingDetail {
                 border-radius: Theme.border-radius;
                 bg-color: Theme.warning-color;
                 text: Logic.tr("Transaction failed");
-                icon: Icons.warning;
+                icon: Icons.warning-light;
                 clicked => {
                     root.back();
                 }

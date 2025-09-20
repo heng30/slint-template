@@ -5,7 +5,7 @@ import { Logic } from "../logic.slint";
 export component Loading inherits Rectangle {
     in property <string> loading-text: Logic.tr("Loading...");
     in property <duration> duration: 0.5s;
-    in property <image> loading-icon: Icons.loading;
+    in property <image> loading-icon: Icons.loading-light;
     in property <length> icon-size: Theme.icon-size;
     in property <color> colorize: Theme.primary-text-color;
     in property <length> font-size: Theme.default-font-size;

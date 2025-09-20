@@ -29,14 +29,14 @@ export component Head inherits Rectangle {
         ic := IconBtn {
             icon-size: Theme.icon-size;
             background: Colors.transparent;
-            icon: Icons.back;
+            icon: Icons.back-light;
             text: root.title;
         }
 
         @children
     }
 
-    if is-show-divider : Divider {
+    if is-show-divider: Divider {
         x: 0;
         y: root.height - self.height;
         background: Theme.base-border-color;

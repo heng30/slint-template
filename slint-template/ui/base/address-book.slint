@@ -68,7 +68,7 @@ export component AddressBook inherits Rectangle {
                 middle-mouse-cursor: MouseCursor.pointer;
 
                 is-show-right-icon: true;
-                right-icon: Icons.copy;
+                right-icon: Icons.copy-light;
 
                 middle-clicked => {
                     AddressBookSetting.current-entry = item;
@@ -95,7 +95,7 @@ export component AddressBook inherits Rectangle {
 
 export component AddressBookDetail inherits SettingDetail {
     private property <AddressBookEntry> entry: AddressBookSetting.current-entry;
-    in property <image> qr-code: Icons.no-data;
+    in property <image> qr-code: Icons.no-data-fill;
     in-out property address <=> address-input.text;
     in-out property name <=> name-input.text;
 
@@ -133,7 +133,7 @@ export component AddressBookDetail inherits SettingDetail {
                 width: root.width - Theme.padding * 4;
                 text: entry.name;
                 is-show-icon: true;
-                icon: self.enabled ? Icons.checked-box : Icons.edit;
+                icon: self.enabled ? Icons.check-box-light : Icons.edit-light;
                 clicked => {
                     self.enabled = !self.enabled;
 
@@ -162,7 +162,7 @@ export component AddressBookDetail inherits SettingDetail {
                 width: root.width - Theme.padding * 4;
                 text: entry.address;
 
-                icon: self.enabled ? Icons.checked-box : Icons.edit;
+                icon: self.enabled ? Icons.check-box-light : Icons.edit-light;
                 is-show-icon: true;
                 clicked => {
                     self.enabled = !self.enabled;
@@ -185,7 +185,7 @@ export component AddressBookDetail inherits SettingDetail {
         VerticalLayout {
             padding-top: Theme.padding * 5;
             CancelBtn {
-                icon: Icons.delete;
+                icon: Icons.delete-light;
                 colorize: Theme.danger-color;
                 text-color: Theme.danger-color;
                 border-radius: Theme.border-radius;

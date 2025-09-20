@@ -167,7 +167,7 @@ export component DatePicker inherits Rectangle {
             spacing: Theme.spacing * 4;
 
             IconBtn {
-                icon: Icons.arrow-left;
+                icon: Icons.arrow-left-light;
 
                 clicked => {
                     prev-month();
@@ -234,7 +234,7 @@ export component DatePicker inherits Rectangle {
             }
 
             IconBtn {
-                icon: Icons.arrow-right;
+                icon: Icons.arrow-right-light;
 
                 clicked => {
                     next-month();
@@ -294,7 +294,6 @@ export component DatePicker inherits Rectangle {
 
                 CancelBtn {
                     text: Logic.tr("Cancel");
-                    icon: Icons.cancel;
 
                     clicked => {
                         root.canceled()
@@ -302,7 +301,6 @@ export component DatePicker inherits Rectangle {
                 }
 
                 ConfirmBtn {
-                    icon: Icons.success;
                     text: Logic.tr("Confirm");
 
                     clicked => {

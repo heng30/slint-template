@@ -106,7 +106,7 @@ export component Mnemonic inherits Rectangle {
                     spacing: Theme.padding * 4;
 
                     if is-show-refresh-btn: IconBtn {
-                        icon: Icons.refresh;
+                        icon: Icons.refresh-light;
 
                         clicked => {
                             refresh(is-mnemonic-counts-12 ? 12 : 24);
@@ -114,14 +114,14 @@ export component Mnemonic inherits Rectangle {
                     }
 
                     if is-read-only: IconBtn {
-                        icon: Icons.copy;
+                        icon: Icons.copy-light;
                         clicked => {
                             copy(mnemonics);
                         }
                     }
 
                     if !is-read-only: IconBtn {
-                        icon: Icons.paste;
+                        icon: Icons.paste-light;
                         clicked => {
                             paste();
                         }
@@ -185,7 +185,7 @@ export component Mnemonic inherits Rectangle {
                 }
 
                 if is-show-switch-mnemonic-counts-btn: TextBtn {
-                    icon: Icons.switch;
+                    icon: Icons.switch-light;
                     text: switch-mnemonic-counts-btn-text;
                     clicked => {
                         if (is-read-only) {

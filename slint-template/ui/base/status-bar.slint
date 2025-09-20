@@ -105,7 +105,7 @@ export component StatusBar inherits Rectangle {
                 spacing: Theme.spacing * 2;
 
                 IconBtn {
-                    icon: Icons.status-bar-min;
+                    icon: Icons.status-bar-min-fill;
                     icon-size: root.icon-size;
                     colorize: Theme.warning-color;
                     show-icon-hover-background: root.show-icon-hover-background;
@@ -124,7 +124,7 @@ export component StatusBar inherits Rectangle {
 
                 IconBtn {
                     enabled-toucharea: !root.disable-maximal;
-                    icon: Icons.status-bar-max;
+                    icon: Icons.status-bar-max-fill;
                     icon-size: root.icon-size;
                     colorize: root.disable-maximal ? Theme.disabled-color : Theme.success-color;
                     show-icon-hover-background: root.show-icon-hover-background;
@@ -136,11 +136,11 @@ export component StatusBar inherits Rectangle {
                         if (root.is-app-window-bar) {
                             if (Util.get-is-max-window()) {
                                 Util.max-window(false);
-                                self.icon = Icons.status-bar-max;
+                                self.icon = Icons.status-bar-max-fill;
                                 self.tip = Logic.tr("maximal");
                             } else {
                                 Util.max-window(true);
-                                self.icon = Icons.status-bar-normal;
+                                self.icon = Icons.status-bar-normal-fill;
                                 self.tip = Logic.tr("normal");
                             }
                         } else {
@@ -150,7 +150,7 @@ export component StatusBar inherits Rectangle {
                 }
 
                 IconBtn {
-                    icon: Icons.status-bar-close;
+                    icon: Icons.status-bar-close-fill;
                     icon-size: root.icon-size;
                     colorize: Theme.danger-color;
                     show-icon-hover-background: root.show-icon-hover-background;

@@ -39,7 +39,7 @@ export component Pagination inherits Rectangle {
         spacing: Theme.spacing;
 
         IconBtn {
-            icon: Icons.arrow-left-round;
+            icon: Icons.arrow-left-round-light;
             use-auto-size: true;
             icon-size: root.icon-size;
             enabled-toucharea: root.real-current-page > 0;
@@ -70,7 +70,7 @@ export component Pagination inherits Rectangle {
 
         IconBtn {
             is-ltr: false;
-            icon: Icons.arrow-right-round;
+            icon: Icons.arrow-right-round-light;
             use-auto-size: true;
             icon-size: root.icon-size;
             enabled-toucharea: root.real-current-page < root.total-pages - 1;
@@ -93,7 +93,7 @@ export component Pagination inherits Rectangle {
 
         IconBtn {
             enabled-toucharea: root.real-current-page > 0;
-            icon: Icons.arrow-left-round;
+            icon: Icons.arrow-left-round-light;
             use-auto-size: true;
             icon-size: root.icon-size;
             colorize: root.text-color;
@@ -154,7 +154,8 @@ export component Pagination inherits Rectangle {
                         is-circle: true;
                         text: inner-real-current-page + 1;
                         font-size: root.font-size;
-                        background: root.real-current-page == inner-real-current-page ? Theme.thirdly-brand-color : Colors.transparent; text-color: root.real-current-page == inner-real-current-page ? Theme.light-text-color : root.text-color;
+                        background: root.real-current-page == inner-real-current-page ? Theme.thirdly-brand-color : Colors.transparent;
+                        text-color: root.real-current-page == inner-real-current-page ? Theme.light-text-color : root.text-color;
 
                         clicked => {
                             root.real-current-page = inner-real-current-page;
@@ -167,7 +168,7 @@ export component Pagination inherits Rectangle {
 
         IconBtn {
             is-ltr: false;
-            icon: Icons.arrow-right-round;
+            icon: Icons.arrow-right-round-light;
             use-auto-size: true;
             icon-size: root.icon-size;
             enabled-toucharea: root.real-current-page < root.total-pages - 1;

@@ -77,7 +77,7 @@ export component VideoControl inherits Rectangle {
                 spacing: Theme.spacing * 4;
 
                 if !root.is-hide-prev-btn: IconBtn {
-                    icon: Icons.skip-next;
+                    icon: Icons.skip-next-light;
                     icon-rotation-angle: 180deg;
                     show-icon-hover-background: false;
                     icon-size: root.icon-size * 1.8;
@@ -89,7 +89,7 @@ export component VideoControl inherits Rectangle {
 
                 IconBtn {
                     show-icon-hover-background: false;
-                    icon: root.is-playing ? Icons.audio-stop : Icons.control-start;
+                    icon: root.is-playing ? Icons.audio-stop-light : Icons.control-start-light;
                     icon-size: root.icon-size * 1.8;
 
                     clicked() => {
@@ -104,7 +104,7 @@ export component VideoControl inherits Rectangle {
                 }
 
                 if !root.is-hide-next-btn: IconBtn {
-                    icon: Icons.skip-next;
+                    icon: Icons.skip-next-light;
                     show-icon-hover-background: false;
                     icon-size: root.icon-size * 1.8;
 
@@ -156,7 +156,7 @@ export component VideoControl inherits Rectangle {
 
                 sound-btn := IconBtn {
                     use-auto-size: true;
-                    icon: root.current-sound <= 0 ? Icons.sound-off : Icons.sound-on;
+                    icon: root.current-sound <= 0 ? Icons.sound-off-fill : Icons.sound-on-fill;
                     show-icon-hover-background: false;
                     icon-size: root.icon-size;
 
@@ -167,7 +167,7 @@ export component VideoControl inherits Rectangle {
 
                 if !root.is-hide-subtitle-btn: IconBtn {
                     use-auto-size: true;
-                    icon: root.enable-subtitle ? Icons.subtitle : Icons.unsubtitle;
+                    icon: root.enable-subtitle ? Icons.subtitle-light : Icons.unsubtitle-light;
                     show-icon-hover-background: false;
                     icon-size: root.icon-size;
 
@@ -190,7 +190,7 @@ export component VideoControl inherits Rectangle {
 
                 if !root.is-hide-full-screen-btn: IconBtn {
                     use-auto-size: true;
-                    icon: root.is-full-screen ? Icons.exit-full-screen : Icons.full-screen;
+                    icon: root.is-full-screen ? Icons.exit-full-screen-light : Icons.full-screen-light;
                     show-icon-hover-background: false;
                     icon-size: root.icon-size;
 

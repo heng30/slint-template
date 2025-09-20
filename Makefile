@@ -41,13 +41,16 @@ web-build:
 web-build-release:
 	- rm -rf ./web/dist/*
 	cd $(app-name) && $(web-build-env) wasm-pack build --no-opt --release --target web --out-dir ./web/dist/pkg --no-default-features --features=web
-	cd $(app-name) && cp -f ./web/index.html ./web/dist && cp -f ./ui/images/brand.png ./web/dist/pkg/favicon.png
+	cd $(app-name) && cp -f ./web/index.html ./web/dist && cp -f ./ui/images/png/brand.png ./web/dist/pkg/favicon.png
 
 web-debug: web-build
 	cd $(app-name) && python3 -m http.server -d web 8000
 
 tr:
 	cargo run --bin tr-helper
+
+icon:
+	cargo run --bin icon-helper -- -i ${app-name}/ui/images -o ${app-name}/ui
 
 packing-android:
 	cp -f target/release/apk/${app-name}.apk target/${app-name}-${version}-aarch64-linux-android.apk

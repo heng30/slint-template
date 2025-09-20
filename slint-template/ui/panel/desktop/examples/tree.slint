@@ -28,7 +28,7 @@ export component TreeExample inherits Flickable {
                         {
                             is-open: true,
                             current-node: Store.is-cn ? "亚洲" : "Asia",
-                            icon: Icons.address,
+                            icon: Icons.address-light,
                         },
                         {
                             current-node: Store.is-cn ? "北美洲" : "North America",
@@ -40,7 +40,7 @@ export component TreeExample inherits Flickable {
                             is-open: true,
                             parent-node: Store.is-cn ? "亚洲" : "Asia",
                             current-node: Store.is-cn ? "中国" : "China",
-                            icon: Icons.airdrop,
+                            icon: Icons.airdrop-light,
                         },
                         {
                             parent-node: Store.is-cn ? "北美洲" : "North America",
@@ -52,7 +52,7 @@ export component TreeExample inherits Flickable {
                         {
                             parent-node: Store.is-cn ? "中国" : "China",
                             current-node:  Store.is-cn ? "珠海" : "ZhuHai",
-                            icon: Icons.delete,
+                            icon: Icons.delete-fill,
                             key: "zhuhai",
                         },
                         {

@@ -33,13 +33,13 @@ export component SideBarExample inherits Flickable {
                         entries: [
                             {
                                 category: Store.is-cn ? "介绍" : "Introduction",
-                                icon: Icons.delete,
+                                icon: Icons.delete-fill,
                                 key: "Introduction",
                             },
                             {
                                 is-open: true,
                                 category: Store.is-cn ? "基础类" : "BaseCategory",
-                                icon: Icons.address,
+                                icon: Icons.address-light,
                                 children: [
                                     {
                                         title: Store.is-cn ? "按钮" : "Button",
@@ -48,33 +48,33 @@ export component SideBarExample inherits Flickable {
                                     },
                                     {
                                         title: Store.is-cn ? "文本" : "Label",
-                                        icon: Icons.add-fill,
+                                        icon: Icons.add-light,
                                         key: "Label",
                                     },
                                     {
                                         title: Store.is-cn ? "分割线" : "Divider",
-                                        icon: Icons.logout,
+                                        icon: Icons.logout-fill,
                                         key: "Divider",
                                     },
                                 ]
                             },
                             {
                                 category: Store.is-cn ? "输入类" : "InputCategory",
-                                icon: Icons.add-fill,
+                                icon: Icons.add-light,
                                 children: [
                                     {
                                         title: Store.is-cn ? "滑动条" : "Slider",
-                                        icon: Icons.feedback,
+                                        icon: Icons.feedback-light,
                                         key: "Slider",
                                     },
                                     {
                                         title: Store.is-cn ? "打分" : "Rate",
-                                        icons: Icons.copy,
+                                        icons: Icons.copy-light,
                                         key: "Rate",
                                     },
                                     {
                                         title: Store.is-cn ? "验证码" : "PinCodes",
-                                        icons: Icons.paste,
+                                        icons: Icons.paste-light,
                                         key: "PinCodes",
                                     },
                                 ]

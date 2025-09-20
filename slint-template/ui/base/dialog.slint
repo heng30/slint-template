@@ -69,7 +69,7 @@ export component Dialog inherits Rectangle {
                     CenterLayout {
                         IconBtn {
                             width: Theme.icon-size;
-                            icon: Icons.close;
+                            icon: Icons.close-light;
                             colorize: txt.color;
                             show-icon-hover-background: false;
                             gain-focus-when-clicked: root.gain-focus-when-clicked;
@@ -92,7 +92,6 @@ export component Dialog inherits Rectangle {
                 padding: Theme.padding * 4;
 
                 if !is-hide-cancel-btn: CancelBtn {
-                    icon: Icons.cancel;
                     text: root.cancel-text;
                     gain-focus-when-clicked: root.gain-focus-when-clicked;
 
@@ -102,7 +101,6 @@ export component Dialog inherits Rectangle {
                 }
 
                 if !is-hide-confirm-btn: ConfirmBtn {
-                    icon: Icons.success;
                     text: root.confirm-text;
                     gain-focus-when-clicked: root.gain-focus-when-clicked;
 
