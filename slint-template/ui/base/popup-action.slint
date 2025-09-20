@@ -24,6 +24,7 @@ import { Divider } from "divider.slint";
 // }
 
 export struct PopupActionEntry {
+    disable: bool,
     icon: image,
     text: string,
     action: string,
@@ -104,12 +105,16 @@ export component PopupAction inherits Rectangle {
                     icon: entry.icon;
                     text: entry.text;
                     font-size: root.font-size;
-                    icon-colorize: root.icon-colorize;
                     icon-size: root.icon-size;
-                    background: self.has-hover ? Theme.secondary-background : Colors.transparent;
+                    icon-colorize: entry.disable ? Theme.disabled-color : root.icon-colorize;
+                    mouse-cursor: entry.disable ? MouseCursor.not-allowed : MouseCursor.pointer;
+                    background: entry.disable ? transparent : (self.has-hover ? Theme.secondary-background : Colors.transparent);
                     gain-focus-when-clicked: gain-focus-when-clicked;
 
                     clicked => {
+                        if (entry.disable) {
+                            return;
+                        }
                         PopupActionSetting.hide();
                         PopupActionSetting.action(entry.action, entry.user-data);
                     }

@@ -65,6 +65,7 @@ export component SettingEntryV2 inherits Rectangle {
     in-out property <color> right-icon-colorize: label.color;
     in-out property <length> right-icon-size;
 
+    in-out property <MouseCursor> mouse-cursor: MouseCursor.pointer;
     in-out property <bool> gain-focus-when-clicked;
 
     callback clicked();
@@ -73,7 +74,7 @@ export component SettingEntryV2 inherits Rectangle {
     fs := FocusScope { }
 
     ta := TouchArea {
-        mouse-cursor: MouseCursor.pointer;
+        mouse-cursor: root.mouse-cursor;
 
         clicked => {
             if (gain-focus-when-clicked) {
@@ -127,7 +128,7 @@ export component SettingEntryV2 inherits Rectangle {
             source: root.right-icon;
 
             TouchArea {
-                mouse-cursor: MouseCursor.pointer;
+                mouse-cursor: root.mouse-cursor;
                 clicked => {
                     if (gain-focus-when-clicked) {
                         fs.focus();

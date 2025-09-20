@@ -1,6 +1,8 @@
 use anyhow::{bail, Result};
 use clap::Parser;
-use std::{fs, io::Write, path::Path};
+use regex::Regex;
+use walkdir::WalkDir;
+use std::{fs, io::Write, collections::HashSet, path::Path};
 
 #[derive(Parser, Debug)]
 #[command(
@@ -18,6 +20,10 @@ struct Args {
     /// Output directory
     #[arg(short, long, default_value = ".")]
     output_dir: String,
+
+    /// Strip unused icons
+    #[arg(short, long)]
+    strip: bool,
 }
 
 #[derive(Debug)]
@@ -39,8 +45,10 @@ fn main() -> Result<()> {
         bail!("output_dir is empty");
     }
 
+    let icons = extract_icon(".")?;
     let dir_info = get_directory_contents(&args.input_dir)?;
     let dir_counts = dir_info.len();
+
     let icon_path = Path::new(&args.output_dir).join("icon.slint");
     let mut icon_file = fs::File::create(icon_path)?;
 
@@ -48,13 +56,10 @@ fn main() -> Result<()> {
     content.push_str("export global Icons {\n");
 
     for (index, dir) in dir_info.into_iter().enumerate() {
-        println!("Directory: {}", dir.dir_name);
-
         for file in dir.files {
-            println!(
-                "  file: {} (without extension: {})",
-                file.full_name, file.name_without_extension
-            );
+            if args.strip && !icons.contains(&file.name_without_extension)             {
+                continue;
+            }
 
             content.push_str("    ");
             content.push_str(&format!(
@@ -127,4 +132,34 @@ pub fn get_directory_contents(dir_path: &str) -> Result<Vec<DirectoryInfo>> {
     }
 
     Ok(result)
+}
+
+
+fn extract_icon(target_dir: impl AsRef<Path>) -> Result<Vec<String>> {
+    let mut icons = HashSet::new();
+    let icon_pattern = Regex::new(r#"Icons\.([a-zA-Z_-][a-zA-Z0-9_-]*)"#)?;
+
+    for entry in WalkDir::new(target_dir)
+        .into_iter()
+        .filter_map(|e| e.ok())
+    {
+        let path = entry.path();
+
+        if path.to_string_lossy().contains(".git/") || path.to_string_lossy().contains("target/") || path.to_string_lossy().ends_with("icon.slint")  {
+            continue;
+        }
+
+        if let Some(ext) = path.extension()
+            && ext == "slint"
+            && let Ok(content) = fs::read_to_string(path)
+        {
+            for cap in icon_pattern.captures_iter(&content) {
+                if let Some(icon_name) = cap.get(1) {
+                    icons.insert(icon_name.as_str().to_string());
+                }
+            }
+        }
+    }
+
+    Ok(icons.into_iter().collect())
 }

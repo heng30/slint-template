@@ -52,6 +52,9 @@ tr:
 icon:
 	cargo run --bin icon-helper -- -i ${app-name}/ui/images -o ${app-name}/ui
 
+icon-strip:
+	cargo run --bin icon-helper -- -i ${app-name}/ui/images -o ${app-name}/ui --strip
+
 packing-android:
 	cp -f target/release/apk/${app-name}.apk target/${app-name}-${version}-aarch64-linux-android.apk
 	echo "${app-name}-${version}-aarch64-linux-android.apk" > target/output-name

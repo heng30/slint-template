@@ -35,7 +35,7 @@ export component PopupActionExample inherits Flickable {
                             if (event.button == PointerEventButton.right) {
                                 PopupActionSetting.show(parent.absolute-position.x + self.mouse-x, parent.absolute-position.y + self.mouse-y, [
                                     { icon: Icons.delete-fill, text: "Delete", action: "delete-item" },
-                                    { icon: Icons.add-light, text: "Add", action: "add-item" },
+                                    { icon: Icons.add-light, text: "Add", action: "add-item", disable: true },
                                     {
                                         icon: Icons.recover-from-trash-light,
                                         text: "Remove trash",
