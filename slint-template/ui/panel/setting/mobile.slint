@@ -22,7 +22,7 @@ component Body inherits VerticalLayout {
 
             SettingEntry {
                 text: Logic.tr("Preference");
-                icon: Icons.ui;
+                icon: Icons.ui-light;
 
                 clicked => {
                     Logic.switch-mobile-setting-detail(MobileSettingDetailIndex.Preference);
@@ -64,7 +64,7 @@ component Body inherits VerticalLayout {
 
             SettingEntry {
                 text: "Github";
-                icon: Icons.github;
+                icon: Icons.github-fill;
                 clicked => {
                     Util.open-url("Default","https://github.com/Heng30/slint-template");
                 }
