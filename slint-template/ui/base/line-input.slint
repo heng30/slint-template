@@ -175,6 +175,9 @@ export component ClickAndEditLabel inherits Rectangle {
             if (!use-fixed-width && self.visible) {
                 root.width = lb.preferred-width;
             }
+            if (self.visible) {
+                li.text = root.text;
+            }
         }
 
         lb := Label {

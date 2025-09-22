@@ -108,6 +108,7 @@ pub fn init(ui: &AppWindow) {
 mod tests {
     use super::*;
 
+    #[test]
     fn test_clipboard() -> Result<()> {
         let msg = "hello world";
         copy_to_clipboard(msg)?;
