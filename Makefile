@@ -50,10 +50,10 @@ tr:
 	cargo run --bin tr-helper
 
 icon:
-	cargo run --bin icon-helper -- -i ${app-name}/ui/images -o ${app-name}/ui
+	cargo run --bin icon-helper -- -i ${app-name}/ui/images -o ${app-name}/ui/base
 
 icon-strip:
-	cargo run --bin icon-helper -- -i ${app-name}/ui/images -o ${app-name}/ui --strip
+	cargo run --bin icon-helper -- -i ${app-name}/ui/images -o ${app-name}/ui/base --strip
 
 packing-android:
 	cp -f target/release/apk/${app-name}.apk target/${app-name}-${version}-aarch64-linux-android.apk

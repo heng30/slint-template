@@ -1,9 +1,10 @@
-import { Logic, Theme, Store, Util, Icons, SettingPreference, SettingDetailIndex, DeviceType, TabIndex, PopupIndex, SettingBackup } from "../def.slint";
+import { Logic, Theme, Store, Util, Icons, SettingPreference, SettingDetailIndex, DeviceType, TabIndex, PopupIndex, SettingBackup, SettingAiModel } from "../def.slint";
 import { IconBtn, SettingEntryV2, Head, SettingDetail, ToastStatus, About, Help, Dialog, ComponentPosition, TabBtns, Divider, ConfirmDialogSetting } from "../../base/widgets.slint";
 
 import { Preference } from "components/preference.slint";
 import { Donate } from "components/donate.slint";
 import { Proxy } from "components/proxy.slint";
+import { AiModel } from "components/ai-model.slint";
 import { HelpDetail } from "components/help-detail.slint";
 import { Backup } from "components/backup.slint";
 
@@ -15,6 +16,8 @@ component SettingBody inherits Rectangle {
             preference.apply();
         } else if (Store.current-setting-detail-index == SettingDetailIndex.Proxy) {
             proxy.apply();
+        } else if (Store.current-setting-detail-index == SettingDetailIndex.AiModel) {
+            ai-model.apply();
         }
     }
 
@@ -48,6 +51,22 @@ component SettingBody inherits Rectangle {
             Logic.set-setting-proxy(self.get());
         }
     }
+
+    ai-model := AiModel {
+        visible: Store.current-setting-detail-index == SettingDetailIndex.AiModel;
+        is-show-header: false;
+
+        private property <SettingAiModel> setting;
+
+        function apply() {
+            setting = self.get();
+            if (setting.api-base-url.is_empty || setting.model-name.is_empty || setting.api-key.is_empty) {
+                Util.show-toast(Logic.tr("Input can not be empty"), ToastStatus.Warning);
+                return;
+            }
+            Logic.set-setting-ai-model(self.get());
+        }
+    }
 }
 
 component Setting inherits Rectangle {
@@ -65,13 +84,16 @@ component Setting inherits Rectangle {
             TabBtns {
                 items: [
                     { icon: Icons.ui-light, text: Logic.tr("Preference") },
-                    { icon: Icons.model-light, text: Logic.tr("Proxy") },
+                    { icon: Icons.ai-robot-light, text: Logic.tr("AI Model") },
+                    { icon: Icons.proxy-light, text: Logic.tr("Proxy") },
                 ];
 
                 clicked(index) => {
                     if (index == 0) {
                         Logic.switch-setting-detail(SettingDetailIndex.Preference);
                     } else if (index == 1) {
+                        Logic.switch-setting-detail(SettingDetailIndex.AiModel);
+                    } else if (index == 2) {
                         Logic.switch-setting-detail(SettingDetailIndex.Proxy);
                     }
                 }

@@ -9,18 +9,19 @@ export enum TabIndex {
 }
 
 export enum PopupIndex {
-    Setting,
+    None,
+    Help,
     About,
     Donate,
-    Help,
-    None,
     Backup,
     Recover,
+    Setting,
 }
 
 export enum SettingDetailIndex {
-    Preference,
     Proxy,
+    AiModel,
+    Preference,
 }
 
 export enum MobileTabIndex {
@@ -48,6 +49,20 @@ export struct SettingPreference {
     is-dark: bool,
 }
 
+export struct SettingProxy {
+    proxy-type: string,
+    http-url: string,
+    http-port: string,
+    socks5-url: string,
+    socks5-port: string,
+}
+
+export struct SettingAiModel {
+    model-name: string,
+    api-base-url: string,
+    api-key: string,
+}
+
 export struct SettingBackup {
    configuration: bool,
    data: bool,
@@ -56,14 +71,6 @@ export struct SettingBackup {
 
 //////////////////////////////// Logic Struct Start ////////////////////////////////
 import { SideBarEntry } from "./base/def.slint";
-
-export struct SettingProxy {
-    proxy-type: string,
-    http-url: string,
-    http-port: string,
-    socks5-url: string,
-    socks5-port: string,
-}
 
 //////////////////////////////// Logic Struct End  ////////////////////////////////
 

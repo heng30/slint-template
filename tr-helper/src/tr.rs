@@ -171,7 +171,8 @@ fn cn() -> &'static HashMap<&'static str, &'static str> {
             ("uninstall", "卸载"),
             ("uninstall successfully", "卸载成功"),
             ("Remove all caches or not?", "删除所有缓存吗？"),
-            ("remove caches", "删除缓存")
+            ("remove caches", "删除缓存"),
+            ("AI Model", "AI模型"),
         ])
     })
 }

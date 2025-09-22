@@ -338,7 +338,7 @@ pub fn init_qrcode(ui: &AppWindow) {
                 );
                 Image::from_rgb8(buffer)
             }
-            _ => ui.global::<Icons>().get_no_data(),
+            _ => ui.global::<Icons>().get_no_data_fill(),
         }
     });
 }

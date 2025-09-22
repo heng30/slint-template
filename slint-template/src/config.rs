@@ -1,14 +1,15 @@
-use super::data::{self, Config};
-use anyhow::{Context, Result};
+use anyhow::{bail, Context, Result};
 use log::debug;
 use once_cell::sync::Lazy;
+use serde::{Deserialize, Serialize};
 use std::{fs, path::PathBuf, sync::Mutex};
-
-const CARGO_TOML: &str = include_str!("../../Cargo.toml");
-static CONFIG: Lazy<Mutex<Config>> = Lazy::new(|| Mutex::new(Config::default()));
+use uuid::Uuid;
 
 #[cfg(feature = "desktop")]
 use platform_dirs::AppDirs;
+
+const CARGO_TOML: &str = include_str!("../Cargo.toml");
+static CONFIG: Lazy<Mutex<Config>> = Lazy::new(|| Mutex::new(Config::default()));
 
 #[cfg(feature = "android")]
 pub struct AppDirs {
@@ -27,6 +28,85 @@ impl AppDirs {
             data_dir: PathBuf::from(&format!("{root_dir}/{name}/data")),
         })
     }
+}
+
+#[derive(Serialize, Deserialize, Default, Debug, Clone)]
+pub struct Config {
+    #[serde(skip)]
+    pub config_path: PathBuf,
+
+    #[serde(skip)]
+    pub db_path: PathBuf,
+
+    #[serde(skip)]
+    pub cache_dir: PathBuf,
+
+    #[serde(skip)]
+    pub is_first_run: bool,
+
+    #[serde(skip)]
+    pub app_name: String,
+
+    #[serde(default = "appid_default")]
+    pub appid: String,
+
+    pub preference: Preference,
+    pub proxy: Proxy,
+    pub ai_model: AiModel,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Derivative)]
+#[derivative(Default)]
+pub struct Preference {
+    #[derivative(Default(value = "1200"))]
+    pub win_width: u32,
+
+    #[derivative(Default(value = "800"))]
+    pub win_height: u32,
+
+    #[derivative(Default(value = "16"))]
+    pub font_size: u32,
+
+    #[derivative(Default(value = "\"Source Han Sans CN\".to_string()"))]
+    pub font_family: String,
+
+    #[derivative(Default(value = "\"en\".to_string()"))]
+    pub language: String,
+
+    #[derivative(Default(value = "false"))]
+    pub always_on_top: bool,
+
+    #[derivative(Default(value = "false"))]
+    pub no_frame: bool,
+
+    pub is_dark: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Derivative)]
+#[derivative(Default)]
+pub struct Proxy {
+    #[derivative(Default(value = "\"127.0.0.1\".to_string()"))]
+    pub http_url: String,
+
+    #[derivative(Default(value = "3128"))]
+    pub http_port: u16,
+
+    #[derivative(Default(value = "\"127.0.0.1\".to_string()"))]
+    pub socks5_url: String,
+
+    #[derivative(Default(value = "1080"))]
+    pub socks5_port: u16,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+pub struct AiModel {
+    pub api_base_url: String,
+    pub model_name: String,
+    pub api_key: String,
+}
+
+fn appid_default() -> String {
+    Uuid::new_v4().to_string()
 }
 
 pub fn init() {
@@ -50,7 +130,7 @@ pub fn is_first_run() -> bool {
     CONFIG.lock().unwrap().is_first_run
 }
 
-pub fn all() -> data::Config {
+pub fn all() -> Config {
     CONFIG.lock().unwrap().clone()
 }
 
@@ -67,12 +147,16 @@ pub fn reset(mut conf: Config) {
     _ = c.save();
 }
 
-pub fn preference() -> data::Preference {
+pub fn preference() -> Preference {
     CONFIG.lock().unwrap().preference.clone()
 }
 
-pub fn proxy() -> data::Proxy {
+pub fn proxy() -> Proxy {
     CONFIG.lock().unwrap().proxy.clone()
+}
+
+pub fn ai_model() -> AiModel {
+    CONFIG.lock().unwrap().ai_model.clone()
 }
 
 #[cfg(feature = "database")]
@@ -85,7 +169,7 @@ pub fn cache_dir() -> PathBuf {
     CONFIG.lock().unwrap().cache_dir.clone()
 }
 
-pub fn save(conf: data::Config) -> Result<()> {
+pub fn save(conf: Config) -> Result<()> {
     let mut config = CONFIG.lock().unwrap();
     *config = conf;
     config.save()
@@ -134,7 +218,7 @@ impl Config {
         self.cache_dir = app_dirs.data_dir.join("cache");
 
         if self.appid.is_empty() {
-            self.appid = super::data::appid_default();
+            self.appid = appid_default();
         }
 
         fs::create_dir_all(&app_dirs.data_dir)?;
@@ -151,6 +235,7 @@ impl Config {
                     self.appid = c.appid;
                     self.preference = c.preference;
                     self.proxy = c.proxy;
+                    self.ai_model = c.ai_model;
                     Ok(())
                 }
                 Err(_) => {
@@ -187,7 +272,7 @@ impl Config {
         match toml::to_string_pretty(self) {
             Ok(text) => Ok(fs::write(&self.config_path, text)
                 .with_context(|| "save config failed".to_string())?),
-            Err(e) => anyhow::bail!(format!("convert config from toml format failed. {e:?}")),
+            Err(e) => bail!(format!("convert config from toml format failed. {e:?}")),
         }
     }
 }

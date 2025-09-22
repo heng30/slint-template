@@ -3,7 +3,7 @@ use crate::{
     global_logic,
     global_store,
     config,
-    slint_generatedAppWindow::{AppWindow, SettingProxy, Theme},
+    slint_generatedAppWindow::{AppWindow, SettingProxy, SettingAiModel, Theme},
     toast_success, toast_warn,
 };
 use slint::ComponentHandle;
@@ -100,6 +100,27 @@ pub fn init(ui: &AppWindow) {
         all.proxy.socks5_url = setting.socks5_url.into();
         all.proxy.socks5_port = setting.socks5_port.parse().unwrap_or(1080);
         _ = config::save(all);
+    });
+
+    global_logic!(ui).on_get_setting_ai_model(move || {
+        let config = config::ai_model();
+
+        SettingAiModel {
+            api_base_url: config.api_base_url.into(),
+            model_name: config.model_name.into(),
+            api_key: config.api_key.into(),
+        }
+    });
+
+    let ui_weak = ui.as_weak();
+    global_logic!(ui).on_set_setting_ai_model(move |setting| {
+        let mut all = config::all();
+        all.ai_model.api_base_url = setting.api_base_url.into();
+        all.ai_model.model_name = setting.model_name.into();
+        all.ai_model.api_key = setting.api_key.into();
+        _ = config::save(all);
+
+        toast_success!(ui_weak.unwrap(), tr("save configuration successfully"));
     });
 
     let ui_weak = ui.as_weak();

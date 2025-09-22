@@ -1,7 +1,7 @@
 [workspace]
 exclude = []
 resolver = "3"
-members = ["slint-template", "lib/*", "tr-helper", "icon-helper"]
+members = ["slint-template", "tr-helper", "icon-helper", "lib/*"]
 
 [workspace.package]
 license = "MIT"
@@ -15,7 +15,6 @@ homepage = "https://github.com/Heng30/slint-template"
 repository = "https://github.com/Heng30/slint-template"
 description = "It's a Rust Slint GUI framework project for quick start."
 
-# more information see: `https://sharnoff.io/blog/why-rust-compiler-slow`
 [profile.dev]
 lto = false
 debug = false

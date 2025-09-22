@@ -1,6 +1,6 @@
 use crate::{
     global_logic,
-    slint_generatedAppWindow::{AppWindow, Logic, TestDialog},
+    slint_generatedAppWindow::{AppWindow, TestDialog},
 };
 use slint::ComponentHandle;
 

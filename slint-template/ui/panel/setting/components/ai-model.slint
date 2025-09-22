@@ -1,0 +1,83 @@
+import { Store, Logic, Theme, DeviceType, Icons, SettingAiModel } from "../../def.slint";
+import { SettingDetail, SettingDetailInner, SettingDetailInnerVbox, SettingDetailLabel, LineInput, ConfirmBtn, Label, Select } from "../../../base/widgets.slint";
+
+export component AiModel inherits SettingDetail {
+    title: Logic.tr("model");
+
+    callback confirmed();
+
+    init => {
+        root.set(Logic.get-setting-ai-model());
+    }
+
+    public function get() -> SettingAiModel {
+        return {
+            api-base-url: api-base-url-lineedit.text,
+            model-name: model-name-lineedit.text,
+            api-key: api-key-lineedit.text,
+        };
+    }
+
+    public function set(setting: SettingAiModel) {
+        api-base-url-lineedit.text = setting.api-base-url;
+        model-name-lineedit.text = setting.model-name;
+        api-key-lineedit.text = setting.api-key;
+    }
+
+    SettingDetailInner {
+        Rectangle {
+            VerticalLayout {
+                spacing: Theme.spacing * 4;
+
+                SettingDetailInnerVbox {
+                    SettingDetailLabel {
+                        text: Logic.tr("API base URL");
+                    }
+
+                    api-base-url-lineedit := LineInput {
+                        placeholder-text: "https://api.deepseek.com/v1";
+                    }
+                }
+
+                SettingDetailInnerVbox {
+                    SettingDetailLabel {
+                        text: Logic.tr("Chat model");
+                    }
+
+                    model-name-lineedit := LineInput {
+                        placeholder-text: "deepseek-chat";
+                    }
+                }
+
+                SettingDetailInnerVbox {
+                    SettingDetailLabel {
+                        text: Logic.tr("API key");
+                    }
+
+                    api-key-lineedit := LineInput {
+                        is-show-icon: true;
+                        icon: self.input-type == InputType.password ? Icons.close-eye-light : Icons.eye-light;
+                        input-type: InputType.password;
+                        placeholder-text: "sk-95c4f3d2b*******583179047f2";
+
+                        clicked => {
+                            if (self.input-type == InputType.password) {
+                                self.input-type = InputType.text;
+                            } else {
+                                self.input-type = InputType.password;
+                            }
+                        }
+                    }
+                }
+
+                Label {
+                    color: Theme.warning-color;
+                    text: Logic.tr("Only support OpenAI compatible API");
+                    font-size: Theme.title4-font-size;
+                    font-weight: Theme.bold-font-weight;
+                    horizontal-alignment: TextHorizontalAlignment.center;
+                }
+            }
+        }
+    }
+}

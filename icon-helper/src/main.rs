@@ -63,7 +63,7 @@ fn main() -> Result<()> {
 
             content.push_str("    ");
             content.push_str(&format!(
-                r#"out property <image> {}: @image-url("images/{}/{}");"#,
+                r#"out property <image> {}: @image-url("../images/{}/{}");"#,
                 file.name_without_extension, dir.dir_name, file.full_name
             ));
             content.push_str("\n");
