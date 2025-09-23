@@ -49,6 +49,15 @@ export struct SettingPreference {
     is-dark: bool,
 }
 
+export struct SettingBackup {
+   configuration: bool,
+   data: bool,
+   cache: bool,
+}
+
+//////////////////////////////// Logic Struct Start ////////////////////////////////
+import { SideBarEntry } from "./base/def.slint";
+
 export struct SettingProxy {
     proxy-type: string,
     http-url: string,
@@ -62,15 +71,6 @@ export struct SettingAiModel {
     api-base-url: string,
     api-key: string,
 }
-
-export struct SettingBackup {
-   configuration: bool,
-   data: bool,
-   cache: bool,
-}
-
-//////////////////////////////// Logic Struct Start ////////////////////////////////
-import { SideBarEntry } from "./base/def.slint";
 
 //////////////////////////////// Logic Struct End  ////////////////////////////////
 

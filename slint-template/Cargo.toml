@@ -60,7 +60,7 @@ slint-build.workspace = true
 embed-resource.workspace = true
 
 [features]
-default = ["desktop"]
+default = ["desktop", "database", "qrcode", "center-window"]
 
 web = []
 mobile = ["android"]

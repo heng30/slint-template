@@ -105,76 +105,6 @@ pub struct AiModel {
     pub api_key: String,
 }
 
-fn appid_default() -> String {
-    Uuid::new_v4().to_string()
-}
-
-pub fn init() {
-    if let Err(e) = CONFIG.lock().unwrap().init() {
-        log::error!("{e:?}");
-        panic!("{:?}", e);
-    }
-}
-
-#[allow(dead_code)]
-pub fn appid() -> String {
-    CONFIG.lock().unwrap().appid.clone()
-}
-
-#[allow(dead_code)]
-pub fn app_name() -> String {
-    CONFIG.lock().unwrap().app_name.clone()
-}
-
-pub fn is_first_run() -> bool {
-    CONFIG.lock().unwrap().is_first_run
-}
-
-pub fn all() -> Config {
-    CONFIG.lock().unwrap().clone()
-}
-
-#[allow(dead_code)]
-pub fn reset(mut conf: Config) {
-    let mut c = CONFIG.lock().unwrap();
-
-    conf.config_path.clone_from(&c.config_path);
-    conf.db_path.clone_from(&c.db_path);
-    conf.cache_dir.clone_from(&c.cache_dir);
-    conf.is_first_run = c.is_first_run;
-
-    *c = conf;
-    _ = c.save();
-}
-
-pub fn preference() -> Preference {
-    CONFIG.lock().unwrap().preference.clone()
-}
-
-pub fn proxy() -> Proxy {
-    CONFIG.lock().unwrap().proxy.clone()
-}
-
-pub fn ai_model() -> AiModel {
-    CONFIG.lock().unwrap().ai_model.clone()
-}
-
-#[cfg(feature = "database")]
-pub fn db_path() -> PathBuf {
-    CONFIG.lock().unwrap().db_path.clone()
-}
-
-#[allow(dead_code)]
-pub fn cache_dir() -> PathBuf {
-    CONFIG.lock().unwrap().cache_dir.clone()
-}
-
-pub fn save(conf: Config) -> Result<()> {
-    let mut config = CONFIG.lock().unwrap();
-    *config = conf;
-    config.save()
-}
-
 impl Config {
     pub fn init(&mut self) -> Result<()> {
         let metadata = toml::from_str::<toml::Table>(CARGO_TOML).expect("Parse Cargo.toml error");
@@ -206,13 +136,13 @@ impl Config {
         };
 
         let app_dirs = AppDirs::new(Some(&pkg_name), true).unwrap();
-        self.init_config(&app_dirs)?;
+        self.crate_dirs(&app_dirs)?;
         self.load().with_context(|| "load config file failed")?;
         debug!("{:?}", self);
         Ok(())
     }
 
-    fn init_config(&mut self, app_dirs: &AppDirs) -> Result<()> {
+    fn crate_dirs(&mut self, app_dirs: &AppDirs) -> Result<()> {
         self.db_path = app_dirs.data_dir.join(format!("{}.db", self.app_name));
         self.config_path = app_dirs.config_dir.join(format!("{}.toml", self.app_name));
         self.cache_dir = app_dirs.data_dir.join("cache");
@@ -231,19 +161,22 @@ impl Config {
     fn load(&mut self) -> Result<()> {
         match fs::read_to_string(&self.config_path) {
             Ok(text) => match toml::from_str::<Config>(&text) {
-                Ok(c) => {
-                    self.appid = c.appid;
-                    self.preference = c.preference;
-                    self.proxy = c.proxy;
-                    self.ai_model = c.ai_model;
+                Ok(mut c) => {
+                    c.config_path = self.config_path.clone();
+                    c.db_path = self.db_path.clone();
+                    c.cache_dir = self.cache_dir.clone();
+                    c.is_first_run = self.is_first_run;
+                    c.app_name = self.app_name.clone();
+                    c.appid = self.appid.clone();
+                    *self = c;
+
                     Ok(())
                 }
                 Err(_) => {
                     self.is_first_run = true;
 
                     if let Some(bak_file) = &self.config_path.as_os_str().to_str() {
-                        let bak_file = format!("{}.bak", bak_file);
-                        _ = fs::copy(&self.config_path, &bak_file);
+                        _ = fs::copy(&self.config_path, format!("{}.bak", bak_file));
                     }
 
                     match toml::to_string_pretty(self) {
@@ -256,8 +189,7 @@ impl Config {
                 self.is_first_run = true;
 
                 if let Some(bak_file) = &self.config_path.as_os_str().to_str() {
-                    let bak_file = format!("{}.bak", bak_file);
-                    _ = fs::copy(&self.config_path, &bak_file);
+                    _ = fs::copy(&self.config_path, format!("{}.bak", bak_file));
                 }
 
                 match toml::to_string_pretty(self) {
@@ -275,4 +207,22 @@ impl Config {
             Err(e) => bail!(format!("convert config from toml format failed. {e:?}")),
         }
     }
+}
+
+fn appid_default() -> String {
+    Uuid::new_v4().to_string()
+}
+
+pub fn init() {
+    CONFIG.lock().unwrap().init().unwrap();
+}
+
+pub fn all() -> Config {
+    CONFIG.lock().unwrap().clone()
+}
+
+pub fn save(conf: Config) -> Result<()> {
+    let mut config = CONFIG.lock().unwrap();
+    *config = conf;
+    config.save()
 }

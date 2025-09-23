@@ -12,12 +12,6 @@ export global Logic {
     callback get-setting-preference() -> SettingPreference;
     callback set-setting-preference(setting: SettingPreference);
 
-    callback get-setting-proxy() -> SettingProxy;
-    callback set-setting-proxy(setting: SettingProxy);
-
-    callback get-setting-ai-model() -> SettingAiModel;
-    callback set-setting-ai-model(setting: SettingAiModel);
-
     callback increase-font-size();
     callback decrease-font-size();
 
@@ -74,6 +68,12 @@ export global Logic {
     }
 
     //////////////////////////////// Logic Start  ////////////////////////////////
+    callback get-setting-proxy() -> SettingProxy;
+    callback set-setting-proxy(setting: SettingProxy);
+
+    callback get-setting-ai-model() -> SettingAiModel;
+    callback set-setting-ai-model(setting: SettingAiModel);
+
     callback web-debug(text: string);
     pure callback generate-search-values(entries: [SideBarEntry]) -> [string];
     pure callback get-sidebar-key-from-search-values(entries: [SideBarEntry], value: string) -> string;

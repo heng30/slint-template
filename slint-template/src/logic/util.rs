@@ -93,7 +93,7 @@ pub fn init(ui: &AppWindow) {
     let ui_weak = ui.as_weak();
     global_util!(ui).on_update_window_size(move || {
         let ui = ui_weak.unwrap();
-        let preference = config::preference();
+        let preference = config::all().preference;
 
         let scale = ui.window().scale_factor();
         let psize = slint::PhysicalSize::from_logical(
@@ -111,7 +111,7 @@ pub fn init(ui: &AppWindow) {
         let ui_weak = ui.as_weak();
         global_util!(ui).on_set_window_center(move || {
             let ui = ui_weak.unwrap();
-            let preference = config::preference();
+            let preference = config::all().preference;
 
             let scale = ui.window().scale_factor();
             let psize = slint::PhysicalSize::from_logical(

@@ -67,7 +67,7 @@ async fn ui_before() {
     config::init();
 
     #[cfg(feature = "database")]
-    db::init(config::db_path().to_str().expect("invalid db path")).await;
+    db::init(config::all().db_path.to_str().expect("invalid db path")).await;
 
     #[cfg(target_os = "linux")]
     {

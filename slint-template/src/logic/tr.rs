@@ -9,7 +9,7 @@ pub fn tr(text: &str) -> String {
 
     #[cfg(any(feature = "desktop", feature = "mobile"))]
     {
-        lang = crate::config::preference().language.clone();
+        lang = crate::config::all().preference.language.clone();
     }
 
     match lang.as_str() {

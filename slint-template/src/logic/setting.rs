@@ -12,10 +12,10 @@ pub fn init(ui: &AppWindow) {
     init_setting(ui);
 
     global_store!(ui)
-        .set_is_first_run(config::is_first_run());
+        .set_is_first_run(config::all().is_first_run);
 
     global_store!(ui)
-        .set_is_show_landing_page(config::is_first_run());
+        .set_is_show_landing_page(config::all().is_first_run);
 
     global_logic!(ui)
         .on_inner_tr(move |text, _lang| tr(text.as_str()).into());
@@ -81,7 +81,7 @@ pub fn init(ui: &AppWindow) {
     });
 
     global_logic!(ui).on_get_setting_proxy(move || {
-        let config = config::proxy();
+        let config = config::all().proxy;
 
         SettingProxy {
             proxy_type: "Http".into(),
@@ -103,7 +103,7 @@ pub fn init(ui: &AppWindow) {
     });
 
     global_logic!(ui).on_get_setting_ai_model(move || {
-        let config = config::ai_model();
+        let config = config::all().ai_model;
 
         SettingAiModel {
             api_base_url: config.api_base_url.into(),
@@ -165,7 +165,7 @@ pub fn init(ui: &AppWindow) {
 }
 
 fn init_setting(ui: &AppWindow) {
-    let config = config::preference();
+    let config = config::all().preference;
     let mut setting = global_store!(ui).get_setting_preference();
 
     let font_size = u32::min(50, u32::max(10, config.font_size));
