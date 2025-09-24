@@ -135,8 +135,8 @@ export component Select inherits Rectangle {
                         clicked => {
                             root.current-index = index;
                             root.current-value = value;
-                            pop.close();
                             root.selected(root.current-index, root.current-value);
+                            pop.close();
                         }
                     }
                 }

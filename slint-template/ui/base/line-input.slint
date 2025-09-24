@@ -139,9 +139,10 @@ export component LineInput inherits Rectangle {
 }
 
 export component ClickAndEditLabel inherits Rectangle {
+    in-out property <string> text;
     in-out property <bool> is-edit;
     in-out property <bool> use-fixed-width;
-    in-out property <string> text;
+    in-out property <bool> allow-breaking-text-binding-when-edit;
     in-out property <int> font-weight: Theme.normal-font-weight;
     in-out property <length> font-size: Theme.default-font-size;
     in-out property <color> text-color: Theme.regular-text-color;
@@ -224,7 +225,9 @@ export component ClickAndEditLabel inherits Rectangle {
             }
 
             edited => {
-                root.text = self.text;
+                if (allow-breaking-text-binding-when-edit) {
+                    root.text = self.text;
+                }
                 root.edited(self.text);
             }
 
