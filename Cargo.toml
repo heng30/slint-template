@@ -21,6 +21,7 @@ debug = false
 opt-level = 0
 incremental = true
 
+# https://github.com/johnthagen/min-sized-rust
 [profile.release]
 lto = true
 strip = true
@@ -48,6 +49,7 @@ bytes = "1.10"
 tokio = "1.45"
 regex = "1.11"
 quote = "1.0"
+paste = "1.0"
 slint = "1.13"
 image = "0.25"
 flate2 = "1.1"
@@ -67,6 +69,7 @@ slint-build = "1.13"
 wasm-bindgen = "0.2"
 display-info = "0.5"
 native-dialog = "0.9"
+derive_setters = "0.1"
 embed-resource = "3.0"
 android_logger = "0.15"
 android_clipboard = "0.1.0"

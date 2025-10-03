@@ -5652,6 +5652,7 @@ dependencies = [
  "log",
  "native-dialog",
  "once_cell",
+ "paste",
  "platform-dirs",
  "qrcode",
  "rand 0.9.1",

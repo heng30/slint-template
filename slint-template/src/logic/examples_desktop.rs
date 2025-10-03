@@ -5,11 +5,11 @@ use crate::{
 use slint::{ComponentHandle, Model, ModelRc, SharedString, VecModel};
 
 pub fn init(ui: &AppWindow) {
-    logic_cb!(on_generate_search_values, ui, entries);
-    logic_cb!(on_get_sidebar_key_from_search_values, ui, entries, text);
+    logic_cb!(generate_search_values, ui, entries);
+    logic_cb!(get_sidebar_key_from_search_values, ui, entries, text);
 }
 
-fn on_generate_search_values(
+fn generate_search_values(
     _ui: &AppWindow,
     entries: ModelRc<UISideBarEntry>,
 ) -> ModelRc<SharedString> {
@@ -30,7 +30,7 @@ fn on_generate_search_values(
     ModelRc::new(VecModel::from_slice(&values[..]))
 }
 
-fn on_get_sidebar_key_from_search_values(
+fn get_sidebar_key_from_search_values(
     _ui: &AppWindow,
     entries: ModelRc<UISideBarEntry>,
     text: SharedString,

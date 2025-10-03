@@ -52,10 +52,12 @@ macro_rules! logic_cb {
     ($callback_name:ident, $ui:expr, $($arg:ident),*) => {
         {{
             let ui_weak = $ui.as_weak();
-            crate::global_logic!($ui)
-                .$callback_name(move |$($arg),*| {
-                    $callback_name(&ui_weak.unwrap(), $($arg),*)
-                });
+            paste::paste! {
+                crate::global_logic!($ui)
+                    .[<on_ $callback_name>](move |$($arg),*| {
+                        $callback_name(&ui_weak.unwrap(), $($arg),*)
+                    });
+            }
         }}
     };
 }
