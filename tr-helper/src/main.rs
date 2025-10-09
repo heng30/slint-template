@@ -56,8 +56,8 @@ fn extract_tr(target_dir: &Path) -> Result<Vec<String>> {
     let mut translations = HashSet::new();
 
     // Compile regex patterns
-    let pattern = Regex::new(r#"(Logic\.tr\("([^"\\]|\\.)*"\)|tr\("([^"\\]|\\.)*"\))"#)?;
-    let extract_pattern = Regex::new(r#"(?:Logic\.tr\("|tr\(")([^"]*)(?:"\))"#)?;
+    let pattern = Regex::new(r#"(?:^|[^\w.])(Logic\.tr\("([^"\\]|\\.)*"\)|tr\("([^"\\]|\\.)*"\))"#)?;
+    let extract_pattern = Regex::new(r#"(?:^|[^\w.])(?:Logic\.tr\("|tr\(")([^"]*)(?:"\))"#)?;
 
     // Walk through directory
     for entry in walkdir::WalkDir::new(target_dir)

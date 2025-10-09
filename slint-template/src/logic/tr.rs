@@ -1,5 +1,5 @@
 //! Translation module
-//! 
+//!
 //! Provides internationalization support with Chinese translations.
 //! Uses lazy initialization for translation maps.
 
@@ -10,10 +10,10 @@ use std::collections::HashMap;
 static CN: OnceCell<HashMap<&'static str, &'static str>> = OnceCell::new();
 
 /// Translates text based on current language setting
-/// 
+///
 /// # Parameters
 /// - `text`: Text to translate
-/// 
+///
 /// # Returns
 /// - Translated text or original text if no translation available
 pub fn tr(text: &str) -> String {
@@ -38,9 +38,9 @@ pub fn tr(text: &str) -> String {
 }
 
 /// Returns the Chinese translation map
-/// 
+///
 /// Initializes the map on first access.
-/// 
+///
 /// # Returns
 /// - Reference to Chinese translation map
 fn cn() -> &'static HashMap<&'static str, &'static str> {
@@ -194,6 +194,25 @@ fn cn() -> &'static HashMap<&'static str, &'static str> {
             ("Remove all caches or not?", "删除所有缓存吗？"),
             ("remove caches", "删除缓存"),
             ("AI Model", "AI模型"),
+            ("API base URL", "API基础URL"),
+            ("API key", "API密钥"),
+            ("Chat model", "聊天模型"),
+            ("Only support OpenAI compatible API", "仅支持OpenAI兼容API"),
+            ("Remove", "移除"),
+            ("Rename", "重命名"),
+            ("Replace", "替换"),
+            ("Replaced text", "已替换文本"),
+            ("Select File", "选择文件"),
+            ("Target text", "目标文本"),
+            ("Warn", "警告"),
+            ("cancel", "取消"),
+            ("confirm", "确认"),
+            ("insert entry failed", "插入条目失败"),
+            ("model", "模型"),
+            ("new", "新建"),
+            ("remove entry failed", "移除条目失败"),
+            ("save configuration successfully", "保存配置成功"),
+            ("update entry failed", "更新条目失败"),
         ])
     })
 }
