@@ -1,6 +1,9 @@
+//! Time and date utilities for formatting, parsing, and calendar operations.
+
 use anyhow::{Context, Result};
 use chrono::{Datelike, Duration, Local, NaiveDate, TimeZone, Weekday};
 
+/// Represents a simple date with year, month, and day.
 #[derive(Debug, Clone)]
 pub struct Date {
     pub year: i32,
@@ -8,11 +11,44 @@ pub struct Date {
     pub day: u32,
 }
 
-// "%Y-%m-%d %H:%M:%S" -> 2023-11-15 14:30:45
+/// Formats the current local time according to the specified format string.
+///
+/// The format string follows the same syntax as `chrono::format::strftime`.
+///
+/// # Arguments
+///
+/// * `format` - The format string (e.g., "%Y-%m-%d %H:%M:%S")
+///
+/// # Returns
+///
+/// Returns the formatted time string.
+///
+/// # Examples
+///
+/// ```
+/// use cutil::time::local_now;
+///
+/// let formatted = local_now("%Y-%m-%d %H:%M:%S");
+/// println!("Current time: {}", formatted);
+/// ```
 pub fn local_now(format: &str) -> String {
     Local::now().format(format).to_string()
 }
 
+/// Gets the current date as a `Date` struct.
+///
+/// # Returns
+///
+/// Returns a `Date` struct representing today's date.
+///
+/// # Examples
+///
+/// ```
+/// use cutil::time::get_current_date;
+///
+/// let today = get_current_date();
+/// println!("Today is {}-{}-{}", today.year, today.month, today.day);
+/// ```
 pub fn get_current_date() -> Date {
     let now = Local::now();
 
@@ -23,6 +59,26 @@ pub fn get_current_date() -> Date {
     }
 }
 
+/// Parses a date string in "YYYY-MM-DD" format into a `Date` struct.
+///
+/// # Arguments
+///
+/// * `date` - The date string in "YYYY-MM-DD" format
+///
+/// # Returns
+///
+/// Returns a `Date` struct on success.
+///
+/// # Examples
+///
+/// ```
+/// use cutil::time::parse_date_str;
+///
+/// let date = parse_date_str("2023-11-15").unwrap();
+/// assert_eq!(date.year, 2023);
+/// assert_eq!(date.month, 11);
+/// assert_eq!(date.day, 15);
+/// ```
 pub fn parse_date_str(date: &str) -> Result<Date> {
     let date = NaiveDate::parse_from_str(date, "%Y-%m-%d")?;
 
@@ -38,10 +94,47 @@ pub fn parse_date_str(date: &str) -> Result<Date> {
     })
 }
 
+/// Gets the current Unix timestamp (seconds since epoch).
+///
+/// # Returns
+///
+/// Returns the current timestamp as a 64-bit integer.
+///
+/// # Examples
+///
+/// ```
+/// use cutil::time::timestamp;
+///
+/// let ts = timestamp();
+/// println!("Current timestamp: {}", ts);
+/// ```
 pub fn timestamp() -> i64 {
     Local::now().timestamp()
 }
 
+/// Generates a calendar matrix for a specific year and month.
+///
+/// The matrix is 6x7 (6 weeks, 7 days per week) and includes dates from
+/// the previous and next months to fill out the calendar grid.
+///
+/// # Arguments
+///
+/// * `year` - The year
+/// * `month` - The month (1-12)
+///
+/// # Returns
+///
+/// Returns a 6x7 matrix of `Date` structs representing the calendar.
+///
+/// # Examples
+///
+/// ```
+/// use cutil::time::get_calendar_matrix;
+///
+/// let calendar = get_calendar_matrix(2023, 11).unwrap();
+/// assert_eq!(calendar.len(), 6);
+/// assert!(calendar.iter().all(|week| week.len() == 7));
+/// ```
 pub fn get_calendar_matrix(year: i32, month: u32) -> Result<Vec<Vec<Date>>> {
     let mut matrix: Vec<Vec<Date>> = vec![vec![]; 6];
 
@@ -77,6 +170,24 @@ pub fn get_calendar_matrix(year: i32, month: u32) -> Result<Vec<Vec<Date>>> {
     Ok(matrix)
 }
 
+/// Converts a date string to a Unix timestamp.
+///
+/// # Arguments
+///
+/// * `date_str` - The date string in "YYYY-MM-DD" format
+///
+/// # Returns
+///
+/// Returns the Unix timestamp (seconds since epoch) for the given date at 00:00:00.
+///
+/// # Examples
+///
+/// ```
+/// use cutil::time::date_str_to_timestamp;
+///
+/// let timestamp = date_str_to_timestamp("2023-11-15").unwrap();
+/// println!("Timestamp: {}", timestamp);
+/// ```
 pub fn date_str_to_timestamp(date_str: &str) -> Result<i64> {
     let date = NaiveDate::parse_from_str(date_str, "%Y-%m-%d")?;
     let datetime = date
@@ -85,6 +196,25 @@ pub fn date_str_to_timestamp(date_str: &str) -> Result<i64> {
     Ok(Local.from_local_datetime(&datetime).unwrap().timestamp())
 }
 
+/// Calculates the number of days between two dates.
+///
+/// # Arguments
+///
+/// * `start_date` - The start date in "YYYY-MM-DD" format
+/// * `end_date` - The end date in "YYYY-MM-DD" format
+///
+/// # Returns
+///
+/// Returns the number of days between the two dates.
+///
+/// # Examples
+///
+/// ```
+/// use cutil::time::diff_dates_to_days;
+///
+/// let days = diff_dates_to_days("2023-11-01", "2023-11-15").unwrap();
+/// assert_eq!(days, 14);
+/// ```
 pub fn diff_dates_to_days(start_date: &str, end_date: &str) -> Result<i64> {
     let start_timestamp = date_str_to_timestamp(start_date)?;
     let end_timestamp = date_str_to_timestamp(end_date)?;
@@ -92,6 +222,27 @@ pub fn diff_dates_to_days(start_date: &str, end_date: &str) -> Result<i64> {
     Ok((end_timestamp - start_timestamp) / (24 * 60 * 60))
 }
 
+/// Converts seconds to a media timestamp format (HH:MM:SS or MM:SS).
+///
+/// For durations less than 1 hour, the format is MM:SS.
+/// For durations 1 hour or more, the format is HH:MM:SS.
+///
+/// # Arguments
+///
+/// * `seconds` - The duration in seconds
+///
+/// # Returns
+///
+/// Returns a formatted timestamp string.
+///
+/// # Examples
+///
+/// ```
+/// use cutil::time::seconds_to_media_timestamp;
+///
+/// assert_eq!(seconds_to_media_timestamp(123.0), "02:03");
+/// assert_eq!(seconds_to_media_timestamp(3661.0), "01:01:01");
+/// ```
 pub fn seconds_to_media_timestamp(seconds: f64) -> String {
     let total_seconds = seconds as u32;
     let hours = total_seconds / 3600;
@@ -105,6 +256,27 @@ pub fn seconds_to_media_timestamp(seconds: f64) -> String {
     }
 }
 
+/// Converts seconds to a media timestamp format with milliseconds.
+///
+/// For durations less than 1 hour, the format is MM:SS.mmm.
+/// For durations 1 hour or more, the format is HH:MM:SS.mmm.
+///
+/// # Arguments
+///
+/// * `seconds` - The duration in seconds
+///
+/// # Returns
+///
+/// Returns a formatted timestamp string with milliseconds.
+///
+/// # Examples
+///
+/// ```
+/// use cutil::time::seconds_to_media_timestamp_with_ms;
+///
+/// assert_eq!(seconds_to_media_timestamp_with_ms(123.456), "02:03.456");
+/// assert_eq!(seconds_to_media_timestamp_with_ms(3661.789), "01:01:01.789");
+/// ```
 pub fn seconds_to_media_timestamp_with_ms(seconds: f64) -> String {
     let total_seconds = seconds as u32;
     let hours = total_seconds / 3600;

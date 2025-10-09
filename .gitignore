@@ -1,3 +1,6 @@
 /target
 /.cargo
 /.cargo.bak
+/.claude
+
+.mcp.json

@@ -1,3 +1,32 @@
+//! Vector manipulation utilities.
+//!
+//! This module provides functions for chunking vectors with intelligent merging.
+
+/// Splits a vector into chunks of specified size, with intelligent merging of small final chunks.
+///
+/// If the final chunk is smaller than the chunk size, it will be merged into the
+/// second-to-last chunk to avoid having very small chunks at the end.
+///
+/// # Arguments
+///
+/// * `vec` - The vector to chunk
+/// * `chunk_size` - The desired size of each chunk
+///
+/// # Returns
+///
+/// Returns a vector of chunks, where all chunks except possibly the last one
+/// have exactly `chunk_size` elements.
+///
+/// # Examples
+///
+/// ```
+/// use cutil::vec::chunk_with_merge;
+///
+/// let numbers: Vec<i32> = (1..25).collect();
+/// let chunks = chunk_with_merge(&numbers, 10);
+/// assert_eq!(chunks[0], (1..11).collect::<Vec<i32>>());
+/// assert_eq!(chunks[1], (11..25).collect::<Vec<i32>>());
+/// ```
 pub fn chunk_with_merge<T: Clone>(vec: &[T], chunk_size: usize) -> Vec<Vec<T>> {
     if vec.len() <= chunk_size {
         return if vec.is_empty() {
