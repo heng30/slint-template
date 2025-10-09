@@ -5820,6 +5820,7 @@ dependencies = [
  "anyhow",
  "once_cell",
  "serde",
+ "serde_json",
  "sqlx",
  "tokio",
 ]

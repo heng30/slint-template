@@ -2,7 +2,6 @@
 
 use proc_macro::TokenStream;
 use quote::quote;
-use std::collections::HashSet;
 use syn::{Data, DeriveInput, Fields, LitStr, parse_macro_input};
 
 #[proc_macro_derive(SlintFromConvert, attributes(from, vec, vec_ui))]
@@ -11,9 +10,8 @@ pub fn from_convert_derive(input: TokenStream) -> TokenStream {
     let name = input.ident;
 
     let mut target_type = None;
-    let mut vec_names = vec![];
     let mut vec_names_ui = vec![];
-    let mut vec_names_set = HashSet::new();
+    let mut vec_field_mappings = std::collections::HashMap::new();
 
     for attr in &input.attrs {
         // find `#[from("Type")]`
@@ -21,20 +19,6 @@ pub fn from_convert_derive(input: TokenStream) -> TokenStream {
             match attr.parse_args::<LitStr>() {
                 Ok(lit) => {
                     target_type = Some(syn::parse_str::<syn::Path>(&lit.value()).unwrap());
-                }
-                Err(e) => {
-                    eprintln!("{e:?}");
-                    panic!("parse args failed");
-                }
-            }
-        }
-
-        // find `#[vec("vec_name")]`
-        if attr.path().is_ident("vec") {
-            match attr.parse_args::<LitStr>() {
-                Ok(lit) => {
-                    vec_names.push(syn::parse_str::<syn::Path>(&lit.value()).unwrap());
-                    vec_names_set.insert(lit.value());
                 }
                 Err(e) => {
                     eprintln!("{e:?}");
@@ -69,10 +53,44 @@ pub fn from_convert_derive(input: TokenStream) -> TokenStream {
         panic!("SlintFromConvert only works on structs");
     };
 
+    // Process field-level vec attributes
+    for field in &fields {
+        let field_name = field.ident.as_ref().unwrap();
+
+        for attr in &field.attrs {
+            if attr.path().is_ident("vec") {
+                match attr.parse_args::<syn::Meta>() {
+                    Ok(syn::Meta::NameValue(meta_name_value))
+                        if meta_name_value.path.is_ident("from") =>
+                    {
+                        if let syn::Expr::Lit(syn::ExprLit {
+                            lit: syn::Lit::Str(lit_str),
+                            ..
+                        }) = &meta_name_value.value
+                        {
+                            let ui_field_name =
+                                syn::parse_str::<syn::Path>(&lit_str.value()).unwrap();
+                            vec_field_mappings.insert(field_name.to_string(), ui_field_name);
+                        }
+                    }
+                    _ => {
+                        panic!(
+                            "Invalid #[vec] attribute format. Expected #[vec(name = \"field_name\")]"
+                        );
+                    }
+                }
+            }
+        }
+    }
+
     let field_conversions = fields.iter().filter_map(|field| {
         let field_name = &field.ident;
+        let field_name_str = field_name.as_ref().unwrap().to_string();
 
-        if vec_names_set.contains(&field_name.as_ref().unwrap().to_string()) {
+        // Check if this field is mapped to a UI field
+        let is_vec_field = vec_field_mappings.contains_key(&field_name_str);
+
+        if is_vec_field {
             None
         } else {
             Some(quote! {
@@ -83,23 +101,29 @@ pub fn from_convert_derive(input: TokenStream) -> TokenStream {
 
     let field_conversions_duplicta = field_conversions.clone();
 
-    let vec_name_conversions = vec_names.iter().map(|name| {
+    // Handle field-level vec mappings
+    let field_vec_conversions = vec_field_mappings.iter().map(|(field_name, ui_field_name)| {
+        let field_ident = syn::parse_str::<syn::Ident>(field_name).unwrap();
         quote! {
-            #name: entry.#name.iter().map(|item| item.clone().into()).collect::<Vec<_>>()
+            #field_ident: entry.#ui_field_name.iter().map(|item| item.clone().into()).collect::<Vec<_>>()
         }
     });
 
-    let vec_name_conversions_slint = vec_names.iter().map(|name| {
-        quote! {
-         #name: slint::ModelRc::new(
-                entry
-                    .#name
-                    .into_iter()
-                    .map(|item| item.into())
-                    .collect::<slint::VecModel<_>>()
-            )
-        }
-    });
+    let field_vec_conversions_slint =
+        vec_field_mappings
+            .iter()
+            .map(|(field_name, ui_field_name)| {
+                let field_ident = syn::parse_str::<syn::Ident>(field_name).unwrap();
+                quote! {
+                 #ui_field_name: slint::ModelRc::new(
+                        entry
+                            .#field_ident
+                            .into_iter()
+                            .map(|item| item.into())
+                            .collect::<slint::VecModel<_>>()
+                    )
+                }
+            });
 
     let vec_name_ui_conversions_slint = vec_names_ui.iter().map(|name| {
         quote! {
@@ -112,7 +136,7 @@ pub fn from_convert_derive(input: TokenStream) -> TokenStream {
             fn from(entry: #name) -> Self {
                 Self {
                     #(#field_conversions,)*
-                    #(#vec_name_conversions_slint,)*
+                    #(#field_vec_conversions_slint,)*
                     #(#vec_name_ui_conversions_slint,)*
                     ..Default::default()
                 }
@@ -123,7 +147,7 @@ pub fn from_convert_derive(input: TokenStream) -> TokenStream {
             fn from(entry: #target_type) -> Self {
                 Self {
                     #(#field_conversions_duplicta,)*
-                    #(#vec_name_conversions,)*
+                    #(#field_vec_conversions,)*
                 }
             }
         }
