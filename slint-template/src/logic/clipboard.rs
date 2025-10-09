@@ -1,8 +1,22 @@
+//! Clipboard operations module
+//! 
+//! Provides cross-platform clipboard functionality including copy and paste operations.
+//! Supports different clipboard backends for various platforms (Wayland, X11, Android).
+
 use super::tr::tr;
 use crate::{global_logic, slint_generatedAppWindow::AppWindow, toast_success, toast_warn};
 use anyhow::{bail, Result};
 use slint::ComponentHandle;
 
+/// Copies text to clipboard on desktop platforms
+/// 
+/// Supports both X11 and Wayland clipboard backends on Linux.
+/// 
+/// # Parameters
+/// - `msg`: Text to copy to clipboard
+/// 
+/// # Returns
+/// - `Result<()>` indicating success or failure
 #[cfg(feature = "desktop")]
 fn copy_to_clipboard(msg: &str) -> Result<()> {
     #[cfg(target_os = "linux")]
@@ -24,6 +38,12 @@ fn copy_to_clipboard(msg: &str) -> Result<()> {
     }
 }
 
+/// Pastes text from clipboard on desktop platforms
+/// 
+/// Supports both X11 and Wayland clipboard backends on Linux.
+/// 
+/// # Returns
+/// - `Result<String>` containing the clipboard text
 #[cfg(feature = "desktop")]
 fn paste_from_clipboard() -> Result<String> {
     #[cfg(target_os = "linux")]
@@ -47,6 +67,13 @@ fn paste_from_clipboard() -> Result<String> {
     }
 }
 
+/// Copies text to clipboard on Android platforms
+/// 
+/// # Parameters
+/// - `msg`: Text to copy to clipboard
+/// 
+/// # Returns
+/// - `Result<()>` indicating success or failure
 #[cfg(feature = "android")]
 fn copy_to_clipboard(msg: &str) -> Result<()> {
     match android_clipboard::set_text(msg.to_string()) {
@@ -55,6 +82,10 @@ fn copy_to_clipboard(msg: &str) -> Result<()> {
     }
 }
 
+/// Pastes text from clipboard on Android platforms
+/// 
+/// # Returns
+/// - `Result<String>` containing the clipboard text
 #[cfg(feature = "android")]
 fn paste_from_clipboard() -> Result<String> {
     match android_clipboard::get_text() {
@@ -63,6 +94,13 @@ fn paste_from_clipboard() -> Result<String> {
     }
 }
 
+/// Copies text to Wayland clipboard using wl-copy command
+/// 
+/// # Parameters
+/// - `text`: Text to copy to clipboard
+/// 
+/// # Returns
+/// - `Result<()>` indicating success or failure
 #[cfg(target_os = "linux")]
 fn copy_to_wayland_clipboard(text: &str) -> Result<()> {
     duct::cmd!("wl-copy", text).run()?;
@@ -70,11 +108,21 @@ fn copy_to_wayland_clipboard(text: &str) -> Result<()> {
     Ok(())
 }
 
+/// Pastes text from Wayland clipboard using wl-paste command
+/// 
+/// # Returns
+/// - `Result<String>` containing the clipboard text
 #[cfg(target_os = "linux")]
 fn paste_from_wayland_clipboard() -> Result<String> {
     Ok(duct::cmd!("wl-paste").read()?)
 }
 
+/// Initializes clipboard functionality
+/// 
+/// Sets up callbacks for copy and paste operations with proper error handling.
+/// 
+/// # Parameters
+/// - `ui`: Reference to the application window
 pub fn init(ui: &AppWindow) {
     let ui_weak = ui.as_weak();
     global_logic!(ui).on_copy_to_clipboard(move |msg| {

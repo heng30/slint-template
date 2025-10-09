@@ -1,3 +1,8 @@
+//! Utility functions module
+//! 
+//! Provides various utility functions for UI operations including window management,
+//! string manipulation, date handling, QR code generation, and URL opening.
+
 use super::tr::tr;
 use crate::{
     config, global_util,
@@ -27,6 +32,13 @@ struct Display {
     modes: Vec<DisplayMode>,
 }
 
+/// Initializes utility functions
+/// 
+/// Sets up callbacks for window management, string utilities,
+/// date handling, and other utility functions.
+/// 
+/// # Parameters
+/// - `ui`: Reference to the application window
 pub fn init(ui: &AppWindow) {
     let ui_weak = ui.as_weak();
     global_util!(ui).on_hide_window(move || {
@@ -309,6 +321,10 @@ pub fn init(ui: &AppWindow) {
     }
 }
 
+/// Checks if the current session is using Wayland
+/// 
+/// # Returns
+/// - `true` if Wayland session is detected
 #[cfg(target_os = "linux")]
 pub fn is_wayland() -> bool {
     std::env::var("WAYLAND_DISPLAY").is_ok()
@@ -317,6 +333,10 @@ pub fn is_wayland() -> bool {
             .unwrap_or(false)
 }
 
+/// Initializes QR code generation functionality
+/// 
+/// # Parameters
+/// - `ui`: Reference to the application window
 #[cfg(feature = "qrcode")]
 pub fn init_qrcode(ui: &AppWindow) {
     use crate::slint_generatedAppWindow::Icons;
@@ -343,6 +363,12 @@ pub fn init_qrcode(ui: &AppWindow) {
     });
 }
 
+/// Gets the current display size for window centering
+/// 
+/// Supports both Wayland and traditional display detection.
+/// 
+/// # Returns
+/// - `Some((width, height))` if display size can be determined
 #[cfg(feature = "center-window")]
 pub fn display_size() -> Option<(u32, u32)> {
     #[cfg(target_os = "linux")]

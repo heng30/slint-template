@@ -1,3 +1,8 @@
+//! UI logic and callback management module
+//! 
+//! Contains macros and initialization functions for connecting Slint UI callbacks
+//! to Rust functions. Provides global access to UI components and utilities.
+
 use crate::slint_generatedAppWindow::AppWindow;
 
 #[cfg(any(feature = "desktop", feature = "mobile"))]
@@ -26,6 +31,13 @@ mod examples_mobile;
 #[cfg(feature = "web")]
 mod examples_web;
 
+/// Macro to access the global Store component
+/// 
+/// # Parameters
+/// - `$ui`: AppWindow instance
+/// 
+/// # Returns
+/// - Reference to the global Store component
 #[macro_export]
 macro_rules! global_store {
     ($ui:expr) => {
@@ -33,6 +45,13 @@ macro_rules! global_store {
     };
 }
 
+/// Macro to access the global Logic component
+/// 
+/// # Parameters
+/// - `$ui`: AppWindow instance
+/// 
+/// # Returns
+/// - Reference to the global Logic component
 #[macro_export]
 macro_rules! global_logic {
     ($ui:expr) => {
@@ -40,6 +59,13 @@ macro_rules! global_logic {
     };
 }
 
+/// Macro to access the global Util component
+/// 
+/// # Parameters
+/// - `$ui`: AppWindow instance
+/// 
+/// # Returns
+/// - Reference to the global Util component
 #[macro_export]
 macro_rules! global_util {
     ($ui:expr) => {
@@ -47,6 +73,15 @@ macro_rules! global_util {
     };
 }
 
+/// Macro to connect Slint callbacks to Rust functions
+/// 
+/// Creates a callback connection with proper weak reference handling
+/// to prevent memory leaks.
+/// 
+/// # Parameters
+/// - `$callback_name`: Name of the callback function
+/// - `$ui`: AppWindow instance
+/// - `$($arg:ident),*`: Callback arguments
 #[macro_export]
 macro_rules! logic_cb {
     ($callback_name:ident, $ui:expr, $($arg:ident),*) => {
@@ -62,6 +97,14 @@ macro_rules! logic_cb {
     };
 }
 
+/// Macro to implement serde Serialize and Deserialize for Slint enums
+/// 
+/// Automatically generates serde implementations that convert between
+/// enum variants and their string representations.
+/// 
+/// # Parameters
+/// - `$ty`: Enum type name
+/// - `$($arg:ident),+`: Enum variant names
 #[macro_export]
 macro_rules! impl_slint_enum_serde {
     ($ty:ident, $($arg:ident),+) => {
@@ -115,6 +158,12 @@ macro_rules! impl_slint_enum_serde {
     };
 }
 
+/// Initializes all UI logic modules
+/// 
+/// Sets up callbacks and initializes platform-specific logic modules.
+/// 
+/// # Parameters
+/// - `ui`: Reference to the application window
 pub fn init(ui: &AppWindow) {
     #[cfg(any(feature = "desktop", feature = "mobile"))]
     {

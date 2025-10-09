@@ -1,3 +1,8 @@
+//! Database management module
+//! 
+//! Provides database initialization and CRUD operation macros for SQLite database.
+//! Supports asynchronous database operations with error handling.
+
 // use serde::{Deserialize, Deserializer, Serialize, Serializer};
 // use serde_with::{serde_as, DeserializeAs, SerializeAs};
 
@@ -8,6 +13,15 @@
 // };
 // pub const ACCOUNTS_TABLE: &str = "accounts";
 
+/// Initializes the database
+/// 
+/// Creates the SQLite database file and sets up required tables.
+/// 
+/// # Parameters
+/// - `db_path`: Path to the database file
+/// 
+/// # Panics
+/// - If database creation fails
 pub async fn init(db_path: &str) {
     sqldb::create_db(db_path).await.expect("create db");
 
@@ -16,6 +30,14 @@ pub async fn init(db_path: &str) {
     //     .expect("account table failed");
 }
 
+/// Macro for adding entries to the database
+/// 
+/// Creates an async function that serializes the entry and inserts it into the database.
+/// Automatically handles error reporting through toast notifications.
+/// 
+/// # Parameters
+/// - `$table`: Database table name
+/// - `$ty`: Entry type that implements `Serialize`
 #[macro_export]
 macro_rules! db_add {
     ($table:expr, $ty:ident) => {
@@ -33,6 +55,14 @@ macro_rules! db_add {
     };
 }
 
+/// Macro for updating entries in the database
+/// 
+/// Creates an async function that serializes the entry and updates it in the database.
+/// Automatically handles error reporting through toast notifications.
+/// 
+/// # Parameters
+/// - `$table`: Database table name
+/// - `$ty`: Entry type that implements `Serialize`
 #[macro_export]
 macro_rules! db_update {
     ($table:expr, $ty:ident) => {
@@ -50,6 +80,13 @@ macro_rules! db_update {
     };
 }
 
+/// Macro for removing entries from the database
+/// 
+/// Creates an async function that deletes an entry from the database by ID.
+/// Automatically handles error reporting through toast notifications.
+/// 
+/// # Parameters
+/// - `$table`: Database table name
 #[macro_export]
 macro_rules! db_remove {
     ($table:expr) => {
