@@ -53,6 +53,9 @@ export global Util {
 
     pure callback upate-date-picker(year: int, month: int) -> [[Date]];
     pure callback seconds-to-media-timestamp(seconds: float) -> string;
+    seconds-to-media-timestamp => {
+        return "00:00";
+    }
 
     public pure function text-color(status: ToastStatus) -> color {
         if (status == ToastStatus.Success) {

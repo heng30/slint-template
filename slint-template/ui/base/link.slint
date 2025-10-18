@@ -32,10 +32,18 @@ export component Link inherits HorizontalLayout {
         }
     }
 
-    if is-show-icon: IconBtn {
-        icon: Icons.browser-access-light;
-        clicked => {
-            root.clicked();
+    if is-show-icon:VerticalLayout {
+        alignment: end;
+        height: tx.preferred-height;
+
+        IconBtn {
+            icon: Icons.browser-access-light;
+            icon-size: tx.font-size * 1.33;
+            colorize: tx.color;
+
+            clicked => {
+                root.clicked();
+            }
         }
     }
 }

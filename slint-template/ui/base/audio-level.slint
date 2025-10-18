@@ -1,0 +1,41 @@
+import { Theme } from "theme.slint";
+import { Label  } from "label.slint";
+
+export component AudioLevel inherits Rectangle {
+    height: Theme.icon-size * 2 / 3;
+    width: 300px;
+
+    in-out property <bool> enable: true;
+    in-out property <int> db: -60;
+    private property <int> real-db: clamp(root.db, -60, 0);
+
+    HorizontalLayout {
+        x: 0;
+        y: 0;
+
+        Rectangle {
+            height: 100%;
+            width: 66%;
+            background: Theme.is-dark ? Theme.hover-background.brighter(20%) : Theme.thirdly-background.darker(10%);
+        }
+
+        Rectangle {
+            height: 100%;
+            width: 17%;
+            background: Theme.is-dark ? Theme.hover-background.darker(10%) : Theme.thirdly-background;
+        }
+
+        Rectangle {
+            height: 100%;
+            width: 17%;
+            background: Theme.is-dark ? Theme.hover-background.brighter(40%) : Theme.thirdly-background.darker(20%);
+        }
+    }
+
+    Rectangle {
+        x: 0;
+        y: 0;
+        width: parent.width * (1 - real-db / -60);
+        background: root.enable ? (real-db < -20 ? Theme.success-color : (real-db < -10 ? Theme.warning-color : Theme.danger-color)) : Theme.disabled-color;
+    }
+}
