@@ -35,7 +35,6 @@
         pkgs.mkShell.override { stdenv = gccStdenv; } {
           nativeBuildInputs = with pkgs; [
             gcc
-            mold
             llvm
             clang
             python3
@@ -58,11 +57,7 @@
               lib.concatStringsSep ":" [ "${glibc.dev}/include" ];
 
             CPLUS_INCLUDE_PATH = with pkgs;
-              lib.concatStringsSep ":" [
-                "${gcc}/include/c++/${gcc.version}"
-                "${gcc}/include/c++/${gcc.version}/x86_64-unknown-linux-gnu"
-                "${glibc.dev}/include"
-              ];
+              lib.concatStringsSep ":" [ "${glibc.dev}/include" ];
 
             PKG_CONFIG_PATH = with pkgs;
               lib.concatStringsSep ":" [ "${wayland.dev}/lib/pkgconfig" ];

@@ -1,36 +1,31 @@
 //! Settings panel logic module
-//! 
+//!
 //! Handles application settings including preferences, proxy configuration,
 //! AI model settings, backup/restore, and cache management.
 
 use super::tr::tr;
 use crate::{
-    global_logic,
-    global_store,
-    config,
-    slint_generatedAppWindow::{AppWindow, SettingProxy, SettingAiModel, Theme},
+    config, global_logic, global_store,
+    slint_generatedAppWindow::{AppWindow, SettingAiModel, SettingProxy, Theme},
     toast_success, toast_warn,
 };
 use slint::ComponentHandle;
 
 /// Initializes settings panel logic
-/// 
+///
 /// Sets up all settings-related callbacks including preferences,
 /// proxy settings, AI model configuration, and utility functions.
-/// 
+///
 /// # Parameters
 /// - `ui`: Reference to the application window
 pub fn init(ui: &AppWindow) {
     init_setting(ui);
 
-    global_store!(ui)
-        .set_is_first_run(config::all().is_first_run);
+    global_store!(ui).set_is_first_run(config::all().is_first_run);
 
-    global_store!(ui)
-        .set_is_show_landing_page(config::all().is_first_run);
+    global_store!(ui).set_is_show_landing_page(config::all().is_first_run);
 
-    global_logic!(ui)
-        .on_inner_tr(move |text, _lang| tr(text.as_str()).into());
+    global_logic!(ui).on_inner_tr(move |text, _lang| tr(text.as_str()).into());
 
     let ui_weak = ui.as_weak();
     global_logic!(ui).on_get_setting_preference(move || {
@@ -39,30 +34,31 @@ pub fn init(ui: &AppWindow) {
     });
 
     let ui_weak = ui.as_weak();
-    global_logic!(ui)
-        .on_set_setting_preference(move |mut setting| {
-            let ui = ui_weak.unwrap();
+    global_logic!(ui).on_set_setting_preference(move |mut setting| {
+        let ui = ui_weak.unwrap();
 
-            let font_size = u32::min(50, u32::max(10, setting.font_size.parse().unwrap_or(16)));
-            setting.font_size = slint::format!("{}", font_size);
+        let font_size = u32::min(50, u32::max(10, setting.font_size.parse().unwrap_or(16)));
+        setting.font_size = slint::format!("{}", font_size);
 
-            let mut all = config::all();
-            all.preference.win_width =
-                u32::max(500, setting.win_width.to_string().parse().unwrap_or(500));
-            all.preference.win_height =
-                u32::max(800, setting.win_height.to_string().parse().unwrap_or(800));
-            all.preference.font_size = font_size;
-            all.preference.font_family = setting.font_family.into();
-            all.preference.language = setting.language.into();
-            all.preference.always_on_top = setting.always_on_top;
-            all.preference.no_frame = setting.no_frame;
-            all.preference.is_dark = setting.is_dark;
-            _ = config::save(all);
+        let mut all = config::all();
+        all.preference.win_width =
+            u32::max(500, setting.win_width.to_string().parse().unwrap_or(500));
+        all.preference.win_height =
+            u32::max(800, setting.win_height.to_string().parse().unwrap_or(800));
+        all.preference.font_size = font_size;
+        all.preference.font_family = setting.font_family.into();
+        all.preference.language = setting.language.into();
+        all.preference.always_on_top = setting.always_on_top;
+        all.preference.no_frame = setting.no_frame;
+        all.preference.is_dark = setting.is_dark;
+        _ = config::save(all);
 
-            if cfg!(feature = "desktop") && !ui.window().is_maximized() {
-                ui.global::<crate::Util>().invoke_update_window_size();
-            }
-        });
+        if cfg!(feature = "desktop") && !ui.window().is_maximized() {
+            ui.global::<crate::Util>().invoke_update_window_size();
+        }
+
+        toast_success!(ui_weak.unwrap(), tr("save configuration successfully"));
+    });
 
     let ui_weak = ui.as_weak();
     global_logic!(ui).on_increase_font_size(move || {
@@ -177,9 +173,9 @@ pub fn init(ui: &AppWindow) {
 }
 
 /// Initializes setting values from configuration
-/// 
+///
 /// Loads current configuration values into the settings UI.
-/// 
+///
 /// # Parameters
 /// - `ui`: Reference to the application window
 fn init_setting(ui: &AppWindow) {
@@ -201,9 +197,9 @@ fn init_setting(ui: &AppWindow) {
 }
 
 /// Performs backup operation for desktop platforms
-/// 
+///
 /// Creates a backup archive containing configuration and data files.
-/// 
+///
 /// # Parameters
 /// - `ui`: Weak reference to the application window
 /// - `setting`: Backup settings including what to backup
@@ -275,9 +271,9 @@ fn backup(ui: slint::Weak<AppWindow>, setting: crate::slint_generatedAppWindow::
 }
 
 /// Performs recovery operation for desktop platforms
-/// 
+///
 /// Restores application data from a backup archive.
-/// 
+///
 /// # Parameters
 /// - `ui`: Weak reference to the application window
 #[cfg(feature = "desktop")]
@@ -350,9 +346,9 @@ fn recover(ui: slint::Weak<AppWindow>) {
 }
 
 /// Performs uninstall operation for desktop platforms
-/// 
+///
 /// Removes application configuration and data directories.
-/// 
+///
 /// # Parameters
 /// - `ui`: Weak reference to the application window
 #[cfg(feature = "desktop")]
