@@ -3,18 +3,18 @@ import { Theme } from "theme.slint";
 export component TabBtn inherits Rectangle {
     in-out property icon <=> img.source;
     in-out property icon-width <=> img.width;
-    in-out property icon-rotation-angle <=> img.rotation-angle;
+    in-out property icon-transform-roatation <=> img.transform-rotation;
     in-out property text <=> txt.text;
 
-    in-out property<length> icon-size: Theme.icon-size;
-    in-out property<color> colorize: Theme.icon-color;
-    in-out property<color> checked-colorize: Theme.thirdly-brand-color;
-    in-out property<bool> checked: false;
+    in-out property <length> icon-size: Theme.icon-size;
+    in-out property <color> colorize: Theme.icon-color;
+    in-out property <color> checked-colorize: Theme.thirdly-brand-color;
+    in-out property <bool> checked: false;
 
     callback clicked();
 
-    in-out property<color> bg-color: Colors.transparent;
-    in-out property<color> bg-pressed-color: Colors.transparent;
+    in-out property <color> bg-color: Colors.transparent;
+    in-out property <color> bg-pressed-color: Colors.transparent;
 
     background: touch.pressed ? bg-pressed-color : bg-color;
 
@@ -35,14 +35,14 @@ export component TabBtn inherits Rectangle {
 
         HorizontalLayout {
             alignment: center;
-            txt :=  Text {
+            txt := Text {
                 font-size: img.width * 0.4;
                 color: img.colorize;
             }
         }
     }
 
-    fs := FocusScope {}
+    fs := FocusScope { }
 
     touch := TouchArea {
         mouse-cursor: MouseCursor.pointer;

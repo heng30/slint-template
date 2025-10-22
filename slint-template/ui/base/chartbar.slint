@@ -44,8 +44,8 @@ export component ChartBar inherits Rectangle {
     in-out property <length> axis-size: Theme.default-border-width;
     in-out property <color> axis-color: Theme.regular-text-color;
     in-out property <length> axis-padding: Theme.padding * 8;
-    in-out property <angle> label-totation-angle: orientation == Orientation.horizontal ? 0 : 20deg;
-    in-out property <angle> number-totation-angle;
+    in-out property <angle> label-transform-rotation: orientation == Orientation.horizontal ? 0 : 20deg;
+    in-out property <angle> number-transform-rotation;
     in-out property <bool> is-hide-number-axis;
     in-out property <duration> animate-duration: Theme.default-animate-duration * 2;
 
@@ -97,7 +97,7 @@ export component ChartBar inherits Rectangle {
                         }
 
                         Label {
-                            rotation-angle: label-totation-angle;
+                            transform-rotation: label-transform-rotation;
                             text: entry.label;
                         }
                     }
@@ -174,7 +174,7 @@ export component ChartBar inherits Rectangle {
 
                         for index in number-counts: Label {
                             x: max-value <= 0 ? -self.preferred-width / 2 : parent.width * self.text.to-float() / max-value - self.preferred-width / 2;
-                            rotation-angle: number-totation-angle;
+                            transform-rotation: number-transform-rotation;
                             text: number-counts <= 1 ? 0 : Math.floor(max-value / (number-counts - 1)) * index;
                         }
                     }
@@ -214,7 +214,7 @@ export component ChartBar inherits Rectangle {
 
                     for index in number-counts: Label {
                         y: max-value <= 0 ? parent.height - self.preferred-height / 2 : parent.height - parent.height * self.text.to-float() / max-value - self.preferred-height / 2;
-                        rotation-angle: number-totation-angle;
+                        transform-rotation: number-transform-rotation;
                         text: number-counts <= 1 ? 0 : Math.floor(max-value / (number-counts - 1)) * index;
                     }
                 }
@@ -288,8 +288,8 @@ export component ChartBar inherits Rectangle {
                     }
 
                     Label {
-                        rotation-origin-x: 0;
-                        rotation-angle: label-totation-angle;
+                        transform-origin: { x: 0, y: 0 };
+                        transform-rotation: label-transform-rotation;
                         text: entry.label;
                     }
                 }

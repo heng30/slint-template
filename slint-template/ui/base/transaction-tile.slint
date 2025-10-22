@@ -116,7 +116,7 @@ export component TransactionTile inherits Rectangle {
                 colorize: root.icon-colorize;
                 icon: root.icon;
                 rotation-type: TransactionTileStatus.Loading == entry.status ? RotationType.Auto : RotationType.None;
-                icon-rotation-angle: TransactionTileStatus.Loading == entry.status ? 240deg * animation-tick() / 0.5s : 0;
+                icon-transform-rotation: TransactionTileStatus.Loading == entry.status ? 240deg * animation-tick() / 0.5s : 0;
             }
         }
     }

@@ -29,10 +29,10 @@ export component Loading inherits Rectangle {
             icon := Image {
                 height: root.icon-size;
                 width: self.height;
-                rotation-angle: !root.is-show-animation ? 0deg : 240deg * animation-tick() / root.duration;
+                transform-rotation: !root.is-show-animation ? 0deg : 240deg * animation-tick() / root.duration;
                 source: root.loading-icon;
                 colorize: root.colorize;
-                animate rotation-angle {
+                animate transform-rotation {
                     easing: ease-in-out;
                     iteration-count: -1;
                 }

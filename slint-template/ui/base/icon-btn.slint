@@ -14,7 +14,7 @@ export component IconBtn inherits Rectangle {
     in-out property colorize <=> img.colorize;
     in-out property icon-size <=> img.width;
     in-out property icon-visible <=> img.visible;
-    in-out property icon-rotation-angle <=> img.rotation-angle;
+    in-out property icon-transform-rotation <=> img.transform-rotation;
     in-out property mouse-cursor <=> touch.mouse-cursor;
     in-out property enabled-toucharea <=> touch.enabled;
     out property has-hover <=> touch.has-hover;
@@ -96,9 +96,9 @@ export component IconBtn inherits Rectangle {
                 width: Theme.icon-size;
                 height: self.width;
                 colorize: Theme.icon-color;
-                rotation-angle: 0;
+                transform-rotation: 0;
 
-                animate rotation-angle {
+                animate transform-rotation {
                     duration: Theme.default-animate-duration;
                     easing: ease-in-out;
                     iteration-count: root.rotation-type == RotationType.Auto ? -1 : root.icon-rotation-iteration-count;
@@ -119,10 +119,10 @@ export component IconBtn inherits Rectangle {
         mouse-cursor: MouseCursor.pointer;
         clicked => {
             if (RotationType.Click == root.rotation-type) {
-                if (icon-rotation-angle == 0) {
-                    icon-rotation-angle = 360deg;
+                if (icon-transform-rotation == 0) {
+                    icon-transform-rotation = 360deg;
                 } else {
-                    icon-rotation-angle = 0deg;
+                    icon-transform-rotation = 0deg;
                 }
             }
             if (gain-focus-when-clicked) {
