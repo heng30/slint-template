@@ -48,6 +48,8 @@ fn cn() -> &'static HashMap<&'static str, &'static str> {
         HashMap::from([
             ("about", "关于"),
             ("About", "关于"),
+            ("Finish", "完成"),
+            ("Next", "下一步"),
             ("Account address", "账户地址"),
             ("Address", "地址"),
             ("Address book", "地址簿"),

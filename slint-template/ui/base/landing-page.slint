@@ -1,9 +1,9 @@
 import { Theme, Icons } from "theme.slint";
 import { Logic } from "../logic.slint";
-import { Store} from "../store.slint";
+import { Store } from "../store.slint";
 import { TextBtn } from "./btn.slint";
 import { CenterLayout } from "center-layout.slint";
-import { Label} from "label.slint";
+import { Label } from "label.slint";
 import { RadioBtn } from "./radio-btn.slint";
 
 export struct LandingDetail {
@@ -142,7 +142,7 @@ export component LandingPage inherits Rectangle {
 
             TextBtn {
                 font-size: Theme.default-font-size - 2px;
-                text: Logic.tr(details.length == current-index + 1 ? "Finish" : "Next");
+                text: details.length == current-index + 1 ? Logic.tr("Finish") : Logic.tr("Next");
                 clicked => {
                     current-index += 1;
 

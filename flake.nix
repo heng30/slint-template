@@ -40,7 +40,6 @@
             python3
             gnumake
             rustToolchain
-            rust-analyzer
           ];
 
           buildInputs = shellBuildInputs;
