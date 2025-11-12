@@ -22,7 +22,6 @@ export component Slider inherits Rectangle {
     in-out property <float> maximum: 100;
     in-out property <length> indicator-size: Theme.icon-size * 2;
     in-out property <Orientation> orientation: Orientation.horizontal;
-    in-out property <bool> enable-value-update-progress;
 
     in-out property enabled <=> ta.enabled;
     out property has-focus <=> fs.has-focus;
@@ -31,23 +30,26 @@ export component Slider inherits Rectangle {
     in-out property <color> finished-progress-color: Theme.thirdly-brand-color;
     in-out property <color> unfinished-progress-color: Theme.secondary-background;
 
-    private property <float> progress: (Math.clamp(value, minimum, maximum) - minimum) / (maximum - minimum);
-
     private property <bool> indicator-has-hover;
+
+    changed minimum => {
+        pb.progress = (Math.clamp(value, minimum, maximum) - minimum) / (maximum - minimum);
+        indicator.update-position();
+    }
+
+    changed maximum => {
+        pb.progress = (Math.clamp(value, minimum, maximum) - minimum) / (maximum - minimum);
+        indicator.update-position();
+    }
+
+    changed value => {
+        pb.progress = (Math.clamp(value, minimum, maximum) - minimum) / (maximum - minimum);
+        indicator.update-position();
+    }
 
     callback changed(value: float);
     callback released(value: float);
     callback pressed(value: float);
-
-    changed value => {
-        if (enable-value-update-progress) {
-            progress = (Math.clamp(value, minimum, maximum) - minimum) / (maximum - minimum);
-        }
-    }
-
-    changed progress => {
-        indicator.update-position();
-    }
 
     width: orientation == Orientation.horizontal ? 400px : Theme.default-font-size;
     height: orientation == Orientation.horizontal ? Theme.default-font-size : 400px;
@@ -60,7 +62,7 @@ export component Slider inherits Rectangle {
         height: root.height;
         border-radius: root.border-radius;
         orientation: root.orientation;
-        progress: root.progress;
+        progress: (Math.clamp(value, minimum, maximum) - minimum) / (maximum - minimum);
         finished-text: "";
         unfinished-text: "";
         unfinished-progress-color: root.unfinished-progress-color;
@@ -79,11 +81,11 @@ export component Slider inherits Rectangle {
             fs.focus();
 
             if (root.orientation == Orientation.horizontal) {
-                root.progress = self.pressed-x / root.width;
-                root.value = root.progress * (root.maximum - root.minimum) + root.minimum;
+                let progress = self.pressed-x / root.width;
+                root.value = progress * (root.maximum - root.minimum) + root.minimum;
             } else {
-                root.progress = 1 - self.pressed-y / root.height;
-                root.value = root.progress * (root.maximum - root.minimum) + root.minimum;
+                let progress = 1 - self.pressed-y / root.height;
+                root.value = progress * (root.maximum - root.minimum) + root.minimum;
             }
 
             root.changed(root.value);
@@ -104,14 +106,21 @@ export component Slider inherits Rectangle {
 
         function update-position() {
             if (root.orientation == Orientation.horizontal) {
-                self.x = root.width * root.progress - self.width / 2;
+                self.x = Math.clamp(root.width * pb.progress - self.width / 2, -self.width / 2, root.width - self.width / 2);
             } else {
-                self.y = root.height - self.height / 2 - root.height * root.progress;
+                self.y = Math.clamp(root.height - self.height / 2 - root.height * pb.progress, -self.height / 2, root.height - self.height / 2);
             }
         }
 
         init => {
             update-position();
+        }
+
+        // Update indicator position when component becomes visible
+        changed visible => {
+            if (self.visible) {
+                update-position();
+            }
         }
 
         indicator-ta := TouchArea {
@@ -129,12 +138,12 @@ export component Slider inherits Rectangle {
             moved => {
                 if (root.orientation == Orientation.horizontal) {
                     parent.x = Math.clamp(parent.x + self.mouse-x - self.pressed-x, -parent.width / 2, root.width - parent.width / 2);
-                    root.progress = (parent.x + parent.width / 2) / root.width;
-                    root.value = root.progress * (root.maximum - root.minimum) + root.minimum;
+                    let progress = (parent.x + parent.width / 2) / root.width;
+                    root.value = progress * (root.maximum - root.minimum) + root.minimum;
                 } else {
                     parent.y = Math.clamp(parent.y + self.mouse-y - self.pressed-y, -parent.height / 2, root.height - parent.height / 2);
-                    root.progress = 1 - (parent.y + parent.width / 2) / root.height;
-                    root.value = root.progress * (root.maximum - root.minimum) + root.minimum;
+                    let progress = 1 - (parent.y + parent.width / 2) / root.height;
+                    root.value = progress * (root.maximum - root.minimum) + root.minimum;
                 }
 
                 root.changed(root.value);

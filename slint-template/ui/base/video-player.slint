@@ -1,0 +1,644 @@
+import { ListView } from "std-widgets.slint";
+import { Theme, Icons } from "theme.slint";
+import { Util } from "util.slint";
+import { Logic } from "../logic.slint";
+import { Store } from "../store.slint";
+import { Slider } from "slider.slint";
+import { IconBtn } from "icon-btn.slint";
+import { Label } from "label.slint";
+import { Playlist } from "playlist.slint";
+import { PlaylistItem, AppPosType } from "def.slint";
+import { TextBtnWithoutIcon } from "btn.slint";
+import { Select } from "select.slint";
+
+export component VideoPlayer inherits Rectangle {
+    in-out property player-image <=> img.source;
+    in-out property <bool> is-playing;
+    in-out property <bool> is-full-screen;
+    in-out property <float> current-sound: 50;
+    in-out property <float> current-speed: 1.0;
+    in-out property <float> progress: 0;
+    in-out property <string> current-time: "0:00";
+    in-out property <string> end-time: "4:00";
+    in-out property <bool> show-controls: false;
+    in-out property <length> control-height: Theme.icon-size * 3;
+    in-out property <float> center-icon-opacity: Theme.golden-ratio;
+    in-out property <bool> show-prev-buttons: true;
+    in-out property <bool> show-next-buttons: true;
+    in-out property <bool> show-playlist-button: true;
+    in-out property <bool> show-full-screen-btn: true;
+    in-out property <bool> show-speed-btn: true;
+    in-out property <bool> show-subtitle-btn: true;
+    in-out property <bool> enable-subtitle;
+    in-out property <duration> controls-hide-delay: 5000ms;
+    in-out property <[PlaylistItem]> playlist-items;
+    in-out property <int> current-playlist-index: -1;
+    in-out property <int> playlist-max-viewport-items: 10;
+    in-out property <length> playlist-width: Theme.default-font-size * 20;
+    out property <length> playlist-item-height: Theme.default-font-size + Theme.padding * 6;
+    in-out property <length> children-spacing: 0px;
+    in-out property <length> childre-padding: 0px;
+
+    private property <bool> show-sound-slider: false;
+    private property <bool> mouse-on-controls: false;
+    private property <bool> mouse-in-player: false;
+    private property <bool> show-play-overlay: !is-playing;
+    private property <bool> show-volume-indicator: false;
+
+    callback prev();
+    callback next();
+    callback play();
+    callback stop();
+    callback forward();
+    callback backward();
+    callback full-screen();
+    callback exit-full-screen();
+    callback sound-changed(sound: int);
+    callback speed-changed(speed: float);
+    callback progress-changed(progress: float);
+    callback playlist-item-selected(index: int);
+    callback key-pressed(key-event: KeyEvent);
+
+    function valid-playlist-index() -> bool {
+        return current-playlist-index >= 0 && current-playlist-index < playlist-items.length;
+    }
+
+    background: black;
+    forward-focus: fs;
+
+    changed progress => {
+        progress-bar.value = progress;
+    }
+
+    fs-timer := Timer {
+        interval: 1s;
+        running: true;
+        triggered() => {
+            fs.focus();
+            self.running = false;
+        }
+    }
+
+    fs := FocusScope {
+        key-pressed(event) => {
+            if (event.text == Key.Escape) {
+                if (root.show-full-screen-btn && root.is-full-screen) {
+                    root.exit-full-screen();
+                }
+            } else if (event.text == Key.Space) {
+                if (valid-playlist-index()) {
+                    root.is-playing = !root.is-playing;
+                    if (root.is-playing) {
+                        root.play();
+                    } else {
+                        root.stop();
+                    }
+                }
+            } else if (event.text == "p") {
+                if (root.current-playlist-index > 0 && valid-playlist-index()) {
+                    root.current-playlist-index = max(0, root.current-playlist-index - 1);
+                    root.prev();
+                }
+            } else if (event.text == "n") {
+                if (root.current-playlist-index < root.playlist-items.length - 1 && valid-playlist-index()) {
+                    root.current-playlist-index = min(root.current-playlist-index + 1, root.playlist-items.length - 1);
+                    root.next();
+                }
+            } else if (event.text == "k" || event.text == Key.UpArrow) {
+                root.current-sound = Math.round(min(root.current-sound + 5, 100));
+                sound-slider.value = root.current-sound;
+                root.sound-changed(root.current-sound);
+                root.show-volume-indicator = true;
+                volume-timer.restart();
+            } else if (event.text == "j" || event.text == Key.DownArrow) {
+                root.current-sound = Math.round(max(0, root.current-sound - 5));
+                sound-slider.value = root.current-sound;
+                root.sound-changed(root.current-sound);
+                root.show-volume-indicator = true;
+                volume-timer.restart();
+            } else if (event.text == "h" || event.text == Key.LeftArrow) {
+                if (valid-playlist-index()) {
+                    root.backward();
+                }
+            } else if (event.text == "l" || event.text == Key.RightArrow) {
+                if (valid-playlist-index()) {
+                    root.forward()
+                }
+            } else {
+                root.key-pressed(event);
+            }
+            accept
+        }
+
+        video-area := Rectangle {
+            private property <float> width-height-rate: self.width / self.height;
+
+            img := Image {
+                private property <float> img-width-height-rate: self.source.width / self.source.height;
+
+                function update-size() {
+                    if (parent.width-height-rate > img-width-height-rate) {
+                        self.height = min(parent.height, self.source.height * 1px);
+                        self.width = self.height * img-width-height-rate;
+                    } else {
+                        self.width = min(parent.width, self.source.width * 1px);
+                        self.height = self.width / img-width-height-rate;
+                    }
+                }
+
+                image-fit: ImageFit.contain;
+
+                changed source => {
+                    update-size();
+                }
+
+                init => {
+                    update-size();
+                }
+            }
+
+            touch := TouchArea {
+                mouse-cursor: MouseCursor.pointer;
+
+                clicked => {
+                    root.focus();
+
+                    if (valid-playlist-index()) {
+                        root.is-playing = !root.is-playing;
+                        if (root.is-playing) {
+                            root.play();
+                        } else {
+                            root.stop();
+                        }
+                    }
+                }
+
+                double-clicked => {
+                    if (root.show-full-screen-btn && !root.is-full-screen) {
+                        root.full-screen();
+                    }
+                }
+
+                changed mouse-x => {
+                    root.show-controls = true;
+                }
+
+                changed mouse-y => {
+                    root.show-controls = true;
+                }
+
+                changed has-hover => {
+                    if (!self.has-hover) {
+                        root.show-controls = false;
+                    }
+                }
+            }
+
+            volume-indicator := Rectangle {
+                x: parent.width / 2 - self.width / 2;
+                y: Theme.padding * 4;
+                width: volume-indicator-hbox.preferred-width;
+                height: volume-indicator-hbox.preferred-height;
+                background: Theme.dark-bg-color;
+                border-radius: self.height / 2;
+                opacity: root.show-volume-indicator ? 0.8 : 0;
+
+                animate opacity {
+                    duration: Theme.default-animate-duration;
+                    easing: ease-in-out;
+                }
+
+                volume-indicator-hbox := HorizontalLayout {
+                    y: 0;
+                    alignment: LayoutAlignment.center;
+                    spacing: Theme.padding * 2;
+                    padding-top: Theme.padding;
+                    padding-bottom: Theme.padding;
+                    padding-left: Theme.padding * 3;
+                    padding-right: Theme.padding * 3;
+
+                    VerticalLayout {
+                        alignment: center;
+                        Image {
+                            source: root.current-sound <= 0 ? Icons.sound-off-fill : Icons.sound-on-fill;
+                            width: Theme.icon-size;
+                            height: self.width;
+                            colorize: Theme.light-text-color;
+                            image-fit: ImageFit.contain;
+                        }
+                    }
+
+                    Label {
+                        text: root.current-sound + "%";
+                        color: Theme.light-text-color;
+                        font-size: Theme.title4-font-size;
+                        vertical-alignment: TextVerticalAlignment.center;
+                        horizontal-alignment: TextHorizontalAlignment.center;
+                    }
+                }
+            }
+
+            volume-timer := Timer {
+                interval: 2s;
+                running: root.show-volume-indicator;
+                triggered => {
+                    root.show-volume-indicator = false;
+                }
+            }
+
+            if !root.is-playing: Rectangle {
+                opacity: root.center-icon-opacity;
+                background: Theme.dark-bg-color;
+
+                Rectangle {
+                    width: Math.min(parent.width, parent.height) * 0.2;
+                    height: self.width;
+                    border-radius: self.width / 2;
+                    background: Theme.light-text-color.darker(30%);
+
+                    Image {
+                        width: 100%;
+                        height: 100%;
+                        source: Icons.control-start-light;
+                        colorize: Theme.dark-bg-color;
+                        image-fit: ImageFit.contain;
+                    }
+                }
+            }
+        }
+
+        control-container := Rectangle {
+            y: parent.height - control-height;
+            x: 0;
+            height: control-height;
+            background: Colors.transparent;
+            opacity: root.show-controls ? 1 : 0;
+
+            animate opacity {
+                duration: Theme.default-animate-duration;
+                easing: ease-in-out;
+            }
+
+            control-touch := TouchArea {
+                mouse-cursor: MouseCursor.pointer;
+
+                clicked => {
+                    root.show-sound-slider = false;
+                }
+
+                changed has-hover => {
+                    mouse-on-controls = self.has-hover;
+                    if (self.has-hover) {
+                        root.show-controls = true;
+                    } else {
+                        root.show-controls = false;
+                    }
+                }
+            }
+
+            progress-bar := Slider {
+                y: Theme.padding * 2;
+                x: Theme.padding * 2;
+                width: parent.width - Theme.padding * 4;
+                height: Theme.default-font-size * 0.33;
+                value: root.progress;
+                finished-progress-color: Theme.is-dark ? Theme.success-color.brighter(20%) : Theme.success-color;
+                unfinished-progress-color: Theme.light-text-color.darker(80%);
+                indicator-size: self.has-hover ? Theme.icon-size * 0.8 : 0;
+                border-radius: 0;
+
+                changed has-hover => {
+                    mouse-on-controls = true;
+                    root.show-controls = true;
+                }
+
+                pressed => {
+                    root.stop();
+                }
+
+                released(v) => {
+                    if (valid-playlist-index()) {
+                        root.progress = v;
+                        root.progress-changed(v);
+                    }
+                }
+            }
+
+            controls := HorizontalLayout {
+                y: Theme.padding * 2 + Theme.default-font-size * 0.33 + Theme.padding * 2;
+                height: control-height - (Theme.padding * 2 + Theme.default-font-size * 0.33 + Theme.padding * 2);
+                padding-left: Theme.padding * 4;
+                padding-right: Theme.padding * 4;
+                padding-bottom: Theme.padding;
+                alignment: LayoutAlignment.space-between;
+
+                left-controls := HorizontalLayout {
+                    alignment: LayoutAlignment.start;
+                    spacing: Theme.padding * 6;
+
+                    playback-controls := HorizontalLayout {
+                        alignment: LayoutAlignment.start;
+                        spacing: Theme.padding * 4;
+
+                        if root.show-prev-buttons && root.current-playlist-index > 0: IconBtn {
+                            icon: Icons.skip-next-light;
+                            icon-transform-rotation: 180deg;
+                            show-icon-hover-background: false;
+                            icon-size: Theme.icon-size * 1.5;
+                            colorize: Theme.light-text-color;
+
+                            changed has-hover => {
+                                mouse-on-controls = true;
+                                root.show-controls = true;
+                            }
+
+                            clicked => {
+                                root.show-sound-slider = false;
+
+                                if (root.current-playlist-index > 0 && valid-playlist-index()) {
+                                    root.current-playlist-index = max(0, root.current-playlist-index - 1);
+                                    root.prev();
+                                }
+                            }
+                        }
+
+                        IconBtn {
+                            icon: root.is-playing ? Icons.audio-stop-light : Icons.control-start-light;
+                            show-icon-hover-background: false;
+                            icon-size: Theme.icon-size * 1.5;
+                            colorize: Theme.light-text-color;
+
+                            changed has-hover => {
+                                mouse-on-controls = true;
+                                root.show-controls = true;
+                            }
+
+                            clicked => {
+                                root.show-sound-slider = false;
+
+                                if (valid-playlist-index()) {
+                                    root.is-playing = !root.is-playing;
+                                    if (root.is-playing) {
+                                        root.play();
+                                    } else {
+                                        root.stop();
+                                    }
+                                }
+                            }
+                        }
+
+                        if root.show-next-buttons && root.current-playlist-index < root.playlist-items.length - 1: IconBtn {
+                            icon: Icons.skip-next-light;
+                            show-icon-hover-background: false;
+                            icon-size: Theme.icon-size * 1.5;
+                            colorize: Theme.light-text-color;
+
+                            changed has-hover => {
+                                mouse-on-controls = true;
+                                root.show-controls = true;
+                            }
+
+                            clicked => {
+                                root.show-sound-slider = false;
+
+                                if (root.current-playlist-index < root.playlist-items.length - 1 && valid-playlist-index()) {
+                                    root.current-playlist-index = min(root.current-playlist-index + 1, root.playlist-items.length - 1);
+                                    root.next();
+                                }
+                            }
+                        }
+                    }
+
+                    sound-control-container := HorizontalLayout {
+                        alignment: LayoutAlignment.start;
+                        spacing: Theme.padding * 2;
+
+                        sound-btn := IconBtn {
+                            icon: root.current-sound <= 0 ? Icons.sound-off-fill : Icons.sound-on-fill;
+                            show-icon-hover-background: false;
+                            icon-size: Theme.icon-size;
+                            colorize: Theme.light-text-color;
+
+                            changed has-hover => {
+                                mouse-on-controls = true;
+                                root.show-controls = true;
+                            }
+
+                            clicked => {
+                                show-sound-slider = !show-sound-slider;
+                            }
+                        }
+
+                        sound-slider := Slider {
+                            visible: root.show-sound-slider;
+                            width: root.show-sound-slider ? Theme.default-font-size * 8 : 0;
+                            height: Theme.default-font-size / 3;
+                            y: parent.height / 2 - self.height / 2;
+                            value: root.current-sound;
+                            minimum: 0;
+                            maximum: 100;
+                            unfinished-progress-color: Theme.light-text-color;
+                            indicator-size: self.has-hover ? Theme.icon-size * 0.6 : 0;
+                            border-radius: Theme.border-radius;
+                            opacity: root.show-sound-slider ? 1 : 0;
+
+                            animate width {
+                                duration: Theme.default-animate-duration;
+                                easing: ease-in-out;
+                            }
+
+                            animate opacity {
+                                duration: Theme.default-animate-duration;
+                                easing: ease-in-out;
+                            }
+
+                            changed has-hover => {
+                                mouse-on-controls = true;
+                                root.show-controls = true;
+                            }
+
+                            released(v) => {
+                                root.current-sound = Math.round(v);
+                                root.sound-changed(root.current-sound);
+                                root.show-volume-indicator = true;
+                                volume-timer.restart();
+                            }
+                        }
+                    }
+
+                    Label {
+                        text: root.current-time + " / " + root.end-time;
+                        color: Theme.light-text-color;
+                        font-size: Theme.title4-font-size;
+                        vertical-alignment: TextVerticalAlignment.center;
+                    }
+                }
+
+                right-controls := HorizontalLayout {
+                    alignment: LayoutAlignment.end;
+                    spacing: Theme.padding * 6;
+
+                    VerticalLayout {
+                        alignment: LayoutAlignment.center;
+                        padding-right: Theme.padding * 4;
+
+                        HorizontalLayout {
+                            alignment: LayoutAlignment.end;
+                            spacing: root.children-spacing;
+                            padding: root.childre-padding;
+
+                            @children
+                        }
+                    }
+
+                    if root.show-speed-btn: Rectangle {
+                        speed-pop := PopupWindow {
+                            y: -speed-rec.preferred-height;
+                            x: -self.width / 2 + speed-btn.preferred-width / 2;
+                            width: speed-rec.preferred-width + Theme.padding * 4;
+                            private property <[float]> values: [2.0, 1.75, 1.5, 1.25, 1.0, 0.75, 0.5];
+
+                            speed-rec := Rectangle {
+                                background: Theme.base-background;
+                                border-width: Theme.default-border-width;
+                                border-color: Theme.base-border-color;
+
+                                speed-rec-vboc := VerticalLayout {
+                                    spacing: Theme.spacing * 2;
+                                    padding: Theme.padding;
+
+                                    for value[index] in values: Rectangle {
+                                        background: speed-pop-ta.has-hover ? Theme.hover-background : Theme.base-background;
+
+                                        Label {
+                                            overflow: elide;
+                                            horizontal-alignment: TextHorizontalAlignment.center;
+                                            text: value + (value == 1.0 || value == 2.0 ? ".0x" : "x");
+                                        }
+
+                                        speed-pop-ta := TouchArea {
+                                            clicked => {
+                                                if (root.current-speed != value) {
+                                                    root.current-speed = value;
+                                                    root.speed-changed(value);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        speed-btn := TextBtnWithoutIcon {
+                            height: self.preferred-height;
+                            text: root.current-speed + (root.current-speed == 1.0 || root.current-speed == 2.0 ? ".0x" : "x");
+                            hpadding: Theme.padding * 2;
+                            text-color: Theme.light-text-color;
+
+                            changed has-hover => {
+                                mouse-on-controls = true;
+                                root.show-controls = true;
+                            }
+
+                            clicked => {
+                                speed-pop.show();
+                            }
+                        }
+                    }
+
+                    if root.show-playlist-button && root.playlist-items.length > 0: playlist-btn := IconBtn {
+                        icon: Icons.menu-light;
+                        show-icon-hover-background: false;
+                        colorize: Theme.light-text-color;
+
+                        changed has-hover => {
+                            mouse-on-controls = true;
+                            root.show-controls = true;
+                        }
+
+                        clicked => {
+                            root.show-sound-slider = false;
+                            playlist-popup.show();
+                        }
+                    }
+
+                    if root.show-subtitle-btn: IconBtn {
+                        icon: root.enable-subtitle ? Icons.subtitle-light : Icons.unsubtitle-light;
+                        show-icon-hover-background: false;
+                        colorize: Theme.light-text-color;
+                        icon-size: Theme.icon-size * 0.9;
+
+                        changed has-hover => {
+                            mouse-on-controls = true;
+                            root.show-controls = true;
+                        }
+
+                        clicked => {
+                            root.enable-subtitle = !root.enable-subtitle;
+                        }
+                    }
+
+                    if root.show-full-screen-btn: IconBtn {
+                        icon: root.is-full-screen ? Icons.exit-full-screen-light : Icons.full-screen-light;
+                        show-icon-hover-background: false;
+                        colorize: Theme.light-text-color;
+                        icon-size: Theme.icon-size * 0.9;
+
+                        changed has-hover => {
+                            mouse-on-controls = true;
+                            root.show-controls = true;
+                        }
+
+                        clicked => {
+                            root.is-full-screen = !root.is-full-screen;
+
+                            if (root.is-full-screen) {
+                                root.full-screen();
+                            } else {
+                                root.exit-full-screen();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        playlist-popup := PopupWindow {
+            x: root.width - root.playlist-width - Theme.padding * 4;
+            y: control-container.y - self.preferred-height - Theme.padding;
+            width: root.playlist-width;
+            opacity: 0;
+
+            Playlist {
+                width: 100%;
+                items: root.playlist-items;
+                current-index: root.current-playlist-index;
+                item-height: root.playlist-item-height;
+                max-viewport-items: root.playlist-max-viewport-items;
+
+                item-selected(index) => {
+                    root.current-playlist-index = index;
+                    root.playlist-item-selected(index);
+                }
+
+                hover-changed(is-hovered) => {
+                    root.mouse-on-controls = is-hovered;
+                    if (is-hovered) {
+                        root.show-controls = true;
+                    }
+                }
+            }
+        }
+
+        hide-timer := Timer {
+            interval: root.controls-hide-delay;
+            running: root.show-controls && touch.has-hover && !root.mouse-on-controls;
+
+            triggered => {
+                if (!root.mouse-on-controls) {
+                    root.show-controls = false;
+                }
+            }
+        }
+    }
+}

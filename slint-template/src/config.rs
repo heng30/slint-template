@@ -1,10 +1,4 @@
-//! Configuration management module
-//! 
-//! Handles application configuration loading, saving, and management.
-//! Supports platform-specific configuration directories and automatic
-//! configuration file creation.
-
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use log::debug;
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
@@ -14,33 +8,17 @@ use uuid::Uuid;
 #[cfg(feature = "desktop")]
 use platform_dirs::AppDirs;
 
-/// Embedded Cargo.toml file content for package metadata
 const CARGO_TOML: &str = include_str!("../Cargo.toml");
-
-/// Global configuration instance protected by a mutex
 static CONFIG: Lazy<Mutex<Config>> = Lazy::new(|| Mutex::new(Config::default()));
 
-/// Android-specific application directories structure
-/// 
-/// Provides platform-specific directory paths for Android applications.
 #[cfg(feature = "android")]
 pub struct AppDirs {
-    /// Configuration directory path
     pub config_dir: PathBuf,
-    /// Data directory path
     pub data_dir: PathBuf,
 }
 
 #[cfg(feature = "android")]
 impl AppDirs {
-    /// Creates new Android application directories
-    /// 
-    /// # Parameters
-    /// - `name`: Application package name
-    /// - `_`: Compatibility parameter (unused)
-    /// 
-    /// # Returns
-    /// - `Some(AppDirs)` if successful, `None` otherwise
     pub fn new(name: Option<&str>, _: bool) -> Option<Self> {
         let root_dir = "/data/data";
         let name = name.unwrap();
@@ -52,9 +30,6 @@ impl AppDirs {
     }
 }
 
-/// Main configuration structure containing all application settings
-/// 
-/// Includes paths, preferences, proxy settings, and AI model configurations.
 #[derive(Serialize, Deserialize, Default, Debug, Clone)]
 pub struct Config {
     #[serde(skip)]
@@ -80,9 +55,6 @@ pub struct Config {
     pub ai_model: AiModel,
 }
 
-/// User preference settings for the application
-/// 
-/// Contains window settings, font preferences, language, and UI options.
 #[derive(Serialize, Deserialize, Debug, Clone, Derivative)]
 #[derivative(Default)]
 pub struct Preference {
@@ -110,9 +82,6 @@ pub struct Preference {
     pub is_dark: bool,
 }
 
-/// Proxy configuration settings
-/// 
-/// Supports both HTTP and SOCKS5 proxy configurations.
 #[derive(Serialize, Deserialize, Debug, Clone, Derivative)]
 #[derivative(Default)]
 pub struct Proxy {
@@ -129,9 +98,6 @@ pub struct Proxy {
     pub socks5_port: u16,
 }
 
-/// AI model configuration settings
-/// 
-/// Contains API endpoints, model names, and authentication keys for AI services.
 #[derive(Serialize, Deserialize, Debug, Clone, Default)]
 pub struct AiModel {
     pub api_base_url: String,
@@ -140,12 +106,6 @@ pub struct AiModel {
 }
 
 impl Config {
-    /// Initializes the configuration
-    /// 
-    /// Loads package metadata, creates directories, and loads configuration file.
-    /// 
-    /// # Returns
-    /// - `Result<()>` indicating success or failure
     pub fn init(&mut self) -> Result<()> {
         let metadata = toml::from_str::<toml::Table>(CARGO_TOML).expect("Parse Cargo.toml error");
 
@@ -182,13 +142,6 @@ impl Config {
         Ok(())
     }
 
-    /// Creates application directories and sets up paths
-    /// 
-    /// # Parameters
-    /// - `app_dirs`: Platform-specific application directories
-    /// 
-    /// # Returns
-    /// - `Result<()>` indicating success or failure
     fn crate_dirs(&mut self, app_dirs: &AppDirs) -> Result<()> {
         self.db_path = app_dirs.data_dir.join(format!("{}.db", self.app_name));
         self.config_path = app_dirs.config_dir.join(format!("{}.toml", self.app_name));
@@ -205,10 +158,6 @@ impl Config {
         Ok(())
     }
 
-    /// Loads configuration from file or creates default if not exists
-    /// 
-    /// # Returns
-    /// - `Result<()>` indicating success or failure
     fn load(&mut self) -> Result<()> {
         match fs::read_to_string(&self.config_path) {
             Ok(text) => match toml::from_str::<Config>(&text) {
@@ -251,10 +200,6 @@ impl Config {
         }
     }
 
-    /// Saves the current configuration to file
-    /// 
-    /// # Returns
-    /// - `Result<()>` indicating success or failure
     pub fn save(&self) -> Result<()> {
         match toml::to_string_pretty(self) {
             Ok(text) => Ok(fs::write(&self.config_path, text)
@@ -264,36 +209,18 @@ impl Config {
     }
 }
 
-/// Generates a default application ID using UUID v4
-/// 
-/// # Returns
-/// - Random UUID string
 fn appid_default() -> String {
     Uuid::new_v4().to_string()
 }
 
-/// Initializes the global configuration
-/// 
-/// This should be called once at application startup.
 pub fn init() {
     CONFIG.lock().unwrap().init().unwrap();
 }
 
-/// Returns a clone of the current configuration
-/// 
-/// # Returns
-/// - Current configuration instance
 pub fn all() -> Config {
     CONFIG.lock().unwrap().clone()
 }
 
-/// Saves a new configuration and updates the global instance
-/// 
-/// # Parameters
-/// - `conf`: New configuration to save
-/// 
-/// # Returns
-/// - `Result<()>` indicating success or failure
 pub fn save(conf: Config) -> Result<()> {
     let mut config = CONFIG.lock().unwrap();
     *config = conf;

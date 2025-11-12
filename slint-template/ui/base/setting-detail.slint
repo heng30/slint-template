@@ -62,8 +62,27 @@ export component SettingDetailInnerVbox inherits VerticalLayout {
     @children
 }
 
-export component SettingDetailLabel inherits Label {
-    font-size: Theme.title4-font-size;
+export component SettingDetailLabel inherits HorizontalLayout {
+    in-out property text <=> lb.text;
+    in-out property color <=> lb.color;
+    in-out property <string> tip;
+
+    alignment: start;
+    spacing: Theme.spacing;
+
+    lb := Label {
+        font-size: Theme.title4-font-size;
+    }
+
+    if !tip.is-empty:
+        IconBtn {
+        icon-size: lb.font-size * 0.8;
+        is-show-tip: true;
+        tip-position: Top;
+        tip: root.tip;
+        icon: Icons.tooltip-light;
+        show-icon-hover-background: false;
+    }
 }
 
 export component SettingDetailSwitch inherits Rectangle {

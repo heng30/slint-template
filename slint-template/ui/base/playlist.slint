@@ -1,0 +1,93 @@
+import { Theme, Icons } from "theme.slint";
+import { Label } from "label.slint";
+import { ListView } from "std-widgets.slint";
+import { PlaylistItem } from "def.slint";
+
+export component Playlist inherits Rectangle {
+    in-out property <[PlaylistItem]> items;
+    in-out property <int> current-index: -1;
+    in-out property <bool> show-playlist: true;
+    in-out property <length> item-height: Theme.default-font-size + Theme.padding * 6;
+    in-out property <int> max-viewport-items: 10;
+
+    callback item-selected(index: int);
+    callback hover-changed(is-hovered: bool);
+
+    preferred-width: Theme.default-font-size * 20;
+    preferred-height: Math.min(root.item-height * root.items.length + Theme.padding * 2, root.item-height * max(max-viewport-items, 0) + Theme.padding * 2);
+    height: self.preferred-height;
+    background: Theme.base-background;
+    border-radius: Theme.border-radius;
+    border-width: Theme.default-border-width;
+    border-color: Theme.base-border-color;
+
+    list := ListView {
+        y: Theme.padding;
+        x: Theme.padding;
+        width: parent.width - Theme.padding * 2;
+        height: parent.height - Theme.padding * 2;
+        viewport-height: root.item-height * root.items.length;
+        viewport-y: min(0, -root.current-index * root.item-height);
+
+        for item[index] in root.items: Rectangle {
+            width: parent.width;
+            height: root.item-height;
+
+            private property <bool> is-hovered: false;
+            background: index == root.current-index ? Theme.focus-color : self.is-hovered ? Theme.thirdly-background : (Math.mod(index, 2) == 0) ? Theme.table-item-first : Theme.table-item-second;
+
+            animate background {
+                duration: Theme.default-animate-duration / 2;
+                easing: ease-in-out;
+            }
+
+            TouchArea {
+                mouse-cursor: MouseCursor.pointer;
+
+                clicked => {
+                    root.item-selected(index);
+                }
+
+                changed has-hover => {
+                    parent.is-hovered = self.has-hover;
+                    root.hover-changed(self.has-hover);
+                }
+            }
+
+            HorizontalLayout {
+                padding-left: Theme.padding * 2;
+                padding-right: Theme.padding * 2;
+                height: parent.height;
+                spacing: Theme.padding * 2;
+
+                Label {
+                    text: index + 1;
+                    color: index == root.current-index ? Theme.light-text-color : Theme.secondary-text-color;
+                    font-size: Theme.default-font-size * 0.8;
+                    vertical-alignment: TextVerticalAlignment.center;
+                    horizontal-alignment: TextHorizontalAlignment.left;
+                    min-width: Theme.default-font-size * 2;
+                }
+
+                Label {
+                    text: item.title;
+                    color: index == root.current-index ? Theme.light-text-color : Theme.primary-text-color;
+                    font-size: Theme.default-font-size;
+                    vertical-alignment: TextVerticalAlignment.center;
+                    horizontal-alignment: TextHorizontalAlignment.left;
+                    overflow: TextOverflow.elide;
+                    horizontal-stretch: 1;
+                }
+
+                Label {
+                    text: item.duration;
+                    color: index == root.current-index ? Theme.light-text-color : Theme.secondary-text-color;
+                    font-size: Theme.default-font-size * 0.8;
+                    vertical-alignment: TextVerticalAlignment.center;
+                    horizontal-alignment: TextHorizontalAlignment.right;
+                    min-width: Theme.default-font-size * 3;
+                }
+            }
+        }
+    }
+}

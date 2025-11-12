@@ -1,7 +1,17 @@
 import { Theme, Icons, Util, Logic, Store } from "../def.slint";
 import { HorizontalSettingIconsBar }  from "../setting/desktop.slint";
 
-import { SettingEntryV2, CenterLayout, IconsDialogSetting, Search, Label, SideBar, SideBarEntry, SideBarChildEntry, ChartBar } from "../../base/widgets.slint";
+import {
+    SettingEntryV2,
+    CenterLayout,
+    IconsDialogSetting,
+    Search,
+    Label,
+    SideBar,
+    SideBarEntry,
+    SideBarChildEntry,
+    ChartBar,
+} from "../../base/widgets.slint";
 import { Introduction }  from "examples/introducion.slint";
 import { TreeExample } from "examples/tree.slint";
 import { StepExample } from "examples/step.slint";
@@ -40,7 +50,9 @@ import { CenterLayoutExample }  from "examples/center-layout.slint";
 import { SlideCardExample }  from "examples/slide-card.slint";
 import { ListTileExample }  from "examples/list-tile.slint";
 import { DrawerExample }  from "examples/drawer.slint";
-import { FlickableWithScrollBarExample }  from "examples/flickable-with-scrollbar.slint";
+import {
+    FlickableWithScrollBarExample,
+}  from "examples/flickable-with-scrollbar.slint";
 import { NewsExample }  from "examples/news.slint";
 import { HeadExample }  from "examples/head.slint";
 import { AboutExample }  from "examples/about.slint";
@@ -58,12 +70,14 @@ import { TokenListExample }  from "examples/token-list.slint";
 import { TokenSenderExample }  from "examples/token-sender.slint";
 import { TokenRecipientExample }  from "examples/token-recipient.slint";
 import { TransactionFeeExample }  from "examples/transaction-fee.slint";
-import { WaitTransactionConfirmedExample }  from "examples/wait-transaction-confirmed.slint";
+import {
+    WaitTransactionConfirmedExample,
+}  from "examples/wait-transaction-confirmed.slint";
 import { TransactionTileExample }  from "examples/transaction-tile.slint";
 import { SideBarExample }  from "examples/sidebar.slint";
 import { ParagraphExample }  from "examples/paragraph.slint";
 import { AudioControlExample }  from "examples/audio-control.slint";
-import { VideoControlExample }  from "examples/video-control.slint";
+import { VideoPlayerExample }  from "examples/video-player.slint";
 import { TodoListExample } from "examples/todo-list.slint";
 import { ChartBarExample } from "examples/chart-bar.slint";
 
@@ -169,7 +183,7 @@ component RightPanel inherits Rectangle {
 
     // MultiMedia
     if Store.current-sidebar-key == "AudioControl": AudioControlExample { }
-    if Store.current-sidebar-key == "VideoControl": VideoControlExample { }
+    if Store.current-sidebar-key == "VideoPlayer": VideoPlayerExample { }
 
     // Other
     if Store.current-sidebar-key == "Setting": SettingExample { }

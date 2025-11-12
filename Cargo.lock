@@ -6121,9 +6121,9 @@ dependencies = [
 
 [[package]]
 name = "stacksafe"
-version = "0.1.4"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1d9c1172965d317e87ddb6d364a040d958b40a1db82b6ef97da26253a8b3d090"
+checksum = "e5481855df765c006135651b88e666edd4f08e176183052d2cb8628450873acb"
 dependencies = [
  "stacker",
  "stacksafe-macro",
@@ -6131,9 +6131,9 @@ dependencies = [
 
 [[package]]
 name = "stacksafe-macro"
-version = "0.1.4"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "172175341049678163e979d9107ca3508046d4d2a7c6682bee46ac541b17db69"
+checksum = "4825bd5b513e9bc047a10ffc1680d1203ef548bdccd633d633a15630f01d126f"
 dependencies = [
  "proc-macro-error2",
  "quote",
