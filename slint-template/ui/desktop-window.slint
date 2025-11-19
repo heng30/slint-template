@@ -2,7 +2,20 @@ import "fonts/SourceHanSerifCN.ttf";
 import "fonts/SourceHanSansCN.otf";
 
 import { Util, Logic, Theme, Icons, Store, DeviceType } from "panel/def.slint";
-import { Toast, IconsDialogSetting, IconsDialog, ConfirmDialog, ConfirmDialogSetting, Blanket, LandingPage, AboutSetting, ToastSetting, PopupActionSetting, ConfirmDialogSetting } from "base/widgets.slint";
+import {
+    Toast,
+    IconsDialogSetting,
+    IconsDialog,
+    ConfirmDialog,
+    ConfirmDialogSetting,
+    MessageDialog,
+    MessageDialogSetting,
+    Blanket,
+    LandingPage,
+    AboutSetting,
+    ToastSetting,
+    PopupActionSetting,
+} from "base/widgets.slint";
 import { DesktopPanel } from "panel/desktop/desktop.slint";
 
 export component AppWindow inherits Window {
@@ -19,10 +32,11 @@ export component AppWindow inherits Window {
 
     DesktopPanel { }
 
-    if IconsDialogSetting.show || ConfirmDialogSetting.show: Blanket {
+    if IconsDialogSetting.show || ConfirmDialogSetting.show || MessageDialogSetting.show: Blanket {
         clicked => {
             IconsDialogSetting.show = false;
             ConfirmDialogSetting.show = false;
+            MessageDialogSetting.show = false;
         }
     }
 
@@ -31,10 +45,16 @@ export component AppWindow inherits Window {
         column-count: Store.device-type == DeviceType.Desktop ? 6 : 5;
         icon-size: Store.device-type == DeviceType.Desktop ? Theme.icon-size * 3 : Theme.icon-size;
         select-index(handle-type, index, user-data) => {
+            // TODO:
         }
     }
 
     if ConfirmDialogSetting.show: ConfirmDialog {
+        is-prevent-event-forward: true;
+        width: Math.min(root.width * 0.9, self.vbox-preferred-width * 2);
+    }
+
+    if MessageDialogSetting.show: MessageDialog {
         is-prevent-event-forward: true;
         width: Math.min(root.width * 0.9, self.vbox-preferred-width * 2);
     }

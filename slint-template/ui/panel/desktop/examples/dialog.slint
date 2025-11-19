@@ -1,5 +1,15 @@
 import { Util, Theme, Icons, Logic, Store } from "../../def.slint";
-import { IconBtn, Dialog, ConfirmDialog, ConfirmDialogSetting, IconsDialog, IconsDialogSetting, LanguageDialog, ExampleComponent } from "../../../base/widgets.slint";
+import {
+    IconBtn,
+    Dialog,
+    ConfirmDialog,
+    ConfirmDialogSetting,
+    MessageDialogSetting,
+    IconsDialog,
+    IconsDialogSetting,
+    LanguageDialog,
+    ExampleComponent,
+} from "../../../base/widgets.slint";
 
 export component DialogExample inherits Flickable {
     viewport-height: vbox.preferred-height;
@@ -62,6 +72,35 @@ export component DialogExample inherits Flickable {
                 }
 
                 code: "export component AppWindow inherits Window {\n    if ConfirmDialogSetting.show: ConfirmDialog {\n        is-prevent-event-forward: true;\n       width: Math.min(root.width * 0.9, self.vbox-preferred-width * 2);\n       background: Theme.secondary-background;\n    }\n\n    IconBtn {\n        icon: Icons.success;\n        text: \"Show ConfirmDialog\";\n        text-color: Colors.white;\n        colorize: self.text-color;\n        background: Theme.success-color;\n        use-auto-size: true;\n        auto-size-vpadding: Theme.padding * 2;\n\n        clicked => {\n            ConfirmDialogSetting.set(true,  Logic.tr(\"Warning\"), Logic.tr(\"Delete or not?\"), \"remove-all-trash\", \"user-data\");\n        }\n    }\n}";
+            }
+        }
+
+        HorizontalLayout {
+            width: root.width;
+            alignment: LayoutAlignment.center;
+
+            ExampleComponent {
+                width: Math.min(1000px, root.width * 0.8);
+
+                VerticalLayout {
+                    spacing: Theme.spacing * 10;
+
+                    IconBtn {
+                        icon: Icons.success-fill;
+                        text: "Show MessageDialog";
+                        text-color: Colors.white;
+                        colorize: self.text-color;
+                        background: Theme.success-color;
+                        use-auto-size: true;
+                        auto-size-vpadding: Theme.padding * 2;
+
+                        clicked => {
+                            MessageDialogSetting.set(true,  Logic.tr("Note"), Logic.tr("It's a test message"));
+                        }
+                    }
+                }
+
+                code: "export component AppWindow inherits Window {\n    if MessageDialogSetting.show: ConfirmDialog {\n        is-prevent-event-forward: true;\n       width: Math.min(root.width * 0.9, self.vbox-preferred-width * 2);\n       background: Theme.secondary-background;\n    }\n\n    IconBtn {\n        icon: Icons.success;\n        text: \"Show ConfirmDialog\";\n        text-color: Colors.white;\n        colorize: self.text-color;\n        background: Theme.success-color;\n        use-auto-size: true;\n        auto-size-vpadding: Theme.padding * 2;\n\n        clicked => {\n            MessageDialogSetting.set(true,  Logic.tr(\"Note\"), Logic.tr(\"It's a test message\"));\n        }\n    }\n}";
             }
         }
 

@@ -1,0 +1,69 @@
+import { Dialog } from "./dialog.slint";
+import { Store } from "../store.slint";
+import { Util } from "util.slint";
+import { Logic } from "../logic.slint";
+import { Theme, Icons } from "theme.slint";
+import { Label } from "./label.slint";
+import { CancelBtn, ConfirmBtn } from "./btn.slint";
+
+export global MessageDialogSetting {
+    in-out property <bool> show;
+    out property <string> title-text: Logic.tr("Note");
+    out property <string> body-text;
+
+    public function set(show: bool, title-text: string, body-text: string) {
+        self.show = show;
+        self.title-text = title-text;
+        self.body-text = body-text;
+    }
+
+    public function hide() {
+        self.show = false;
+    }
+}
+
+export component MessageDialog inherits Rectangle {
+    height: vbox.preferred-height;
+    background: Theme.base-background;
+    border-radius: Theme.border-radius;
+
+    in-out property <bool> is-prevent-event-forward: false;
+    in-out property <string> title: MessageDialogSetting.title-text;
+    in-out property vbox-preferred-width <=> vbox.preferred-width;
+
+    if is-prevent-event-forward: TouchArea { }
+
+    vbox := VerticalLayout {
+        alignment: start;
+        padding: Theme.padding * 4;
+        spacing: Theme.spacing * 4;
+
+        title-label := Label {
+            text: root.title;
+            color: Theme.primary-text-color;
+            font-size: Theme.title1-font-size;
+        }
+
+        TextInput {
+            wrap: word-wrap;
+            vertical-alignment: center;
+            color: Theme.secondary-text-color;
+            font-size: Theme.title4-font-size;
+            text: MessageDialogSetting.body-text;
+            font-family: Theme.default-font-family;
+            read-only: true;
+        }
+
+        HorizontalLayout {
+            alignment: end;
+
+            CancelBtn {
+                text: Logic.tr("Close");
+
+                clicked => {
+                    MessageDialogSetting.show = false;
+                }
+            }
+        }
+    }
+}
