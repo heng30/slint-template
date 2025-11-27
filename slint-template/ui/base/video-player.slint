@@ -279,6 +279,11 @@ export component VideoPlayer inherits Rectangle {
                 easing: ease-in-out;
             }
 
+            if root.show-controls: Rectangle {
+                opacity: Theme.golden-ratio;
+                background: black;
+            }
+
             control-touch := TouchArea {
                 mouse-cursor: MouseCursor.pointer;
 

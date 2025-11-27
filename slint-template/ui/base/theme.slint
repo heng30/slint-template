@@ -84,7 +84,7 @@ export global Theme {
 
     out property <length> dialog-max-width: 1300px;
     out property <length> dialog-normal-width: 600px;
-    out property <length> dialog-inner-height: 650px;
+    out property <length> dialog-inner-height: Math.min((Theme.default-height - Theme.title1-font-size - Theme.icon-size * 2) * 0.8, 650px);
 
     public function set-dark(flag: bool) {
         Store.setting-preference.is-dark = flag;

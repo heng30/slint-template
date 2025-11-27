@@ -94,7 +94,7 @@ clippy:
 	cargo clippy $(proj-features)
 
 check:
-	cargo check --no-default-features $(proj-features)
+	cargo check --no-default-features $(proj-features) --bin ${app-name}
 
 clean:
 	cargo clean
