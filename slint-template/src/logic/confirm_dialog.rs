@@ -1,16 +1,6 @@
-//! Confirmation dialog logic module
-//! 
-//! Handles confirmation dialog callbacks for various application actions.
-
 use crate::{global_logic, global_util, slint_generatedAppWindow::AppWindow};
 use slint::ComponentHandle;
 
-/// Initializes confirmation dialog callbacks
-/// 
-/// Sets up handlers for different confirmation dialog actions.
-/// 
-/// # Parameters
-/// - `ui`: Reference to the application window
 pub fn init(ui: &AppWindow) {
     let ui_weak = ui.as_weak();
     global_util!(ui).on_handle_confirm_dialog(move |handle_type, _user_data| {

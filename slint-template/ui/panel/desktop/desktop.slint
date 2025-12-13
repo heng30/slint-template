@@ -185,6 +185,8 @@ export component DesktopPanel inherits Rectangle {
 
     if is-show-setting-dialog: SettingDialog {
         width: Math.min(Theme.dialog-max-width, root.width * 0.95);
+        inner-height: Math.max(root.height * Theme.golden-ratio, Theme.dialog-inner-height);
+
         escape => {
             Logic.switch-popup(PopupIndex.None);
         }

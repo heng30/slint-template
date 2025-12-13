@@ -91,7 +91,7 @@ timings:
 	$(build-env) cargo build --timings $(proj-features)
 
 clippy:
-	cargo clippy $(proj-features)
+	cargo clippy $(proj-features) --workspace
 
 check:
 	cargo check --no-default-features $(proj-features) --bin ${app-name}

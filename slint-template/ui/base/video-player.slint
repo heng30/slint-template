@@ -285,8 +285,6 @@ export component VideoPlayer inherits Rectangle {
             }
 
             control-touch := TouchArea {
-                mouse-cursor: MouseCursor.pointer;
-
                 clicked => {
                     root.show-sound-slider = false;
                 }

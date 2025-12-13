@@ -1,21 +1,8 @@
-//! Translation module
-//!
-//! Provides internationalization support with Chinese translations.
-//! Uses lazy initialization for translation maps.
-
 use once_cell::sync::OnceCell;
 use std::collections::HashMap;
 
-/// Chinese translation map
 static CN: OnceCell<HashMap<&'static str, &'static str>> = OnceCell::new();
 
-/// Translates text based on current language setting
-///
-/// # Parameters
-/// - `text`: Text to translate
-///
-/// # Returns
-/// - Translated text or original text if no translation available
 pub fn tr(text: &str) -> String {
     #[allow(unused_assignments)]
     let mut lang = "en".to_string();
@@ -37,12 +24,6 @@ pub fn tr(text: &str) -> String {
     text.to_string()
 }
 
-/// Returns the Chinese translation map
-///
-/// Initializes the map on first access.
-///
-/// # Returns
-/// - Reference to Chinese translation map
 fn cn() -> &'static HashMap<&'static str, &'static str> {
     CN.get_or_init(|| {
         HashMap::from([
