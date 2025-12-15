@@ -109,6 +109,7 @@ component HorizontalStatusBar inherits StatusBar {
 }
 
 component VerticalStatusBar inherits Rectangle {
+    width: Theme.sidebar-width;
     background: Theme.secondary-background;
 
     private property <bool> is-show-tip: true;
@@ -172,6 +173,7 @@ export component DesktopPanel inherits Rectangle {
 
             Home {
                 vertical-stretch: 1;
+                width: root.width - (Store.setting-preference.no-frame ? 0 : Theme.sidebar-width);
                 height: root.height - (Store.setting-preference.no-frame ? Theme.header-height : 0);
             }
         }

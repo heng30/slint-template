@@ -13,6 +13,7 @@ import { TextBtn } from "btn.slint";
 export component TabBtns inherits Rectangle {
     in-out property <[{icon: image, text: string}]> items;
     in-out property <length> font-size: Theme.default-font-size;
+    in-out property <bool> enable: true;
 
     private property <length> next-pos-x;
     private property <length> btn-height;
@@ -21,6 +22,7 @@ export component TabBtns inherits Rectangle {
     private property <length> btn-pos-y;
 
     private property <bool> is-init: true;
+    private property <int> selected-index: 0;
 
     background: Theme.secondary-background;
     border-radius: Theme.border-radius;
@@ -69,7 +71,6 @@ export component TabBtns inherits Rectangle {
             if (index == 0) {
                 next-pos-x = 0;
             }
-
             self.x = next-pos-x;
             next-pos-x = self.x + btn.preferred-width + Theme.padding;
 
@@ -83,9 +84,11 @@ export component TabBtns inherits Rectangle {
             text: item.text;
             font-size: root.font-size;
             icon-size: self.font-size;
-            colorize: Theme.is-dark ? Theme.light-text-color : Theme.primary-text-color;
+            enabled-toucharea: root.enable;
+            colorize: selected-index == index ? (Theme.is-dark ? Theme.light-text-color : Theme.primary-text-color) : Theme.have-read-text-color;
 
             clicked => {
+                selected-index = index;
                 root.clicked(index);
                 root.is-init = false;
                 update-btn();

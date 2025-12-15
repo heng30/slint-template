@@ -8,5 +8,8 @@ export component Blanket inherits Rectangle {
 
     ta := TouchArea {
         mouse-cursor: MouseCursor.pointer;
+        scroll-event(event) => {
+            accept
+        }
     }
 }

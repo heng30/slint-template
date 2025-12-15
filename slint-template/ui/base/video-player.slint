@@ -18,11 +18,14 @@ export component VideoPlayer inherits Rectangle {
     in-out property <float> current-sound: 50;
     in-out property <float> current-speed: 1.0;
     in-out property <float> progress: 0;
+    in-out property <bool> show-time-label: true;
     in-out property <string> current-time: "0:00";
     in-out property <string> end-time: "4:00";
+    in-out property <string> time-label: root.current-time + " / " + root.end-time;
     in-out property <bool> show-controls: false;
     in-out property <length> control-height: Theme.icon-size * 3;
     in-out property <float> center-icon-opacity: Theme.golden-ratio;
+    in-out property <bool> show-progress-bar: true;
     in-out property <bool> show-prev-buttons: true;
     in-out property <bool> show-next-buttons: true;
     in-out property <bool> show-playlist-button: true;
@@ -83,6 +86,7 @@ export component VideoPlayer inherits Rectangle {
         key-pressed(event) => {
             if (event.text == Key.Escape) {
                 if (root.show-full-screen-btn && root.is-full-screen) {
+                    root.is-full-screen = !root.is-full-screen;
                     root.exit-full-screen();
                 }
             } else if (event.text == Key.Space) {
@@ -300,10 +304,11 @@ export component VideoPlayer inherits Rectangle {
             }
 
             progress-bar := Slider {
+                visible: root.show-progress-bar;
                 y: Theme.padding * 2;
                 x: Theme.padding * 2;
                 width: parent.width - Theme.padding * 4;
-                height: Theme.default-font-size * 0.33;
+                height: self.visible ? Theme.default-font-size * 0.33 : 0;
                 value: root.progress;
                 finished-progress-color: Theme.is-dark ? Theme.success-color.brighter(20%) : Theme.success-color;
                 unfinished-progress-color: Theme.light-text-color.darker(80%);
@@ -470,7 +475,7 @@ export component VideoPlayer inherits Rectangle {
                     }
 
                     Label {
-                        text: root.current-time + " / " + root.end-time;
+                        text: root.time-label;
                         color: Theme.light-text-color;
                         font-size: Theme.title4-font-size;
                         vertical-alignment: TextVerticalAlignment.center;

@@ -116,7 +116,7 @@ export component IconBtn inherits Rectangle {
     fs := FocusScope { }
 
     touch := TouchArea {
-        mouse-cursor: MouseCursor.pointer;
+        mouse-cursor: self.enabled ? MouseCursor.pointer : MouseCursor.not-allowed;
         clicked => {
             if (RotationType.Click == root.rotation-type) {
                 if (icon-transform-rotation == 0) {

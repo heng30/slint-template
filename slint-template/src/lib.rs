@@ -26,9 +26,15 @@ pub fn init_logger() {
 
             writeln!(
                 buf,
-                "[{} {style}{}{style:#} {} {}] {}",
+                "[{} {style}{}{style:#} {}::{} {}] {}",
                 ts,
                 record.level(),
+                record
+                    .module_path()
+                    .unwrap_or("None")
+                    .split("::")
+                    .next()
+                    .unwrap_or("None"),
                 record
                     .file()
                     .unwrap_or("None")
