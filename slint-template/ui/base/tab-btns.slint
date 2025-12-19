@@ -31,6 +31,10 @@ export component TabBtns inherits Rectangle {
 
     callback clicked(index: int);
 
+    public function update-selected-index(index: int) {
+        selected-index = index;
+    }
+
     Rectangle {
         opacity: is-init ? 0 : 1;
         x: btn-pos-x;
@@ -74,7 +78,7 @@ export component TabBtns inherits Rectangle {
             self.x = next-pos-x;
             next-pos-x = self.x + btn.preferred-width + Theme.padding;
 
-            if (index == 0) {
+            if (index == selected-index) {
                 update-btn();
             }
         }

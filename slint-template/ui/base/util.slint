@@ -1,5 +1,11 @@
 import { Theme, Icons } from "theme.slint";
-import { ToastStatus, AppPosType, TreeEntry, MediaControlStatus, Date } from "def.slint";
+import {
+    ToastStatus,
+    AppPosType,
+    TreeEntry,
+    MediaControlStatus,
+    Date,
+} from "def.slint";
 
 export global Util {
     callback hide-window();
@@ -55,6 +61,14 @@ export global Util {
     pure callback seconds-to-media-timestamp(seconds: float) -> string;
     seconds-to-media-timestamp => {
         return "00:00";
+    }
+
+    pure callback color-picker-get(x: int, y: int, width: int, height: int) -> color;
+    pure callback color-picker-hex-color(color-hex: string) -> color;
+    pure callback color-picker-str(r: int, g: int, b: int, a: int) -> string;
+    pure callback color-picker-image() -> image;
+    color-picker-image => {
+        return Icons.brand;
     }
 
     public pure function text-color(status: ToastStatus) -> color {

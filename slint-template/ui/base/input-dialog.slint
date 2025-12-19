@@ -4,24 +4,32 @@ import { Logic } from "../logic.slint";
 import { Dialog } from "./dialog.slint";
 import { LineInput } from "line-input.slint";
 
-export component RenameDialog inherits Dialog {
-    title: Logic.tr("Rename");
+export component InputDialog inherits Dialog {
+    title: Logic.tr("Input");
     is-prevent-event-forward: true;
 
     in-out property text <=> line-input.text;
+    in-out property placeholder-text <=> line-input.placeholder-text;
 
-    callback rename(text: string);
-
-    init => {
-        line-input.focus();
-    }
+    callback accepted(text: string);
 
     confirmed => {
-        rename(root.text);
+        accepted(root.text);
     }
 
     canceled => {
         self.escape();
+    }
+
+    Timer {
+        private property <bool> is-running: true;
+
+        interval: 200ms;
+        running: is-running;
+        triggered() => {
+            is-running = false;
+            line-input.focus();
+        }
     }
 
     VerticalLayout {
@@ -30,7 +38,7 @@ export component RenameDialog inherits Dialog {
 
         line-input := LineInput {
             accepted => {
-                rename(root.text);
+                root.accepted(root.text);
             }
         }
     }

@@ -303,6 +303,56 @@ pub fn init(ui: &AppWindow) {
         }
     });
 
+    global_util!(ui).on_color_picker_image(move || new_color_picker_image());
+
+    global_util!(ui).on_color_picker_str(move |r, g, b, a| {
+        rgba_to_hex(r as u8, g as u8, b as u8, a as u8).into()
+    });
+
+    global_util!(ui).on_color_picker_hex_color(move |hex| {
+        if let Ok(c) = hex_to_rgba(hex.as_str()) {
+            return slint::RgbaColor {
+                red: c.0,
+                green: c.1,
+                blue: c.2,
+                alpha: c.3,
+            }
+            .into();
+        }
+
+        slint::RgbaColor {
+            red: 0,
+            green: 0,
+            blue: 0,
+            alpha: 255,
+        }
+        .into()
+    });
+
+    global_util!(ui).on_color_picker_get(move |x, y, width, height| {
+        if width <= 0 || height <= 0 {
+            return slint::RgbaColor {
+                red: 0,
+                green: 0,
+                blue: 0,
+                alpha: 255,
+            }
+            .into();
+        }
+
+        let x = x * 1920 / width;
+        let y = y * 1080 / height;
+        let (red, green, blue, alpha) = get_color_picker_color(x as usize, y as usize, 1920, 1080);
+
+        slint::RgbaColor {
+            red,
+            green,
+            alpha,
+            blue,
+        }
+        .into()
+    });
+
     #[cfg(feature = "qrcode")]
     {
         init_qrcode(ui);
@@ -375,4 +425,137 @@ pub fn display_size() -> Option<(u32, u32)> {
     }
 
     None
+}
+
+pub fn hsv_to_rgb(h: f32, s: f32, v: f32) -> (u8, u8, u8) {
+    let c = v * s;
+    let x = c * (1.0 - ((h / 60.0) % 2.0 - 1.0).abs());
+    let m = v - c;
+
+    let (r_prime, g_prime, b_prime) = if h < 60.0 {
+        (c, x, 0.0)
+    } else if h < 120.0 {
+        (x, c, 0.0)
+    } else if h < 180.0 {
+        (0.0, c, x)
+    } else if h < 240.0 {
+        (0.0, x, c)
+    } else if h < 300.0 {
+        (x, 0.0, c)
+    } else {
+        (c, 0.0, x)
+    };
+
+    let r = ((r_prime + m) * 255.0) as u8;
+    let g = ((g_prime + m) * 255.0) as u8;
+    let b = ((b_prime + m) * 255.0) as u8;
+
+    (r, g, b)
+}
+
+#[inline]
+pub fn rgba_to_hex(r: u8, g: u8, b: u8, a: u8) -> String {
+    format!("#{:02X}{:02X}{:02X}{:02X}", r, g, b, a)
+}
+
+fn new_color_picker_image() -> slint::Image {
+    let width = 1920;
+    let height = 1080;
+
+    let mut pixels = Vec::with_capacity(width * height * 4);
+    for y in 0..height {
+        for x in 0..width {
+            let (r, g, b, a) = get_color_picker_color(x, y, width, height);
+            pixels.push(r);
+            pixels.push(g);
+            pixels.push(b);
+            pixels.push(a);
+        }
+    }
+
+    let buffer = slint::SharedPixelBuffer::<slint::Rgba8Pixel>::clone_from_slice(
+        &pixels,
+        width as u32,
+        height as u32,
+    );
+
+    slint::Image::from_rgba8(buffer)
+}
+
+fn get_color_picker_color(x: usize, y: usize, width: usize, height: usize) -> (u8, u8, u8, u8) {
+    let hue = (x as f32 / width as f32) * 360.0; // Hue varies horizontally
+    let saturation = 1.0; // Full saturation
+    let value = y as f32 / height as f32; // Value/brightness varies vertically
+
+    let (r, g, b) = hsv_to_rgb(hue, saturation, value);
+    (r, g, b, 255) // Alpha channel (fully opaque)
+}
+
+fn hex_to_rgba(hex: &str) -> Result<(u8, u8, u8, u8), String> {
+    let hex = hex.trim_start_matches('#');
+
+    match hex.len() {
+        6 => {
+            // RGB format
+            let r = u8::from_str_radix(&hex[0..2], 16)
+                .map_err(|e| format!("Invalid red component: {}", e))?;
+            let g = u8::from_str_radix(&hex[2..4], 16)
+                .map_err(|e| format!("Invalid green component: {}", e))?;
+            let b = u8::from_str_radix(&hex[4..6], 16)
+                .map_err(|e| format!("Invalid blue component: {}", e))?;
+            Ok((r, g, b, 255))
+        }
+        8 => {
+            // RGBA format
+            let r = u8::from_str_radix(&hex[0..2], 16)
+                .map_err(|e| format!("Invalid red component: {}", e))?;
+            let g = u8::from_str_radix(&hex[2..4], 16)
+                .map_err(|e| format!("Invalid green component: {}", e))?;
+            let b = u8::from_str_radix(&hex[4..6], 16)
+                .map_err(|e| format!("Invalid blue component: {}", e))?;
+            let a = u8::from_str_radix(&hex[6..8], 16)
+                .map_err(|e| format!("Invalid alpha component: {}", e))?;
+            Ok((r, g, b, a))
+        }
+        3 => {
+            // Short format (RGB)
+            let r = u8::from_str_radix(&hex[0..1].repeat(2), 16)
+                .map_err(|e| format!("Invalid red component: {}", e))?;
+            let g = u8::from_str_radix(&hex[1..2].repeat(2), 16)
+                .map_err(|e| format!("Invalid green component: {}", e))?;
+            let b = u8::from_str_radix(&hex[2..3].repeat(2), 16)
+                .map_err(|e| format!("Invalid blue component: {}", e))?;
+            Ok((r, g, b, 255))
+        }
+        4 => {
+            // Short format (RGBA)
+            let r = u8::from_str_radix(&hex[0..1].repeat(2), 16)
+                .map_err(|e| format!("Invalid red component: {}", e))?;
+            let g = u8::from_str_radix(&hex[1..2].repeat(2), 16)
+                .map_err(|e| format!("Invalid green component: {}", e))?;
+            let b = u8::from_str_radix(&hex[2..3].repeat(2), 16)
+                .map_err(|e| format!("Invalid blue component: {}", e))?;
+            let a = u8::from_str_radix(&hex[3..4].repeat(2), 16)
+                .map_err(|e| format!("Invalid alpha component: {}", e))?;
+            Ok((r, g, b, a))
+        }
+        _ => Err(format!("Invalid hex length: {}", hex.len())),
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_hex_to_rgba() {
+        let colors = vec!["#FF5733", "#FF573380", "#F50", "#F508", "FF5733"];
+
+        for color in colors {
+            match hex_to_rgba(color) {
+                Ok((r, g, b, a)) => println!("{} -> RGBA({}, {}, {}, {})", color, r, g, b, a),
+                Err(e) => println!("{} -> Error: {}", color, e),
+            }
+        }
+    }
 }

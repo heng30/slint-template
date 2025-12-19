@@ -340,8 +340,8 @@ export component DatePickerPopup inherits PopupWindow {
         }
 
         confirmed(date) => {
-            root.close();
             root.confirmed(date);
+            root.close();
         }
     }
 }

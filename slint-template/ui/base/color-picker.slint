@@ -1,0 +1,243 @@
+import { Icons, Theme } from "theme.slint";
+import { Util } from "util.slint";
+import { IconBtn } from "icon-btn.slint";
+import { Label } from "label.slint";
+import { LineInput } from "line-input.slint";
+import { Logic } from "../logic.slint";
+import { CancelBtn, ConfirmBtn } from "btn.slint";
+
+export component ColorPicker inherits Rectangle {
+    private property <[color]> default-colors: [
+        #000000ff,
+        #ffffffff,
+        #f8f8f8ff,
+        #f5f5f7ff,
+        #f0f8ffff,
+        #f0f0f0ff,
+        #e6e6faff,
+        #e0e0e0ff,
+        #d3d3d3ff,
+        #bebebeff,
+        #ccccccff,
+        #b0c4deff,
+        #778899ff,
+        #696969ff,
+        #999999ff,
+        #666666ff,
+        #ffebcdff,
+        #f5deb3ff,
+        #ffdab9ff,
+        #d2b48cff,
+        #deb887ff,
+        #cd853fff,
+        #f4a460ff,
+        #d2691eff,
+        #8b4513ff,
+        #bc8f8fff,
+        #a52a2aff,
+        #ffc0cbff,
+        #ff69b4ff,
+        #ff1493ff,
+        #dc143cff,
+        #ff0000ff,
+        #ff7f50ff,
+        #ff4500ff,
+        #ff6b35ff,
+        #ffa500ff,
+        #ffd700ff,
+        #ffff00ff,
+        #adff2fff,
+        #9acd32ff,
+        #32cd32ff,
+        #008000ff,
+        #228b22ff,
+        #2e8b57ff,
+        #006400ff,
+        #556b2fff,
+        #00ffffff,
+        #00ced1ff,
+        #008080ff,
+        #66cdaaff,
+        #87ceebff,
+        #0000ffff,
+        #1e90ffff,
+        #000080ff,
+        #191970ff,
+        #2f4f4fff,
+        #ee82eeff,
+        #ff00ffff,
+        #9400d3ff,
+        #8a2be2ff,
+        #483d8bff,
+        #4b0082ff,
+        #800080ff,
+        #800040ff,
+    ];
+
+    private property <length> default-colors-size: Theme.icon-size;
+    private property <length> default-colors-spacing: Theme.spacing * 2;
+    private property <color> selected-color: default-colors[0];
+
+    width: 640px;
+
+    callback canceled();
+    callback confirmed(color: string);
+
+    VerticalLayout {
+        alignment: start;
+        spacing: Theme.spacing * 4;
+
+        Image {
+            width: root.width;
+            height: root.width * 1080 / 1920;
+            source: Util.color-picker-image();
+
+            TouchArea {
+                mouse-cursor: MouseCursor.pointer;
+
+                clicked => {
+                    let color = Util.color-picker-get(self.mouse-x / 1px, self.mouse-y / 1px, parent.width / 1px, parent.height / 1px);
+
+                    root.selected-color = color;
+                    li-color.text = Util.color-picker-str(color.red, color.green, color.blue, color.alpha);
+                }
+            }
+        }
+
+        HorizontalLayout {
+            alignment: space-between;
+            spacing: Theme.spacing * 2;
+
+            rect := Rectangle {
+                private property <int> columns: max(1, floor((root.width - show-color-vbox.width - vbox.padding) / (default-colors-size + default-colors-spacing)));
+                private property <int> rows: max(1, ceil(default-colors.length / columns));
+
+                width: vbox.preferred-width;
+                height: vbox.preferred-height;
+                background: Theme.hover-background;
+
+                vbox := VerticalLayout {
+                    alignment: start;
+                    padding: Theme.padding * 2;
+                    spacing: Theme.spacing * 2;
+
+                    for r in rows: HorizontalLayout {
+                        alignment: start;
+                        spacing: default-colors-spacing;
+
+                        for c in columns: HorizontalLayout {
+                            private property <int> index: r * columns + c;
+
+                            if index < default-colors.length: Rectangle {
+                                width: default-colors-size;
+                                height: default-colors-size;
+                                background: default-colors[index];
+                                border-color: Theme.base-border-color;
+                                border-width: Theme.default-border-width;
+
+                                TouchArea {
+                                    mouse-cursor: MouseCursor.pointer;
+
+                                    clicked => {
+                                        selected-color = parent.background;
+                                        li-color.text = Util.color-picker-str(selected-color.red, selected-color.green, selected-color.blue, selected-color.alpha);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            show-color-vbox := VerticalLayout {
+                height: rect.height;
+                width: Theme.icon-size * 5;
+                spacing: Theme.spacing * 2;
+                alignment: center;
+
+                HorizontalLayout {
+                    alignment: center;
+                    Rectangle {
+                        width: show-color-vbox.width;
+                        height: rect.height - li-hbox.preferred-height - show-color-vbox.spacing;
+                        background: selected-color;
+
+                        fs := FocusScope { }
+
+                        TouchArea {
+                            mouse-cursor: MouseCursor.pointer;
+
+                            clicked => {
+                                fs.focus();
+                                Logic.copy-to-clipboard(li-color.text);
+                            }
+                        }
+                    }
+                }
+
+                li-hbox := HorizontalLayout {
+                    alignment: center;
+
+                    li-color := LineInput {
+                        width: show-color-vbox.width;
+                        text: Util.color-picker-str(selected-color.red, selected-color.green, selected-color.blue, selected-color.alpha);
+
+                        accepted => {
+                            selected-color = Util.color-picker-hex-color(li-color.text);
+                        }
+                    }
+                }
+            }
+        }
+
+        HorizontalLayout {
+            alignment: end;
+            spacing: Theme.spacing * 4;
+
+            CancelBtn {
+                text: Logic.tr("Cancel");
+
+                clicked => {
+                    root.canceled()
+                }
+            }
+
+            ConfirmBtn {
+                text: Logic.tr("Confirm");
+
+                clicked => {
+                    root.confirmed(li-color.text);
+                }
+            }
+        }
+    }
+}
+
+export component ColorPickerPopup inherits PopupWindow {
+    callback confirmed(color: string);
+
+    width: vbox.preferred-width;
+    height: vbox.preferred-height;
+    close-policy: PopupClosePolicy.close-on-click-outside;
+
+    Rectangle {
+        background: Theme.base-background;
+        border-color: Theme.base-border-color;
+        border-width: Theme.default-border-width;
+
+        vbox := VerticalLayout {
+            padding: Theme.padding * 4;
+
+            cp := ColorPicker {
+                canceled => {
+                    root.close();
+                }
+
+                confirmed(color) => {
+                    root.confirmed(color);
+                    root.close();
+                }
+            }
+        }
+    }
+}

@@ -10,11 +10,14 @@ import { Playlist } from "playlist.slint";
 import { PlaylistItem, AppPosType } from "def.slint";
 import { TextBtnWithoutIcon } from "btn.slint";
 import { Select } from "select.slint";
+import { Loading } from "loading.slint";
 
 export component VideoPlayer inherits Rectangle {
     in-out property player-image <=> img.source;
     in-out property <bool> is-playing;
+    in-out property <bool> is-loading;
     in-out property <bool> is-full-screen;
+    in-out property <bool> is-real-time-player-mode;
     in-out property <float> current-sound: 50;
     in-out property <float> current-speed: 1.0;
     in-out property <float> progress: 0;
@@ -90,7 +93,7 @@ export component VideoPlayer inherits Rectangle {
                     root.exit-full-screen();
                 }
             } else if (event.text == Key.Space) {
-                if (valid-playlist-index()) {
+                if (valid-playlist-index() || is-real-time-player-mode) {
                     root.is-playing = !root.is-playing;
                     if (root.is-playing) {
                         root.play();
@@ -167,7 +170,7 @@ export component VideoPlayer inherits Rectangle {
                 clicked => {
                     root.focus();
 
-                    if (valid-playlist-index()) {
+                    if (valid-playlist-index() || is-real-time-player-mode) {
                         root.is-playing = !root.is-playing;
                         if (root.is-playing) {
                             root.play();
@@ -250,7 +253,7 @@ export component VideoPlayer inherits Rectangle {
                 }
             }
 
-            if !root.is-playing: Rectangle {
+            if !root.is-playing && !is-loading: Rectangle {
                 opacity: root.center-icon-opacity;
                 background: Theme.dark-bg-color;
 
@@ -267,6 +270,17 @@ export component VideoPlayer inherits Rectangle {
                         colorize: Theme.dark-bg-color;
                         image-fit: ImageFit.contain;
                     }
+                }
+            }
+
+            if !root.is-playing && is-loading: Rectangle {
+                opacity: root.center-icon-opacity;
+                background: Theme.dark-bg-color;
+
+                Loading {
+                    loading-text: "";
+                    icon-size: Math.min(parent.width, parent.height) * 0.2;
+                    colorize: Theme.thirdly-brand-color.darker(30%);
                 }
             }
         }
@@ -305,7 +319,7 @@ export component VideoPlayer inherits Rectangle {
 
             progress-bar := Slider {
                 visible: root.show-progress-bar;
-                y: Theme.padding * 2;
+                y: self.visible ? Theme.padding * 2 : 0;
                 x: Theme.padding * 2;
                 width: parent.width - Theme.padding * 4;
                 height: self.visible ? Theme.default-font-size * 0.33 : 0;
@@ -333,7 +347,7 @@ export component VideoPlayer inherits Rectangle {
             }
 
             controls := HorizontalLayout {
-                y: Theme.padding * 2 + Theme.default-font-size * 0.33 + Theme.padding * 2;
+                y: progress-bar.y + Theme.default-font-size * 0.33 + Theme.padding * 2;
                 height: control-height - (Theme.padding * 2 + Theme.default-font-size * 0.33 + Theme.padding * 2);
                 padding-left: Theme.padding * 4;
                 padding-right: Theme.padding * 4;
@@ -384,7 +398,7 @@ export component VideoPlayer inherits Rectangle {
                             clicked => {
                                 root.show-sound-slider = false;
 
-                                if (valid-playlist-index()) {
+                                if (valid-playlist-index() || is-real-time-player-mode) {
                                     root.is-playing = !root.is-playing;
                                     if (root.is-playing) {
                                         root.play();
@@ -422,6 +436,8 @@ export component VideoPlayer inherits Rectangle {
                         spacing: Theme.padding * 2;
 
                         sound-btn := IconBtn {
+                            private property <int> current-sound-cache;
+
                             icon: root.current-sound <= 0 ? Icons.sound-off-fill : Icons.sound-on-fill;
                             show-icon-hover-background: false;
                             icon-size: Theme.icon-size;
@@ -430,10 +446,18 @@ export component VideoPlayer inherits Rectangle {
                             changed has-hover => {
                                 mouse-on-controls = true;
                                 root.show-controls = true;
+                                root.show-sound-slider = true;
                             }
 
                             clicked => {
-                                show-sound-slider = !show-sound-slider;
+                                if (root.current-sound == 0) {
+                                    root.current-sound = current-sound-cache;
+                                    sound-slider.value = current-sound-cache;
+                                } else {
+                                    current-sound-cache = root.current-sound;
+                                    root.current-sound = 0;
+                                    sound-slider.value = 0;
+                                }
                             }
                         }
 
@@ -463,6 +487,7 @@ export component VideoPlayer inherits Rectangle {
                             changed has-hover => {
                                 mouse-on-controls = true;
                                 root.show-controls = true;
+                                root.show-sound-slider = true;
                             }
 
                             released(v) => {

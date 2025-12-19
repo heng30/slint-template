@@ -65,6 +65,7 @@ import { LogInExample }  from "examples/log-in.slint";
 import { PasswordExample }  from "examples/password.slint";
 import { ResetPasswordExample }  from "examples/reset-password.slint";
 import { DatePickerExample }  from "examples/date-picker.slint";
+import { ColorPickerExample }  from "examples/color-picker.slint";
 import { SettingExample }  from "examples/setting.slint";
 import { TokenListExample }  from "examples/token-list.slint";
 import { TokenSenderExample }  from "examples/token-sender.slint";
@@ -137,6 +138,7 @@ component RightPanel inherits Rectangle {
     if Store.current-sidebar-key == "Password": PasswordExample { }
     if Store.current-sidebar-key == "ResetPassword": ResetPasswordExample { }
     if Store.current-sidebar-key == "DatePicker": DatePickerExample { }
+    if Store.current-sidebar-key == "ColorPicker": ColorPickerExample { }
 
     // Navigation
     if Store.current-sidebar-key == "Tree": TreeExample { }
