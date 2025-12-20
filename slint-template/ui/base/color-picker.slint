@@ -7,6 +7,9 @@ import { Logic } from "../logic.slint";
 import { CancelBtn, ConfirmBtn } from "btn.slint";
 
 export component ColorPicker inherits Rectangle {
+    in-out property <bool> is-show-btns;
+    in-out property <color> selected-color: default-colors[0];
+
     private property <[color]> default-colors: [
         #000000ff,
         #ffffffff,
@@ -72,16 +75,19 @@ export component ColorPicker inherits Rectangle {
         #4b0082ff,
         #800080ff,
         #800040ff,
+        #404040ff,
+        #303030ff,
+        #202020ff,
+        #101010ff,
     ];
 
     private property <length> default-colors-size: Theme.icon-size;
     private property <length> default-colors-spacing: Theme.spacing * 2;
-    private property <color> selected-color: default-colors[0];
-
-    width: 640px;
 
     callback canceled();
     callback confirmed(color: string);
+
+    width: 680px;
 
     VerticalLayout {
         alignment: start;
@@ -109,7 +115,7 @@ export component ColorPicker inherits Rectangle {
             spacing: Theme.spacing * 2;
 
             rect := Rectangle {
-                private property <int> columns: max(1, floor((root.width - show-color-vbox.width - vbox.padding) / (default-colors-size + default-colors-spacing)));
+                private property <int> columns: max(1, floor((root.width - show-color-vbox.width - vbox.padding * 2) / (default-colors-size + default-colors-spacing)));
                 private property <int> rows: max(1, ceil(default-colors.length / columns));
 
                 width: vbox.preferred-width;
@@ -190,7 +196,7 @@ export component ColorPicker inherits Rectangle {
             }
         }
 
-        HorizontalLayout {
+        if is-show-btns: HorizontalLayout {
             alignment: end;
             spacing: Theme.spacing * 4;
 
@@ -214,13 +220,20 @@ export component ColorPicker inherits Rectangle {
 }
 
 export component ColorPickerPopup inherits PopupWindow {
+    in-out property inner-width <=> cp.width;
+    in-out property is-show-btns <=> cp.is-show-btns;
+    in-out property selected-color <=> cp.selected-color;
+    in-out property border-color <=> rec.border-color;
+    in-out property border-width <=> rec.border-width;
+    in-out property border-radius <=> rec.border-radius;
+
     callback confirmed(color: string);
 
     width: vbox.preferred-width;
     height: vbox.preferred-height;
     close-policy: PopupClosePolicy.close-on-click-outside;
 
-    Rectangle {
+    rec := Rectangle {
         background: Theme.base-background;
         border-color: Theme.base-border-color;
         border-width: Theme.default-border-width;
@@ -229,6 +242,8 @@ export component ColorPickerPopup inherits PopupWindow {
             padding: Theme.padding * 4;
 
             cp := ColorPicker {
+                is-show-btns: true;
+
                 canceled => {
                     root.close();
                 }
