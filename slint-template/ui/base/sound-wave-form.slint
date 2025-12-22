@@ -1,0 +1,182 @@
+import { Theme } from "theme.slint";
+import { Util } from "../panel/def.slint";
+
+export component SoundWaveForm inherits Rectangle {
+    in-out property <[float]> wave-data;
+    in-out property <float> zoom-level: 1.0;
+    in-out property <float> amplitude-scale: 1.0;
+    in-out property <length> data-width: 2px;
+    in-out property <color> wave-color: Theme.brand-color;
+    in-out property <bool> show-control-handle: true;
+    in-out property <color> start-control-handle-color: Theme.success-color;
+    in-out property <color> end-control-handle-color: Theme.danger-color;
+    in-out property <length> control-handle-size: Theme.icon-size * 0.8;
+
+    in-out property center-line-color <=> center-line.background;
+
+    private property <length> horizontal-offset: 0px;
+    private property <length> start-control-handle-pos-cache: control-handle-size / -2;
+    private property <length> end-control-handle-pos-cache: root.width - control-handle-size / 2;
+    private property <[float]> final-wave-data: Util.cal-sound-wave-form-data(root.wave-data, root.width / 1px, root.data-width / 1px);
+
+    callback move(percent: float);
+    callback zoom-changed(level: float);
+    callback amplitude-changed(scale: float);
+    callback start-position-changed(position: float);
+    callback end-position-changed(position: float);
+
+    public function reset-view() {
+        zoom-level = 1.0;
+        amplitude-scale = 1.0;
+        horizontal-offset = 0px;
+    }
+
+    width: wave-data.length * 2px;
+    height: Theme.default-font-size * 10;
+    background: Theme.secondary-background;
+    border-width: Theme.default-border-width;
+    border-color: Theme.base-border-color;
+    border-radius: Theme.border-radius;
+
+    Rectangle {
+        clip: true;
+
+        for data-index in final-wave-data.length: Rectangle {
+            x: (data-index / Math.max(1, final-wave-data.length)) * parent.width * zoom-level + horizontal-offset;
+            y: final-wave-data[data-index] >= 0 ? (parent.height / 2 - self.height) : (parent.height / 2);
+            width: Math.max(1px, (parent.width * zoom-level / Math.max(1, final-wave-data.length)));
+            height: Math.abs(final-wave-data[data-index]) * parent.height / 2 * amplitude-scale;
+            background: wave-color;
+        }
+
+        center-line := Rectangle {
+            y: parent.height / 2 - self.height / 2;
+            width: 100%;
+            height: Theme.default-border-width;
+            background: Theme.have-read-text-color;
+        }
+    }
+
+    TouchArea {
+        mouse-cursor: self.pressed ? MouseCursor.grabbing : MouseCursor.grab;
+
+        property <length> start-drag-x: 0px;
+        property <length> start-offset: 0px;
+        property <bool> is-dragging: false;
+
+        clicked => {
+            is-dragging = false;
+            move((self.mouse-x - start-drag-x) / root.width);
+        }
+
+        moved => {
+            if (self.pressed) {
+                if (!is-dragging) {
+                    start-offset = horizontal-offset;
+                    start-drag-x = self.mouse-x;
+                    is-dragging = true;
+                }
+                let delta-x = start-drag-x - self.mouse-x;
+                horizontal-offset = start-offset - delta-x;
+            }
+        }
+
+        scroll-event(event) => {
+            if (event.modifiers.control) {
+                if (event.delta-y > 0) {
+                    amplitude-scale += 0.1;
+                    amplitude-changed(amplitude-scale);
+                    return EventResult.accept;
+                } else if (event.delta-y < 0) {
+                    amplitude-scale -= 0.1;
+                    amplitude-changed(amplitude-scale);
+                    return EventResult.accept;
+                }
+            } else {
+
+                if (event.delta-y > 0) {
+                    zoom-level += 0.1;
+                    zoom-changed(zoom-level);
+                    return EventResult.accept;
+                } else if (event.delta-y < 0) {
+                    zoom-level -= 0.1;
+                    zoom-changed(zoom-level);
+                    return EventResult.accept;
+                }
+            }
+            return EventResult.reject;
+        }
+    }
+
+    if show-control-handle: Rectangle {
+        x: control-handle-size / -2;
+        y: control-handle-size / -2;
+        width: control-handle-size;
+        height: root.height;
+
+        start-rec := Rectangle {
+            y: 0;
+            width: control-handle-size;
+            height: self.width;
+            border-radius: self.width / 2;
+            background: start-control-handle-color;
+        }
+
+        Rectangle {
+            x: start-rec.x + control-handle-size / 2;
+            y: control-handle-size / 2;
+            width: Theme.default-border-width * 2;
+            height: root.height;
+            background: start-control-handle-color;
+        }
+
+        TouchArea {
+            mouse-cursor: MouseCursor.move;
+
+            moved => {
+                if (self.pressed) {
+                    parent.x = min( clamp(parent.x + self.mouse-x - self.pressed-x, - control-handle-size / 2, root.width - control-handle-size / 2), root.end-control-handle-pos-cache);
+
+                    root.start-control-handle-pos-cache = parent.x;
+                    start-position-changed((parent.x + control-handle-size) / root.width);
+                }
+            }
+        }
+    }
+
+    if show-control-handle: Rectangle {
+        x: root.width - control-handle-size / 2;
+        y: control-handle-size / -2;
+        width: control-handle-size;
+        height: root.height;
+
+        end-rec := Rectangle {
+            y: 0;
+            width: control-handle-size;
+            height: self.width;
+            border-radius: self.width / 2;
+            background: end-control-handle-color;
+        }
+
+        Rectangle {
+            x: end-rec.x + control-handle-size / 2;
+            y: control-handle-size / 2;
+            width: Theme.default-border-width * 2;
+            height: root.height;
+            background: end-control-handle-color;
+        }
+
+        TouchArea {
+            mouse-cursor: MouseCursor.move;
+
+            moved => {
+                if (self.pressed) {
+                    parent.x = max(clamp(parent.x + self.mouse-x - self.pressed-x, - control-handle-size / 2, root.width - control-handle-size / 2), root.start-control-handle-pos-cache);
+
+                    root.end-control-handle-pos-cache = parent.x;
+                    end-position-changed((parent.x + control-handle-size) / root.width);
+                }
+            }
+        }
+    }
+}

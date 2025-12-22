@@ -78,6 +78,7 @@ import { TransactionTileExample }  from "examples/transaction-tile.slint";
 import { SideBarExample }  from "examples/sidebar.slint";
 import { ParagraphExample }  from "examples/paragraph.slint";
 import { AudioControlExample }  from "examples/audio-control.slint";
+import { SoundWaveFormExample }  from "examples/sound-wave-form.slint";
 import { VideoPlayerExample }  from "examples/video-player.slint";
 import { TodoListExample } from "examples/todo-list.slint";
 import { ChartBarExample } from "examples/chart-bar.slint";
@@ -185,6 +186,7 @@ component RightPanel inherits Rectangle {
 
     // MultiMedia
     if Store.current-sidebar-key == "AudioControl": AudioControlExample { }
+    if Store.current-sidebar-key == "SoundWaveForm": SoundWaveFormExample { }
     if Store.current-sidebar-key == "VideoPlayer": VideoPlayerExample { }
 
     // Other

@@ -458,6 +458,8 @@ export component VideoPlayer inherits Rectangle {
                                     root.current-sound = 0;
                                     sound-slider.value = 0;
                                 }
+
+                                root.sound-changed(root.current-sound);
                             }
                         }
 

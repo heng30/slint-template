@@ -71,6 +71,11 @@ export global Util {
         return Icons.brand;
     }
 
+    pure callback cal-sound-wave-form-data(data: [float], container-width: float, data-width: float) -> [float];
+    cal-sound-wave-form-data(data, container-width, data-width) => {
+        return data;
+    }
+
     public pure function text-color(status: ToastStatus) -> color {
         if (status == ToastStatus.Success) {
             return Theme.success-color;

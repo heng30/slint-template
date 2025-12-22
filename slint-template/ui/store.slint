@@ -105,7 +105,8 @@ export global Store {
 
     //////////////////////////////// Logic Start ////////////////////////////////
     in-out property <bool> is-cn: setting-preference.language == "cn";
-    in-out property <string> current-sidebar-key: "Introduction";
+    // in-out property <string> current-sidebar-key: "Introduction";
+    in-out property <string> current-sidebar-key: "SoundWaveForm";
     in-out property <[SideBarEntry]> sidebar-entries: [
         {
             category: is-cn ? "介绍" : "Introduction",
@@ -374,6 +375,10 @@ export global Store {
                 {
                     title: is-cn ? "音乐控制" : "AudioControl",
                     key: "AudioControl",
+                },
+                {
+                    title: is-cn ? "声音波纹" : "SoundWaveForm",
+                    key: "SoundWaveForm",
                 },
                 {
                     title: is-cn ? "视频播放器" : "VideoPlayer",
