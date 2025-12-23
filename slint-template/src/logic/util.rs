@@ -353,6 +353,46 @@ pub fn init(ui: &AppWindow) {
         .into()
     });
 
+    global_util!(ui).on_cal_sound_wave(move |data, container_width, data_width, is_mono: bool| {
+        let data_len = data.row_count();
+        let counts = (container_width / data_width).ceil() as usize;
+
+        if counts <= data_len {
+            return data;
+        }
+
+        if is_mono {
+            let chunk_size = (data_len + counts - 1) / counts;
+            if chunk_size <= 0 {
+                return data;
+            }
+
+            let mut new_data = vec![];
+            for chunk in data.iter().collect::<Vec<f32>>().chunks(chunk_size) {
+                let s = chunk.into_iter().sum::<f32>() / chunk.len() as f32;
+                new_data.push(s);
+            }
+
+            ModelRc::new(VecModel::from_slice(&new_data))
+        } else {
+            let chunk_size = (data_len / 2 + counts - 1) / counts;
+            if chunk_size <= 0 {
+                return data;
+            }
+
+            let mut new_data = vec![];
+            for chunk in data.iter().collect::<Vec<f32>>().chunks(chunk_size * 2) {
+                let left_sum = chunk.iter().step_by(2).sum::<f32>() / (chunk.len() / 2) as f32;
+                let right_sum =
+                    chunk.iter().skip(1).step_by(2).sum::<f32>() / (chunk.len() / 2) as f32;
+
+                new_data.extend_from_slice(&[left_sum, right_sum]);
+            }
+
+            ModelRc::new(VecModel::from_slice(&new_data))
+        }
+    });
+
     #[cfg(feature = "qrcode")]
     {
         init_qrcode(ui);

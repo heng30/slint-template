@@ -1,4 +1,15 @@
-import { Store, SettingPreference, SettingProxy, TabIndex, SettingDetailIndex, MobileSettingDetailIndex, PopupIndex, MobileTabIndex, SettingBackup, SettingAiModel } from "store.slint";
+import {
+    Store,
+    SettingPreference,
+    SettingProxy,
+    TabIndex,
+    SettingDetailIndex,
+    MobileSettingDetailIndex,
+    PopupIndex,
+    MobileTabIndex,
+    SettingBackup,
+    SettingAiModel,
+} from "store.slint";
 
 import { SideBarEntry } from "base/def.slint";
 
@@ -77,6 +88,7 @@ export global Logic {
     callback web-debug(text: string);
     pure callback generate-search-values(entries: [SideBarEntry]) -> [string];
     pure callback get-sidebar-key-from-search-values(entries: [SideBarEntry], value: string) -> string;
+    pure callback generate-sound-data(counts: int) -> [float];
 
     callback show-mobile-test-dialog();
 

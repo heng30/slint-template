@@ -71,8 +71,8 @@ export global Util {
         return Icons.brand;
     }
 
-    pure callback cal-sound-wave-form-data(data: [float], container-width: float, data-width: float) -> [float];
-    cal-sound-wave-form-data(data, container-width, data-width) => {
+    pure callback cal-sound-wave(data: [float], container-width: float, data-width: float, is-mono: bool) -> [float];
+    cal-sound-wave(data, container-width, data-width, is-mono) => {
         return data;
     }
 

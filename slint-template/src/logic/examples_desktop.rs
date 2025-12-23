@@ -7,6 +7,7 @@ use slint::{ComponentHandle, Model, ModelRc, SharedString, VecModel};
 pub fn init(ui: &AppWindow) {
     logic_cb!(generate_search_values, ui, entries);
     logic_cb!(get_sidebar_key_from_search_values, ui, entries, text);
+    logic_cb!(generate_sound_data, ui, counts);
 }
 
 fn generate_search_values(
@@ -66,4 +67,12 @@ fn get_sidebar_key_from_search_values(
     } else {
         entries[0].clone()
     }
+}
+
+fn generate_sound_data(_ui: &AppWindow, counts: i32) -> ModelRc<f32> {
+    use rand::Rng;
+
+    let mut rng = rand::rng();
+    let data: Vec<f32> = (0..counts).map(|_| rng.random_range(-1.0..=1.0)).collect();
+    ModelRc::new(VecModel::from_slice(&data))
 }

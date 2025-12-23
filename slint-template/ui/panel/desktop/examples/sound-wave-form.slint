@@ -107,69 +107,6 @@ export component SoundWaveFormExample inherits Flickable {
         -0.9
     ];
 
-    private property <[float]> square-wave-data: [
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8,
-        -0.8
-    ];
-
     vbox := VerticalLayout {
         spacing: Theme.spacing * 20;
         padding-top: Theme.padding * 5;
@@ -188,7 +125,7 @@ export component SoundWaveFormExample inherits Flickable {
                     spacing: Theme.spacing * 10;
 
                     Text {
-                        text: "Interactive Wave - Drag to pan, buttons to zoom";
+                        text: "Interactive Wave";
                         font-size: Theme.title4-font-size;
                         color: Theme.primary-text-color;
                         horizontal-alignment: center;
@@ -200,6 +137,7 @@ export component SoundWaveFormExample inherits Flickable {
                         wave-data: sine-wave-data;
                         wave-color: Theme.brand-color;
                         background: Theme.secondary-background;
+                        is-mono: true;
 
                         move(precent) => {
                             debug(precent);
@@ -208,37 +146,6 @@ export component SoundWaveFormExample inherits Flickable {
                 }
 
                 code: "SoundWaveForm {\n    height: 200px;\n    wave-data: sineWaveData; // Float array\n}";
-            }
-        }
-
-        // Customized Style Example
-        HorizontalLayout {
-            width: root.width;
-            alignment: LayoutAlignment.center;
-
-            ExampleComponent {
-                width: Math.min(1000px, root.width * 0.8);
-
-                VerticalLayout {
-                    spacing: Theme.spacing * 10;
-
-                    Text {
-                        text: "Square Wave with Grid";
-                        font-size: Theme.title4-font-size;
-                        color: Theme.primary-text-color;
-                        horizontal-alignment: center;
-                    }
-
-                    SoundWaveForm {
-                        width: Math.min(1000px, root.width * 0.8);
-                        wave-data: square-wave-data;
-                        wave-color: Theme.success-color;
-                        background: Theme.thirdly-background;
-                        amplitude-scale: 1.5;
-                    }
-                }
-
-                code: "SoundWaveForm {\n    height: 150px;\n    wave-data: squareWaveData;\n    wave-color: Theme.success-color;\n    show-grid: true;\n    amplitude-scale: 1.5;\n}";
             }
         }
 
@@ -254,21 +161,30 @@ export component SoundWaveFormExample inherits Flickable {
                     spacing: Theme.spacing * 10;
 
                     Text {
-                        text: "Random Noise (Amplitude 2x)";
+                        text: "Random Noise";
                         font-size: Theme.title4-font-size;
                         color: Theme.primary-text-color;
                         horizontal-alignment: center;
                     }
 
                     SoundWaveForm {
+                        init => {
+                            let random_data = Logic.generate-sound-data(1000);
+                            if (random-data.length > 0) {
+                                self.wave-data = random-data;
+                            }
+                        }
+
                         width: Math.min(1000px, root.width * 0.8);
                         wave-data: noise-data;
-                        wave-color: Theme.danger-color;
-                        amplitude-scale: 2.0;
+                        wave-color: Theme.warning-color;
+                        show-timestamp: true;
+                        start-timestamp: "01:00";
+                        end-timestamp: "05:00";
                     }
                 }
 
-                code: "SoundWaveForm {\n    height: 150px;\n    wave-data: noiseData;\n    amplitude-scale: 2.0;  // Scale amplitude\n}";
+                code: "SoundWaveForm {\n    height: 150px;\n    wave-data: noiseData;\n}";
             }
         }
     }

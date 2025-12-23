@@ -1,5 +1,16 @@
 import { Theme } from "theme.slint";
 import { Util } from "../panel/def.slint";
+import { Label } from "label.slint";
+
+// Example:
+// SoundWaveForm {
+//     width: Math.min(1000px, root.width * 0.8);
+//     wave-data: noise-data;
+//     wave-color: Theme.warning-color;
+//     show-timestamp: true;
+//     start-timestamp: "01:00";
+//     end-timestamp: "05:00";
+// }
 
 export component SoundWaveForm inherits Rectangle {
     in-out property <[float]> wave-data;
@@ -7,23 +18,29 @@ export component SoundWaveForm inherits Rectangle {
     in-out property <float> amplitude-scale: 1.0;
     in-out property <length> data-width: 2px;
     in-out property <color> wave-color: Theme.brand-color;
+    in-out property <bool> is-mono;
     in-out property <bool> show-control-handle: true;
     in-out property <color> start-control-handle-color: Theme.success-color;
     in-out property <color> end-control-handle-color: Theme.danger-color;
     in-out property <length> control-handle-size: Theme.icon-size * 0.8;
+    in-out property <string> start-timestamp: "00:00";
+    in-out property <string> end-timestamp: "00:00";
+    in-out property <color> timestamp-color: Theme.regular-text-color;
+    in-out property <bool> show-timestamp;
 
     in-out property center-line-color <=> center-line.background;
 
+    private property <length> max-data-width: 16px;
     private property <length> horizontal-offset: 0px;
     private property <length> start-control-handle-pos-cache: control-handle-size / -2;
     private property <length> end-control-handle-pos-cache: root.width - control-handle-size / 2;
-    private property <[float]> final-wave-data: Util.cal-sound-wave-form-data(root.wave-data, root.width / 1px, root.data-width / 1px);
+    private property <[float]> final-wave-data: Util.cal-sound-wave(root.wave-data, clamp(root.width / 1px, 1, max-data-width / 1px), root.data-width / 1px, self.is-mono);
 
-    callback move(percent: float);
+    callback move(percent: float); // move left: < 0; move right: > 0;
     callback zoom-changed(level: float);
     callback amplitude-changed(scale: float);
-    callback start-position-changed(position: float);
-    callback end-position-changed(position: float);
+    callback start-position-changed(position: float); // [0, 1]
+    callback end-position-changed(position: float); // [0, 1]
 
     public function reset-view() {
         zoom-level = 1.0;
@@ -41,19 +58,71 @@ export component SoundWaveForm inherits Rectangle {
     Rectangle {
         clip: true;
 
-        for data-index in final-wave-data.length: Rectangle {
-            x: (data-index / Math.max(1, final-wave-data.length)) * parent.width * zoom-level + horizontal-offset;
-            y: final-wave-data[data-index] >= 0 ? (parent.height / 2 - self.height) : (parent.height / 2);
-            width: Math.max(1px, (parent.width * zoom-level / Math.max(1, final-wave-data.length)));
-            height: Math.abs(final-wave-data[data-index]) * parent.height / 2 * amplitude-scale;
-            background: wave-color;
+        if is-mono: Rectangle {
+            for data-index in final-wave-data.length: Rectangle {
+                x: (data-index / Math.max(1, final-wave-data.length)) * parent.width * zoom-level + horizontal-offset;
+                y: final-wave-data[data-index] >= 0 ? (parent.height / 2 - self.height) : (parent.height / 2);
+                width: Math.clamp((parent.width * zoom-level / Math.max(1, final-wave-data.length)), 1px, max-data-width);
+                height: Math.abs(final-wave-data[data-index]) * parent.height / 2 * amplitude-scale;
+                background: wave-color;
+            }
+        }
+
+        if !is-mono: Rectangle {
+            private property <int> frame-counts: final-wave-data.length / 2;
+
+            for data-index in frame_counts: Rectangle {
+                Rectangle {
+                    x: (data-index / Math.max(1, frame-counts)) * parent.width * zoom-level + horizontal-offset;
+                    y: final-wave-data[data-index] >= 0 ? (parent.height / 2 - self.height) : (parent.height / 2);
+                    width: Math.clamp((parent.width * zoom-level / Math.max(1, frame-counts)), 1px, max-data-width);
+                    height: Math.abs(final-wave-data[data-index + 1]) * parent.height / 2 * amplitude-scale;
+                    background: wave-color;
+                }
+
+                Rectangle {
+                    x: (data-index / Math.max(1, frame-counts)) * parent.width * zoom-level + horizontal-offset;
+                    y: final-wave-data[data-index + 1] >= 0 ? (parent.height / 2 - self.height) : (parent.height / 2);
+                    width: Math.clamp((parent.width * zoom-level / Math.max(1, frame-counts)), 1px, max-data-width);
+                    height: Math.abs(final-wave-data[data-index + 1]) * parent.height / 2 * amplitude-scale;
+                    background: wave-color;
+                }
+            }
+        }
+    }
+
+    HorizontalLayout {
+        padding-left: show-timestamp ? Theme.padding : 0;
+        padding-right: show-timestamp ? Theme.padding : 0;
+        alignment: space-between;
+        width: root.width;
+
+        private property <length> start-timestamp-lable-width;
+        private property <length> end-timestamp-lable-width;
+
+        if show-timestamp: Label {
+            init => {
+                start-timestamp-lable-width = self.preferred-width;
+            }
+
+            text: start-timestamp;
+            color: timestamp-color;
         }
 
         center-line := Rectangle {
             y: parent.height / 2 - self.height / 2;
-            width: 100%;
+            width: !show-timestamp ? root.width : root.width - start-timestamp-lable-width - end-timestamp-lable-width - parent.padding-left - parent.padding-right - Theme.padding * 2;
             height: Theme.default-border-width;
             background: Theme.have-read-text-color;
+        }
+
+        if show-timestamp: Label {
+            init => {
+                end-timestamp-lable-width = self.preferred-width;
+            }
+
+            text: end-timestamp;
+            color: timestamp-color;
         }
     }
 
@@ -88,7 +157,7 @@ export component SoundWaveForm inherits Rectangle {
                     amplitude-changed(amplitude-scale);
                     return EventResult.accept;
                 } else if (event.delta-y < 0) {
-                    amplitude-scale -= 0.1;
+                    amplitude-scale = max(0,  amplitude-scale - 0.1);
                     amplitude-changed(amplitude-scale);
                     return EventResult.accept;
                 }
@@ -99,7 +168,7 @@ export component SoundWaveForm inherits Rectangle {
                     zoom-changed(zoom-level);
                     return EventResult.accept;
                 } else if (event.delta-y < 0) {
-                    zoom-level -= 0.1;
+                    zoom-level = max(0, zoom-level - 0.1);
                     zoom-changed(zoom-level);
                     return EventResult.accept;
                 }
