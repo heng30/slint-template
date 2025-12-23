@@ -136,10 +136,9 @@ export component SoundWaveFormExample inherits Flickable {
                         width: Math.min(1000px, root.width * 0.8);
                         wave-data: sine-wave-data;
                         wave-color: Theme.brand-color;
-                        background: Theme.secondary-background;
                         is-mono: true;
 
-                        move(precent) => {
+                        moved(precent) => {
                             debug(precent);
                         }
                     }
