@@ -13,7 +13,6 @@ use tr::tr;
     about = "A tool to extract all sentences, needed to be translated, of current project.",
     long_about = None
 )]
-
 struct Args {
     /// Input directory
     #[arg(short, long, default_value = ".")]

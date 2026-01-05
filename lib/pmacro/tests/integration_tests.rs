@@ -1,8 +1,5 @@
-//! Integration tests for the pmacro library.
-
 use pmacro::SlintFromConvert;
 
-/// Mock Slint types for testing
 mod slint {
     use std::sync::Arc;
 
@@ -12,14 +9,12 @@ mod slint {
 
 use slint::ModelRc;
 
-/// Test struct with basic field conversions
 #[derive(Debug, Clone, PartialEq, Default)]
 struct TestUIBasic {
     name: String,
     age: u32,
 }
 
-/// Test struct with vector field conversions
 #[derive(Debug, Clone, PartialEq, Default)]
 struct TestUIWithVectors {
     name: String,
@@ -28,7 +23,6 @@ struct TestUIWithVectors {
     empty_vec: ModelRc<u8>,
 }
 
-/// Test basic field conversion without vectors
 #[derive(Debug, Clone, PartialEq, Default, SlintFromConvert)]
 #[from("TestUIBasic")]
 struct TestBasic {
@@ -36,7 +30,6 @@ struct TestBasic {
     age: u32,
 }
 
-/// Test struct with vector field mappings
 #[derive(Debug, Clone, PartialEq, Default, SlintFromConvert)]
 #[from("TestUIWithVectors")]
 #[vec_ui("empty_vec")]

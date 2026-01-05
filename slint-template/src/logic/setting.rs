@@ -1,7 +1,7 @@
 use super::tr::tr;
 use crate::{
-    config, global_logic, global_store,
-    slint_generatedAppWindow::{AppWindow, SettingAiModel, SettingProxy, Theme},
+    config, global_logic, global_store, global_theme, global_util,
+    slint_generatedAppWindow::{AppWindow, SettingAiModel, SettingProxy},
     toast_success, toast_warn,
 };
 use slint::ComponentHandle;
@@ -42,7 +42,7 @@ pub fn init(ui: &AppWindow) {
         _ = config::save(all);
 
         if cfg!(feature = "desktop") && !ui.window().is_maximized() {
-            ui.global::<crate::Util>().invoke_update_window_size();
+            global_util!(ui).invoke_update_window_size();
         }
 
         toast_success!(ui_weak.unwrap(), tr("save configuration successfully"));
@@ -174,7 +174,7 @@ fn init_setting(ui: &AppWindow) {
     setting.no_frame = config.no_frame;
     setting.is_dark = config.is_dark;
 
-    ui.global::<Theme>().invoke_set_dark(config.is_dark);
+    global_theme!(ui).invoke_set_dark(config.is_dark);
     global_store!(ui).set_setting_preference(setting);
 }
 

@@ -11,7 +11,6 @@ use std::{fs, io::Write, collections::HashSet, path::Path};
     about = "A tool to generate the `icon.slint` for this project.",
     long_about = None
 )]
-
 struct Args {
     /// Input directory
     #[arg(short, long, default_value = ".")]
@@ -66,16 +65,16 @@ fn main() -> Result<()> {
                 r#"out property <image> {}: @image-url("../images/{}/{}");"#,
                 file.name_without_extension, dir.dir_name, file.full_name
             ));
-            content.push_str("\n");
+            content.push('\n');
         }
 
         if index < dir_counts - 1 {
-            content.push_str("\n");
+            content.push('\n');
         }
     }
 
-    content.push_str("}");
-    icon_file.write(content.as_bytes())?;
+    content.push('}');
+    icon_file.write_all(content.as_bytes())?;
 
     Ok(())
 }
@@ -105,21 +104,20 @@ pub fn get_directory_contents(dir_path: &str) -> Result<Vec<DirectoryInfo>> {
                         continue;
                     }
 
-                    if let Some(extension) = sub_path.extension().and_then(|e| e.to_str()) {
-                        if extension.to_lowercase() == "svg" || extension.to_lowercase() == "png" {
-                            if let Some(file_name) = sub_path.file_name().and_then(|n| n.to_str()) {
-                                let name_without_extension = sub_path
-                                    .file_stem()
-                                    .and_then(|s| s.to_str())
-                                    .unwrap_or("")
-                                    .to_string();
+                    if let Some(extension) = sub_path.extension().and_then(|e| e.to_str())
+                        && (extension.to_lowercase() == "svg" || extension.to_lowercase() == "png")
+                        && let Some(file_name) = sub_path.file_name().and_then(|n| n.to_str())
+                    {
+                        let name_without_extension = sub_path
+                            .file_stem()
+                            .and_then(|s| s.to_str())
+                            .unwrap_or("")
+                            .to_string();
 
-                                files.push(FileInfo {
-                                    full_name: file_name.to_string(),
-                                    name_without_extension,
-                                });
-                            }
-                        }
+                        files.push(FileInfo {
+                            full_name: file_name.to_string(),
+                            name_without_extension,
+                        });
                     }
                 }
             }

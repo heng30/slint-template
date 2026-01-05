@@ -44,6 +44,46 @@ macro_rules! db_update {
 }
 
 #[macro_export]
+macro_rules! db_select {
+    ($table:expr, $ty:ident) => {
+        fn db_select<F>(
+            ui: slint::Weak<$crate::slint_generatedAppWindow::AppWindow>,
+            id: impl ToString,
+            callback: F,
+        ) where
+            F: FnOnce(&$crate::slint_generatedAppWindow::AppWindow, $ty) + Send + 'static,
+        {
+            let id = id.to_string();
+            tokio::spawn(async move {
+                match sqldb::entry::select($table, id.as_str()).await {
+                    Ok(item) => match serde_json::from_str::<$ty>(&item.data) {
+                        Ok(data) => {
+                            let _ = slint::invoke_from_event_loop(move || {
+                                if let Some(ui) = ui.upgrade() {
+                                    callback(&ui, data);
+                                }
+                            });
+                        }
+                        Err(e) => {
+                            $crate::logic::toast::async_toast_warn(
+                                ui,
+                                format!("{}. {e}", crate::logic::tr::tr("parse entry failed")),
+                            );
+                        }
+                    },
+                    Err(e) => {
+                        $crate::logic::toast::async_toast_warn(
+                            ui,
+                            format!("{}. {e}", crate::logic::tr::tr("load entry failed")),
+                        );
+                    }
+                }
+            });
+        }
+    };
+}
+
+#[macro_export]
 macro_rules! db_select_all {
     ($table:expr, $ty:ident) => {{
         match sqldb::entry::select_all($table).await {

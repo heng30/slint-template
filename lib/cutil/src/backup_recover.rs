@@ -1,8 +1,3 @@
-//! Backup and restore utilities for creating and restoring compressed archives.
-//!
-//! This module provides functions to create compressed tar.gz backups of directories
-//! and restore them later.
-
 use anyhow::Result;
 use flate2::{write::GzEncoder, Compression};
 use std::{
@@ -11,29 +6,6 @@ use std::{
 };
 use tar::{Archive, Builder};
 
-/// Creates a compressed backup archive from multiple source directories.
-///
-/// # Arguments
-///
-/// * `sources` - List of directories to include in the backup
-/// * `output` - Path where the backup archive will be created
-/// * `excludes` - List of paths to exclude from the backup
-///
-/// # Returns
-///
-/// Returns `Ok(())` on success, or an error if the backup creation fails.
-///
-/// # Examples
-///
-/// ```no_run
-/// use std::path::PathBuf;
-/// use cutil::backup_recover::create_backup;
-///
-/// let sources = [PathBuf::from("/path/to/source1"), PathBuf::from("/path/to/source2")];
-/// let output = PathBuf::from("/path/to/backup.tar.gz");
-/// let excludes = vec![PathBuf::from("/path/to/source1/exclude")];
-/// create_backup(&sources, &output, &excludes).unwrap();
-/// ```
 pub fn create_backup(sources: &[PathBuf], output: &Path, excludes: &[PathBuf]) -> Result<()> {
     for source in sources {
         if !source.exists() {
@@ -54,9 +26,6 @@ pub fn create_backup(sources: &[PathBuf], output: &Path, excludes: &[PathBuf]) -
     Ok(())
 }
 
-/// Recursively visits directories and adds files to the tar archive.
-///
-/// This is an internal helper function used by `create_backup`.
 fn visit_dirs(
     root: &Path,
     current: &Path,
@@ -86,27 +55,6 @@ fn visit_dirs(
     Ok(())
 }
 
-/// Restores a backup archive to the specified target directory.
-///
-/// # Arguments
-///
-/// * `input` - Path to the backup archive to restore
-/// * `target` - Directory where the backup will be restored
-///
-/// # Returns
-///
-/// Returns `Ok(())` on success, or an error if the restoration fails.
-///
-/// # Examples
-///
-/// ```no_run
-/// use std::path::PathBuf;
-/// use cutil::backup_recover::restore_backup;
-///
-/// let input = PathBuf::from("/path/to/backup.tar.gz");
-/// let target = PathBuf::from("/path/to/restore");
-/// restore_backup(&input, &target).unwrap();
-/// ```
 pub fn restore_backup(input: &Path, target: &Path) -> Result<()> {
     if !input.exists() {
         anyhow::bail!(format!("Can't find backup file: {}", input.display()));
@@ -135,20 +83,19 @@ mod tests {
             .map(|item| Path::new(item).to_path_buf())
             .collect::<Vec<_>>();
         let excludes = vec![Path::new("target/test2/test3").to_path_buf()];
-        // let excludes: Vec<PathBuf> = vec![];
         let output = Path::new("target/test.tar.gz");
 
         for (index, path) in sources.iter().enumerate() {
             fs::create_dir_all(path)?;
-            fs::write(path.join(&format!("foo-{index}")), &format!("{index}"))?;
+            fs::write(path.join(format!("foo-{index}")), format!("{index}"))?;
         }
 
         for (index, path) in excludes.iter().enumerate() {
             fs::create_dir_all(path)?;
-            fs::write(path.join(&format!("foo-{index}")), &format!("{index}"))?;
+            fs::write(path.join(format!("foo-{index}")), format!("{index}"))?;
         }
 
-        if let Err(e) = create_backup(&sources, &output, &excludes) {
+        if let Err(e) = create_backup(&sources, output, &excludes) {
             anyhow::bail!("backup failed: {}", e);
         }
 
@@ -171,21 +118,20 @@ mod tests {
             .into_iter()
             .map(|item| Path::new(item).to_path_buf())
             .collect::<Vec<_>>();
-        // let excludes = vec![Path::new("/tmp/test2/test3").to_path_buf()];
         let excludes: Vec<PathBuf> = vec![];
         let output = Path::new("/tmp/test.tar.gz");
 
         for (index, path) in sources.iter().enumerate() {
             fs::create_dir_all(path)?;
-            fs::write(path.join(&format!("foo-{index}")), &format!("{index}"))?;
+            fs::write(path.join(format!("foo-{index}")), format!("{index}"))?;
         }
 
         for (index, path) in excludes.iter().enumerate() {
             fs::create_dir_all(path)?;
-            fs::write(path.join(&format!("foo-{index}")), &format!("{index}"))?;
+            fs::write(path.join(format!("foo-{index}")), format!("{index}"))?;
         }
 
-        if let Err(e) = create_backup(&sources, &output, &excludes) {
+        if let Err(e) = create_backup(&sources, output, &excludes) {
             anyhow::bail!("backup failed: {}", e);
         }
 

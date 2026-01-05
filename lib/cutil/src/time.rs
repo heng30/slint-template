@@ -61,15 +61,15 @@ pub fn get_calendar_matrix(year: i32, month: u32) -> Result<Vec<Vec<Date>>> {
     let start_date = first_day_month - Duration::days(first_day_col as i64);
 
     let mut current_date = start_date;
-    for row in 0..6 {
-        matrix[row] = Vec::with_capacity(7);
+    for matrix_row in matrix.iter_mut().take(6) {
+        *matrix_row = Vec::with_capacity(7);
         for _ in 0..7 {
-            matrix[row].push(Date {
+            matrix_row.push(Date {
                 year: current_date.year(),
                 month: current_date.month(),
                 day: current_date.day(),
             });
-            current_date = current_date + Duration::days(1);
+            current_date += Duration::days(1);
         }
     }
 
@@ -148,12 +148,11 @@ pub fn media_timestamp_to_second(time_str: &str) -> Option<u64> {
 
 fn parse_mm_ss(time_str: &str) -> Option<(u64, u64)> {
     let parts: Vec<&str> = time_str.split(':').collect();
-    if parts.len() == 2 {
-        if let (Ok(minutes), Ok(seconds)) = (parts[0].parse::<u64>(), parts[1].parse::<u64>()) {
-            if minutes < 60 && seconds < 60 {
-                return Some((minutes, seconds));
-            }
-        }
+    if parts.len() == 2
+        && let (Ok(minutes), Ok(seconds)) = (parts[0].parse::<u64>(), parts[1].parse::<u64>())
+        && minutes < 60 && seconds < 60
+    {
+        return Some((minutes, seconds));
     }
     None
 }
@@ -164,7 +163,6 @@ mod tests {
 
     #[test]
     fn test_calendar_matrix() -> Result<()> {
-        // 测试2025年7月的日历
         let matrix = get_calendar_matrix(2025, 7)?;
 
         for row in &matrix {
@@ -180,17 +178,15 @@ mod tests {
         assert_eq!(matrix[0][0].month, 6);
         assert_eq!(matrix[0][0].day, 29);
 
-        // 测试2023年11月的日历 (11月1日是星期三)
         let matrix_nov = get_calendar_matrix(2023, 11)?;
-        assert_eq!(matrix_nov[0][3].month, 11); // 11月1日应该在第四列(星期三)
+        assert_eq!(matrix_nov[0][3].month, 11);
         assert_eq!(matrix_nov[0][3].day, 1);
-        assert_eq!(matrix_nov[0][0].month, 10); // 前面的应该是10月的日期
-        assert_eq!(matrix_nov[4][6].month, 12); // 最后几个应该是12月的日期
+        assert_eq!(matrix_nov[0][0].month, 10);
+        assert_eq!(matrix_nov[4][6].month, 12);
 
-        // 测试2023年2月的日历 (28天)
         let matrix_feb = get_calendar_matrix(2023, 2)?;
-        assert_eq!(matrix_feb[0][2].month, 1); // 前面几天是1月的
-        assert_eq!(matrix_feb[4][6].month, 3); // 最后几天是3月的
+        assert_eq!(matrix_feb[0][2].month, 1);
+        assert_eq!(matrix_feb[4][6].month, 3);
 
         Ok(())
     }

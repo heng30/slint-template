@@ -1,28 +1,26 @@
 use crate::{
-    global_util,
-    slint_generatedAppWindow::{AppWindow, ToastSetting, ToastStatus},
+    global_toast_setting, global_util,
+    slint_generatedAppWindow::{AppWindow, ToastStatus},
 };
 use slint::{ComponentHandle, Timer, TimerMode, Weak};
 
 #[macro_export]
 macro_rules! toast_warn {
     ($ui:expr, $msg:expr) => {
-        $ui.global::<$crate::slint_generatedAppWindow::Util>()
-            .invoke_show_toast(
-                slint::format!("{}", $msg),
-                $crate::slint_generatedAppWindow::ToastStatus::Warning,
-            )
+        $crate::global_util!($ui).invoke_show_toast(
+            slint::format!("{}", $msg),
+            $crate::slint_generatedAppWindow::ToastStatus::Warning,
+        )
     };
 }
 
 #[macro_export]
 macro_rules! toast_success {
     ($ui:expr, $msg:expr) => {
-        $ui.global::<$crate::slint_generatedAppWindow::Util>()
-            .invoke_show_toast(
-                slint::format!("{}", $msg),
-                $crate::slint_generatedAppWindow::ToastStatus::Success,
-            )
+        $crate::global_util!($ui).invoke_show_toast(
+            slint::format!("{}", $msg),
+            $crate::slint_generatedAppWindow::ToastStatus::Success,
+        )
     };
 }
 
@@ -30,11 +28,10 @@ macro_rules! toast_success {
 #[macro_export]
 macro_rules! toast_info {
     ($ui:expr, $msg:expr) => {
-        $ui.global::<$crate::slint_generatedAppWindow::Util>()
-            .invoke_show_toast(
-                slint::format!("{}", $msg),
-                $crate::slint_generatedAppWindow::ToastStatus::Info,
-            )
+        $crate::global_util!($ui).invoke_show_toast(
+            slint::format!("{}", $msg),
+            $crate::slint_generatedAppWindow::ToastStatus::Info,
+        )
     };
 }
 
@@ -77,14 +74,14 @@ pub fn init(ui: &AppWindow) {
             2
         };
 
-        ui.global::<ToastSetting>().set_is_timeout(false);
-        ui.global::<ToastSetting>().invoke_set(msg, status);
+        global_toast_setting!(ui).set_is_timeout(false);
+        global_toast_setting!(ui).invoke_set(msg, status);
 
         timer.start(
             TimerMode::SingleShot,
             std::time::Duration::from_secs(interval),
             move || {
-                ui.global::<ToastSetting>().set_is_timeout(true);
+                global_toast_setting!(ui).set_is_timeout(true);
             },
         );
     });

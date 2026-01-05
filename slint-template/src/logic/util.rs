@@ -528,7 +528,7 @@ fn get_color_picker_color(x: usize, y: usize, width: usize, height: usize) -> (u
     let value = y as f32 / height as f32; // Value/brightness varies vertically
 
     let (r, g, b) = hsv_to_rgb(hue, saturation, value);
-    (r, g, b, 255) // Alpha channel (fully opaque)
+    (r, g, b, 255)
 }
 
 fn hex_to_rgba(hex: &str) -> Result<(u8, u8, u8, u8), String> {
@@ -536,7 +536,6 @@ fn hex_to_rgba(hex: &str) -> Result<(u8, u8, u8, u8), String> {
 
     match hex.len() {
         6 => {
-            // RGB format
             let r = u8::from_str_radix(&hex[0..2], 16)
                 .map_err(|e| format!("Invalid red component: {}", e))?;
             let g = u8::from_str_radix(&hex[2..4], 16)
@@ -546,7 +545,6 @@ fn hex_to_rgba(hex: &str) -> Result<(u8, u8, u8, u8), String> {
             Ok((r, g, b, 255))
         }
         8 => {
-            // RGBA format
             let r = u8::from_str_radix(&hex[0..2], 16)
                 .map_err(|e| format!("Invalid red component: {}", e))?;
             let g = u8::from_str_radix(&hex[2..4], 16)
@@ -558,7 +556,6 @@ fn hex_to_rgba(hex: &str) -> Result<(u8, u8, u8, u8), String> {
             Ok((r, g, b, a))
         }
         3 => {
-            // Short format (RGB)
             let r = u8::from_str_radix(&hex[0..1].repeat(2), 16)
                 .map_err(|e| format!("Invalid red component: {}", e))?;
             let g = u8::from_str_radix(&hex[1..2].repeat(2), 16)
@@ -568,7 +565,6 @@ fn hex_to_rgba(hex: &str) -> Result<(u8, u8, u8, u8), String> {
             Ok((r, g, b, 255))
         }
         4 => {
-            // Short format (RGBA)
             let r = u8::from_str_radix(&hex[0..1].repeat(2), 16)
                 .map_err(|e| format!("Invalid red component: {}", e))?;
             let g = u8::from_str_radix(&hex[1..2].repeat(2), 16)

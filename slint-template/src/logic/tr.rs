@@ -12,13 +12,8 @@ pub fn tr(text: &str) -> String {
         lang = crate::config::all().preference.language.clone();
     }
 
-    match lang.as_str() {
-        "cn" => {
-            if let Some(txt) = cn().get(text) {
-                return txt.to_string();
-            }
-        }
-        _ => (),
+    if lang.as_str() == "cn" && let Some(txt) = cn().get(text) {
+        return txt.to_string();
     }
 
     text.to_string()

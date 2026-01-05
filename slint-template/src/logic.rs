@@ -43,7 +43,7 @@ pub fn init(ui: &AppWindow) {
         #[cfg(feature = "desktop")]
         examples_desktop::init(ui);
 
-        #[cfg(any(feature = "android"))]
+        #[cfg(feature = "android")]
         examples_mobile::init(ui);
 
         #[cfg(feature = "web")]
@@ -54,21 +54,49 @@ pub fn init(ui: &AppWindow) {
 #[macro_export]
 macro_rules! global_store {
     ($ui:expr) => {
-        $ui.global::<crate::slint_generatedAppWindow::Store>()
+        $ui.global::<$crate::slint_generatedAppWindow::Store>()
     };
 }
 
 #[macro_export]
 macro_rules! global_logic {
     ($ui:expr) => {
-        $ui.global::<crate::slint_generatedAppWindow::Logic>()
+        $ui.global::<$crate::slint_generatedAppWindow::Logic>()
     };
 }
 
 #[macro_export]
 macro_rules! global_util {
     ($ui:expr) => {
-        $ui.global::<crate::slint_generatedAppWindow::Util>()
+        $ui.global::<$crate::slint_generatedAppWindow::Util>()
+    };
+}
+
+#[macro_export]
+macro_rules! global_about {
+    ($ui:expr) => {
+        $ui.global::<$crate::slint_generatedAppWindow::AboutSetting>()
+    };
+}
+
+#[macro_export]
+macro_rules! global_toast_setting {
+    ($ui:expr) => {
+        $ui.global::<$crate::slint_generatedAppWindow::ToastSetting>()
+    };
+}
+
+#[macro_export]
+macro_rules! global_popup_action {
+    ($ui:expr) => {
+        $ui.global::<$crate::slint_generatedAppWindow::PopupActionSetting>()
+    };
+}
+
+#[macro_export]
+macro_rules! global_theme {
+    ($ui:expr) => {
+        $ui.global::<$crate::slint_generatedAppWindow::Theme>()
     };
 }
 
@@ -78,7 +106,7 @@ macro_rules! logic_cb {
         {{
             let ui_weak = $ui.as_weak();
             paste::paste! {
-                crate::global_logic!($ui)
+                $crate::global_logic!($ui)
                     .[<on_ $callback_name>](move |$($arg),*| {
                         $callback_name(&ui_weak.unwrap(), $($arg),*)
                     });
@@ -169,8 +197,6 @@ macro_rules! impl_c_like_enum_convert {
 
 #[cfg(test)]
 mod test {
-    use crate::impl_slint_enum_serde;
-
     #[derive(Debug, Clone)]
     enum MyEnum {
         VariantA,
