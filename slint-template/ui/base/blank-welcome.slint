@@ -45,8 +45,10 @@ export component BlankWelcome inherits HorizontalLayout {
             padding-top: Theme.padding * 4;
 
             Image {
-                width: Math.min(root.width * 0.8, self.height);
-                height: vbox.height - vbox.spacing * 2 - l1.preferred-height - l2.preferred-height - parent.padding-top;
+                private property <length> temp-height: vbox.height - vbox.spacing * 2 - l1.preferred-height - l2.preferred-height - parent.padding-top;
+
+                width: Math.min(root.width * 0.8, self.temp-height);
+                height: self.width;
                 source: Icons.brand;
                 opacity: root.img-opacity;
             }

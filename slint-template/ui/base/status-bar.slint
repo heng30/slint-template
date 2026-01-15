@@ -15,9 +15,18 @@ export component StatusBar inherits Rectangle {
     in-out property <bool> is-app-window-bar: true;
     in-out property <bool> disable-window-ctrl-btns;
 
+    in-out property <bool> hide-maximal-ctrl-btns;
+    in-out property <bool> hide-minimal-ctrl-btns;
+    in-out property <bool> hide-close-ctrl-btns;
+
+    in-out property <image> close-icon: Icons.status-bar-close-fill;
+    in-out property <color> close-icon-colorize: Theme.danger-color;
+
     in-out property <bool> is-show-icon;
     in-out property <image> icon;
     in-out property <string> title;
+    in-out property <color> icon-colorize: Theme.icon-color;
+    in-out property <color> title-text-color: Theme.secondary-text-color;
 
     in-out property <bool> is-show-tip: false;
     in-out property <ComponentPosition> tip-position: ComponentPosition.Bottom;
@@ -87,11 +96,12 @@ export component StatusBar inherits Rectangle {
             Image {
                 source: root.icon;
                 width: Math.min(root.icon-size + Theme.padding, root.height);
+                colorize: root.icon-colorize;
             }
 
             Label {
                 text: root.title;
-                color: Theme.secondary-text-color;
+                color: root.title-text-color;
                 font-size: root.icon-size;
             }
         }
@@ -104,7 +114,7 @@ export component StatusBar inherits Rectangle {
             if !disable-window-ctrl-btns: HorizontalLayout {
                 spacing: Theme.spacing * 2;
 
-                IconBtn {
+                if !hide-minimal-ctrl-btns: IconBtn {
                     icon: Icons.status-bar-min-fill;
                     icon-size: root.icon-size;
                     colorize: Theme.warning-color;
@@ -122,7 +132,7 @@ export component StatusBar inherits Rectangle {
                     }
                 }
 
-                IconBtn {
+                if !hide-maximal-ctrl-btns: IconBtn {
                     enabled-toucharea: !root.disable-maximal;
                     icon: Icons.status-bar-max-fill;
                     icon-size: root.icon-size;
@@ -149,10 +159,10 @@ export component StatusBar inherits Rectangle {
                     }
                 }
 
-                IconBtn {
-                    icon: Icons.status-bar-close-fill;
+                if !hide-close-ctrl-btns: IconBtn {
+                    icon: root.close-icon;
                     icon-size: root.icon-size;
-                    colorize: Theme.danger-color;
+                    colorize: root.close-icon-colorize;
                     show-icon-hover-background: root.show-icon-hover-background;
                     is-show-tip: root.is-show-tip;
                     tip-position: root.tip-position;
@@ -169,4 +179,17 @@ export component StatusBar inherits Rectangle {
             }
         }
     }
+}
+
+export component DialogStatusBar inherits StatusBar {
+    width: Theme.default-font-size * 13;
+    hide-minimal-ctrl-btns: true;
+    hide-maximal-ctrl-btns: true;
+    is-show-icon: true;
+    is-app-window-bar: false;
+    background: Theme.secondary-brand-color;
+    icon-colorize: Theme.light-text-color;
+    title-text-color: Theme.light-text-color;
+    close-icon: Icons.close-light;
+    close-icon-colorize: Theme.light-text-color;
 }
