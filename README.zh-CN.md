@@ -52,3 +52,6 @@
 - [developer.android.com](https://developer.android.com/guide)
 - [color4bg](https://www.color4bg.com/zh-hans/)
 - [How to Deploy Rust Binaries with GitHub Actions](https://dzfrias.dev/blog/deploy-rust-cross-platform-github-actions/)
+
+## 关注历史
+[![Star History Chart](https://api.star-history.com/svg?repos=heng30/slint-template&type=date&legend=top-left)](https://www.star-history.com/#heng30/slint-template&type=date&legend=top-left)
