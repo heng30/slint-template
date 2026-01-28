@@ -13,10 +13,12 @@ export component FilePicker inherits Rectangle {
     in-out property <string> title;
     in-out property <string> sub-title;
     in-out property <length> inner-padding: Theme.padding * 30;
+    in-out property <bool> show-recovery-btn;
 
     private property <color> dashline-color: Theme.base-border-color;
 
     callback select-file();
+    callback recovery();
 
     width: vbox.preferred-width;
     height: vbox.preferred-height;
@@ -96,6 +98,7 @@ export component FilePicker inherits Rectangle {
                 alignment: center;
                 padding: Theme.padding * 2;
                 padding-top: Theme.padding * 4;
+                spacing: Theme.spacing * 4;
 
                 ConfirmBtn {
                     icon: Icons.open-file-light;
@@ -107,6 +110,19 @@ export component FilePicker inherits Rectangle {
 
                     clicked => {
                         root.select-file();
+                    }
+                }
+
+                if show-recovery-btn: ConfirmBtn {
+                    icon: Icons.recovery-convert-light;
+                    text: Logic.tr("Recovery");
+                    bg-color: Theme.thirdly-brand-color;
+                    auto-size-hpadding: Theme.spacing * 3;
+                    auto-size-vpadding: Theme.spacing * 2;
+                    spacing: Theme.spacing * 2;
+
+                    clicked => {
+                        root.recovery();
                     }
                 }
             }

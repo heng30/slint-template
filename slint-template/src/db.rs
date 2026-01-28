@@ -49,6 +49,7 @@ macro_rules! db_select {
         fn db_select<F>(
             ui: slint::Weak<$crate::slint_generatedAppWindow::AppWindow>,
             id: impl ToString,
+            show_err_toast: bool,
             callback: F,
         ) where
             F: FnOnce(&$crate::slint_generatedAppWindow::AppWindow, $ty) + Send + 'static,
@@ -72,10 +73,12 @@ macro_rules! db_select {
                         }
                     },
                     Err(e) => {
-                        $crate::logic::toast::async_toast_warn(
-                            ui,
-                            format!("{}. {e}", crate::logic::tr::tr("load entry failed")),
-                        );
+                        if show_err_toast {
+                            $crate::logic::toast::async_toast_warn(
+                                ui,
+                                format!("{}. {e}", crate::logic::tr::tr("load entry failed")),
+                            );
+                        }
                     }
                 }
             });

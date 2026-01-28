@@ -1,5 +1,5 @@
 import { Theme } from "theme.slint";
-import { Util } from "../panel/def.slint";
+import { Util } from "util.slint";
 import { Label } from "label.slint";
 
 // Example:
@@ -30,6 +30,7 @@ export component SoundWaveForm inherits Rectangle {
     in-out property <bool> show-timestamp;
     in-out property <bool> disable-zoom;
     in-out property <bool> disable-amplitude;
+    in-out property <bool> has-hover;
 
     private property <length> max-data-width: 16px;
     private property <length> horizontal-offset: 0px;
@@ -163,6 +164,10 @@ export component SoundWaveForm inherits Rectangle {
             }
         }
 
+        changed has-hover => {
+            root.has-hover = self.has-hover;
+        }
+
         moved => {
             if (self.pressed) {
                 if (!is-dragging) {
@@ -206,7 +211,7 @@ export component SoundWaveForm inherits Rectangle {
 
     if show-control-handle: Rectangle {
         x: control-handle-size / -2;
-        y: control-handle-size / -2;
+        y: 0;
         width: control-handle-size;
         height: root.height;
 
@@ -227,9 +232,9 @@ export component SoundWaveForm inherits Rectangle {
 
         Rectangle {
             x: start-rec.x + control-handle-size / 2;
-            y: control-handle-size / 2;
+            y: control-handle-size;
             width: Theme.default-border-width * 2;
-            height: root.height;
+            height: root.height - control-handle-size;
             background: start-control-handle-color;
         }
 
@@ -240,6 +245,10 @@ export component SoundWaveForm inherits Rectangle {
                 if (!self.pressed) {
                     start-position-changed((parent.x + control-handle-size) / root.width);
                 }
+            }
+
+            changed has-hover => {
+                root.has-hover = self.has-hover;
             }
 
             moved => {
@@ -254,7 +263,7 @@ export component SoundWaveForm inherits Rectangle {
 
     if show-control-handle: Rectangle {
         x: root.width - control-handle-size / 2;
-        y: control-handle-size / -2;
+        y: 0;
         width: control-handle-size;
         height: root.height;
 
@@ -275,9 +284,9 @@ export component SoundWaveForm inherits Rectangle {
 
         Rectangle {
             x: end-rec.x + control-handle-size / 2;
-            y: control-handle-size / 2;
+            y: control-handle-size;
             width: Theme.default-border-width * 2;
-            height: root.height;
+            height: root.height - control-handle-size;
             background: end-control-handle-color;
         }
 
@@ -288,6 +297,10 @@ export component SoundWaveForm inherits Rectangle {
                 if (!self.pressed) {
                     end-position-changed((parent.x + control-handle-size) / root.width);
                 }
+            }
+
+            changed has-hover => {
+                root.has-hover = self.has-hover;
             }
 
             moved => {

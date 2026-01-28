@@ -49,8 +49,6 @@ export component StatusBar inherits Rectangle {
     height: Theme.header-height;
 
     if !disable-window-ctrl-btns: TouchArea {
-        mouse-cursor: MouseCursor.grabbing;
-
         moved => {
             if (!root.enable-move) {
                 return;

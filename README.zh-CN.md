@@ -13,8 +13,12 @@
 ### 简介
 这是一个基于Rust和Slint GUI框架的模板项目。包含一些常用的组件，设置面板，配置文件，简单的数据库功能和其他小功能。这个项目的主要目的是给新手开发者提供一个简单快速的Slint GUI开发环境。该项目能够编译到桌面平台（Windows, Linux, Macos），Android移动平台和Web平台。
 
+----
+
 ### 如何初始化新项目？
 进入`script`目录并运行`./init-project.sh <new-project-name> `来初始化一个新项目。
+
+----
 
 ### 如何构建?
 - 安装 `Rust` 和 `Cargo`
@@ -33,14 +37,20 @@
 - 运行 `make web-build-dist` 编译Web平台。构建输出目录`web/dist`
 - 参考 [Makefile](./Makefile) 了解更多信息
 
+----
+
 ### 安卓平台编译信息
 - `min-sdk-version = 23`
 - `target-sdk-version = 32`
+
+----
 
 ### 问题排查
 - 使用`Qt后端`能解决windows平台字体发虚的问题。也推荐优先使用`Qt后端`保持和开发者相同的构建环境
 
 - 查看程序输出日志信息：`RUST_LOG=debug wayshot`。可选日志级别：`debug`, `info`, `warn`, `error`
+
+----
 
 ### 参考
 - [Slint Language Documentation](https://slint-ui.com/releases/1.0.0/docs/slint/)
@@ -52,6 +62,8 @@
 - [developer.android.com](https://developer.android.com/guide)
 - [color4bg](https://www.color4bg.com/zh-hans/)
 - [How to Deploy Rust Binaries with GitHub Actions](https://dzfrias.dev/blog/deploy-rust-cross-platform-github-actions/)
+
+----
 
 ## 关注历史
 [![Star History Chart](https://api.star-history.com/svg?repos=heng30/slint-template&type=date&legend=top-left)](https://www.star-history.com/#heng30/slint-template&type=date&legend=top-left)
