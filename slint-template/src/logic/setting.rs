@@ -6,6 +6,42 @@ use crate::{
 };
 use slint::ComponentHandle;
 
+#[macro_export]
+macro_rules! app_setting {
+    ($ui:expr, $field:ident, $show_toast:expr, $toast_message:expr) => {{
+        use paste::paste;
+
+        paste! {
+            global_logic!($ui).[<on_get_setting_$field>](move || {
+                let config = config::all().$field;
+                config.into()
+            });
+        }
+
+        let ui_weak = $ui.as_weak();
+        paste! {
+            global_logic!($ui).[<on_set_setting_$field>](move |setting| {
+                let mut all = config::all();
+                all.$field = setting.into();
+                _ = config::save(all);
+
+                if $show_toast {
+                    toast_success!(ui_weak.unwrap(), $toast_message);
+                }
+            });
+        }
+    }};
+
+    ($ui:expr, $field:ident, $show_toast:expr) => {
+        app_setting!(
+            $ui,
+            $field,
+            $show_toast,
+            tr("save configuration successfully")
+        );
+    };
+}
+
 pub fn init(ui: &AppWindow) {
     init_setting(ui);
 
