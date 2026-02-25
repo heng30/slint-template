@@ -21,11 +21,15 @@ export component StatusBar inherits Rectangle {
 
     in-out property <image> close-icon: Icons.status-bar-close-fill;
     in-out property <color> close-icon-colorize: Theme.danger-color;
+    in-out property <image> maximal-icon: Icons.status-bar-max-fill;
+    in-out property <color> maximal-icon-colorize: root.disable-maximal ? Theme.disabled-color : Theme.success-color;
+    in-out property <image> minimal-icon: Icons.status-bar-min-fill;
+    in-out property <color> minimal-icon-colorize: Theme.warning-color;
 
     in-out property <bool> is-show-icon;
     in-out property <image> icon;
     in-out property <string> title;
-    in-out property <color> icon-colorize: Theme.icon-color;
+    in-out property <color> icon-colorize: transparent;
     in-out property <color> title-text-color: Theme.secondary-text-color;
 
     in-out property <bool> is-show-tip: false;
@@ -113,9 +117,9 @@ export component StatusBar inherits Rectangle {
                 spacing: Theme.spacing * 2;
 
                 if !hide-minimal-ctrl-btns: IconBtn {
-                    icon: Icons.status-bar-min-fill;
+                    icon: root.minimal-icon;
                     icon-size: root.icon-size;
-                    colorize: Theme.warning-color;
+                    colorize: root.minimal-icon-colorize;
                     show-icon-hover-background: root.show-icon-hover-background;
                     is-show-tip: root.is-show-tip;
                     tip-position: root.tip-position;
@@ -132,9 +136,9 @@ export component StatusBar inherits Rectangle {
 
                 if !hide-maximal-ctrl-btns: IconBtn {
                     enabled-toucharea: !root.disable-maximal;
-                    icon: Icons.status-bar-max-fill;
+                    icon: root.maximal-icon;
                     icon-size: root.icon-size;
-                    colorize: root.disable-maximal ? Theme.disabled-color : Theme.success-color;
+                    colorize: root.maximal-icon-colorize;
                     show-icon-hover-background: root.show-icon-hover-background;
                     is-show-tip: root.is-show-tip;
                     tip-position: root.tip-position;
@@ -190,4 +194,8 @@ export component DialogStatusBar inherits StatusBar {
     title-text-color: Theme.light-text-color;
     close-icon: Icons.close-light;
     close-icon-colorize: Theme.light-text-color;
+    maximal-icon: Icons.maximal-light;
+    minimal-icon: Icons.minimal-light;
+    minimal-icon-colorize: Theme.light-text-color;
+    maximal-icon-colorize: Theme.light-text-color;
 }

@@ -70,7 +70,7 @@ fn get_sidebar_key_from_search_values(
 }
 
 fn generate_sound_data(_ui: &AppWindow, counts: i32) -> ModelRc<f32> {
-    use rand::Rng;
+    use rand::RngExt;
 
     let mut rng = rand::rng();
     let data: Vec<f32> = (0..counts).map(|_| rng.random_range(-1.0..=1.0)).collect();

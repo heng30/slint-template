@@ -5,7 +5,7 @@ use crate::{
     toast_warn,
 };
 use cutil::{self, number, time};
-use rand::{self, Rng};
+use rand::{self, RngExt};
 use slint::{ComponentHandle, Model, ModelRc, SharedString, VecModel};
 use std::str::FromStr;
 use webbrowser::{self, Browser};

@@ -65,6 +65,11 @@ export component SettingEntryV2 inherits Rectangle {
     in-out property <color> right-icon-colorize: label.color;
     in-out property <length> right-icon-size;
 
+    in-out property <bool> is-show-right-text;
+    in-out property <string> right-text;
+    in-out property <color> right-text-font-color: label.color;
+    in-out property <length> right-text-font-size: root.font-size;
+
     in-out property <MouseCursor> mouse-cursor: MouseCursor.pointer;
     in-out property <bool> gain-focus-when-clicked;
 
@@ -118,6 +123,15 @@ export component SettingEntryV2 inherits Rectangle {
                 label := Label {
                     color: root.icon-colorize;
                 }
+            }
+        }
+
+        if is-show-right-text: HorizontalLayout {
+            padding-left: Theme.spacing * 4;
+            Label {
+                font-size: root.right-text-font-size;
+                color: root.right-text-font-color;
+                text: root.right-text;
             }
         }
 

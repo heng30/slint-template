@@ -1,0 +1,51 @@
+import { Theme } from "theme.slint";
+import { Util } from "util.slint";
+import { Label } from "label.slint";
+import { Divider } from "divider.slint";
+
+export component ReadonlySoundWaveForm inherits Rectangle {
+    in-out property <[float]> data;
+    in-out property <bool> is-mono;
+    in-out property <bool> show-center-line;
+    in-out property <color> center-line-color: Theme.divider-color;
+    in-out property <color> sample-color: Theme.divider-color;
+
+    if is-mono: HorizontalLayout {
+        private property <length> sample-width: root.width / max(1, root.data.length);
+
+        for value in root.data: Rectangle {
+            y: root.height * (1 - abs(value));
+            width: parent.sample-width;
+            height: root.height * abs(value);
+            background: root.sample-color;
+        }
+    }
+
+    if !is-mono: HorizontalLayout {
+        private property <length> sample-width: root.width / max(1, root.data.length / 2);
+
+        for index in root.data.length / 2: Rectangle {
+            private property <float> left-value: abs(root.data[index * 2]);
+            private property <float> right-value: abs(root.data[index * 2 + 1]);
+
+            width: parent.sample-width;
+
+            Rectangle {
+                y: root.height / 2 - self.height;
+                height: root.height * left-value / 2;
+                background: root.sample-color;
+            }
+
+            Rectangle {
+                y: root.height / 2;
+                height: root.height * right-value / 2;
+                background: root.sample-color;
+            }
+        }
+    }
+
+    if show-center-line: Divider {
+        width: 100%;
+        background: root.center-line-color;
+    }
+}

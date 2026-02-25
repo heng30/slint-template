@@ -1,0 +1,53 @@
+import { Theme } from "theme.slint";
+import { Util } from "util.slint";
+
+export component Playhead inherits Rectangle {
+    out property pressed <=> ta.pressed;
+    out property mouse-x <=> ta.mouse-x;
+    out property mouse-y <=> ta.mouse-y;
+    out property pressed-x <=> ta.pressed-x;
+    out property pressed-y <=> ta.pressed-y;
+    in-out property line-color <=> line.background;
+
+    in-out property <length> handle-width: Theme.default-font-size;
+    in-out property <length> handle-height: Theme.default-font-size * Theme.golden-ratio;
+    in-out property <length> line-width: Theme.default-border-width;
+
+    callback moved <=> ta.moved;
+    callback clicked <=> ta.clicked;
+
+    width: handle-width;
+
+    ta := TouchArea {
+        mouse-cursor: MouseCursor.pointer;
+    }
+
+    Path {
+        y: -1px;
+        width: handle-width;
+        height: handle-height;
+        fill: line.background;
+
+        MoveTo {
+            x: 0;
+            y: 0;
+        }
+
+        LineTo {
+            x: handle-width / 2px;
+            y: handle-height / 1px;
+        }
+
+        LineTo {
+            x: handle-width / 1px;
+            y: 0;
+        }
+
+        Close { }
+    }
+
+    line := Rectangle {
+        background: Theme.thirdly-brand-color;
+        width: line-width;
+    }
+}

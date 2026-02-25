@@ -1,4 +1,4 @@
-use rand::Rng;
+use rand::RngExt;
 
 pub fn split_string_to_fixed_length_parts(input: &str, length: usize) -> Vec<String> {
     input
@@ -44,7 +44,10 @@ mod tests {
 
     #[test]
     fn test_split_string_to_fixed_length_parts() {
-        assert_eq!(split_string_to_fixed_length_parts("", 3), Vec::<String>::new());
+        assert_eq!(
+            split_string_to_fixed_length_parts("", 3),
+            Vec::<String>::new()
+        );
 
         assert_eq!(
             split_string_to_fixed_length_parts("abcdef", 2),
@@ -97,14 +100,8 @@ mod tests {
             "hello world"
         );
 
-        assert_eq!(
-            replace_multiple_chars("", &['a', 'b'], '-'),
-            ""
-        );
+        assert_eq!(replace_multiple_chars("", &['a', 'b'], '-'), "");
 
-        assert_eq!(
-            replace_multiple_chars("abc", &['a', 'b', 'c'], '-'),
-            "---"
-        );
+        assert_eq!(replace_multiple_chars("abc", &['a', 'b', 'c'], '-'), "---");
     }
 }

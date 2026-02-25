@@ -1,0 +1,55 @@
+import { Theme } from "theme.slint";
+
+export component MovingDivider inherits Rectangle {
+    out property has-hover <=> ta.has-hover;
+    out property pressed-x <=> ta.pressed-x;
+    out property pressed-y <=> ta.pressed-y;
+    out property mouse-x <=> ta.mouse-x;
+    out property mouse-y <=> ta.mouse-y;
+    out property paressed <=> ta.pressed;
+    in-out property <Orientation> orientation: Orientation.vertical;
+
+    callback moved <=> ta.moved;
+
+    init => {
+        if (orientation == Orientation.vertical) {
+
+            root.width = Theme.padding;
+        }
+        if (orientation == Orientation.horizontal) {
+            root.height = Theme.padding;
+        }
+    }
+
+    background: ta.has-hover ? Theme.checked-background : Colors.transparent;
+
+    if root.orientation == Orientation.horizontal: HorizontalLayout {
+        padding: 0.5px;
+        alignment: center;
+        spacing: Theme.spacing;
+
+        for _ in 3: Rectangle {
+            width: self.height;
+            height: min(root.height - parent.padding * 2, root.width - parent.padding * 2);
+            border-radius: self.width / 2;
+            background: ta.has-hover ? Theme.invert-base-color : Theme.placeholder-text-color;
+        }
+    }
+
+    if root.orientation == Orientation.vertical: VerticalLayout {
+        padding: 0.5px;
+        alignment: center;
+        spacing: Theme.spacing;
+
+        for _ in 3: Rectangle {
+            width: self.height;
+            height: min(root.height - parent.padding * 2, root.width - parent.padding * 2);
+            border-radius: self.width / 2;
+            background: ta.has-hover ? Theme.invert-base-color : Theme.placeholder-text-color;
+        }
+    }
+
+    ta := TouchArea {
+        mouse-cursor: root.orientation == Orientation.vertical ? MouseCursor.col-resize : MouseCursor.row-resize;
+    }
+}

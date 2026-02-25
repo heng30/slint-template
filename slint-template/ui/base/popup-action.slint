@@ -27,6 +27,7 @@ export struct PopupActionEntry {
     disable: bool,
     icon: image,
     text: string,
+    shotcut: string,
     action: string,
     user-data: string,
 }
@@ -79,6 +80,10 @@ export component PopupAction inherits Rectangle {
             }
             PopupActionSetting.hide();
         }
+
+        scroll-event(event) => {
+            accept
+        }
     }
 
     rect := Rectangle {
@@ -104,6 +109,9 @@ export component PopupAction inherits Rectangle {
                 if !entry.text.is-empty: SettingEntryV2 {
                     icon: entry.icon;
                     text: entry.text;
+                    right-text: entry.shotcut;
+                    right-text-font-size: self.font-size * Theme.golden-ratio;
+                    is-show-right-text: !entry.shotcut.is-empty;
                     font-size: root.font-size;
                     icon-size: root.icon-size;
                     icon-colorize: entry.disable ? Theme.disabled-color : root.icon-colorize;
