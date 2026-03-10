@@ -47,7 +47,7 @@ export component IconBtn inherits Rectangle {
 
     in-out property <color> bg-color: Colors.transparent;
     in-out property <color> bg-pressed-color: self.bg-color;
-    in-out property <color> hover-color: Theme.is-dark ? Theme.secondary-background.darker(50%) : Theme.secondary-background.darker(5%);
+    in-out property <color> hover-color: Theme.is-dark ? Theme.secondary-background.brighter(10%) : Theme.secondary-background.darker(5%);
 
     callback clicked();
     callback entered();

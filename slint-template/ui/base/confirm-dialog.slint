@@ -30,6 +30,8 @@ export component ConfirmDialog inherits Rectangle {
     height: vbox.preferred-height;
     background: Theme.base-background;
     border-radius: Theme.border-radius;
+    border-width: Theme.default-border-width;
+    border-color: Theme.base-border-color;
 
     in-out property <bool> is-prevent-event-forward: false;
     in-out property <string> title: ConfirmDialogSetting.title-text;

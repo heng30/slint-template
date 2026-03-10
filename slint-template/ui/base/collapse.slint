@@ -105,3 +105,74 @@ export component Collapse inherits Rectangle {
         }
     }
 }
+
+export component SingleCollapse inherits Rectangle {
+    in-out property <string> title;
+    in-out property <bool> is-open;
+    in-out property <image> title-icon;
+
+    in-out property <color> title-color: Theme.primary-text-color;
+    in-out property <length> title-font-size: Theme.title3-font-size;
+    in-out property <int> title-font-weight: Theme.bold-font-weight;
+
+    in-out property <image> open-icon: Icons.arrow-down-light;
+    in-out property <image> close-icon: Icons.arrow-up-light;
+
+    in-out property <length> spacing: Theme.spacing * 2;
+    in-out property <length> hpadding: Theme.padding * 2;
+    in-out property <length> vpadding: Theme.padding * 2;
+
+    callback toggle(state: bool);
+
+    background: Theme.secondary-background;
+    border-radius: Theme.border-radius;
+
+    TouchArea {
+        clicked => {
+            root.is-open = !root.is-open;
+            toggle(root.is-open);
+        }
+    }
+
+    HorizontalLayout {
+        alignment: LayoutAlignment.space-between;
+        spacing: Theme.spacing * 2;
+        padding-left: root.hpadding;
+        padding-right: root.hpadding;
+        padding-top: root.vpadding;
+        padding-bottom: root.vpadding;
+
+        HorizontalLayout {
+            spacing: root.spacing;
+
+            if root.title-icon.width > 0: VerticalLayout {
+                alignment: LayoutAlignment.center;
+
+                Image {
+                    width: Theme.icon-size;
+                    height: self.width;
+                    colorize: Theme.icon-color;
+                    source: root.title-icon;
+                }
+            }
+
+            lb := Label {
+                overflow: elide;
+                text: root.title;
+                font-size: root.title-font-size;
+                color: root.title-color;
+                font-weight: root.title-font-weight;
+            }
+        }
+
+        VerticalLayout {
+            alignment: LayoutAlignment.center;
+            Image {
+                width: Theme.icon-size;
+                height: self.width;
+                colorize: Theme.icon-color;
+                source: root.is-open ? root.close-icon : root.open-icon;
+            }
+        }
+    }
+}
