@@ -21,10 +21,12 @@ export component FlickableWithScrollBar inherits Rectangle {
     in-out property <bool> is-show-scrollbar-v: true;
     in-out property <bool> is-show-scrollbar-h: true;
     in-out property <length> spacing: Theme.spacing;
-    in-out property <length> scrollbar-size: Theme.padding * 1.5;
+    in-out property <length> scrollbar-size: Theme.scrollbar-size;
     in-out property <length> scrollbar-border-radius: scrollbar-size / 2;
-    in-out property <color> scrollbar-color: Theme.placeholder-text-color;
-    in-out property <color> scrollbar-background: self.scrollbar-color.brighter(30%);
+    in-out property <color> scrollbar-color: Theme.is-dark ? Theme.hover-background.brighter(50%) : Theme.hover-background.darker(50%);
+    in-out property <color> scrollbar-background: Theme.is-dark ? Theme.hover-background : Theme.hover-background.darker(10%);
+    out property <length> visible-width: self.width - (is-show-scrollbar-inner-v ? self.scrollbar-size + Theme.spacing : 0);
+    out property <length> visible-height: self.height - (is-show-scrollbar-inner-h ? self.scrollbar-size + Theme.spacing : 0);
 
     in-out property interactive <=> flick.interactive;
     in-out property viewport-x <=> flick.viewport-x;
@@ -33,7 +35,6 @@ export component FlickableWithScrollBar inherits Rectangle {
     in-out property viewport-height <=> flick.viewport-height;
 
     private property <bool> is-show-scrollbar-inner-v: is-show-scrollbar-v && flick.viewport-height > flick.height;
-
     private property <bool> is-show-scrollbar-inner-h: is-show-scrollbar-h && flick.viewport-width > flick.width;
 
     callback flicked();

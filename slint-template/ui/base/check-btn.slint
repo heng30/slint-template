@@ -2,7 +2,7 @@ import { Theme, Icons } from "theme.slint";
 import { Label } from "./label.slint";
 
 export component CheckBtn inherits Rectangle {
-    in-out property text <=> txt.text;
+    in-out property <string> text;
     in-out property enabled <=> ta.enabled;
     in-out property h-spacing <=> hbox.spacing;
 
@@ -47,10 +47,11 @@ export component CheckBtn inherits Rectangle {
             }
         }
 
-        VerticalLayout {
+        if !root.text.is-empty: VerticalLayout {
             alignment: center;
             txt := Label {
                 color: root.enabled ? root.text-color : Theme.disabled-color;
+                text: root.text;
             }
         }
     }

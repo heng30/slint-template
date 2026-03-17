@@ -26,6 +26,7 @@ import { Divider } from "divider.slint";
 export struct PopupActionEntry {
     disable: bool,
     icon: image,
+    icon-rotation: angle,
     text: string,
     shotcut: string,
     action: string,
@@ -109,6 +110,7 @@ export component PopupAction inherits Rectangle {
                 if !entry.text.is-empty: SettingEntryV2 {
                     icon: entry.icon;
                     text: entry.text;
+                    icon-rotation: entry.icon-rotation;
                     right-text: entry.shotcut;
                     right-text-font-size: self.font-size * Theme.golden-ratio;
                     is-show-right-text: !entry.shotcut.is-empty;

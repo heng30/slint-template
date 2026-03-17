@@ -3,6 +3,7 @@ import { Label } from "./label.slint";
 
 export component SwitchBtn inherits Rectangle {
     in-out property enabled <=> ta.enabled;
+    out property has-hover <=> ta.has-hover;
     in-out property <bool> checked;
 
     in-out property <color> unchecked-background: Theme.is-dark ? Theme.secondary-background.brighter(50%) : Theme.secondary-background.darker(10%);
