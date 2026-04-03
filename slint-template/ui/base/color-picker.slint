@@ -11,6 +11,7 @@ export component ColorPicker inherits Rectangle {
     in-out property <color> selected-color: default-colors[0];
 
     private property <[color]> default-colors: [
+        #00000000,
         #000000ff,
         #ffffffff,
         #f8f8f8ff,
@@ -78,7 +79,6 @@ export component ColorPicker inherits Rectangle {
         #404040ff,
         #303030ff,
         #202020ff,
-        #101010ff,
     ];
 
     private property <length> default-colors-size: Theme.icon-size;
@@ -141,6 +141,13 @@ export component ColorPicker inherits Rectangle {
                                 border-color: Theme.base-border-color;
                                 border-width: Theme.default-border-width;
 
+                                if index == 0: Image {
+                                    width: parent.width;
+                                    height: parent.height;
+                                    source: Icons.transparent-light;
+                                    colorize: Theme.icon-color;
+                                }
+
                                 TouchArea {
                                     mouse-cursor: MouseCursor.pointer;
 
@@ -169,6 +176,12 @@ export component ColorPicker inherits Rectangle {
                         background: selected-color;
 
                         fs := FocusScope { }
+
+                        if selected-color == #00000000: Image {
+                            width: parent.width;
+                            height: parent.height;
+                            source: Icons.transparent-light;
+                        }
 
                         TouchArea {
                             mouse-cursor: MouseCursor.pointer;

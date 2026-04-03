@@ -64,6 +64,14 @@ export component TabBtns inherits Rectangle {
         height: btn.preferred-height;
         border-radius: Theme.border-radius;
 
+        private property <int> inner-selected-index <=> root.selected-index;
+
+        changed inner-selected-index => {
+            if (selected-index == index) {
+                self.update-btn();
+            }
+        }
+
         function update-btn() {
             btn-width = btn.preferred-width;
             btn-height = Math.max(btn-height, btn.preferred-height);

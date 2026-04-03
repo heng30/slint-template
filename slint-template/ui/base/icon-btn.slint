@@ -11,12 +11,17 @@ export enum RotationType {
 
 export component IconBtn inherits Rectangle {
     in-out property icon <=> img.source;
-    in-out property colorize <=> img.colorize;
+    in-out property <color> colorize: Theme.icon-color;
+    in-out property <color> disabled-color: Theme.disabled-color;
+    in-out property <color> checked-color: transparent;
+    in-out property <bool> checked;
     in-out property icon-size <=> img.width;
     in-out property icon-visible <=> img.visible;
     in-out property icon-transform-rotation <=> img.transform-rotation;
     in-out property mouse-cursor <=> touch.mouse-cursor;
     in-out property enabled-toucharea <=> touch.enabled;
+    in-out property enabled <=> touch.enabled;
+    out property pressed <=> touch.pressed;
     out property has-hover <=> touch.has-hover;
     out property mouse-x <=> touch.mouse-x;
     out property mouse-y <=> touch.mouse-y;
@@ -70,7 +75,7 @@ export component IconBtn inherits Rectangle {
         width: Math.max(Theme.icon-size, root.icon-size) + Theme.spacing * 4;
         height: self.width;
         border-radius: self.width / 2;
-        background: touch.has-hover ? root.hover-color : Colors.transparent;
+        background: root.enabled ? (root.checked ? root.checked-color : (touch.has-hover ? root.hover-color : transparent)) : transparent;
     }
 
     hbox := HorizontalLayout {
@@ -82,7 +87,7 @@ export component IconBtn inherits Rectangle {
         padding-right: root.use-auto-size ? root.auto-size-hpadding : 0;
 
         if !root.is-ltr && root.text != "": Label {
-            color: root.text-color;
+            color: root.enabled ? root.text-color : root.disabled-color;
             font-size: root.font-size;
             text: root.text;
             font-weight: root.font-weight;
@@ -95,7 +100,7 @@ export component IconBtn inherits Rectangle {
                 vertical-alignment: root.icon-valignment;
                 width: Theme.icon-size;
                 height: self.width;
-                colorize: Theme.icon-color;
+                colorize: root.enabled ? root.colorize : root.disabled-color;
                 transform-rotation: 0;
 
                 animate transform-rotation {
@@ -107,7 +112,7 @@ export component IconBtn inherits Rectangle {
         }
 
         if root.is-ltr && root.text != "": Label {
-            color: root.text-color;
+            color: root.enabled ? root.text-color : root.disabled-color;
             font-size: root.font-size;
             text: root.text;
         }
@@ -128,6 +133,7 @@ export component IconBtn inherits Rectangle {
             if (gain-focus-when-clicked) {
                 fs.focus();
             }
+            root.checked = !root.checked;
             root.clicked();
         }
 

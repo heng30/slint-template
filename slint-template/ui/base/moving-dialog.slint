@@ -7,6 +7,9 @@ export component MovingDialog inherits Rectangle {
     in-out property title <=> sb.title;
     in-out property header-width <=> sb.width;
     in-out property icon <=> sb.icon;
+    in-out property <length> head-x <=> sb.x;
+    in-out property <length> head-y <=> sb.y;
+
     callback close <=> sb.close;
 
     sb := DialogStatusBar {

@@ -66,16 +66,19 @@ export component SettingDetailLabel inherits HorizontalLayout {
     in-out property text <=> lb.text;
     in-out property color <=> lb.color;
     in-out property <string> tip;
+    in-out property <bool> enabled: true;
 
     alignment: start;
     spacing: Theme.spacing;
 
     lb := Label {
         font-size: Theme.title4-font-size;
+        color: root.enabled ? Theme.primary-text-color : Theme.disabled-color;
     }
 
-    if !tip.is-empty:
-        IconBtn {
+    if !tip.is-empty: IconBtn {
+        enabled: root.enabled;
+        colorize: lb.color;
         icon-size: lb.font-size * 0.8;
         is-show-tip: true;
         tip-position: Top;

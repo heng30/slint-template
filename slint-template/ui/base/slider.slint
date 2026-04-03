@@ -32,6 +32,14 @@ export component Slider inherits Rectangle {
 
     private property <bool> indicator-has-hover;
 
+    changed width => {
+        indicator.update-position();
+    }
+
+    changed height => {
+        indicator.update-position();
+    }
+
     changed minimum => {
         pb.progress = (Math.clamp(value, minimum, maximum) - minimum) / (maximum - minimum);
         indicator.update-position();

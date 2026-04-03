@@ -33,11 +33,14 @@ export component LineInput inherits Rectangle {
     in property read-only <=> text-input.read-only;
     in property <bool> enabled <=> text-input.enabled;
     in property <string> placeholder-text;
+    in-out property <color> disabled-color: Theme.disabled-color;
     in-out property <bool> gain-focus-when-clicked: true;
     in-out property <color> placeholder-text-color: Theme.placeholder-text-color;
     out property has-focus <=> text-input.has-focus;
     out property <color> default-border-color: text-input.has-focus ? Theme.thirdly-brand-color : Theme.base-border-color;
     in-out property <bool> show-icon-hover-background: true;
+    in-out property <bool> is-show-color-block;
+    in-out property <color> color-block-color;
 
     in property <bool> is-show-icon;
     in property <image> icon;
@@ -92,15 +95,29 @@ export component LineInput inherits Rectangle {
                         accept
                     }
 
-                    text-input := TextInput {
-                        single-line: true;
-                        vertical-alignment: TextVerticalAlignment.center;
-                        color: Theme.primary-text-color;
-                        font-size: Theme.default-font-size;
+                    HorizontalLayout {
+                        spacing: Theme.spacing * 2;
 
-                        accepted => {
-                            self.clear-focus();
-                            root.accepted();
+                        if is-show-color-block: VerticalLayout {
+                            alignment: center;
+
+                            Rectangle {
+                                width: text-input.font-size * 0.8;
+                                height: self.width;
+                                background: color-block-color;
+                            }
+                        }
+
+                        text-input := TextInput {
+                            single-line: true;
+                            vertical-alignment: TextVerticalAlignment.center;
+                            color: root.enabled ? Theme.primary-text-color : root.disabled-color;
+                            font-size: Theme.default-font-size;
+
+                            accepted => {
+                                self.clear-focus();
+                                root.accepted();
+                            }
                         }
                     }
                 }
@@ -108,12 +125,12 @@ export component LineInput inherits Rectangle {
                 if text-input.text == "": Label {
                     x: 0;
                     text: root.placeholder-text;
-                    color: root.placeholder-text-color;
+                    color: root.enabled ? root.placeholder-text-color : root.disabled-color;
                     font-size: text-input.font-size - 2px;
                 }
 
                 ta := TouchArea {
-                    enabled: text-input.text == "";
+                    enabled: root.enabled && text-input.text == "";
                     mouse-cursor: MouseCursor.text;
 
                     clicked => {
@@ -127,6 +144,7 @@ export component LineInput inherits Rectangle {
             alignment: LayoutAlignment.center;
 
             IconBtn {
+                enabled: root.enabled;
                 width: root.icon-size;
                 height: self.width;
                 icon: root.icon;
@@ -148,6 +166,7 @@ export component ClickAndEditLabel inherits Rectangle {
     in-out property <bool> is-edit;
     in-out property <bool> use-fixed-width;
     in-out property <bool> allow-breaking-text-binding-when-edit;
+    in-out property <bool> show-icon-hover-background: true;
     in-out property <int> font-weight: Theme.normal-font-weight;
     in-out property <length> font-size: Theme.default-font-size;
     in-out property <color> text-color: Theme.regular-text-color;
@@ -224,6 +243,7 @@ export component ClickAndEditLabel inherits Rectangle {
             font-size: root.font-size;
             font-weight: root.font-weight;
             text-color: root.text-color;
+            show-icon-hover-background: root.show-icon-hover-background;
 
             accepted => {
                 inner-is-edit = !inner-is-edit;
