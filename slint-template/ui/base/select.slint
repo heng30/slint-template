@@ -35,7 +35,7 @@ export component Select inherits Rectangle {
     height: hbox.preferred-height;
     background: Theme.secondary-background;
     border-radius: Theme.border-radius;
-    border-width: fs.has-focus ? 2px : 0;
+    border-width: fs.has-focus && root.enabled ? 2px : 0;
     border-color: Theme.focus-color;
 
     callback selected(current-index: int, current-value: string);
@@ -53,6 +53,7 @@ export component Select inherits Rectangle {
         spacing: Theme.spacing * 2;
 
         lb := Label {
+            enabled: root.enabled;
             text: root.current-value;
             font-size: root.font-size;
             overflow: elide;
@@ -66,9 +67,12 @@ export component Select inherits Rectangle {
         }
     }
 
-    fs := FocusScope { }
+    fs := FocusScope {
+        enabled: root.enabled;
+    }
 
     ta := TouchArea {
+        enabled: root.enabled;
         mouse-cursor: MouseCursor.pointer;
         clicked => {
             is-indicator-down = false;

@@ -1,8 +1,10 @@
 import { Theme } from "theme.slint";
 
 export component Label inherits Text {
+    in-out property <bool> enabled: true;
+
     vertical-alignment: center;
-    color: Theme.primary-text-color;
+    color: enabled ? Theme.primary-text-color : Theme.disabled-color;
     font-size: Theme.default-font-size;
     font-family: Theme.default-font-family;
 }

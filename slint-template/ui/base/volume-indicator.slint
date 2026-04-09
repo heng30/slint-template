@@ -1,0 +1,59 @@
+import { Theme, Icons } from "theme.slint";
+import { Util } from "util.slint";
+import { Logic } from "../logic.slint";
+import { Label } from "label.slint";
+
+export component VolumeIndicator inherits Rectangle {
+    in-out property <int> volume;
+    in-out property <bool> is-show;
+    in-out property <bool> enable-timer;
+    in-out property <color> font-color: Theme.light-text-color;
+
+    x: Theme.padding * 2;
+    y: Theme.padding * 2;
+    width: volume-indicator-hbox.preferred-width;
+    height: volume-indicator-hbox.preferred-height;
+    background: Theme.dark-bg-color;
+    border-radius: self.height / 2;
+    opacity: is-show ? 0.8 : 0;
+
+    animate opacity {
+        duration: Theme.default-animate-duration;
+        easing: ease-in-out;
+    }
+
+    Timer {
+        interval: 2s;
+        running: is-show && enable-timer;
+        triggered => {
+            root.is-show = false;
+        }
+    }
+
+    volume-indicator-hbox := HorizontalLayout {
+        alignment: LayoutAlignment.center;
+        spacing: Theme.padding * 2;
+        padding: Theme.padding;
+        padding-left: Theme.padding * 3;
+        padding-right: Theme.padding * 3;
+
+        VerticalLayout {
+            alignment: center;
+
+            Image {
+                source: root.volume == 0 ? Icons.sound-off-fill : Icons.sound-on-fill;
+                width: Theme.icon-size * 0.8;
+                height: self.width;
+                colorize: root.font-color;
+                image-fit: ImageFit.contain;
+            }
+        }
+
+        Label {
+            text: round(root.volume) + "%";
+            color: root.font-color;
+            font-size: Theme.title4-font-size;
+            vertical-alignment: TextVerticalAlignment.center;
+        }
+    }
+}

@@ -50,6 +50,7 @@ export component IconBtn inherits Rectangle {
     in-out property <string> tip;
     in-out property <ComponentPosition> tip-position;
 
+    in-out property <length> hover-background-padding: Theme.padding * 2;
     in-out property <color> bg-color: Colors.transparent;
     in-out property <color> bg-pressed-color: self.bg-color;
     in-out property <color> hover-color: Theme.is-dark ? Theme.secondary-background.brighter(10%) : Theme.secondary-background.darker(5%);
@@ -71,8 +72,8 @@ export component IconBtn inherits Rectangle {
 
     // only is a icon showing this hover color
     if (text == "" && show-icon-hover-background): Rectangle {
-        x: img.x - Theme.spacing * 2 - (Math.max(Theme.icon-size, root.icon-size) - img.width) / 2;
-        width: Math.max(Theme.icon-size, root.icon-size) + Theme.spacing * 4;
+        x: img.x - root.hover-background-padding - (Math.max(Theme.icon-size, root.icon-size) - img.width) / 2;
+        width: Math.max(Theme.icon-size, root.icon-size) + root.hover-background-padding * 2;
         height: self.width;
         border-radius: self.width / 2;
         background: root.enabled ? (root.checked ? root.checked-color : (touch.has-hover ? root.hover-color : transparent)) : transparent;

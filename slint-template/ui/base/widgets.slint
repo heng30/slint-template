@@ -120,7 +120,11 @@ import { Tree } from "tree.slint";
 import { ExampleComponent } from "example-component.slint";
 import { SideBar } from "sidebar.slint";
 import { Paragraph, ParagraphEntry } from "paragraph.slint";
-import { AudioControl } from "audio-control.slint";
+import {
+    AudioControl,
+    VolumePopup,
+    SimpleAudioControl,
+} from "audio-control.slint";
 import { VideoPlayer } from "video-player.slint";
 import { TodoEntry, TodoList } from "todo-list.slint";
 import { GainFocus } from "gain-focus.slint";
@@ -144,6 +148,7 @@ import { MovingDivider } from "moving-divider.slint";
 import { Playhead } from "playhead.slint";
 import { UnsaveChangeDialog } from "unsave-change-dialog.slint";
 import { RecoveryDialog } from "recovery-dialog.slint";
+import { VolumeIndicator } from "volume-indicator.slint";
 
 export {
     AppPosType,
@@ -269,6 +274,8 @@ export {
     ParagraphEntry,
     Stretch,
     AudioControl,
+    VolumePopup,
+    SimpleAudioControl,
     VideoPlayer,
     TodoEntry,
     TodoList,
@@ -297,5 +304,6 @@ export {
     MovingDivider,
     Playhead,
     UnsaveChangeDialog,
-    RecoveryDialog
+    RecoveryDialog,
+    VolumeIndicator
 }

@@ -56,6 +56,7 @@ export component TxtEdit inherits Rectangle {
     in-out property font-size <=> edit.font-size;
     in-out property text-color <=> edit.color;
     in-out property read-only <=> edit.read-only;
+    out property <bool> has-focus: edit.has-focus;
 
     callback edited(text: string);
     callback key-pressed <=> edit.key-pressed;
@@ -90,7 +91,7 @@ export component TxtEdit inherits Rectangle {
             edit := TextInput {
                 single-line: false;
                 wrap: word-wrap;
-                color: Theme.regular-text-color;
+                color: root.has-focus ? Theme.primary-text-color : Theme.regular-text-color;
                 font-size: Theme.default-font-size;
 
                 edited() => {

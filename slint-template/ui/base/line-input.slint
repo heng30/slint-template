@@ -1,4 +1,4 @@
-import { Theme } from "theme.slint";
+import { Theme, Icons } from "theme.slint";
 import { Label } from "./label.slint";
 import { IconBtn } from "./icon-btn.slint";
 
@@ -100,8 +100,15 @@ export component LineInput inherits Rectangle {
 
                         if is-show-color-block: VerticalLayout {
                             alignment: center;
+                            private property <bool> is-transcparent: text-input.text == "#00000000";
 
-                            Rectangle {
+                            if is-transcparent: Image {
+                                width: text-input.font-size * 0.8;
+                                height: self.width;
+                                source: Icons.transparent-light;
+                            }
+
+                            if !is-transcparent: Rectangle {
                                 width: text-input.font-size * 0.8;
                                 height: self.width;
                                 background: color-block-color;

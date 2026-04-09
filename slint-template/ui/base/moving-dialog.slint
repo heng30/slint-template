@@ -9,8 +9,11 @@ export component MovingDialog inherits Rectangle {
     in-out property icon <=> sb.icon;
     in-out property <length> head-x <=> sb.x;
     in-out property <length> head-y <=> sb.y;
+    in-out property <bool> enable-resize;
+    in-out property <length> body-border-width: Theme.default-border-width * 2;
 
     callback close <=> sb.close;
+    callback resize(offset: length);
 
     sb := DialogStatusBar {
         x: (root.width - self.width) / 2;
@@ -42,12 +45,29 @@ export component MovingDialog inherits Rectangle {
         Rectangle {
             width: parent.width;
             background: Theme.base-background;
-            border-width: 1px;
+            border-width: root.body-border-width;
             border-color: Theme.base-border-color;
             height: vbox.preferred-height;
 
             vbox := VerticalLayout {
+                padding: parent.border-width;
                 @children
+            }
+
+            if enable-resize: Rectangle {
+                x: parent.width - self.width;
+                y: parent.height - self.height;
+                width: Theme.padding * 3;
+                height: self.width;
+                background: resize-ta.has-hover ? Theme.thirdly-brand-color : transparent;
+
+                resize-ta := TouchArea {
+                    mouse-cursor: MouseCursor.se-resize;
+
+                    moved => {
+                        root.resize(self.mouse-x - self.pressed-x);
+                    }
+                }
             }
         }
     }

@@ -339,7 +339,7 @@ export component VideoPlayer inherits Rectangle {
                 }
 
                 released(v) => {
-                    if (valid-playlist-index()) {
+                    if (valid-playlist-index() || is-real-time-player-mode) {
                         root.progress = v;
                         root.progress-changed(v);
                     }
