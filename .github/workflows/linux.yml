@@ -17,7 +17,7 @@ jobs:
       - run: echo "The ${{ github.workspace }} is now ready to test your code on the runner."
       - run: ls ${{ github.workspace }}
       - run: sudo apt update
-      - run: sudo apt install libxcb-composite0-dev upx imagemagick
+      - run: sudo apt install libxcb-composite0-dev upx imagemagick libfontconfig-dev
 
       - run: echo "start install Rust..."
       - name: Install Rust
