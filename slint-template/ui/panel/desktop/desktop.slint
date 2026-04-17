@@ -161,21 +161,21 @@ export component DesktopPanel inherits Rectangle {
 
     background: Theme.base-background;
 
-    VerticalLayout {
-        if Store.setting-preference.no-frame: HorizontalStatusBar { }
+    if !Store.setting-preference.no-frame: HorizontalLayout {
+        VerticalStatusBar { }
 
-        HorizontalLayout {
-            vertical-stretch: 1;
+        Home {
+            width: root.width - Theme.sidebar-width;
+            height: root.height;
+        }
+    }
 
-            if !Store.setting-preference.no-frame: VerticalStatusBar {
-                vertical-stretch: 1;
-            }
+    if Store.setting-preference.no-frame: VerticalLayout {
+        HorizontalStatusBar { }
 
-            Home {
-                vertical-stretch: 1;
-                width: root.width - (Store.setting-preference.no-frame ? 0 : Theme.sidebar-width);
-                height: root.height - (Store.setting-preference.no-frame ? Theme.header-height : 0);
-            }
+        Home {
+            width: root.width;
+            height: root.height - Theme.header-height;
         }
     }
 

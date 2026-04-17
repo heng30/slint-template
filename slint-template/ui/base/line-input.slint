@@ -37,7 +37,7 @@ export component LineInput inherits Rectangle {
     in-out property <bool> gain-focus-when-clicked: true;
     in-out property <color> placeholder-text-color: Theme.placeholder-text-color;
     out property has-focus <=> text-input.has-focus;
-    out property <color> default-border-color: text-input.has-focus ? Theme.thirdly-brand-color : Theme.base-border-color;
+    out property <color> default-border-color: (text-input.has-focus && self.enabled && !read-only) ? Theme.thirdly-brand-color : Theme.base-border-color;
     in-out property <bool> show-icon-hover-background: true;
     in-out property <bool> is-show-color-block;
     in-out property <color> color-block-color;
