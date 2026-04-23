@@ -5,6 +5,7 @@ import { Label } from "label.slint";
 import { LineInput } from "line-input.slint";
 import { Logic } from "../logic.slint";
 import { CancelBtn, ConfirmBtn } from "btn.slint";
+import { Checkerboard } from "checkerboard.slint";
 
 export component ColorPicker inherits Rectangle {
     in-out property <bool> is-show-btns;
@@ -87,25 +88,129 @@ export component ColorPicker inherits Rectangle {
     callback canceled();
     callback confirmed(color: string);
 
+    function set-alpha(c: color, alpha: float) -> color {
+        return rgba(c.red, c.green, c.blue, alpha.clamp(0.0, 1.0));
+    }
+
     width: 680px;
 
     VerticalLayout {
         alignment: start;
-        spacing: Theme.spacing * 4;
 
-        Image {
-            width: root.width;
-            height: root.width * 1080 / 1920;
-            source: Util.color-picker-image();
+        VerticalLayout {
+            Image {
+                width: root.width;
+                height: root.width * 1080 / 1920;
+                source: Util.color-picker-image();
 
-            TouchArea {
-                mouse-cursor: MouseCursor.pointer;
+                TouchArea {
+                    mouse-cursor: MouseCursor.pointer;
 
-                clicked => {
-                    let color = Util.color-picker-get(self.mouse-x / 1px, self.mouse-y / 1px, parent.width / 1px, parent.height / 1px);
+                    clicked => {
+                        let color = Util.color-picker-get(self.mouse-x / 1px, self.mouse-y / 1px, parent.width / 1px, parent.height / 1px);
+                        selected-color = root.set-alpha(color, alpha-ta.get-alpha());
+                        li-color.text = Util.color-picker-str(selected-color.red, selected-color.green, selected-color.blue, selected-color.alpha);
+                    }
+                }
+            }
 
-                    root.selected-color = color;
-                    li-color.text = Util.color-picker-str(color.red, color.green, color.blue, color.alpha);
+            VerticalLayout {
+                alpha-rec := Rectangle {
+                    border-width: Theme.default-border-width * 2;
+                    border-color: Theme.placeholder-text-color;
+                    height: Theme.icon-size;
+                    width: parent.width;
+
+                    HorizontalLayout {
+                        padding: parent.border-width;
+                        height: Theme.icon-size - parent.border-width * 2;
+
+                        Checkerboard {
+                            row-count: 2;
+                            col-count: parent.width / Theme.icon-size * 2;
+                        }
+                    }
+
+                    HorizontalLayout {
+                        padding: parent.border-width;
+                        height: Theme.icon-size - parent.border-width * 2;
+
+                        Rectangle {
+                            background: Theme.is-dark ? @linear-gradient(90deg, #ffffff00, #ffffffff) : @linear-gradient(90deg, #00000000, #000000ff);
+
+                            TouchArea {
+                                mouse-cursor: pointer;
+
+                                clicked => {
+                                    alhpa-handle-out.x = clamp(self.mouse-x - alhpa-handle-out.width / 2, -alpha-handle.width / 2, alpha-rec.width - alpha-handle.width / 2);
+                                    root.selected-color = root.set-alpha(selected-color, alpha-ta.get-alpha());
+                                    li-color.text = Util.color-picker-str(selected-color.red, selected-color.green, selected-color.blue, selected-color.alpha);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                alhpa-handle-out := Rectangle {
+                    height: Theme.icon-size;
+                    width: self.height;
+                    x: -alpha-handle.width / 2;
+
+                    alpha-handle := Path {
+                        x: 0;
+                        y: 0;
+                        width: parent.width;
+                        height: parent.height * 2 / 3;
+                        fill: Theme.invert-base-color;
+                        stroke: Theme.light-text-color;
+                        stroke-width: Theme.default-border-width * 2;
+
+                        MoveTo {
+                            x: parent.width / 1px / 2;
+                            y: 0;
+                        }
+
+                        LineTo {
+                            x: 0;
+                            y: parent.height / 1px;
+                        }
+
+                        LineTo {
+                            x: parent.width / 1px;
+                            y: parent.height / 1px;
+                        }
+
+                        Close { }
+                    }
+
+                    alpha-ta := TouchArea {
+                        mouse-cursor: MouseCursor.pointer;
+
+                        private property <bool> can-move;
+
+                        public function get-alpha() -> float {
+                            return Math.clamp((parent.x + alpha-handle.width / 2) / alpha-rec.width, 0, 1);
+                        }
+
+                        pointer-event(event) => {
+                            if (event.button == PointerEventButton.left) {
+                                if (event.kind == PointerEventKind.down) {
+                                    can-move = true;
+                                } else if (event.kind == PointerEventKind.up) {
+                                    can-move = false;
+                                    selected-color = root.set-alpha(selected-color, get-alpha());
+                                    li-color.text = Util.color-picker-str(selected-color.red, selected-color.green, selected-color.blue, selected-color.alpha);
+                                }
+                            }
+                        }
+
+                        moved => {
+                            if can-move {
+                                let diff-x = self.mouse-x - self.pressed-x;
+                                parent.x = clamp(parent.x + diff-x, -alpha-handle.width / 2, alpha-rec.width - alpha-handle.width / 2);
+                            }
+                        }
+                    }
                 }
             }
         }

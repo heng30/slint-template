@@ -1,0 +1,17 @@
+import { Theme } from "theme.slint";
+
+export component Checkerboard inherits Rectangle {
+    in property <int> row-count: 8;
+    in property <int> col-count: 8;
+    in property <color> light-color: Theme.base-background;
+    in property <color> dark-color: Theme.secondary-background;
+
+    GridLayout {
+        for index[idx] in row-count * col-count: Rectangle {
+            col: idx.mod(col-count);
+            row: idx / col-count;
+            background: mod(self.row + self.col, 2) == 0 ? light-color : dark-color;
+        }
+    }
+}
+

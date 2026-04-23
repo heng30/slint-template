@@ -66,6 +66,7 @@ export global Util {
     pure callback color-picker-get(x: int, y: int, width: int, height: int) -> color;
     pure callback color-picker-hex-color(color-hex: string) -> color;
     pure callback color-picker-str(r: int, g: int, b: int, a: int) -> string;
+
     pure callback color-picker-image() -> image;
     color-picker-image => {
         return Icons.brand;

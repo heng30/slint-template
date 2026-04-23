@@ -82,6 +82,7 @@ import { SoundWaveFormExample }  from "examples/sound-wave-form.slint";
 import { VideoPlayerExample }  from "examples/video-player.slint";
 import { TodoListExample } from "examples/todo-list.slint";
 import { ChartBarExample } from "examples/chart-bar.slint";
+import { CheckerboardExample } from "examples/checkerboard.slint";
 
 component LeftPanel inherits Rectangle {
     background: Theme.secondary-background;
@@ -172,6 +173,7 @@ component RightPanel inherits Rectangle {
     if Store.current-sidebar-key == "Paragraph": ParagraphExample { }
     if Store.current-sidebar-key == "TodoList": TodoListExample { }
     if Store.current-sidebar-key == "ChartBar": ChartBarExample { }
+    if Store.current-sidebar-key == "Checkerboard": CheckerboardExample { }
 
     // Crypto
     // if Store.current-sidebar-key == "Mnemonic": MnemonicExample { }
