@@ -11,6 +11,7 @@ export component MovingDialog inherits Rectangle {
     in-out property <length> head-y <=> sb.y;
     in-out property <bool> enable-resize;
     in-out property <length> body-border-width: Theme.default-border-width * 2;
+    in-out property <color> content-background: Theme.base-background;
 
     callback close <=> sb.close;
     callback resize(offset: length);
@@ -44,7 +45,7 @@ export component MovingDialog inherits Rectangle {
 
         Rectangle {
             width: parent.width;
-            background: Theme.base-background;
+            background: root.content-background;
             border-width: root.body-border-width;
             border-color: Theme.base-border-color;
             height: vbox.preferred-height;

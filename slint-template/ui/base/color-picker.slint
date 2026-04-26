@@ -92,10 +92,20 @@ export component ColorPicker inherits Rectangle {
         return rgba(c.red, c.green, c.blue, alpha.clamp(0.0, 1.0));
     }
 
+    function update-alpha() {
+        let norm-alpha = clamp(selected-color.alpha / 255, 0, 1);
+        alhpa-handle-out.x = clamp(alpha-rec.width * norm-alpha - alhpa-handle-out.width / 2, -alpha-handle.width / 2, alpha-rec.width - alpha-handle.width / 2);
+    }
+
+    init => {
+        update-alpha();
+    }
+
     width: 680px;
 
     VerticalLayout {
         alignment: start;
+        spacing: Theme.spacing * 4;
 
         VerticalLayout {
             Image {
@@ -121,31 +131,21 @@ export component ColorPicker inherits Rectangle {
                     height: Theme.icon-size;
                     width: parent.width;
 
-                    HorizontalLayout {
-                        padding: parent.border-width;
-                        height: Theme.icon-size - parent.border-width * 2;
-
-                        Checkerboard {
-                            row-count: 2;
-                            col-count: parent.width / Theme.icon-size * 2;
-                        }
+                    Checkerboard {
+                        row-count: 2;
+                        col-count: parent.width / Theme.icon-size * 2;
                     }
 
-                    HorizontalLayout {
-                        padding: parent.border-width;
-                        height: Theme.icon-size - parent.border-width * 2;
+                    Rectangle {
+                        background: Theme.is-dark ? @linear-gradient(90deg, #ffffff00, #ffffffff) : @linear-gradient(90deg, #00000000, #000000ff);
 
-                        Rectangle {
-                            background: Theme.is-dark ? @linear-gradient(90deg, #ffffff00, #ffffffff) : @linear-gradient(90deg, #00000000, #000000ff);
+                        TouchArea {
+                            mouse-cursor: pointer;
 
-                            TouchArea {
-                                mouse-cursor: pointer;
-
-                                clicked => {
-                                    alhpa-handle-out.x = clamp(self.mouse-x - alhpa-handle-out.width / 2, -alpha-handle.width / 2, alpha-rec.width - alpha-handle.width / 2);
-                                    root.selected-color = root.set-alpha(selected-color, alpha-ta.get-alpha());
-                                    li-color.text = Util.color-picker-str(selected-color.red, selected-color.green, selected-color.blue, selected-color.alpha);
-                                }
+                            clicked => {
+                                alhpa-handle-out.x = clamp(self.mouse-x - alhpa-handle-out.width / 2, -alpha-handle.width / 2, alpha-rec.width - alpha-handle.width / 2);
+                                root.selected-color = root.set-alpha(selected-color, alpha-ta.get-alpha());
+                                li-color.text = Util.color-picker-str(selected-color.red, selected-color.green, selected-color.blue, selected-color.alpha);
                             }
                         }
                     }
@@ -154,16 +154,14 @@ export component ColorPicker inherits Rectangle {
                 alhpa-handle-out := Rectangle {
                     height: Theme.icon-size;
                     width: self.height;
-                    x: -alpha-handle.width / 2;
+                    x: parent.width - alpha-handle.width / 2;
 
                     alpha-handle := Path {
                         x: 0;
                         y: 0;
-                        width: parent.width;
-                        height: parent.height * 2 / 3;
+                        width: parent.width * 2 / 3;
+                        height: parent.height / 2;
                         fill: Theme.invert-base-color;
-                        stroke: Theme.light-text-color;
-                        stroke-width: Theme.default-border-width * 2;
 
                         MoveTo {
                             x: parent.width / 1px / 2;
@@ -213,101 +211,103 @@ export component ColorPicker inherits Rectangle {
                     }
                 }
             }
-        }
 
-        HorizontalLayout {
-            alignment: space-between;
-            spacing: Theme.spacing * 2;
+            HorizontalLayout {
+                alignment: space-between;
+                spacing: Theme.spacing * 2;
 
-            rect := Rectangle {
-                private property <int> columns: max(1, floor((root.width - show-color-vbox.width - vbox.padding * 2) / (default-colors-size + default-colors-spacing)));
-                private property <int> rows: max(1, ceil(default-colors.length / columns));
+                rect := Rectangle {
+                    private property <int> columns: max(1, floor((root.width - show-color-vbox.width - vbox.padding * 2) / (default-colors-size + default-colors-spacing)));
+                    private property <int> rows: max(1, ceil(default-colors.length / columns));
 
-                width: vbox.preferred-width;
-                height: vbox.preferred-height;
-                background: Theme.hover-background;
+                    width: vbox.preferred-width;
+                    height: vbox.preferred-height;
+                    background: Theme.hover-background;
 
-                vbox := VerticalLayout {
-                    alignment: start;
-                    padding: Theme.padding * 2;
-                    spacing: Theme.spacing * 2;
-
-                    for r in rows: HorizontalLayout {
+                    vbox := VerticalLayout {
                         alignment: start;
-                        spacing: default-colors-spacing;
+                        padding: Theme.padding * 2;
+                        spacing: Theme.spacing * 2;
 
-                        for c in columns: HorizontalLayout {
-                            private property <int> index: r * columns + c;
+                        for r in rows: HorizontalLayout {
+                            alignment: start;
+                            spacing: default-colors-spacing;
 
-                            if index < default-colors.length: Rectangle {
-                                width: default-colors-size;
-                                height: default-colors-size;
-                                background: default-colors[index];
-                                border-color: Theme.base-border-color;
-                                border-width: Theme.default-border-width;
+                            for c in columns: HorizontalLayout {
+                                private property <int> index: r * columns + c;
 
-                                if index == 0: Image {
-                                    width: parent.width;
-                                    height: parent.height;
-                                    source: Icons.transparent-light;
-                                    colorize: Theme.icon-color;
-                                }
+                                if index < default-colors.length: Rectangle {
+                                    width: default-colors-size;
+                                    height: default-colors-size;
+                                    background: default-colors[index];
+                                    border-color: Theme.base-border-color;
+                                    border-width: Theme.default-border-width;
 
-                                TouchArea {
-                                    mouse-cursor: MouseCursor.pointer;
+                                    if index == 0: Image {
+                                        width: parent.width;
+                                        height: parent.height;
+                                        source: Icons.transparent-light;
+                                        colorize: Theme.icon-color;
+                                    }
 
-                                    clicked => {
-                                        selected-color = parent.background;
-                                        li-color.text = Util.color-picker-str(selected-color.red, selected-color.green, selected-color.blue, selected-color.alpha);
+                                    TouchArea {
+                                        mouse-cursor: MouseCursor.pointer;
+
+                                        clicked => {
+                                            selected-color = parent.background;
+                                            li-color.text = Util.color-picker-str(selected-color.red, selected-color.green, selected-color.blue, selected-color.alpha);
+                                            root.update-alpha();
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            show-color-vbox := VerticalLayout {
-                height: rect.height;
-                width: Theme.icon-size * 5;
-                spacing: Theme.spacing * 2;
-                alignment: center;
-
-                HorizontalLayout {
+                show-color-vbox := VerticalLayout {
+                    height: rect.height;
+                    width: Theme.icon-size * 5;
+                    spacing: Theme.spacing * 2;
                     alignment: center;
-                    Rectangle {
-                        width: show-color-vbox.width;
-                        height: rect.height - li-hbox.preferred-height - show-color-vbox.spacing;
-                        background: selected-color;
 
-                        fs := FocusScope { }
+                    HorizontalLayout {
+                        alignment: center;
+                        Rectangle {
+                            width: show-color-vbox.width;
+                            height: rect.height - li-hbox.preferred-height - show-color-vbox.spacing;
+                            background: selected-color;
 
-                        if selected-color == #00000000: Image {
-                            width: parent.width;
-                            height: parent.height;
-                            source: Icons.transparent-light;
-                        }
+                            fs := FocusScope { }
 
-                        TouchArea {
-                            mouse-cursor: MouseCursor.pointer;
+                            if selected-color == #00000000: Image {
+                                width: parent.width;
+                                height: parent.height;
+                                source: Icons.transparent-light;
+                            }
 
-                            clicked => {
-                                fs.focus();
-                                Logic.copy-to-clipboard(li-color.text);
+                            TouchArea {
+                                mouse-cursor: MouseCursor.pointer;
+
+                                clicked => {
+                                    fs.focus();
+                                    Logic.copy-to-clipboard(li-color.text);
+                                }
                             }
                         }
                     }
-                }
 
-                li-hbox := HorizontalLayout {
-                    alignment: center;
+                    li-hbox := HorizontalLayout {
+                        alignment: center;
 
-                    li-color := LineInput {
-                        width: show-color-vbox.width;
-                        text: Util.color-picker-str(selected-color.red, selected-color.green, selected-color.blue, selected-color.alpha);
+                        li-color := LineInput {
+                            width: show-color-vbox.width;
+                            text: Util.color-picker-str(selected-color.red, selected-color.green, selected-color.blue, selected-color.alpha);
 
-                        accepted => {
-                            selected-color = Util.color-picker-hex-color(li-color.text);
+                            accepted => {
+                                selected-color = Util.color-picker-hex-color(li-color.text);
+                                root.update-alpha();
+                            }
                         }
                     }
                 }

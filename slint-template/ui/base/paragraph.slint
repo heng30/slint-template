@@ -7,8 +7,12 @@ import { Divider } from "divider.slint";
 export struct ParagraphEntry {
     title: string,
     title-link: string,
+    title-font-size: length,
     contents: [string],
+    content-font-size: length,
     picture: image,
+    picture-size: length,
+    is-picture-before-contents: bool,
 }
 
 export component Paragraph inherits Rectangle {
@@ -43,7 +47,8 @@ export component Paragraph inherits Rectangle {
 
         if entry.picture.width > 0 && root.is-picture-before-contents: HorizontalLayout {
             alignment: LayoutAlignment.center;
-            padding: Theme.padding * 4;
+            padding-top: Theme.padding * 4;
+            padding-bottom: Theme.padding * 4;
 
             Rectangle {
                 border-radius: Theme.border-radius * 2;
@@ -75,7 +80,8 @@ export component Paragraph inherits Rectangle {
 
         if entry.picture.width > 0 && !root.is-picture-before-contents: HorizontalLayout {
             alignment: LayoutAlignment.center;
-            padding: Theme.padding * 4;
+            padding-top: Theme.padding * 4;
+            padding-bottom: Theme.padding * 4;
 
             Rectangle {
                 border-radius: Theme.border-radius * 2;
