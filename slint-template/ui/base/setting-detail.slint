@@ -96,6 +96,7 @@ export component SettingDetailSwitch inherits Rectangle {
     in-out property icon-size <=> sib.icon-size;
     in-out property enabled <=> eib.enabled;
     in-out property checked <=> eib.checked;
+    in-out property gain-focus-when-clicked <=> eib.gain-focus-when-clicked;
 
     height: vbox.preferred-height;
     background: Theme.secondary-background;
@@ -115,7 +116,9 @@ export component SettingDetailSwitch inherits Rectangle {
 
         eib := SwitchBtn {
             toggled => {
-                fs.focus();
+                if (root.gain-focus-when-clicked) {
+                    fs.focus();
+                }
                 root.toggled();
             }
         }

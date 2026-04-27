@@ -56,11 +56,35 @@ export component MovingDialog inherits Rectangle {
             }
 
             if enable-resize: Rectangle {
-                x: parent.width - self.width;
-                y: parent.height - self.height;
+                x: parent.width - self.width - root.body-border-width;
+                y: parent.height - self.height - root.body-border-width;
                 width: Theme.padding * 3;
                 height: self.width;
-                background: resize-ta.has-hover ? Theme.thirdly-brand-color : transparent;
+
+                Path {
+                    x: 0;
+                    y: 0;
+                    width: parent.width;
+                    height: parent.height;
+                    fill: resize-ta.has-hover ? Theme.invert-base-color : transparent;
+
+                    MoveTo {
+                        x: 0;
+                        y: parent.height / 1px;
+                    }
+
+                    LineTo {
+                        x: parent.width / 1px;
+                        y: parent.height / 1px;
+                    }
+
+                    LineTo {
+                        x: parent.width / 1px;
+                        y: 0;
+                    }
+
+                    Close { }
+                }
 
                 resize-ta := TouchArea {
                     mouse-cursor: MouseCursor.se-resize;
