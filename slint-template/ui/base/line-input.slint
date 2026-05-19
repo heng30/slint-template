@@ -32,7 +32,8 @@ export component LineInput inherits Rectangle {
     in property input-type <=> text-input.input-type;
     in property read-only <=> text-input.read-only;
     in property <bool> enabled <=> text-input.enabled;
-    in property <string> placeholder-text;
+    in-out property <string> placeholder-text;
+    in-out property placeholder <=> self.placeholder-text;
     in-out property <color> disabled-color: Theme.disabled-color;
     in-out property <bool> gain-focus-when-clicked: true;
     in-out property <color> placeholder-text-color: Theme.placeholder-text-color;
@@ -91,6 +92,8 @@ export component LineInput inherits Rectangle {
                 width: Math.max(parent.width, text-input.preferred-width);
 
                 if root.enabled && root.enable-step && !text-input.text.is-empty && text-input.has-focus && (text-input.input-type == InputType.number || text-input.input-type == InputType.decimal): TouchArea {
+                    enabled: root.enabled;
+
                     scroll-event(event) => {
                         if (event.delta-y < 0) {
                             if (text-input.input-type == InputType.number) {
@@ -201,6 +204,7 @@ export component ClickAndEditLabel inherits Rectangle {
     in-out property <length> font-size: Theme.default-font-size;
     in-out property <color> text-color: Theme.regular-text-color;
     in-out property wrap <=> lb.wrap;
+    in-out property enabled <=> lb.enabled;
 
     private property <bool> inner-is-edit;
 
@@ -243,6 +247,7 @@ export component ClickAndEditLabel inherits Rectangle {
             color: root.text-color;
 
             TouchArea {
+                enabled: root.enabled;
                 mouse-cursor: MouseCursor.pointer;
 
                 clicked => {
@@ -268,6 +273,7 @@ export component ClickAndEditLabel inherits Rectangle {
         }
 
         li := LineInput {
+            enabled: root.enabled;
             width: use-fixed-width ? root.width : lb.preferred-width + self.hpadding * 2;
             text: root.text;
             font-size: root.font-size;

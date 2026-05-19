@@ -1,6 +1,6 @@
 import { Theme, Icons } from "theme.slint";
-import { SettingDetailInner } from "setting-detail.slint";
 import { DialogStatusBar } from "status-bar.slint";
+import { SettingDetailInner } from "setting-detail.slint";
 
 export component MovingDialog inherits Rectangle {
     private property <bool> show-body: true;
@@ -15,6 +15,8 @@ export component MovingDialog inherits Rectangle {
 
     callback close <=> sb.close;
     callback resize(offset: length);
+    callback minimal();
+    callback maximal();
 
     sb := DialogStatusBar {
         x: (root.width - self.width) / 2;
@@ -27,17 +29,19 @@ export component MovingDialog inherits Rectangle {
 
         maximal => {
             root.show-body = !root.show-body;
+            root.maximal();
         }
 
         minimal => {
             root.show-body = !root.show-body;
+            root.minimal();
         }
     }
 
     body := SettingDetailInner {
         visible: root.show-body;
         x: sb.x;
-        y: sb.y + sb.height;
+        y: sb.y + sb.height - 1px;
         width: sb.width;
         height: self.width / Theme.golden-ratio - sb.height;
         vbox-padding: 0px;
@@ -49,6 +53,8 @@ export component MovingDialog inherits Rectangle {
             border-width: root.body-border-width;
             border-color: Theme.base-border-color;
             height: vbox.preferred-height;
+
+            TouchArea { }
 
             vbox := VerticalLayout {
                 padding: parent.border-width;

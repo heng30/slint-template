@@ -20,7 +20,7 @@ export component Slider inherits Rectangle {
     in-out property <float> value: 0;
     in-out property <float> minimum: 0;
     in-out property <float> maximum: 100;
-    in-out property <length> indicator-size: Theme.icon-size * 2;
+    in-out property <length> indicator-size: Theme.default-font-size;
     in-out property <Orientation> orientation: Orientation.horizontal;
 
     in-out property enabled <=> ta.enabled;
@@ -59,8 +59,8 @@ export component Slider inherits Rectangle {
     callback released(value: float);
     callback pressed(value: float);
 
-    width: orientation == Orientation.horizontal ? 400px : Theme.default-font-size;
-    height: orientation == Orientation.horizontal ? Theme.default-font-size : 400px;
+    preferred-width: orientation == Orientation.horizontal ? 400px : root.indicator-size * 0.3;
+    preferred-height: orientation == Orientation.horizontal ? root.indicator-size * 0.3 : 400px;
     border-radius: orientation == Orientation.horizontal ? self.height / 2 : self.width / 2;
 
     pb := ProgressBar {

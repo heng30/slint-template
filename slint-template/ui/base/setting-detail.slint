@@ -98,6 +98,8 @@ export component SettingDetailSwitch inherits Rectangle {
     in-out property checked <=> eib.checked;
     in-out property gain-focus-when-clicked <=> eib.gain-focus-when-clicked;
 
+    in-out property <length> spacing;
+
     height: vbox.preferred-height;
     background: Theme.secondary-background;
     border-radius: Theme.border-radius;
@@ -109,8 +111,10 @@ export component SettingDetailSwitch inherits Rectangle {
     vbox := HorizontalLayout {
         padding: Theme.padding * 2;
         alignment: space-between;
+        spacing: root.spacing;
 
         sib := IconBtn {
+            enabled: root.enabled;
             background: Colors.transparent;
         }
 

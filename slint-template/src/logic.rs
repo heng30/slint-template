@@ -116,6 +116,32 @@ macro_rules! logic_cb {
 }
 
 #[macro_export]
+macro_rules! logic_cb_pure {
+    ($callback_name:ident, $ui:expr, $($arg:ident),*) => {
+        {{
+            let ui_weak = $ui.as_weak();
+            paste::paste! {
+                crate::global_logic!($ui)
+                    .[<on_ $callback_name>](move |$($arg),*| {
+                        $callback_name(&ui_weak.unwrap(), $($arg),*)
+                    });
+            }
+        }}
+    };
+    ($callback_name:ident, $ui:expr) => {
+        {{
+            let ui_weak = $ui.as_weak();
+            paste::paste! {
+                crate::global_logic!($ui)
+                    .[<on_ $callback_name>](move || {
+                        $callback_name(&ui_weak.unwrap())
+                    });
+            }
+        }}
+    };
+}
+
+#[macro_export]
 macro_rules! impl_slint_enum_serde {
     ($ty:ident, $($arg:ident),+) => {
         impl serde::Serialize for $ty {

@@ -2,11 +2,11 @@ import { TextEdit, Palette, ScrollView } from "std-widgets.slint";
 import { Theme } from "theme.slint";
 
 export component TxtEditStd inherits Rectangle {
-    border-width: edit.has-focus ? 2px : 1px;
-    border-radius: Theme.border-radius;
-    border-color: edit.has-focus ? Theme.thirdly-brand-color : Theme.base-border-color;
-    forward-focus: edit;
     clip: true;
+    forward-focus: edit;
+    border-radius: Theme.border-radius;
+    border-width: edit.has-focus ? Theme.default-border-width * 2 : Theme.default-border-width;
+    border-color: edit.has-focus ? Theme.thirdly-brand-color : Theme.base-border-color;
 
     in-out property <string> placeholder;
     in-out property <length> inner-padding: 0;
@@ -45,10 +45,10 @@ export component TxtEditStd inherits Rectangle {
 }
 
 export component TxtEdit inherits Rectangle {
-    border-width: edit.has-focus ? 2px : 1px;
-    border-radius: Theme.border-radius;
-    border-color: edit.has-focus ? Theme.thirdly-brand-color : Theme.base-border-color;
     forward-focus: edit;
+    border-radius: Theme.border-radius;
+    border-width: edit.has-focus && !read-only ? Theme.default-border-width * 2 : Theme.default-border-width;
+    border-color: edit.has-focus && !read-only ? Theme.thirdly-brand-color : (read-only ? Theme.regular-text-color : Theme.base-border-color);
 
     in-out property <string> placeholder;
     in-out property <length> inner-padding: Theme.padding * 2;
@@ -91,7 +91,7 @@ export component TxtEdit inherits Rectangle {
             edit := TextInput {
                 single-line: false;
                 wrap: word-wrap;
-                color: root.has-focus ? Theme.primary-text-color : Theme.regular-text-color;
+                color: root.has-focus || self.read-only ? Theme.primary-text-color : Theme.regular-text-color;
                 font-size: Theme.default-font-size;
 
                 edited() => {

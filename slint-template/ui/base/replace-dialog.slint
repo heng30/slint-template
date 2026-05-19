@@ -4,36 +4,25 @@ import { Logic } from "../logic.slint";
 import { Dialog } from "./dialog.slint";
 import { LineInput } from "line-input.slint";
 import { Label } from "label.slint";
-import { DialogStatusBar } from "status-bar.slint";
+import { MovingDialog } from "moving-dialog.slint";
 
-export component ReplaceDialog inherits Rectangle {
-    private property <length> header-width: Math.min(Theme.dialog-max-width, Theme.default-font-size * 25);
+export component ReplaceDialog inherits MovingDialog {
+    title: Logic.tr("Replace");
+    icon: Icons.replace-light;
 
-    callback escape();
     callback replace(old-text: string, new-text: string);
 
-    init => {
-        old-line-input.focus();
-    }
-
-    sb := DialogStatusBar {
-        x: (root.width - self.width) / 2;
-        y: (root.height - self.height - body.height) / 2;
-        width: header-width - root.border-width * 2;
-        icon: Icons.replace-light;
-        title: Logic.tr("Replace");
-        container-width: root.width;
-        container-height: root.height;
-
-        close => {
-            escape();
+    fs-timer := Timer {
+        interval: 200ms;
+        running: true;
+        triggered() => {
+            old-line-input.focus();
+            self.running = false;
         }
     }
 
     body := Rectangle {
-        x: sb.x;
-        y: sb.y + sb.height;
-        width: header-width;
+        width: root.header-width;
         height: vbox.preferred-height + self.border-width * 2;
         border-width: Theme.default-border-width;
         border-color: Theme.base-border-color;
@@ -57,6 +46,7 @@ export component ReplaceDialog inherits Rectangle {
                     icon: Icons.close-light;
                     icon-size: Theme.icon-size * Theme.golden-ratio;
                     gain-focus-when-clicked: false;
+                    show-icon-hover-background: false;
 
                     key-pressed(event) => {
                         if (event.text == Key.Tab) {
@@ -85,6 +75,7 @@ export component ReplaceDialog inherits Rectangle {
                     icon: Icons.close-light;
                     icon-size: Theme.icon-size * Theme.golden-ratio;
                     gain-focus-when-clicked: false;
+                    show-icon-hover-background: false;
 
                     key-pressed(event) => {
                         if (event.text == Key.Tab) {

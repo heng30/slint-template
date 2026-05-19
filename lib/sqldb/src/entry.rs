@@ -39,6 +39,17 @@ pub async fn insert(table: &str, uuid: &str, data: &str) -> Result<()> {
     Ok(())
 }
 
+pub async fn upsert(table: &str, uuid: &str, data: &str) -> Result<()> {
+    sqlx::query(&format!(
+        "INSERT OR REPLACE INTO {table} (uuid, data) VALUES (?, ?)"
+    ))
+    .bind(uuid)
+    .bind(data)
+    .execute(&pool().await)
+    .await?;
+    Ok(())
+}
+
 pub async fn update(table: &str, uuid: &str, data: &str) -> Result<()> {
     sqlx::query(&format!("UPDATE {table} SET data=? WHERE uuid=?"))
         .bind(data)

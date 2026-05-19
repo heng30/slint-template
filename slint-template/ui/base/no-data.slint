@@ -22,7 +22,7 @@ export component NoDataImg inherits Rectangle {
         if !root.text.is-empty: CenterLayout {
             Text {
                 text: root.text;
-                color: Theme.primary-text-color;
+                color: root.colorize;
                 font-size: root.font-size;
             }
         }
