@@ -64,6 +64,7 @@ export component IconBtn inherits Rectangle {
 
     border-radius: Theme.border-radius;
     background: touch.pressed ? bg-pressed-color : (touch.has-hover ? bg-color.darker(10%) : bg-color);
+    forward-focus: fs;
 
     animate background {
         duration: Theme.default-animate-duration;

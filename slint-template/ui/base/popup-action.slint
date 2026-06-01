@@ -56,7 +56,8 @@ export global PopupActionSetting {
 export component PopupAction inherits Rectangle {
     in-out property <length> window-width;
     in-out property <length> window-height;
-    in-out property <length> spacing: Theme.spacing * 2;
+    in-out property <length> item-padding: Theme.padding * 2;
+    in-out property spacing <=> vbox.spacing;
 
     in-out property <color> icon-colorize: Theme.icon-color;
     in-out property <length> icon-size: Theme.icon-size;
@@ -100,7 +101,6 @@ export component PopupAction inherits Rectangle {
 
         vbox := VerticalLayout {
             alignment: LayoutAlignment.center;
-            spacing: root.spacing;
             width: self.preferred-width;
             height: self.preferred-height;
 
@@ -110,6 +110,7 @@ export component PopupAction inherits Rectangle {
                 if !entry.text.is-empty: SettingEntryV2 {
                     icon: entry.icon;
                     text: entry.text;
+                    vpadding: root.item-padding;
                     icon-rotation: entry.icon-rotation;
                     right-text: entry.shotcut;
                     right-text-font-size: self.font-size * Theme.golden-ratio;

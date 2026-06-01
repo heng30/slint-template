@@ -203,8 +203,12 @@ export component ClickAndEditLabel inherits Rectangle {
     in-out property <int> font-weight: Theme.normal-font-weight;
     in-out property <length> font-size: Theme.default-font-size;
     in-out property <color> text-color: Theme.regular-text-color;
+    in-out property <bool> disabled-click-enter-edit-mode;
     in-out property wrap <=> lb.wrap;
     in-out property enabled <=> lb.enabled;
+    in-out property overflow <=> lb.overflow;
+    in-out property vpadding <=> li.vpadding;
+    out property has-focus <=> li.has-focus;
 
     private property <bool> inner-is-edit;
 
@@ -217,8 +221,6 @@ export component ClickAndEditLabel inherits Rectangle {
         li.text = text;
     }
 
-    width: lb.preferred-width;
-
     changed is-edit => {
         if (is-edit) {
             inner-is-edit = true;
@@ -226,6 +228,15 @@ export component ClickAndEditLabel inherits Rectangle {
             inner-is-edit = false;
         }
     }
+
+    public function enter-edit-mode() {
+        if (disabled-click-enter-edit-mode) {
+            inner-is-edit = true;
+            li.focus();
+        }
+    }
+
+    width: lb.preferred-width;
 
     VerticalLayout {
         visible: !inner-is-edit;
@@ -247,11 +258,11 @@ export component ClickAndEditLabel inherits Rectangle {
             color: root.text-color;
 
             TouchArea {
-                enabled: root.enabled;
+                enabled: root.enabled && !disabled-click-enter-edit-mode;
                 mouse-cursor: MouseCursor.pointer;
 
                 clicked => {
-                    inner-is-edit = !inner-is-edit;
+                    inner-is-edit = true;
 
                     if (inner-is-edit) {
                         li.focus();

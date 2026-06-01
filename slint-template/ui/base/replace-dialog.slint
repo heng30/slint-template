@@ -9,6 +9,8 @@ import { MovingDialog } from "moving-dialog.slint";
 export component ReplaceDialog inherits MovingDialog {
     title: Logic.tr("Replace");
     icon: Icons.replace-light;
+    head-y: self.height * 0.2;
+    header-width: Math.min(Theme.dialog-max-width, Theme.default-font-size * 25);
 
     callback replace(old-text: string, new-text: string);
 

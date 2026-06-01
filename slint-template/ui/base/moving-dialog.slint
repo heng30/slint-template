@@ -6,17 +6,27 @@ export component MovingDialog inherits Rectangle {
     private property <bool> show-body: true;
     in-out property title <=> sb.title;
     in-out property header-width <=> sb.width;
+    in-out property body-height <=> vbox.preferred-height;
     in-out property icon <=> sb.icon;
     in-out property <length> head-x <=> sb.x;
     in-out property <length> head-y <=> sb.y;
     in-out property <bool> enable-resize;
     in-out property <length> body-border-width: Theme.default-border-width * 2;
     in-out property <color> content-background: Theme.base-background;
+    in-out property <bool> always-show-resize-area: true;
+    in-out property <length> min-header-width: Theme.moving-dialog-min-width;
+    in-out property <length> min-body-height: Theme.moving-dialog-min-height;
+
+    private property <length> normal-header-width: max(header-width, root.min-header-width);
 
     callback close <=> sb.close;
-    callback resize(offset: length);
+    callback resize(offset-x: length, offset-y: length);
     callback minimal();
     callback maximal();
+
+    init => {
+        root.normal-header-width = root.header-width;
+    }
 
     sb := DialogStatusBar {
         x: (root.width - self.width) / 2;
@@ -28,11 +38,13 @@ export component MovingDialog inherits Rectangle {
         hide-minimal-ctrl-btns: !root.show-body;
 
         maximal => {
+            root.header-width = root.normal-header-width;
             root.show-body = !root.show-body;
             root.maximal();
         }
 
         minimal => {
+            root.header-width = sb.minimal-bar-width;
             root.show-body = !root.show-body;
             root.minimal();
         }
@@ -72,7 +84,7 @@ export component MovingDialog inherits Rectangle {
                     y: 0;
                     width: parent.width;
                     height: parent.height;
-                    fill: resize-ta.has-hover ? Theme.invert-base-color : transparent;
+                    fill: always-show-resize-area || resize-ta.has-hover ? Theme.regular-text-color : transparent;
 
                     MoveTo {
                         x: 0;
@@ -96,7 +108,12 @@ export component MovingDialog inherits Rectangle {
                     mouse-cursor: MouseCursor.se-resize;
 
                     moved => {
-                        root.resize(self.mouse-x - self.pressed-x);
+                        let offset-x = self.mouse-x - self.pressed-x;
+                        let offset-y = self.mouse-y - self.pressed-y;
+                        root.header-width = max(root.header-width + offset-x, root.min-header-width);
+                        root.body-height = max(root.body-height + offset-y, root.min-body-height);
+                        root.normal-header-width = root.header-width;
+                        root.resize(offset-x, offset-y);
                     }
                 }
             }

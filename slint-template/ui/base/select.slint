@@ -145,6 +145,7 @@ export component Select inherits Rectangle {
                             root.current-index = index;
                             root.current-value = value;
                             root.selected(root.current-index, root.current-value);
+                            is-indicator-down = true;
                             pop.close();
                         }
                     }

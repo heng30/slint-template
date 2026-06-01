@@ -26,6 +26,10 @@ export component StatusBar inherits Rectangle {
     in-out property <image> minimal-icon: Icons.status-bar-min-fill;
     in-out property <color> minimal-icon-colorize: Theme.warning-color;
 
+    private property <length> min-title-icon-width;
+    private property <length> min-ctrl-btns-width;
+    in-out property <length> minimal-bar-width: min-title-icon-width + min-ctrl-btns-width + Theme.spacing * 10;
+
     in-out property <bool> is-show-icon;
     in-out property <image> icon;
     in-out property <string> title;
@@ -95,6 +99,11 @@ export component StatusBar inherits Rectangle {
 
         if root.is-show-icon: HorizontalLayout {
             spacing: Theme.spacing;
+
+            init => {
+                root.min-title-icon-width = self.preferred-width;
+            }
+
             Image {
                 source: root.icon;
                 width: Math.min(root.icon-size + Theme.padding, root.height);
@@ -115,6 +124,10 @@ export component StatusBar inherits Rectangle {
 
             if !disable-window-ctrl-btns: HorizontalLayout {
                 spacing: Theme.spacing * 2;
+
+                init => {
+                    root.min-ctrl-btns-width = self.preferred-width;
+                }
 
                 if !hide-minimal-ctrl-btns: IconBtn {
                     icon: root.minimal-icon;

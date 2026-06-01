@@ -108,7 +108,7 @@ export component Slider inherits Rectangle {
         border-radius: self.width / 2;
         border-width: indicator-ta.pressed ? 2px : 0;
         border-color: root.finished-progress-color;
-        background: Theme.light-text-color;
+        background: root.enabled ? Theme.light-text-color : Theme.disabled-color;
         drop-shadow-blur: Theme.padding * 2;
         drop-shadow-color: indicator-ta.pressed ? self.border-color : Theme.secondary-background.darker(30%);
 

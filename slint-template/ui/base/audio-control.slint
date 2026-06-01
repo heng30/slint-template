@@ -35,6 +35,43 @@ export component VolumePopup inherits PopupWindow {
     }
 }
 
+export component SpeedPopup inherits PopupWindow {
+    in-out property <[float]> values: [3.0, 2.5, 2.0, 1.75, 1.5, 1.25, 1.0, 0.75, 0.5];
+    in-out property <float> speed: 1.0;
+    callback speed-changed(v: float);
+
+    width: speed-rec.preferred-width + Theme.padding * 4;
+
+    speed-rec := Rectangle {
+        background: Theme.base-background;
+        border-width: Theme.default-border-width;
+        border-color: Theme.base-border-color;
+
+        speed-rec-vboc := VerticalLayout {
+            spacing: Theme.spacing * 2;
+            padding: Theme.padding;
+
+            for value[index] in values: Rectangle {
+                background: speed-pop-ta.has-hover ? Theme.hover-background : Theme.base-background;
+
+                Label {
+                    overflow: elide;
+                    horizontal-alignment: TextHorizontalAlignment.center;
+                    text: value + (value == 1.0 || value == 2.0 || value == 3.0 ? ".0x" : "x");
+                }
+
+                speed-pop-ta := TouchArea {
+                    mouse-cursor: pointer;
+                    clicked => {
+                        root.speed = value;
+                        root.speed-changed(value);
+                    }
+                }
+            }
+        }
+    }
+}
+
 export component AudioControl inherits Rectangle {
     in-out property <bool> is-playing;
     in-out property <bool> is-hide-three-control-btns;
@@ -304,9 +341,9 @@ export component AudioControl inherits Rectangle {
 
 export component SimpleAudioControl inherits Rectangle {
     in-out property <bool> is-playing;
-    in-out property <bool> is-hide-status-btn;
-    in-out property <bool> is-hide-speed-btn;
+    in-out property <bool> is-hide-speed-btn: true;
     in-out property <float> current-sound: 50;
+    in-out property <float> current-speed: 1.0;
     in-out property <length> icon-size: Theme.icon-size;
     in-out property <length> spacing: Theme.spacing * 4;
     in-out property <length> inner-padding: Theme.padding * 2;
@@ -323,12 +360,14 @@ export component SimpleAudioControl inherits Rectangle {
     callback progress-changed <=> slider.changed;
     callback progress-released <=> slider.released;
     callback progress-pressed <=> slider.pressed;
+    callback speed-changed(speed: float);
 
     changed progress => {
         slider.value = progress;
     }
 
     preferred-width: 500px;
+    forward-focus: play-icon;
 
     FocusScope {
         key-pressed(event) => {
@@ -385,6 +424,31 @@ export component SimpleAudioControl inherits Rectangle {
                             }
                             root.current-sound = Math.ceil(v);
                             root.sound-changed(root.current-sound);
+                        }
+                    }
+                }
+
+                HorizontalLayout {
+                    visible: !root.is-hide-speed-btn;
+                    width: self.visible ? self.preferred-width : 0;
+                    padding-right: Theme.padding * 4;
+
+                    TextBtnWithoutIcon {
+                        text: root.current-speed + (root.current-speed == 1.0 || root.current-speed == 2.0 || root.current-speed == 3.0 ? ".0x" : "x");
+
+                        clicked => {
+                            speed-pop.show();
+                        }
+
+                        speed-pop := SpeedPopup {
+                            x: -self.width / 2 + parent.preferred-width / 2;
+                            y: -speed-pop.preferred-height;
+                            speed: root.current-speed;
+
+                            speed-changed(v) => {
+                                root.current-speed = v;
+                                root.speed-changed(v);
+                            }
                         }
                     }
                 }
