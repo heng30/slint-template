@@ -54,6 +54,7 @@ export component SliderExample inherits Flickable {
                     value: 30;
                     minimum: 20;
                     maximum: 80;
+                    indicator-size: self.height * 1.3;
                     changed(value) => {
                         debug(value);
                     }
@@ -78,6 +79,7 @@ export component SliderExample inherits Flickable {
                     width: 20px;
                     height: 300px;
                     value: 50;
+                    indicator-size: self.width * 1.3;
 
                     changed => {
                         root.interactive = false;

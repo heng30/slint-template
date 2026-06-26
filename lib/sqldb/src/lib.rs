@@ -47,7 +47,7 @@ pub async fn is_table_exist(table_name: &str) -> Result<()> {
 }
 
 pub async fn drop_table(table_name: &str) -> Result<()> {
-    sqlx::query(&format!("DROP TABLE {}", table_name))
+    sqlx::query(sqlx::AssertSqlSafe(format!("DROP TABLE {}", table_name)))
         .execute(&pool().await)
         .await?;
 

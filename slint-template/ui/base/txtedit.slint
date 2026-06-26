@@ -48,15 +48,17 @@ export component TxtEdit inherits Rectangle {
     forward-focus: edit;
     border-radius: Theme.border-radius;
     border-width: edit.has-focus && !read-only ? Theme.default-border-width * 2 : Theme.default-border-width;
-    border-color: edit.has-focus && !read-only ? Theme.thirdly-brand-color : (read-only ? Theme.regular-text-color : Theme.base-border-color);
+    border-color: self.default-border-color;
 
+    in-out property <bool> enabled: true;
     in-out property <string> placeholder;
     in-out property <length> inner-padding: Theme.padding * 2;
     in-out property text <=> edit.text;
     in-out property font-size <=> edit.font-size;
     in-out property text-color <=> edit.color;
-    in-out property read-only <=> edit.read-only;
+    in-out property <bool> read-only;
     out property <bool> has-focus: edit.has-focus;
+    out property <color> default-border-color: !root.enabled ? Theme.base-border-color : (edit.has-focus && !read-only ? Theme.thirdly-brand-color : (read-only ? Theme.regular-text-color : Theme.base-border-color));
 
     callback edited(text: string);
     callback key-pressed <=> edit.key-pressed;
@@ -91,8 +93,9 @@ export component TxtEdit inherits Rectangle {
             edit := TextInput {
                 single-line: false;
                 wrap: word-wrap;
-                color: root.has-focus || self.read-only ? Theme.primary-text-color : Theme.regular-text-color;
+                color: root.enabled && !root.read-only ? Theme.primary-text-color : Theme.disabled-color;
                 font-size: Theme.default-font-size;
+                read-only: root.read-only || !root.enabled;
 
                 edited() => {
                     ensure-show-cursor();

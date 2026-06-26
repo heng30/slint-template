@@ -9,26 +9,29 @@ export component ReadonlySoundWaveForm inherits Rectangle {
     in-out property <bool> show-center-line;
     in-out property <color> center-line-color: Theme.divider-color;
     in-out property <color> sample-color: Theme.divider-color;
+    in-out property <float> amplitude-scale: 1.0;
 
-    if is-mono: HorizontalLayout {
+    if is-mono: Rectangle {
         private property <length> sample-width: root.width / max(1, root.data.length);
 
-        for value in root.data: Rectangle {
-            y: root.height * (1 - abs(value));
-            width: parent.sample-width;
-            height: root.height * abs(value);
+        for index in root.data.length: Rectangle {
+            x: index * parent.sample-width;
+            y: root.height * (1 - min(1.0, abs(root.data[index]) * root.amplitude-scale));
+            width: max(parent.sample-width, 1px);
+            height: root.height * min(1.0, abs(root.data[index]) * root.amplitude-scale);
             background: root.sample-color;
         }
     }
 
-    if !is-mono: HorizontalLayout {
+    if !is-mono: Rectangle {
         private property <length> sample-width: root.width / max(1, root.data.length / 2);
 
         for index in root.data.length / 2: Rectangle {
-            private property <float> left-value: abs(root.data[index * 2]);
-            private property <float> right-value: abs(root.data[index * 2 + 1]);
+            private property <float> left-value: min(1.0, abs(root.data[index * 2]) * root.amplitude-scale);
+            private property <float> right-value: min(1.0, abs(root.data[index * 2 + 1]) * root.amplitude-scale);
 
-            width: parent.sample-width;
+            x: index * parent.sample-width;
+            width: max(parent.sample-width, 1px);
 
             Rectangle {
                 y: root.height / 2 - self.height;

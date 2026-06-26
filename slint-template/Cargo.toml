@@ -35,8 +35,8 @@ serde = { workspace = true, features = ["serde_derive"] }
 cutil = { workspace = true, features = ["str", "time", "number", "fs"] }
 
 [target.'cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))'.dependencies]
+arboard.workspace = true
 tempfile.workspace = true
-clipboard.workspace = true
 env_logger.workspace = true
 native-dialog.workspace = true
 platform-dirs.workspace = true

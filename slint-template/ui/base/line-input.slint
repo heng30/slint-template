@@ -204,6 +204,7 @@ export component ClickAndEditLabel inherits Rectangle {
     in-out property <length> font-size: Theme.default-font-size;
     in-out property <color> text-color: Theme.regular-text-color;
     in-out property <bool> disabled-click-enter-edit-mode;
+    in-out property <bool> enabled-double-click-enter-edit-mode;
     in-out property wrap <=> lb.wrap;
     in-out property enabled <=> lb.enabled;
     in-out property overflow <=> lb.overflow;
@@ -215,6 +216,7 @@ export component ClickAndEditLabel inherits Rectangle {
     callback accepted(text: string);
     callback edited(text: string);
     callback clicked();
+    callback double-clicked();
     callback escape();
 
     changed text => {
@@ -261,13 +263,26 @@ export component ClickAndEditLabel inherits Rectangle {
                 enabled: root.enabled && !disabled-click-enter-edit-mode;
                 mouse-cursor: MouseCursor.pointer;
 
-                clicked => {
+                function enter-edit-mode() {
                     inner-is-edit = true;
 
                     if (inner-is-edit) {
                         li.focus();
                     }
+                }
+
+                clicked => {
+                    if (!enabled-double-click-enter-edit-mode) {
+                        enter-edit-mode();
+                    }
                     root.clicked();
+                }
+
+                double-clicked => {
+                    if (enabled-double-click-enter-edit-mode) {
+                        enter-edit-mode();
+                    }
+                    root.double-clicked();
                 }
             }
         }

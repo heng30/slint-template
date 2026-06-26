@@ -11,23 +11,16 @@ import { TextBtn } from "btn.slint";
 // }
 
 export component TabBtns inherits Rectangle {
-    in-out property <[{icon: image, text: string}]> items;
+    in-out property <[{ icon: image, text: string }]> items;
     in-out property <length> font-size: Theme.default-font-size;
     in-out property <bool> enable: true;
 
-    private property <length> next-pos-x;
     private property <length> btn-height;
     private property <length> btn-width;
     private property <length> btn-pos-x;
     private property <length> btn-pos-y;
-
-    private property <bool> is-init: true;
-    private property <int> selected-index: 0;
-
-    background: Theme.secondary-background;
-    border-radius: Theme.border-radius;
-    width: next-pos-x + Theme.padding;
-    height: btn-height + Theme.padding * 2;
+    private property <int> selected-index;
+    private property <bool> init-delay-flag;
 
     callback clicked(index: int);
 
@@ -35,8 +28,21 @@ export component TabBtns inherits Rectangle {
         selected-index = index;
     }
 
+    background: Theme.secondary-background;
+    border-radius: Theme.border-radius;
+    width: hbox.preferred-width;
+    height: hbox.preferred-height;
+
+    Timer {
+        interval: 100ms;
+        running: true;
+        triggered() => {
+            self.running = false;
+            init-delay-flag = !init-delay-flag;
+        }
+    }
+
     Rectangle {
-        opacity: is-init ? 0 : 1;
         x: btn-pos-x;
         y: btn-pos-y;
         width: btn-width;
@@ -50,60 +56,48 @@ export component TabBtns inherits Rectangle {
         }
     }
 
-    if is-init: Rectangle {
-        x: btn-pos-x;
-        y: btn-pos-y;
-        width: btn-width;
-        height: btn-height;
-        background: Theme.base-background;
-        border-radius: Theme.border-radius;
-    }
+    hbox := HorizontalLayout {
+        padding: Theme.padding;
 
-    for item[index] in items: Rectangle {
-        width: btn.preferred-width;
-        height: btn.preferred-height;
-        border-radius: Theme.border-radius;
+        for item[index] in items: Rectangle {
+            width: btn.preferred-width;
+            height: btn.preferred-height;
+            border-radius: Theme.border-radius;
 
-        private property <int> inner-selected-index <=> root.selected-index;
-
-        changed inner-selected-index => {
-            if (selected-index == index) {
-                self.update-btn();
+            private property <int> inner-selected-index <=> root.selected-index;
+            changed inner-selected-index => {
+                if (selected-index == index) {
+                    self.update-btn();
+                }
             }
-        }
 
-        function update-btn() {
-            btn-width = btn.preferred-width;
-            btn-height = Math.max(btn-height, btn.preferred-height);
-            btn-pos-x = self.x + Theme.padding;
-            btn-pos-y = self.y;
-        }
-
-        init => {
-            if (index == 0) {
-                next-pos-x = 0;
+            private property inner-init-delay-flag <=> init-delay-flag;
+            changed inner-init-delay-flag => {
+                if (index == root.selected-index) {
+                    self.update-btn();
+                }
             }
-            self.x = next-pos-x;
-            next-pos-x = self.x + btn.preferred-width + Theme.padding;
 
-            if (index == selected-index) {
-                update-btn();
+            function update-btn() {
+                btn-width = self.preferred-width - Theme.spacing * 2;
+                btn-height = Math.max(btn-height, self.preferred-height);
+                btn-pos-x = self.x + Theme.padding;
+                btn-pos-y = self.y;
             }
-        }
 
-        btn := TextBtn {
-            icon: item.icon;
-            text: item.text;
-            font-size: root.font-size;
-            icon-size: self.font-size;
-            enabled-toucharea: root.enable;
-            colorize: selected-index == index ? (Theme.is-dark ? Theme.light-text-color : Theme.primary-text-color) : Theme.have-read-text-color;
+            btn := TextBtn {
+                icon: item.icon;
+                text: item.text;
+                font-size: root.font-size;
+                icon-size: self.font-size;
+                enabled-toucharea: root.enable;
+                colorize: selected-index == index ? (Theme.is-dark ? Theme.light-text-color : Theme.primary-text-color) : Theme.have-read-text-color;
 
-            clicked => {
-                selected-index = index;
-                root.clicked(index);
-                root.is-init = false;
-                update-btn();
+                clicked => {
+                    selected-index = index;
+                    root.clicked(index);
+                    update-btn();
+                }
             }
         }
     }

@@ -73,7 +73,7 @@ export component IconBtn inherits Rectangle {
 
     // only is a icon showing this hover color
     if (text == "" && show-icon-hover-background): Rectangle {
-        x: img.x - root.hover-background-padding - (Math.max(Theme.icon-size, root.icon-size) - img.width) / 2;
+        // x: img.x - root.hover-background-padding - (Math.max(Theme.icon-size, root.icon-size) - img.width) / 2;
         width: Math.max(Theme.icon-size, root.icon-size) + root.hover-background-padding * 2;
         height: self.width;
         border-radius: self.width / 2;

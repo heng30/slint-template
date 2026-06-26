@@ -65,9 +65,10 @@ export component SideBar inherits Rectangle {
 
             for entry[top-index] in root.entries: VerticalLayout {
                 SettingEntryV2 {
-                    width: fl.width;
                     private property <bool> is-checked: root.selected-key != "" && root.selected-key == entry.key;
 
+                    width: fl.width;
+                    height: self.preferred-height;
                     text: entry.category;
                     font-size: root.category-font-size;
                     font-weight: root.category-font-weight;
@@ -104,6 +105,8 @@ export component SideBar inherits Rectangle {
                     child-vbox := VerticalLayout {
                         for item[index] in entry.children: SettingEntryV2 {
                             private property <bool> is-checked: root.selected-key != "" && root.selected-key == item.key;
+
+                            height: self.preferred-height;
                             text: item.title;
                             font-size: root.child-font-size;
                             background: self.is-checked ? Theme.checked-background : self.has-hover ? Theme.hover-background : Colors.transparent;

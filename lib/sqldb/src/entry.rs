@@ -1,14 +1,15 @@
 use super::{ComEntry, pool};
 use anyhow::Result;
+use sqlx::AssertSqlSafe;
 
 pub async fn new(table: &str) -> Result<()> {
-    sqlx::query(&format!(
+    sqlx::query(AssertSqlSafe(format!(
         "CREATE TABLE IF NOT EXISTS {table} (
              id INTEGER PRIMARY KEY,
              uuid TEXT NOT NULL UNIQUE,
              data TEXT NOT NULL
              )"
-    ))
+    )))
     .execute(&pool().await)
     .await?;
 
@@ -16,7 +17,7 @@ pub async fn new(table: &str) -> Result<()> {
 }
 
 pub async fn delete(table: &str, uuid: &str) -> Result<()> {
-    sqlx::query(&format!("DELETE FROM {table} WHERE uuid=?"))
+    sqlx::query(AssertSqlSafe(format!("DELETE FROM {table} WHERE uuid=?")))
         .bind(uuid)
         .execute(&pool().await)
         .await?;
@@ -24,14 +25,14 @@ pub async fn delete(table: &str, uuid: &str) -> Result<()> {
 }
 
 pub async fn delete_all(table: &str) -> Result<()> {
-    sqlx::query(&format!("DELETE FROM {table}"))
+    sqlx::query(AssertSqlSafe(format!("DELETE FROM {table}")))
         .execute(&pool().await)
         .await?;
     Ok(())
 }
 
 pub async fn insert(table: &str, uuid: &str, data: &str) -> Result<()> {
-    sqlx::query(&format!("INSERT INTO {table} (uuid, data) VALUES (?, ?)"))
+    sqlx::query(AssertSqlSafe(format!("INSERT INTO {table} (uuid, data) VALUES (?, ?)")))
         .bind(uuid)
         .bind(data)
         .execute(&pool().await)
@@ -40,9 +41,9 @@ pub async fn insert(table: &str, uuid: &str, data: &str) -> Result<()> {
 }
 
 pub async fn upsert(table: &str, uuid: &str, data: &str) -> Result<()> {
-    sqlx::query(&format!(
+    sqlx::query(AssertSqlSafe(format!(
         "INSERT OR REPLACE INTO {table} (uuid, data) VALUES (?, ?)"
-    ))
+    )))
     .bind(uuid)
     .bind(data)
     .execute(&pool().await)
@@ -51,7 +52,7 @@ pub async fn upsert(table: &str, uuid: &str, data: &str) -> Result<()> {
 }
 
 pub async fn update(table: &str, uuid: &str, data: &str) -> Result<()> {
-    sqlx::query(&format!("UPDATE {table} SET data=? WHERE uuid=?"))
+    sqlx::query(AssertSqlSafe(format!("UPDATE {table} SET data=? WHERE uuid=?")))
         .bind(data)
         .bind(uuid)
         .execute(&pool().await)
@@ -62,7 +63,7 @@ pub async fn update(table: &str, uuid: &str, data: &str) -> Result<()> {
 
 pub async fn select(table: &str, uuid: &str) -> Result<ComEntry> {
     Ok(
-        sqlx::query_as::<_, ComEntry>(&format!("SELECT * FROM {table} WHERE uuid=?"))
+        sqlx::query_as::<_, ComEntry>(AssertSqlSafe(format!("SELECT * FROM {table} WHERE uuid=?")))
             .bind(uuid)
             .fetch_one(&pool().await)
             .await?,
@@ -71,14 +72,14 @@ pub async fn select(table: &str, uuid: &str) -> Result<ComEntry> {
 
 pub async fn select_all(table: &str) -> Result<Vec<ComEntry>> {
     Ok(
-        sqlx::query_as::<_, ComEntry>(&format!("SELECT * FROM {table}"))
+        sqlx::query_as::<_, ComEntry>(AssertSqlSafe(format!("SELECT * FROM {table}")))
             .fetch_all(&pool().await)
             .await?,
     )
 }
 
 pub async fn row_counts(table: &str) -> Result<i64> {
-    let count: (i64,) = sqlx::query_as(&format!("SELECT COUNT(*) FROM {table}"))
+    let count: (i64,) = sqlx::query_as(AssertSqlSafe(format!("SELECT COUNT(*) FROM {table}")))
         .fetch_one(&pool().await)
         .await?;
 

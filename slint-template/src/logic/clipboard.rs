@@ -1,9 +1,8 @@
 use super::tr::tr;
 use crate::{global_logic, slint_generatedAppWindow::AppWindow, toast_success, toast_warn};
-use anyhow::{Result, bail};
+use anyhow::Result;
 use slint::ComponentHandle;
 
-#[cfg(feature = "desktop")]
 fn copy_to_clipboard(msg: &str) -> Result<()> {
     #[cfg(target_os = "linux")]
     {
@@ -12,19 +11,11 @@ fn copy_to_clipboard(msg: &str) -> Result<()> {
         }
     }
 
-    use clipboard::{ClipboardContext, ClipboardProvider};
-    let ctx: Result<ClipboardContext, _> = ClipboardProvider::new();
-
-    match ctx {
-        Ok(mut ctx) => match ctx.set_contents(msg.to_string()) {
-            Err(e) => bail!("{e:?}"),
-            _ => Ok(()),
-        },
-        Err(e) => bail!("{e:?}"),
-    }
+    let mut ctx = arboard::Clipboard::new()?;
+    ctx.set_text(msg)?;
+    Ok(())
 }
 
-#[cfg(feature = "desktop")]
 fn paste_from_clipboard() -> Result<String> {
     #[cfg(target_os = "linux")]
     {
@@ -35,16 +26,8 @@ fn paste_from_clipboard() -> Result<String> {
         }
     }
 
-    use clipboard::{ClipboardContext, ClipboardProvider};
-    let ctx: Result<ClipboardContext, _> = ClipboardProvider::new();
-
-    match ctx {
-        Ok(mut ctx) => match ctx.get_contents() {
-            Err(e) => bail!("{e:?}"),
-            Ok(msg) => Ok(msg),
-        },
-        Err(e) => bail!("{e:?}"),
-    }
+    let mut ctx = arboard::Clipboard::new()?;
+    Ok(ctx.get_text()?)
 }
 
 #[cfg(feature = "android")]

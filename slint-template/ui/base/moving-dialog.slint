@@ -46,6 +46,8 @@ export component MovingDialog inherits Rectangle {
         minimal => {
             root.header-width = sb.minimal-bar-width;
             root.show-body = !root.show-body;
+            head-x = head-x.max(0);
+            head-y = head-y.max(0);
             root.minimal();
         }
     }
