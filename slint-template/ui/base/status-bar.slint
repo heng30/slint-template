@@ -28,7 +28,7 @@ export component StatusBar inherits Rectangle {
 
     private property <length> min-title-icon-width;
     private property <length> min-ctrl-btns-width;
-    in-out property <length> minimal-bar-width: min-title-icon-width + min-ctrl-btns-width + Theme.spacing * 10;
+    in-out property <length> minimal-bar-width: hbox.preferred-width;
 
     in-out property <bool> is-show-icon;
     in-out property <image> icon;
@@ -91,10 +91,10 @@ export component StatusBar inherits Rectangle {
         }
     }
 
-    HorizontalLayout {
+    hbox := HorizontalLayout {
+        spacing: Theme.spacing * 4;
         padding-left: Theme.padding * 2;
         padding-right: Theme.padding * 2;
-
         alignment: root.is-show-icon ? LayoutAlignment.space-between : LayoutAlignment.end;
 
         if root.is-show-icon: HorizontalLayout {
