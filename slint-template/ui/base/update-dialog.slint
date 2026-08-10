@@ -1,0 +1,99 @@
+import { Dialog } from "./dialog.slint";
+import { Theme } from "theme.slint";
+import { Logic } from "../logic.slint";
+import { Label } from "./label.slint";
+import { SingleCollapse } from "./collapse.slint";
+import { CheckBtn } from "./check-btn.slint";
+import { ScrollView } from "std-widgets.slint";
+
+export component UpdateDialog inherits Rectangle {
+    in-out property <string> app-name;
+    in-out property <string> current-version;
+    in-out property <string> latest-version;
+    in-out property <string> update-content;
+    in-out property <bool> dont-ask-again;
+    in-out property <string> title: Logic.tr("New version available");
+    in-out property <string> collapse-title: Logic.tr("Update content");
+    in-out property <string> cancel-text <=> dlg.cancel-text;
+    in-out property <string> confirm-text <=> dlg.confirm-text;
+    in-out property <image> confirm-icon <=> dlg.confirm-icon;
+
+    callback canceled <=> dlg.canceled;
+    callback confirmed <=> dlg.confirmed;
+    callback escape <=> dlg.escape;
+
+    width: dlg.width;
+    height: dlg.height;
+
+    dlg := Dialog {
+        title: root.title;
+        is-prevent-event-forward: true;
+
+        VerticalLayout {
+            alignment: start;
+            padding: Theme.padding * 4;
+            spacing: Theme.spacing * 4;
+
+            Label {
+                text: root.app-name + " " + Logic.tr("has a new version available");
+                color: Theme.primary-text-color;
+                font-size: Theme.title1-font-size;
+                font-weight: Theme.bold-font-weight;
+            }
+
+            HorizontalLayout {
+                alignment: start;
+                spacing: Theme.spacing * 4;
+
+                Label {
+                    text: Logic.tr("Current version") + " " + root.current-version;
+                }
+
+                Label {
+                    text: "|";
+                }
+
+                Label {
+                    color: Theme.success-color;
+                    font-size: Theme.title4-font-size;
+                    font-weight: Theme.bold-font-weight;
+                    text: Logic.tr("Latest version") + " " + root.latest-version;
+                }
+            }
+
+            if !root.update-content.is-empty: VerticalLayout {
+                spacing: Theme.spacing * 2;
+
+                sc := SingleCollapse {
+                    title: root.collapse-title;
+                    is-open: false;
+                }
+
+                if sc.is-open: ScrollView {
+                    height: min(vbox.preferred-height, Theme.default-font-size * 20);
+                    viewport-height: vbox.preferred-height;
+
+                    Rectangle {
+                        background: Theme.secondary-background;
+                        border-radius: Theme.border-radius;
+
+                        vbox := VerticalLayout {
+                            padding: Theme.padding * 2;
+                            padding-right: Theme.padding * 4;
+
+                            Label {
+                                wrap: word-wrap;
+                                text: root.update-content;
+                            }
+                        }
+                    }
+                }
+            }
+
+            CheckBtn {
+                text: Logic.tr("Don't remind again");
+                checked <=> root.dont-ask-again;
+            }
+        }
+    }
+}

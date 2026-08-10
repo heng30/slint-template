@@ -17,6 +17,7 @@ export component Dialog inherits Rectangle {
     in-out property <bool> gain-focus-when-clicked: true;
     in-out property <string> cancel-text: Logic.tr("Cancel");
     in-out property <string> confirm-text: Logic.tr("Confirm");
+    in-out property <image> confirm-icon: Icons.success-light;
 
     callback close <=> cancel-clicked;
     callback canceled <=> cancel-clicked;
@@ -104,6 +105,7 @@ export component Dialog inherits Rectangle {
 
                 if !is-hide-confirm-btn: ConfirmBtn {
                     text: root.confirm-text;
+                    icon: root.confirm-icon;
                     gain-focus-when-clicked: root.gain-focus-when-clicked;
 
                     clicked => {

@@ -29,6 +29,8 @@ export component Select inherits Rectangle {
     in-out property <length> vpadding: Theme.padding * 2;
     in-out property <length> spacing: Theme.spacing * 2;
     in-out property <bool> gain-focus-when-clicked: true;
+    in-out property <bool> is-show-indicator: true;
+    in-out property <length> indicator-left-padding: Theme.padding * 2;
     out property has-focus <=> fs.has-focus;
 
     private property <bool> is-indicator-down;
@@ -53,7 +55,7 @@ export component Select inherits Rectangle {
         padding-right: root.hpadding;
         padding-top: root.vpadding;
         padding-bottom: root.vpadding;
-        spacing: Theme.spacing * 2;
+        spacing: indicator-left-padding;
 
         lb := Label {
             enabled: root.enabled;
@@ -62,10 +64,10 @@ export component Select inherits Rectangle {
             overflow: elide;
         }
 
-        Image {
+        if is-show-indicator: Image {
             height: lb.preferred-height;
             width: self.height;
-            source: is-indicator-down ? Icons.arrow-down-light : (fs.has-focus ? Icons.arrow-down-light : Icons.arrow-up-light);
+            source: is-indicator-down ? Icons.arrow-down-light : Icons.arrow-up-light;
             colorize: lb.color;
         }
     }

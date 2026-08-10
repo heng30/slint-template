@@ -23,8 +23,8 @@ export component FlickableWithScrollBar inherits Rectangle {
     in-out property <length> spacing: Theme.spacing;
     in-out property <length> scrollbar-size: Theme.scrollbar-size;
     in-out property <length> scrollbar-border-radius: scrollbar-size / 2;
-    in-out property <color> scrollbar-color: Theme.is-dark ? Theme.hover-background.brighter(50%) : Theme.hover-background.darker(50%);
-    in-out property <color> scrollbar-background: Theme.is-dark ? Theme.hover-background : Theme.hover-background.darker(10%);
+    in-out property <color> scrollbar-color: Theme.scrollbar-color;
+    in-out property <color> scrollbar-background: Theme.scrollbar-background;
     out property <length> visible-width: self.width - (is-show-scrollbar-inner-v ? self.scrollbar-size + Theme.spacing : 0);
     out property <length> visible-height: self.height - (is-show-scrollbar-inner-h ? self.scrollbar-size + Theme.spacing : 0);
 
