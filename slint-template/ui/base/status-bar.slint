@@ -14,6 +14,7 @@ export component StatusBar inherits Rectangle {
     in-out property <bool> disable-maximal: false;
     in-out property <bool> is-app-window-bar: true;
     in-out property <bool> disable-window-ctrl-btns;
+    in-out property <bool> draggable: true;
 
     in-out property <bool> hide-maximal-ctrl-btns;
     in-out property <bool> hide-minimal-ctrl-btns;
@@ -52,13 +53,19 @@ export component StatusBar inherits Rectangle {
     callback close();
     callback start-moving();
     callback stop-moving();
+    callback clicked();
+    callback top-z();
 
     background: Theme.secondary-background;
     height: Theme.header-height;
 
-    if !disable-window-ctrl-btns: TouchArea {
+    TouchArea {
+        clicked => {
+            root.clicked();
+        }
+
         moved => {
-            if (!root.enable-move) {
+            if (!root.draggable || !root.enable-move) {
                 return;
             }
             if (root.is-app-window-bar) {
@@ -81,20 +88,26 @@ export component StatusBar inherits Rectangle {
         pointer-event(event) => {
             if (event.button == PointerEventButton.left) {
                 if (event.kind == PointerEventKind.down) {
-                    root.enable-move = true;
-                    root.start-moving();
+                    root.top-z();
+
+                    if (root.draggable) {
+                        root.enable-move = true;
+                        root.start-moving();
+                    }
                 } else {
-                    root.enable-move = false;
-                    root.stop-moving();
+                    if (root.draggable) {
+                        root.enable-move = false;
+                        root.stop-moving();
+                    }
                 }
             }
         }
     }
 
     hbox := HorizontalLayout {
-        spacing: Theme.spacing * 4;
         padding-left: Theme.padding * 2;
         padding-right: Theme.padding * 2;
+        spacing: Theme.spacing * 4;
         alignment: root.is-show-icon ? LayoutAlignment.space-between : LayoutAlignment.end;
 
         if root.is-show-icon: HorizontalLayout {

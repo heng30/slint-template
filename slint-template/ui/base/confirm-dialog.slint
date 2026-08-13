@@ -33,7 +33,8 @@ export component ConfirmDialog inherits Rectangle {
     border-width: Theme.default-border-width;
     border-color: Theme.base-border-color;
 
-    in-out property <bool> is-prevent-event-forward: false;
+    in-out property <bool> is-prevent-event-forward;
+    in-out property <bool> gain-focus-when-clicked: true;
     in-out property <string> title: ConfirmDialogSetting.title-text;
     in-out property vbox-preferred-width <=> vbox.preferred-width;
 
@@ -63,6 +64,7 @@ export component ConfirmDialog inherits Rectangle {
 
             CancelBtn {
                 text: Logic.tr("Cancel");
+                gain-focus-when-clicked: root.gain-focus-when-clicked;
 
                 clicked => {
                     ConfirmDialogSetting.show = false;
@@ -71,6 +73,7 @@ export component ConfirmDialog inherits Rectangle {
 
             ConfirmBtn {
                 text: Logic.tr("Confirm");
+                gain-focus-when-clicked: root.gain-focus-when-clicked;
 
                 clicked => {
                     Util.handle-confirm-dialog(ConfirmDialogSetting.handle-type, ConfirmDialogSetting.user-data);

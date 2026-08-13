@@ -64,7 +64,7 @@ export component SettingEntryV2 inherits Rectangle {
     in-out property <bool> is-show-right-icon;
     in-out property <image> right-icon: Icons.star-fill;
     in-out property <color> right-icon-colorize: label.color;
-    in-out property <length> right-icon-size;
+    in-out property <length> right-icon-size: Theme.icon-size;
 
     in-out property <bool> is-show-right-text;
     in-out property <string> right-text;
@@ -76,6 +76,8 @@ export component SettingEntryV2 inherits Rectangle {
 
     callback clicked();
     callback clicked-right-icon();
+
+    preferred-height: hbox.preferred-height;
 
     fs := FocusScope { }
 

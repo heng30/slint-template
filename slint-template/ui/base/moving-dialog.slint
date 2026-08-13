@@ -2,6 +2,19 @@ import { Theme, Icons } from "theme.slint";
 import { DialogStatusBar } from "status-bar.slint";
 import { SettingDetailInner } from "setting-detail.slint";
 
+export global MovingDialogSetting {
+    private property <int> current-top-z;
+
+    public function inc-fetch-z() -> int {
+        self.current-top-z += 1;
+        return self.current-top-z;
+    }
+
+    pure public function fetch-z() -> int {
+        return self.current-top-z;
+    }
+}
+
 export component MovingDialog inherits Rectangle {
     private property <bool> show-body: true;
     in-out property title <=> sb.title;
@@ -26,6 +39,7 @@ export component MovingDialog inherits Rectangle {
 
     init => {
         root.normal-header-width = root.header-width;
+        self.z = MovingDialogSetting.inc-fetch-z();
     }
 
     sb := DialogStatusBar {
@@ -36,6 +50,10 @@ export component MovingDialog inherits Rectangle {
         container-height: root.height;
         hide-maximal-ctrl-btns: root.show-body;
         hide-minimal-ctrl-btns: !root.show-body;
+
+        top-z => {
+            root.z = MovingDialogSetting.inc-fetch-z();
+        }
 
         maximal => {
             root.header-width = root.normal-header-width;
@@ -68,11 +86,23 @@ export component MovingDialog inherits Rectangle {
             border-color: Theme.base-border-color;
             height: vbox.preferred-height;
 
-            TouchArea { }
+            TouchArea {
+                clicked => {
+                    root.z = MovingDialogSetting.inc-fetch-z();
+                }
+            }
 
             vbox := VerticalLayout {
                 padding: parent.border-width;
                 @children
+            }
+
+            TouchArea {
+                enabled: root.z < MovingDialogSetting.fetch-z();
+
+                clicked => {
+                    root.z = MovingDialogSetting.inc-fetch-z();
+                }
             }
 
             if enable-resize: Rectangle {
@@ -108,6 +138,10 @@ export component MovingDialog inherits Rectangle {
 
                 resize-ta := TouchArea {
                     mouse-cursor: MouseCursor.se-resize;
+
+                    clicked => {
+                        root.z = MovingDialogSetting.inc-fetch-z();
+                    }
 
                     moved => {
                         let offset-x = self.mouse-x - self.pressed-x;

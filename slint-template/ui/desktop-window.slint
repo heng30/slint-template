@@ -51,6 +51,7 @@ export component AppWindow inherits Window {
 
     if ConfirmDialogSetting.show: ConfirmDialog {
         is-prevent-event-forward: true;
+        gain-focus-when-clicked: false;
         width: Math.min(root.width * 0.9, self.vbox-preferred-width * 2);
     }
 
@@ -89,4 +90,14 @@ export component AppWindow inherits Window {
     }
 }
 
-export { Util, Logic, Store, Theme, Icons, AboutSetting, PopupActionSetting, ToastSetting, ConfirmDialogSetting }
+export {
+    Util,
+    Logic,
+    Store,
+    Theme,
+    Icons,
+    AboutSetting,
+    PopupActionSetting,
+    ToastSetting,
+    ConfirmDialogSetting,
+}

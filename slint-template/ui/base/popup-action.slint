@@ -4,6 +4,7 @@ import { Util } from "util.slint";
 import { Label } from "label.slint";
 import { SettingEntryV2 } from "setting-entry.slint";
 import { Divider } from "divider.slint";
+import { Icons } from "icon.slint";
 
 // Example:
 // Rectangle {
@@ -23,6 +24,16 @@ import { Divider } from "divider.slint";
 //     }
 // }
 
+export struct PopupActionSubEntry {
+    disable: bool,
+    icon: image,
+    icon-rotation: angle,
+    text: string,
+    shotcut: string,
+    action: string,
+    user-data: string,
+}
+
 export struct PopupActionEntry {
     disable: bool,
     icon: image,
@@ -31,6 +42,8 @@ export struct PopupActionEntry {
     shotcut: string,
     action: string,
     user-data: string,
+    sub-in-left: bool,
+    sub-entries: [PopupActionSubEntry],
 }
 
 export global PopupActionSetting {
@@ -65,6 +78,12 @@ export component PopupAction inherits Rectangle {
 
     in-out property <bool> gain-focus-when-clicked;
 
+    private property <bool> is-show-sub-popup-actions;
+    private property <bool> sub-in-left;
+    private property <length> sub-popup-actions-x;
+    private property <length> sub-popup-actions-y;
+    private property <[PopupActionSubEntry]> current-sub-entries;
+
     pure function calc-x() -> length {
         return Math.clamp(PopupActionSetting.pressed-absolute-x + Theme.padding * 2, Theme.padding * 2, root.window-width - rect.width - Theme.padding * 2);
     }
@@ -76,6 +95,20 @@ export component PopupAction inherits Rectangle {
     fs := FocusScope { }
 
     TouchArea {
+        function in-bounding-box(x: length, y: length, w: length, h: length, margin: length) -> bool {
+            return self.mouse-x > x - margin && self.mouse-x < x + w + margin && self.mouse-y > y - margin && self.mouse-y < y + h + margin;
+        }
+
+        changed mouse-x => {
+            if is-show-sub-popup-actions {
+                let in-rect-bbox = in-bounding-box(rect.x, rect.y, rect.width, rect.height, Theme.padding * 4);
+                let in-sub-rect-bbox = in-bounding-box(sub-rect.x, sub-rect.y, sub-rect.width, sub-rect.height, Theme.padding * 4);
+                if !(in-rect-bbox || in-sub-rect-bbox) {
+                    is-show-sub-popup-actions = false;
+                }
+            }
+        }
+
         clicked => {
             if (gain-focus-when-clicked) {
                 fs.focus();
@@ -112,9 +145,95 @@ export component PopupAction inherits Rectangle {
                     text: entry.text;
                     vpadding: root.item-padding;
                     icon-rotation: entry.icon-rotation;
+                    right-text: entry.sub-entries.length == 0 ? entry.shotcut : "";
+                    right-text-font-size: self.font-size * Theme.golden-ratio;
+                    right-icon: Icons.arrow-right-light;
+                    right-icon-size: Theme.icon-size * 0.8;
+                    is-show-right-icon: entry.sub-entries.length > 0;
+                    is-show-right-text: !self.right-text.is-empty;
+                    font-size: root.font-size;
+                    icon-size: root.icon-size;
+                    icon-colorize: entry.disable ? Theme.disabled-color : root.icon-colorize;
+                    mouse-cursor: entry.disable ? MouseCursor.not-allowed : MouseCursor.pointer;
+                    background: entry.disable ? transparent : (self.has-hover ? Theme.secondary-background : Colors.transparent);
+                    gain-focus-when-clicked: gain-focus-when-clicked;
+
+                    changed has-hover => {
+                        if entry.disable {
+                            is-show-sub-popup-actions = false;
+                            return;
+                        }
+                        if self.has-hover {
+                            if entry.sub-in-left {
+                                // 先记录下父节点的位置，后续子节点再计算最终位置
+                                sub-popup-actions-x = rect.x;
+                            } else {
+                                sub-popup-actions-x = rect.x + rect.width;
+                            }
+
+                            sub-in-left = entry.sub-in-left;
+                            sub-popup-actions-y = rect.y + parent.y;
+                            is-show-sub-popup-actions = true;
+                            current-sub-entries = entry.sub-entries;
+                        }
+                    }
+
+                    clicked => {
+                        if (entry.disable) {
+                            return;
+                        }
+                        PopupActionSetting.hide();
+                        PopupActionSetting.action(entry.action, entry.user-data);
+                    }
+                }
+
+                if entry.text.is-empty: HorizontalLayout {
+                    padding-left: Theme.padding * 2;
+                    padding-right: Theme.padding * 2;
+
+                    Rectangle {
+                        height: Theme.default-border-width;
+                        background: Theme.thirdly-brand-color;
+                    }
+                }
+
+                if index != PopupActionSetting.actions.length - 1 && !entry.text.is-empty && !next-entries-is-empty:  HorizontalLayout {
+                    padding-left: Theme.padding * 2;
+                    padding-right: Theme.padding * 2;
+                    Divider { }
+                }
+            }
+        }
+    }
+
+    sub-rect := Rectangle {
+        visible: is-show-sub-popup-actions && current-sub-entries.length > 0;
+        x: sub-in-left ? sub-popup-actions-x - self.width : sub-popup-actions-x;
+        y: sub-popup-actions-y;
+        width: sub-vbox.preferred-width + Theme.spacing * 2;
+        height: sub-vbox.preferred-height + Theme.padding * 2;
+        background: Theme.base-background;
+        border-color: Theme.base-border-color;
+        border-width: 1px;
+        border-radius: Theme.border-radius;
+
+        sub-vbox := VerticalLayout {
+            alignment: LayoutAlignment.center;
+            width: self.preferred-width;
+            height: self.preferred-height;
+            spacing: vbox.spacing;
+
+            for entry[index] in current-sub-entries: VerticalLayout {
+                private property <bool> next-entries-is-empty: index + 1 < PopupActionSetting.actions.length ? PopupActionSetting.actions[index + 1].text.is-empty : true;
+
+                if !entry.text.is-empty: SettingEntryV2 {
+                    icon: entry.icon;
+                    text: entry.text;
+                    vpadding: root.item-padding;
+                    icon-rotation: entry.icon-rotation;
                     right-text: entry.shotcut;
                     right-text-font-size: self.font-size * Theme.golden-ratio;
-                    is-show-right-text: !entry.shotcut.is-empty;
+                    is-show-right-text: !self.right-text.is-empty;
                     font-size: root.font-size;
                     icon-size: root.icon-size;
                     icon-colorize: entry.disable ? Theme.disabled-color : root.icon-colorize;
@@ -141,7 +260,7 @@ export component PopupAction inherits Rectangle {
                     }
                 }
 
-                if index != PopupActionSetting.actions.length - 1 && !entry.text.is-empty && !next-entries-is-empty:  HorizontalLayout {
+                if index != current-sub-entries.length - 1 && !entry.text.is-empty && !next-entries-is-empty:  HorizontalLayout {
                     padding-left: Theme.padding * 2;
                     padding-right: Theme.padding * 2;
                     Divider { }
