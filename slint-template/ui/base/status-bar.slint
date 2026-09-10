@@ -155,6 +155,7 @@ export component StatusBar inherits Rectangle {
                         if (root.is-app-window-bar) {
                             Util.min-window(true);
                         } else {
+                            root.top-z();
                             root.minimal();
                         }
                     }
@@ -182,6 +183,7 @@ export component StatusBar inherits Rectangle {
                                 self.tip = Logic.tr("normal");
                             }
                         } else {
+                            root.top-z();
                             root.maximal();
                         }
                     }

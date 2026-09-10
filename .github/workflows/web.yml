@@ -20,7 +20,7 @@ jobs:
 
       - run: echo "start install Rust..."
       - name: Install Rust
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@stable
       - run: echo "end install Rust..."
 
       - run: echo "start install wasm-pack..."

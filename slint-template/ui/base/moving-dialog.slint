@@ -13,6 +13,11 @@ export global MovingDialogSetting {
     pure public function fetch-z() -> int {
         return self.current-top-z;
     }
+
+    public function dec-fetch-z() -> int {
+        self.current-top-z -= 1;
+        return self.current-top-z;
+    }
 }
 
 export component MovingDialog inherits Rectangle {
@@ -32,10 +37,14 @@ export component MovingDialog inherits Rectangle {
 
     private property <length> normal-header-width: max(header-width, root.min-header-width);
 
-    callback close <=> sb.close;
-    callback resize(offset-x: length, offset-y: length);
+    callback close();
     callback minimal();
     callback maximal();
+    callback resize(offset-x: length, offset-y: length);
+
+    public function inner-close() {
+        sb.close();
+    }
 
     init => {
         root.normal-header-width = root.header-width;
@@ -52,7 +61,9 @@ export component MovingDialog inherits Rectangle {
         hide-minimal-ctrl-btns: !root.show-body;
 
         top-z => {
-            root.z = MovingDialogSetting.inc-fetch-z();
+            if root.z != MovingDialogSetting.fetch-z() {
+                root.z = MovingDialogSetting.inc-fetch-z();
+            }
         }
 
         maximal => {
@@ -67,6 +78,13 @@ export component MovingDialog inherits Rectangle {
             head-x = head-x.max(0);
             head-y = head-y.max(0);
             root.minimal();
+        }
+
+        close => {
+            if root.z == MovingDialogSetting.fetch-z() {
+                MovingDialogSetting.dec-fetch-z();
+            }
+            root.close();
         }
     }
 
@@ -88,7 +106,9 @@ export component MovingDialog inherits Rectangle {
 
             TouchArea {
                 clicked => {
-                    root.z = MovingDialogSetting.inc-fetch-z();
+                    if root.z != MovingDialogSetting.fetch-z() {
+                        root.z = MovingDialogSetting.inc-fetch-z();
+                    }
                 }
             }
 
@@ -101,7 +121,9 @@ export component MovingDialog inherits Rectangle {
                 enabled: root.z < MovingDialogSetting.fetch-z();
 
                 clicked => {
-                    root.z = MovingDialogSetting.inc-fetch-z();
+                    if root.z != MovingDialogSetting.fetch-z() {
+                        root.z = MovingDialogSetting.inc-fetch-z();
+                    }
                 }
             }
 
@@ -140,7 +162,9 @@ export component MovingDialog inherits Rectangle {
                     mouse-cursor: MouseCursor.se-resize;
 
                     clicked => {
-                        root.z = MovingDialogSetting.inc-fetch-z();
+                        if root.z != MovingDialogSetting.fetch-z() {
+                            root.z = MovingDialogSetting.inc-fetch-z();
+                        }
                     }
 
                     moved => {
