@@ -91,7 +91,7 @@ export component IconsDialog inherits Dialog {
 
     flick := Flickable {
         height: root.body-height;
-        viewport-height: (icon-size + icon-spacing) * Math.ceil(IconsDialogSetting.icons.length / column-count) - icon-spacing + Theme.padding * 2;
+        content-height: (icon-size + icon-spacing) * Math.ceil(IconsDialogSetting.icons.length / column-count) - icon-spacing + Theme.padding * 2;
 
         vbox := VerticalLayout {
             padding: Theme.padding;
@@ -138,11 +138,11 @@ export component IconsDialog inherits Dialog {
         }
     }
 
-    cancel-clicked => {
+    close => {
         IconsDialogSetting.show = false;
     }
 
-    ok-clicked => {
+    confirmed => {
         IconsDialogSetting.show = false;
     }
 }

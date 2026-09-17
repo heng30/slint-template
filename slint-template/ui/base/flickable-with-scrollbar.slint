@@ -29,51 +29,51 @@ export component FlickableWithScrollBar inherits Rectangle {
     out property <length> visible-height: self.height - (is-show-scrollbar-inner-h ? self.scrollbar-size + Theme.spacing : 0);
 
     in-out property interactive <=> flick.interactive;
-    in-out property viewport-x <=> flick.viewport-x;
-    in-out property viewport-y <=> flick.viewport-y;
-    in-out property viewport-width <=> flick.viewport-width;
-    in-out property viewport-height <=> flick.viewport-height;
+    in-out property content-x <=> flick.content-x;
+    in-out property content-y <=> flick.content-y;
+    in-out property content-width <=> flick.content-width;
+    in-out property content-height <=> flick.content-height;
 
-    private property <bool> is-show-scrollbar-inner-v: is-show-scrollbar-v && flick.viewport-height > flick.height;
-    private property <bool> is-show-scrollbar-inner-h: is-show-scrollbar-h && flick.viewport-width > flick.width;
+    private property <bool> is-show-scrollbar-inner-v: is-show-scrollbar-v && flick.content-height > flick.height;
+    private property <bool> is-show-scrollbar-inner-h: is-show-scrollbar-h && flick.content-width > flick.width;
 
     callback flicked();
 
     public function scroll-top() {
-        flick.viewport-y = 0;
+        flick.content-y = 0;
     }
 
     public function scroll-bottom() {
-        flick.viewport-y = Math.min(0, -flick.viewport-height + flick.height);
+        flick.content-y = Math.min(0, -flick.content-height + flick.height);
     }
 
     public function reset() {
-        flick.viewport-x = 0;
-        flick.viewport-y = 0;
+        flick.content-x = 0;
+        flick.content-y = 0;
     }
 
     public function scroll-up-precent(precent: float) {
-        flick.viewport-y = Math.clamp(flick.viewport-y + flick.viewport-height * precent, -flick.viewport-height + flick.height, 0);
+        flick.content-y = Math.clamp(flick.content-y + flick.content-height * precent, -flick.content-height + flick.height, 0);
     }
 
     public function scroll-up-pixel(pixel: length) {
-        flick.viewport-y = Math.clamp(flick.viewport-y + pixel, -flick.viewport-height + flick.height, 0);
+        flick.content-y = Math.clamp(flick.content-y + pixel, -flick.content-height + flick.height, 0);
     }
 
     public function scroll-down-precent(precent: float) {
-        flick.viewport-y = Math.clamp(flick.viewport-y - flick.viewport-height * precent, -flick.viewport-height + flick.height, 0);
+        flick.content-y = Math.clamp(flick.content-y - flick.content-height * precent, -flick.content-height + flick.height, 0);
     }
 
     public function scroll-down-pixel(pixel: length) {
-        flick.viewport-y = Math.clamp(flick.viewport-y - pixel, -flick.viewport-height + flick.height, 0);
+        flick.content-y = Math.clamp(flick.content-y - pixel, -flick.content-height + flick.height, 0);
     }
 
     public function scroll-v(rate: float) {
-        flick.viewport-y = Math.clamp( -(flick.viewport-height - flick.height) * rate, -flick.viewport-height + flick.height, 0);
+        flick.content-y = Math.clamp( -(flick.content-height - flick.height) * rate, -flick.content-height + flick.height, 0);
     }
 
     public function scroll-h(rate: float) {
-        flick.viewport-x = Math.clamp(-(flick.viewport-width - flick.width) * rate, -flick.viewport-width + flick.width, 0);
+        flick.content-x = Math.clamp(-(flick.content-width - flick.width) * rate, -flick.content-width + flick.width, 0);
     }
 
     changed is-show-scrollbar-h => {
@@ -94,11 +94,11 @@ export component FlickableWithScrollBar inherits Rectangle {
 
         flicked => {
             if (is-show-scrollbar-inner-v) {
-                scroll-rate-v = -self.viewport-y / (self.viewport-height - self.height);
+                scroll-rate-v = -self.content-y / (self.content-height - self.height);
                 sb-v.y = (self.height - sb-v.height) * scroll-rate-v;
             }
             if (is-show-scrollbar-inner-h) {
-                scroll-rate-h = -self.viewport-x / (self.viewport-width - self.width);
+                scroll-rate-h = -self.content-x / (self.content-width - self.width);
                 sb-h.x = (self.width - sb-h.width) * scroll-rate-h;
             }
             root.flicked()
@@ -121,7 +121,7 @@ export component FlickableWithScrollBar inherits Rectangle {
         x: root.width - self.width;
         y: 0;
         background: scrollbar-color;
-        height: Math.max(parent.height * 0.1, flick.height * 2 - flick.viewport-height);
+        height: Math.max(parent.height * 0.1, flick.height * 2 - flick.content-height);
         width: scrollbar-size;
         border-radius: scrollbar-border-radius;
 
@@ -165,7 +165,7 @@ export component FlickableWithScrollBar inherits Rectangle {
         x: 0;
         y: root.height - self.height;
         background: scrollbar-color;
-        width: Math.max(parent.width * 0.1, flick.width * 2 - flick.viewport-width);
+        width: Math.max(parent.width * 0.1, flick.width * 2 - flick.content-width);
         height: scrollbar-size;
         border-radius: scrollbar-border-radius;
 

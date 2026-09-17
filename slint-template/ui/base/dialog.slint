@@ -19,13 +19,10 @@ export component Dialog inherits Rectangle {
     in-out property <string> confirm-text: Logic.tr("Confirm");
     in-out property <image> confirm-icon: Icons.success-light;
 
-    callback close <=> cancel-clicked;
-    callback canceled <=> cancel-clicked;
-    callback confirmed <=> ok-clicked;
-
-    callback cancel-clicked();
-    callback ok-clicked();
+    callback close();
     callback escape();
+    callback canceled();
+    callback confirmed();
 
     width: 800px;
     height: vbox.preferred-height;
@@ -78,7 +75,7 @@ export component Dialog inherits Rectangle {
                             gain-focus-when-clicked: root.gain-focus-when-clicked;
 
                             clicked => {
-                                root.cancel-clicked();
+                                root.close();
                             }
                         }
                     }
@@ -99,7 +96,7 @@ export component Dialog inherits Rectangle {
                     gain-focus-when-clicked: root.gain-focus-when-clicked;
 
                     clicked => {
-                        root.cancel-clicked();
+                        root.canceled();
                     }
                 }
 
@@ -109,7 +106,7 @@ export component Dialog inherits Rectangle {
                     gain-focus-when-clicked: root.gain-focus-when-clicked;
 
                     clicked => {
-                        root.ok-clicked();
+                        root.confirmed();
                     }
                 }
             }

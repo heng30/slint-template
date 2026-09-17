@@ -71,7 +71,7 @@ export component UpdateDialog inherits Rectangle {
 
                 if sc.is-open: ScrollView {
                     height: min(vbox.preferred-height, Theme.default-font-size * 20);
-                    viewport-height: vbox.preferred-height;
+                    content-height: vbox.preferred-height;
 
                     Rectangle {
                         background: Theme.secondary-background;

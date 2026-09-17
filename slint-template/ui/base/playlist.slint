@@ -26,8 +26,8 @@ export component Playlist inherits Rectangle {
         x: Theme.padding;
         width: parent.width - Theme.padding * 2;
         height: parent.height - Theme.padding * 2;
-        viewport-height: root.item-height * root.items.length;
-        viewport-y: min(0, -root.current-index * root.item-height);
+        content-height: root.item-height * root.items.length;
+        content-y: min(0, -root.current-index * root.item-height);
 
         for item[index] in root.items: Rectangle {
             width: parent.width;

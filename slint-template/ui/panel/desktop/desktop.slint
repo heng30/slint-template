@@ -199,7 +199,7 @@ export component DesktopPanel inherits Rectangle {
 
         private property <SettingBackup> setting;
 
-        ok-clicked => {
+        confirmed => {
             setting = self.get-setting-backup();
 
             if (!setting.configuration && !setting.data && !setting.cache) {

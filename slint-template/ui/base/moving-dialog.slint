@@ -35,6 +35,10 @@ export component MovingDialog inherits Rectangle {
     in-out property <length> min-header-width: Theme.moving-dialog-min-width;
     in-out property <length> min-body-height: Theme.moving-dialog-min-height;
 
+    // 运行时层级：内部只写 z-order，由实例化点上的 `z: self.z-order;` 驱动真正的 z。
+    // slint 1.18 只在父组件能看到非平凡 `z:` 绑定时才启用动态 z 排序。
+    in-out property <float> z-order: 0;
+
     private property <length> normal-header-width: max(header-width, root.min-header-width);
 
     callback close();
@@ -48,7 +52,7 @@ export component MovingDialog inherits Rectangle {
 
     init => {
         root.normal-header-width = root.header-width;
-        self.z = MovingDialogSetting.inc-fetch-z();
+        self.z-order = MovingDialogSetting.inc-fetch-z();
     }
 
     sb := DialogStatusBar {
@@ -61,8 +65,8 @@ export component MovingDialog inherits Rectangle {
         hide-minimal-ctrl-btns: !root.show-body;
 
         top-z => {
-            if root.z != MovingDialogSetting.fetch-z() {
-                root.z = MovingDialogSetting.inc-fetch-z();
+            if root.z-order != MovingDialogSetting.fetch-z() {
+                root.z-order = MovingDialogSetting.inc-fetch-z();
             }
         }
 
@@ -81,7 +85,7 @@ export component MovingDialog inherits Rectangle {
         }
 
         close => {
-            if root.z == MovingDialogSetting.fetch-z() {
+            if root.z-order == MovingDialogSetting.fetch-z() {
                 MovingDialogSetting.dec-fetch-z();
             }
             root.close();
@@ -106,8 +110,8 @@ export component MovingDialog inherits Rectangle {
 
             TouchArea {
                 clicked => {
-                    if root.z != MovingDialogSetting.fetch-z() {
-                        root.z = MovingDialogSetting.inc-fetch-z();
+                    if root.z-order != MovingDialogSetting.fetch-z() {
+                        root.z-order = MovingDialogSetting.inc-fetch-z();
                     }
                 }
             }
@@ -118,11 +122,11 @@ export component MovingDialog inherits Rectangle {
             }
 
             TouchArea {
-                enabled: root.z < MovingDialogSetting.fetch-z();
+                enabled: root.z-order < MovingDialogSetting.fetch-z();
 
                 clicked => {
-                    if root.z != MovingDialogSetting.fetch-z() {
-                        root.z = MovingDialogSetting.inc-fetch-z();
+                    if root.z-order != MovingDialogSetting.fetch-z() {
+                        root.z-order = MovingDialogSetting.inc-fetch-z();
                     }
                 }
             }
@@ -162,8 +166,8 @@ export component MovingDialog inherits Rectangle {
                     mouse-cursor: MouseCursor.se-resize;
 
                     clicked => {
-                        if root.z != MovingDialogSetting.fetch-z() {
-                            root.z = MovingDialogSetting.inc-fetch-z();
+                        if root.z-order != MovingDialogSetting.fetch-z() {
+                            root.z-order = MovingDialogSetting.inc-fetch-z();
                         }
                     }
 

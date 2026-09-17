@@ -1,5 +1,31 @@
-import { Logic, Theme, Store, Util, Icons, SettingPreference, SettingDetailIndex, DeviceType, TabIndex, PopupIndex, SettingBackup, SettingAiModel } from "../def.slint";
-import { IconBtn, SettingEntryV2, Head, SettingDetail, ToastStatus, About, Help, Dialog, ComponentPosition, TabBtns, Divider, ConfirmDialogSetting } from "../../base/widgets.slint";
+import {
+    Logic,
+    Theme,
+    Store,
+    Util,
+    Icons,
+    SettingPreference,
+    SettingDetailIndex,
+    DeviceType,
+    TabIndex,
+    PopupIndex,
+    SettingBackup,
+    SettingAiModel,
+} from "../def.slint";
+import {
+    IconBtn,
+    SettingEntryV2,
+    Head,
+    SettingDetail,
+    ToastStatus,
+    About,
+    Help,
+    Dialog,
+    ComponentPosition,
+    TabBtns,
+    Divider,
+    ConfirmDialogSetting,
+} from "../../base/widgets.slint";
 
 import { Preference } from "components/preference.slint";
 import { Donate } from "components/donate.slint";
@@ -116,11 +142,11 @@ export component SettingDialog inherits Dialog {
         height: root.inner-height;
     }
 
-    cancel-clicked => {
+    close => {
         Logic.switch-popup(PopupIndex.None);
     }
 
-    ok-clicked => {
+    confirmed => {
         setting.apply();
     }
 }
@@ -137,8 +163,12 @@ export component BackupDialog inherits Dialog {
         is-show-header: false;
     }
 
-    cancel-clicked => {
+    canceled => {
         Logic.switch-popup(PopupIndex.None);
+    }
+
+    close => {
+        self.canceled();
     }
 }
 
@@ -154,7 +184,7 @@ export component AboutDialog inherits Dialog {
         is-show-header: false;
     }
 
-    cancel-clicked => {
+    close => {
         Logic.switch-popup(PopupIndex.None);
     }
 }
@@ -173,7 +203,7 @@ export component HelpDialog inherits Dialog {
         HelpDetail { }
     }
 
-    cancel-clicked => {
+    close => {
         Logic.switch-popup(PopupIndex.None);
     }
 }
@@ -190,7 +220,7 @@ export component DonateDialog inherits Dialog {
         is-show-header: false;
     }
 
-    cancel-clicked => {
+    close => {
         Logic.switch-popup(PopupIndex.None);
     }
 }

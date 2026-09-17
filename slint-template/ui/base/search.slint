@@ -105,7 +105,7 @@ export component Search inherits Rectangle {
         Flickable {
             width: pop.width - 2px;
             height: pop.height;
-            viewport-height: pop.height;
+            content-height: pop.height;
 
             for value[index] in root.matched-values: Rectangle {
                 y: Theme.padding + pop-hbox.preferred-height * index;
@@ -113,7 +113,7 @@ export component Search inherits Rectangle {
                 background: pop-ta.has-hover ? Theme.hover-background : Theme.base-background;
 
                 init => {
-                    parent.viewport-height = self.y + self.height + Theme.padding;
+                    parent.content-height = self.y + self.height + Theme.padding;
                 }
 
                 pop-hbox := HorizontalLayout {

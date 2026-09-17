@@ -57,7 +57,7 @@ export component SideBar inherits Rectangle {
         y: root.is-show-search ? hbox.height + Theme.padding * 2 : 0;
         width: root.width;
         height: root.height - (root.is-show-search ? hbox.height : 0);
-        viewport-height: vbox.preferred-height;
+        content-height: vbox.preferred-height;
 
         vbox := VerticalLayout {
             alignment: LayoutAlignment.start;

@@ -76,13 +76,13 @@ export component TxtEdit inherits Rectangle {
     }
 
     function ensure-show-cursor() {
-        if (flick.viewport-height <= flick.height) {
-            flick.viewport-y = 0;
+        if (flick.content-height <= flick.height) {
+            flick.content-y = 0;
         } else {
-            if (-flick.viewport-y + edit.font-size * 2 < flick.viewport-height - flick.height) {
+            if (-flick.content-y + edit.font-size * 2 < flick.content-height - flick.height) {
                 return;
             }
-            flick.viewport-y = -flick.viewport-height + flick.height;
+            flick.content-y = -flick.content-height + flick.height;
         }
     }
 
