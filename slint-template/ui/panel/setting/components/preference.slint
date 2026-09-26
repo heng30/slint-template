@@ -1,5 +1,25 @@
-import { Theme, Logic, Store, Icons, SettingPreference, DeviceType } from "../../def.slint";
-import { SettingDetailInner, SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, RadioBtn, ConfirmBtn, SettingDetailSwitch, ConfirmDialogSetting, Label, LineInput, Select, SettingDetailInner } from "../../../base/widgets.slint";
+import {
+    Theme,
+    Logic,
+    Store,
+    Icons,
+    SettingPreference,
+    DeviceType,
+} from "../../def.slint";
+import {
+    SettingDetailInner,
+    SettingDetail,
+    SettingDetailInnerVbox,
+    SettingDetailLabel,
+    RadioBtn,
+    ConfirmBtn,
+    SettingDetailSwitch,
+    ConfirmDialogSetting,
+    Label,
+    LineInput,
+    Select,
+    SettingDetailInner,
+} from "../../../base/widgets.slint";
 
 export component Preference inherits SettingDetail {
     title: Logic.tr("Preference");
@@ -32,6 +52,8 @@ export component Preference inherits SettingDetail {
     }
 
     SettingDetailInner {
+        width: parent.width;
+
         if Store.device-type == DeviceType.Desktop: SettingDetailInnerVbox {
             win-size-txt := SettingDetailLabel {
                 text: Logic.tr("Window size");
