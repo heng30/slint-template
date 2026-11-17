@@ -24,8 +24,8 @@ export component Loading inherits Rectangle {
         alignment: center;
         spacing: root.gap;
         Rectangle {
+            width: icon.width;
             height: icon.height;
-            width: parent.width;
             icon := Image {
                 height: root.icon-size;
                 width: self.height;

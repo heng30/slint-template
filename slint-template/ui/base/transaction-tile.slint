@@ -77,7 +77,6 @@ export component TransactionTile inherits Rectangle {
                 font-size: root.hash-font-size;
                 color: root.hash-color;
                 text: entry.hash;
-                wrap: TextWrap.no-wrap;
                 overflow: TextOverflow.elide;
                 font-weight: Theme.bold-font-weight;
 
@@ -92,7 +91,6 @@ export component TransactionTile inherits Rectangle {
 
                 Label {
                     text: entry.balance;
-                    wrap: TextWrap.no-wrap;
                     overflow: TextOverflow.elide;
                     color: root.balance-color;
                     font-size: root.balance-font-size;
@@ -100,7 +98,6 @@ export component TransactionTile inherits Rectangle {
 
                 Label {
                     text: entry.time;
-                    wrap: TextWrap.no-wrap;
                     overflow: TextOverflow.elide;
                     color: Theme.have-read-text-color;
                     font-size: Theme.default-font-size - 2px;

@@ -23,10 +23,8 @@ export component BreadCrumbExample inherits Flickable {
                     alignment: LayoutAlignment.start;
 
                     BreadCrumb {
-                        separator: "/";
                         items: ["root", "home", "nixos"];
                         is-show-start-separator: true;
-                        is-show-end-separator: false;
                         selected-color: Colors.red;
 
                         selected(index) => {

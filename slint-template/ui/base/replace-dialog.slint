@@ -16,7 +16,6 @@ export component ReplaceDialog inherits MovingDialog {
 
     fs-timer := Timer {
         interval: 200ms;
-        running: true;
         triggered() => {
             old-line-input.focus();
             self.running = false;

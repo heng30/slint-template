@@ -35,7 +35,6 @@ export component TabBtns inherits Rectangle {
 
     Timer {
         interval: 100ms;
-        running: true;
         triggered() => {
             self.running = false;
             init-delay-flag = !init-delay-flag;

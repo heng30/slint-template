@@ -78,7 +78,6 @@ export component VideoPlayer inherits Rectangle {
 
     fs-timer := Timer {
         interval: 1s;
-        running: true;
         triggered() => {
             fs.focus();
             self.running = false;
@@ -239,7 +238,6 @@ export component VideoPlayer inherits Rectangle {
                         text: root.current-sound + "%";
                         color: Theme.light-text-color;
                         font-size: Theme.title4-font-size;
-                        vertical-alignment: TextVerticalAlignment.center;
                         horizontal-alignment: TextHorizontalAlignment.center;
                     }
                 }
@@ -274,6 +272,8 @@ export component VideoPlayer inherits Rectangle {
             }
 
             if !root.is-playing && is-loading: Rectangle {
+                x: 0;
+                y: 0;
                 opacity: root.center-icon-opacity;
                 background: Theme.dark-bg-color;
 
@@ -289,7 +289,6 @@ export component VideoPlayer inherits Rectangle {
             y: parent.height - control-height;
             x: 0;
             height: control-height;
-            background: Colors.transparent;
             opacity: root.show-controls ? 1 : 0;
 
             animate opacity {
@@ -469,8 +468,6 @@ export component VideoPlayer inherits Rectangle {
                             height: Theme.default-font-size / 3;
                             y: parent.height / 2 - self.height / 2;
                             value: root.current-sound;
-                            minimum: 0;
-                            maximum: 100;
                             unfinished-progress-color: Theme.light-text-color;
                             indicator-size: self.has-hover ? Theme.icon-size * 0.6 : 0;
                             border-radius: Theme.border-radius;
@@ -505,7 +502,6 @@ export component VideoPlayer inherits Rectangle {
                         text: root.time-label;
                         color: Theme.light-text-color;
                         font-size: Theme.title4-font-size;
-                        vertical-alignment: TextVerticalAlignment.center;
                     }
                 }
 

@@ -77,7 +77,6 @@ component HorizontalStatusBar inherits StatusBar {
 
         HorizontalHomeIconsBar {
             icon-size: Theme.default-font-size;
-            show-icon-hover-background: false;
             is-show-tip: root.is-show-tip;
             tip-position: root.tip-position;
         }
@@ -93,7 +92,6 @@ component HorizontalStatusBar inherits StatusBar {
         HorizontalSettingIconsBar {
             icon-size: Theme.default-font-size;
             h-spacing: Theme.spacing * 3;
-            show-icon-hover-background: false;
             is-show-tip: root.is-show-tip;
             tip-position: root.tip-position;
         }
@@ -165,8 +163,7 @@ export component DesktopPanel inherits Rectangle {
         VerticalStatusBar { }
 
         Home {
-            width: root.width - Theme.sidebar-width;
-            height: root.height;
+            horizontal-stretch: 1;
         }
     }
 
@@ -174,8 +171,7 @@ export component DesktopPanel inherits Rectangle {
         HorizontalStatusBar { }
 
         Home {
-            width: root.width;
-            height: root.height - Theme.header-height;
+            vertical-stretch: 1;
         }
     }
 

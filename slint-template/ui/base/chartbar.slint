@@ -55,7 +55,6 @@ export component ChartBar inherits Rectangle {
 
     Timer {
         interval: 100ms;
-        running: true;
         triggered() => {
             animation-flag = true;
             self.running = false;

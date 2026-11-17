@@ -83,7 +83,6 @@ component Tile inherits Rectangle {
                 Label {
                     font-size: root.symbol-font-size;
                     text: entry.symbol;
-                    wrap: TextWrap.no-wrap;
                     overflow: TextOverflow.elide;
                     font-weight: 0.5;
                 }
@@ -91,7 +90,6 @@ component Tile inherits Rectangle {
                 Label {
                     font-size: root.balance-font-size;
                     text: entry.balance;
-                    wrap: TextWrap.no-wrap;
                     overflow: TextOverflow.elide;
                 }
             }

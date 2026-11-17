@@ -9,13 +9,25 @@ fn main() {
 
 fn build_slint() {
     #[cfg(feature = "desktop")]
-    slint_build::compile("ui/desktop-window.slint").unwrap();
+    slint_build::compile_with_config(
+        "ui/desktop-window.slint",
+        slint_build::CompilerConfiguration::new().with_edition((1, 19)),
+    )
+    .unwrap();
 
     #[cfg(feature = "android")]
-    slint_build::compile("ui/android-window.slint").unwrap();
+    slint_build::compile_with_config(
+        "ui/android-window.slint",
+        slint_build::CompilerConfiguration::new().with_edition((1, 19)),
+    )
+    .unwrap();
 
     #[cfg(feature = "web")]
-    slint_build::compile("ui/web-window.slint").unwrap();
+    slint_build::compile_with_config(
+        "ui/web-window.slint",
+        slint_build::CompilerConfiguration::new().with_edition((1, 19)),
+    )
+    .unwrap();
 }
 
 fn write_app_version() -> Result<(), Box<dyn std::error::Error>> {

@@ -1,5 +1,11 @@
 import { Store, Logic, Theme, SettingBackup } from "../../def.slint";
-import { SettingDetail, SettingDetailInnerVbox, SettingDetailLabel, CheckBtn, SettingDetailInner } from "../../../base/widgets.slint";
+import {
+    SettingDetail,
+    SettingDetailInnerVbox,
+    SettingDetailLabel,
+    CheckBtn,
+    SettingDetailInner,
+} from "../../../base/widgets.slint";
 
 export component Backup inherits SettingDetail {
     title: Logic.tr("Backup");
@@ -41,7 +47,6 @@ export component Backup inherits SettingDetail {
 
                     cache-checkbtn := CheckBtn {
                         text: Logic.tr("Cache");
-                        checked: false;
                     }
                 }
             }

@@ -38,13 +38,9 @@ export component CircleProgress inherits Rectangle {
 
     Rectangle {
         Path {
-            viewbox-x: 0;
-            viewbox-y: 0;
             viewbox-width: root.radius / 1px * 2;
             viewbox-height: self.viewbox-width;
 
-            stroke: Colors.transparent;
-            stroke-width: 0;
             fill: root.ring-angle >= 360deg ? root.finished-progress-color : root.unfinished-progress-color;
 
             MoveTo {
@@ -79,13 +75,9 @@ export component CircleProgress inherits Rectangle {
             private property <float> innerline-end-x: Util.lenght2float(root.radius - root.ring-width) * (1 - Math.cos(inner-ring-angle)) + root.ring-width / 1px;
             private property <float> innerline-end-y: Util.lenght2float(root.radius - root.ring-width) * (1 - Math.sin(inner-ring-angle)) + root.ring-width / 1px;
 
-            viewbox-x: 0;
-            viewbox-y: 0;
             viewbox-width: root.radius / 1px * 2;
             viewbox-height: self.viewbox-width;
 
-            stroke: Colors.transparent;
-            stroke-width: 0;
             fill: root.finished-progress-color;
 
             MoveTo {
@@ -131,13 +123,9 @@ export component CircleProgress inherits Rectangle {
         }
 
         Path {
-            viewbox-x: 0;
-            viewbox-y: 0;
             viewbox-width: root.radius / 1px * 2;
             viewbox-height: self.viewbox-width;
 
-            stroke: Colors.transparent;
-            stroke-width: 0;
             fill: root.ring-angle >= 360deg ? root.finished-text-background : root.unfinished-text-background;
 
             MoveTo {

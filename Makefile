@@ -76,13 +76,13 @@ packing-web:
 	echo "$(app-name)-$(version)-web.tar.gz" > target/output-name
 
 slint-viewer-android:
-	$(android-build-env) slint-viewer --auto-reload -I $(app-name)/ui ${app-name}/ui/android-window.slint
+	$(android-build-env) slint-viewer --auto-reload -p $(app-name) -I $(app-name)/ui ${app-name}/ui/android-window.slint
 
 slint-viewer-desktop:
-	$(desktop-build-env) slint-viewer --auto-reload -I $(app-name)/ui ${app-name}/ui/desktop-window.slint
+	$(desktop-build-env) slint-viewer --auto-reload -p $(app-name) -I $(app-name)/ui ${app-name}/ui/desktop-window.slint
 
 slint-viewer-web:
-	$(web-build-env) slint-viewer --auto-reload -I $(app-name)/ui ${app-name}/ui/web-window.slint
+	$(web-build-env) slint-viewer --auto-reload -p $(app-name) -I $(app-name)/ui ${app-name}/ui/web-window.slint
 
 test:
 	$(build-env) $(run-env) cargo test -- --nocapture

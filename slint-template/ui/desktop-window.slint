@@ -30,7 +30,12 @@ export component AppWindow inherits Window {
     no-frame: Store.setting-preference.no-frame;
     always-on-top: Store.setting-preference.always-on-top;
 
-    DesktopPanel { }
+    DesktopPanel {
+        x: 0;
+        y: 0;
+        width: root.width;
+        height: root.height;
+    }
 
     if IconsDialogSetting.show || ConfirmDialogSetting.show || MessageDialogSetting.show: Blanket {
         clicked => {
@@ -70,6 +75,10 @@ export component AppWindow inherits Window {
     }
 
     if Store.is-show-landing-page: LandingPage {
+        x: 0;
+        y: 0;
+        width: root.width;
+        height: root.height;
         details: [
             {
                 picture: Icons.landing-account,

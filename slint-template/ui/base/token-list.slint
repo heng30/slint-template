@@ -9,7 +9,6 @@ import { NoDataImg } from "no-data.slint";
 export component TokenList inherits SettingDetailInner {
     in-out property <[TokenTileEntry]> entries;
 
-    vbox-alignment: LayoutAlignment.start;
     vbox-spacing: Theme.spacing * 2;
 
     callback clicked(entry: TokenTileEntry);
@@ -31,7 +30,6 @@ export component TokenListWithSwitch inherits SettingDetail {
     callback toggled(flag: bool, entry: TokenTileEntry);
 
     if !is-loading && entries.length > 0: SettingDetailInner {
-        vbox-alignment: LayoutAlignment.start;
         vbox-spacing: Theme.spacing * 2;
 
         for item[index] in entries: TokenTileWithSwitch {

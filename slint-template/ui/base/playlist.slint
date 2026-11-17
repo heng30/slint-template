@@ -64,7 +64,6 @@ export component Playlist inherits Rectangle {
                     text: index + 1;
                     color: index == root.current-index ? Theme.light-text-color : Theme.secondary-text-color;
                     font-size: Theme.default-font-size * 0.8;
-                    vertical-alignment: TextVerticalAlignment.center;
                     horizontal-alignment: TextHorizontalAlignment.left;
                     min-width: Theme.default-font-size * 2;
                 }
@@ -73,7 +72,6 @@ export component Playlist inherits Rectangle {
                     text: item.title;
                     color: index == root.current-index ? Theme.light-text-color : Theme.primary-text-color;
                     font-size: Theme.default-font-size;
-                    vertical-alignment: TextVerticalAlignment.center;
                     horizontal-alignment: TextHorizontalAlignment.left;
                     overflow: TextOverflow.elide;
                     horizontal-stretch: 1;
@@ -83,7 +81,6 @@ export component Playlist inherits Rectangle {
                     text: item.duration;
                     color: index == root.current-index ? Theme.light-text-color : Theme.secondary-text-color;
                     font-size: Theme.default-font-size * 0.8;
-                    vertical-alignment: TextVerticalAlignment.center;
                     horizontal-alignment: TextHorizontalAlignment.right;
                     min-width: Theme.default-font-size * 3;
                 }
